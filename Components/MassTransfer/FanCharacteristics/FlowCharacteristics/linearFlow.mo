@@ -1,4 +1,4 @@
-within ThermalManagement.Components.MassTransfer.FanCharacteristics.FlowCharacteristics;
+within DynTherM.Components.MassTransfer.FanCharacteristics.FlowCharacteristics;
 class linearFlow "Linear flow characteristic"
   extends BaseClass;
   Modelica.Units.SI.SpecificEnergy Head "Head provided by the fan";

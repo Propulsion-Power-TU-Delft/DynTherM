@@ -1,4 +1,4 @@
-within ThermalManagement.Systems.Helicopter.NH90.BasicAirbusEES;
+within DynTherM.Systems.Helicopter.NH90.BasicAirbusEES;
 model NH90CombinedFixedDuctHeat
   "Basic component built model (1:1 with EES) using fixed heat transfer rates to ducts"
   parameter Modelica.Units.SI.MassFlowRate m_leak_in_ck=0.05
@@ -144,7 +144,7 @@ model NH90CombinedFixedDuctHeat
     extSw=true,
     ISA_plus=25,
     allowFlowReversal=false,
-    initOpt=ThermalManagement.Choices.InitOpt.fixedState,
+    initOpt=DynTherM.Choices.InitOpt.fixedState,
     phi_amb=0.4,
     T_ground=273.15)
     annotation (Placement(transformation(extent={{-88,64},{-68,84}})));

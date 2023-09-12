@@ -1,4 +1,4 @@
-within ThermalManagement.Materials.AirbusEES;
+within DynTherM.Materials.AirbusEES;
 model EngineAluminium "NH90: Engine wall aluminium"
   extends Modelica.Icons.MaterialProperty;
   extends Materials.Properties(

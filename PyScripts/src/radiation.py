@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ########################################################################################################################
-# ThermalManagement
+# DynTherM: Dynamic modeling and simulation of Thermal Management systems
 # Author: ir. A. Giuffre'
 # Content: solar radiation computation with SMARTS
 # 2022 - TU Delft - All rights reserved

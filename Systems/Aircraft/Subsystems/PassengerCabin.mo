@@ -1,21 +1,20 @@
-within ThermalManagement.Systems.Aircraft.Subsystems;
+within DynTherM.Systems.Aircraft.Subsystems;
 model PassengerCabin "Upper section of the fuselage: cabin section"
   // Hp: the fuselage is modelled as a hollow cylinder
   // Hp: the heat transfer through the aft pressure bulkhead is neglected
 
-  outer ThermalManagement.Components.Environment environment
-    "Environmental properties";
+  outer DynTherM.Components.Environment environment "Environmental properties";
 
   replaceable model HTC_int =
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
     constrainedby
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
     annotation (choicesAllMatching=true);
 
   replaceable model HTC_ext =
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassExternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal
     constrainedby
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassExternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal
     annotation (choicesAllMatching=true);
 
   parameter Real N_occupants[3] "Number of: passengers, cabin crew, pilots inside the cabin";
@@ -114,8 +113,7 @@ model PassengerCabin "Upper section of the fuselage: cabin section"
         transformation(extent={{94,-72},{118,-48}}), iconTransformation(
           extent={{88,-42},{112,-18}})));
 
-  ThermalManagement.Systems.Aircraft.Subsystems.UpperFuselageHeatTransfer
-    section_3(
+  DynTherM.Systems.Aircraft.Subsystems.UpperFuselageHeatTransfer section_3(
     redeclare model HTC_int = HTC_int,
     redeclare model HTC_ext = HTC_ext,
     coeff=1/8,
@@ -130,8 +128,7 @@ model PassengerCabin "Upper section of the fuselage: cabin section"
     Tstart_fuselage=Tstart_fuselage)
     annotation (Placement(transformation(extent={{-20,62},{20,102}})));
 
-  ThermalManagement.Systems.Aircraft.Subsystems.UpperFuselageHeatTransfer
-    section_2(
+  DynTherM.Systems.Aircraft.Subsystems.UpperFuselageHeatTransfer section_2(
     redeclare model HTC_int = HTC_int,
     redeclare model HTC_ext = HTC_ext,
     coeff=1/8,
@@ -145,8 +142,7 @@ model PassengerCabin "Upper section of the fuselage: cabin section"
     theta=theta_2,
     Tstart_fuselage=Tstart_fuselage)
     annotation (Placement(transformation(extent={{80,62},{40,102}})));
-  ThermalManagement.Systems.Aircraft.Subsystems.UpperFuselageHeatTransfer
-    section_4(
+  DynTherM.Systems.Aircraft.Subsystems.UpperFuselageHeatTransfer section_4(
     redeclare model HTC_int = HTC_int,
     redeclare model HTC_ext = HTC_ext,
     coeff=1/8,
@@ -160,8 +156,7 @@ model PassengerCabin "Upper section of the fuselage: cabin section"
     theta=theta_4,
     Tstart_fuselage=Tstart_fuselage)
     annotation (Placement(transformation(extent={{-80,62},{-40,102}})));
-  ThermalManagement.Systems.Aircraft.Subsystems.FuselageHeatTransferWindow
-    section_5(
+  DynTherM.Systems.Aircraft.Subsystems.FuselageHeatTransferWindow section_5(
     redeclare model HTC_int = HTC_int,
     redeclare model HTC_ext = HTC_ext,
     coeff=1/8,
@@ -180,8 +175,7 @@ model PassengerCabin "Upper section of the fuselage: cabin section"
         extent={{20,-20},{-20,20}},
         rotation=90,
         origin={-82,14})));
-  ThermalManagement.Systems.Aircraft.Subsystems.FuselageHeatTransferWindow
-    section_1(
+  DynTherM.Systems.Aircraft.Subsystems.FuselageHeatTransferWindow section_1(
     redeclare model HTC_int = HTC_int,
     redeclare model HTC_ext = HTC_ext,
     coeff=1/8,

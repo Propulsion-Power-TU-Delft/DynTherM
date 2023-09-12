@@ -1,6 +1,6 @@
-within ThermalManagement.BoundaryConditions;
+within DynTherM.BoundaryConditions;
 model radiation "Model to impose irradiance"
-  extends ThermalManagement.Base.rin1;
+  extends DynTherM.Base.rin1;
 parameter Modelica.Units.SI.Irradiance E "Incident irradiance"
   annotation (Dialog(tab="Boundary conditions", enable=use_E));
 parameter Modelica.Units.SI.Angle theta "Incidence angle"

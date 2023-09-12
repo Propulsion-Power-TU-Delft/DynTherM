@@ -1,4 +1,4 @@
-within ThermalManagement.Tests.MassTransfer;
+within DynTherM.Tests.MassTransfer;
 model test_pipe_sys "Simple test of component pipe"
 
   Modelica.Blocks.Interfaces.RealInput T_fromMix annotation (Placement(
@@ -6,7 +6,7 @@ model test_pipe_sys "Simple test of component pipe"
           extent={{-106,-30},{-86,-10}})));
   inner Components.Environment environment(
     allowFlowReversal=false,
-    initOpt=ThermalManagement.Choices.InitOpt.fixedState)
+    initOpt=DynTherM.Choices.InitOpt.fixedState)
     annotation (Placement(transformation(extent={{60,60},{100,100}})));
   Components.MassTransfer.SourceMassFlow ECSFlow(
     use_in_massFlow=true,
@@ -26,7 +26,7 @@ model test_pipe_sys "Simple test of component pipe"
     annotation (Placement(transformation(extent={{76,-42},{100,-18}})));
   Components.MassTransfer.Pipe pipe(
     allowFlowReversal=false,
-    option=ThermalManagement.Choices.PDropOpt.darcyWeisbach,
+    option=DynTherM.Choices.PDropOpt.darcyWeisbach,
     L=10,
     D=0.2) annotation (Placement(transformation(extent={{-24,-54},{24,-6}})));
 equation

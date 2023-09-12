@@ -1,14 +1,14 @@
-within ThermalManagement.Components.MassTransfer;
+within DynTherM.Components.MassTransfer;
 model Pipe
   "Pipe model: pressure drop computed with Darcy-Weisbach equation with external heat input."
-  outer ThermalManagement.Components.Environment environment "Environmental properties";
+  outer DynTherM.Components.Environment environment "Environmental properties";
   package Medium = Modelica.Media.Air.MoistAir;
   parameter Boolean allowFlowReversal=environment.allowFlowReversal
     "= true to allow flow reversal, false restricts to design direction";
-  parameter ThermalManagement.Choices.PDropOpt option
+  parameter DynTherM.Choices.PDropOpt option
     "Select the type of pressure drop to impose";
-  parameter ThermalManagement.CustomUnits.HydraulicResistance R=0
-    "Hydraulic Resistance" annotation(Dialog(enable = option == Choices.PDropOpt.linear));
+  parameter DynTherM.CustomUnits.HydraulicResistance R=0 "Hydraulic Resistance"
+    annotation (Dialog(enable=option == Choices.PDropOpt.linear));
   parameter Modelica.Units.SI.MassFlowRate m_flow_start=1
     "Mass flow rate - start value" annotation (Dialog(tab="Initialization"));
   parameter Modelica.Units.SI.Pressure P_start=101325
@@ -39,20 +39,22 @@ model Pipe
   Medium.ThermodynamicState state_inlet "Inlet state";
   Medium.ThermodynamicState state_outlet "Outlet state";
 
-  ThermalManagement.CustomInterfaces.FluidPort_A inlet(
-    m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0, start=m_flow_start),
+  DynTherM.CustomInterfaces.FluidPort_A inlet(
+    m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0, start=
+          m_flow_start),
     P(start=P_start),
     h_outflow(start=Medium.specificEnthalpy(state_start)),
-    Xi_outflow(start=X_start)) annotation (
-      Placement(transformation(extent={{-120,-20},{-80,20}}, rotation=0),
-        iconTransformation(extent={{-110,-10},{-90,10}})));
-  ThermalManagement.CustomInterfaces.FluidPort_B outlet(
-    m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0, start=-m_flow_start),
+    Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{-120,
+            -20},{-80,20}}, rotation=0), iconTransformation(extent={{-110,-10},
+            {-90,10}})));
+  DynTherM.CustomInterfaces.FluidPort_B outlet(
+    m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0, start=
+          -m_flow_start),
     P(start=P_start),
     h_outflow(start=Medium.specificEnthalpy(state_start)),
-    Xi_outflow(start=X_start)) annotation (
-      Placement(transformation(extent={{80,-20},{120,20}}, rotation=0),
-        iconTransformation(extent={{90,-10},{110,10}})));
+    Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{80,
+            -20},{120,20}}, rotation=0), iconTransformation(extent={{90,-10},{
+            110,10}})));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a thermalPort
     annotation (Placement(transformation(extent={{-10,28},{10,48}})));
 equation

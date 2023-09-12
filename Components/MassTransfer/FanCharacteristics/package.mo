@@ -1,4 +1,4 @@
-within ThermalManagement.Components.MassTransfer;
+within DynTherM.Components.MassTransfer;
 package FanCharacteristics
 
 

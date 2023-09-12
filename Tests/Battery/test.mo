@@ -1,51 +1,51 @@
-within ThermalManagement.Tests.Battery;
+within DynTherM.Tests.Battery;
 model test
   parameter Real SOC=100;
   parameter Modelica.Units.SI.Temperature Tstart=293.15;
   Components.Battery.Cell18650 C11(
     SOC=SOC,
     Tstart=Tstart,
-    initOpt=ThermalManagement.Choices.InitOpt.fixedState)
+    initOpt=DynTherM.Choices.InitOpt.fixedState)
     annotation (Placement(transformation(extent={{-50,-50},{-30,-30}})));
   Components.Battery.Cell18650 C21(
     SOC=SOC,
     Tstart=Tstart,
-    initOpt=ThermalManagement.Choices.InitOpt.fixedState)
+    initOpt=DynTherM.Choices.InitOpt.fixedState)
     annotation (Placement(transformation(extent={{-10,-50},{10,-30}})));
   Components.Battery.Cell18650 C12(
     SOC=SOC,
     Tstart=Tstart,
-    initOpt=ThermalManagement.Choices.InitOpt.fixedState)
+    initOpt=DynTherM.Choices.InitOpt.fixedState)
     annotation (Placement(transformation(extent={{-50,-10},{-30,10}})));
   Components.Battery.Cell18650 C22(
     SOC=SOC,
     Tstart=Tstart,
-    initOpt=ThermalManagement.Choices.InitOpt.fixedState)
+    initOpt=DynTherM.Choices.InitOpt.fixedState)
     annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
   Components.Battery.Cell18650 C13(
     SOC=SOC,
     Tstart=Tstart,
-    initOpt=ThermalManagement.Choices.InitOpt.fixedState)
+    initOpt=DynTherM.Choices.InitOpt.fixedState)
     annotation (Placement(transformation(extent={{-50,30},{-30,50}})));
   Components.Battery.Cell18650 C23(
     SOC=SOC,
     Tstart=Tstart,
-    initOpt=ThermalManagement.Choices.InitOpt.fixedState)
+    initOpt=DynTherM.Choices.InitOpt.fixedState)
     annotation (Placement(transformation(extent={{-10,30},{10,50}})));
   Components.Battery.Cell18650 C31(
     SOC=SOC,
     Tstart=Tstart,
-    initOpt=ThermalManagement.Choices.InitOpt.fixedState)
+    initOpt=DynTherM.Choices.InitOpt.fixedState)
     annotation (Placement(transformation(extent={{30,-50},{50,-30}})));
   Components.Battery.Cell18650 C32(
     SOC=SOC,
     Tstart=Tstart,
-    initOpt=ThermalManagement.Choices.InitOpt.fixedState)
+    initOpt=DynTherM.Choices.InitOpt.fixedState)
     annotation (Placement(transformation(extent={{30,-10},{50,10}})));
   Components.Battery.Cell18650 C33(
     SOC=SOC,
     Tstart=Tstart,
-    initOpt=ThermalManagement.Choices.InitOpt.fixedState)
+    initOpt=DynTherM.Choices.InitOpt.fixedState)
     annotation (Placement(transformation(extent={{30,30},{50,50}})));
   Modelica.Thermal.HeatTransfer.Components.Convection northConvection
     annotation (Placement(transformation(

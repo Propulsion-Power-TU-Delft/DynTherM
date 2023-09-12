@@ -1,4 +1,4 @@
-within ThermalManagement.Materials;
+within DynTherM.Materials;
 model Hexcel "Hexcel HRH-10-1/8-6.0"
   extends Modelica.Icons.MaterialProperty;
   extends Materials.Properties(

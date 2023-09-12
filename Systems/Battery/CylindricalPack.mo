@@ -1,4 +1,4 @@
-within ThermalManagement.Systems.Battery;
+within DynTherM.Systems.Battery;
 model CylindricalPack
   "1D thermal model of a battery pack made of cylindrical cells"
 
@@ -8,11 +8,12 @@ model CylindricalPack
 
   // Initialization
   parameter Modelica.Units.SI.Temperature Tstart "Temperature start value" annotation (Dialog(tab="Initialization"));
-  parameter ThermalManagement.Choices.InitOpt initOpt "Initialization option" annotation (Dialog(tab="Initialization"));
+  parameter DynTherM.Choices.InitOpt initOpt "Initialization option"
+    annotation (Dialog(tab="Initialization"));
 
   replaceable model CylindricalCell =
-      ThermalManagement.Components.Battery.Cell18650 constrainedby
-    ThermalManagement.Components.Battery.CylindricalCell;
+      DynTherM.Components.Battery.Cell18650 constrainedby
+    DynTherM.Components.Battery.CylindricalCell;
 
   CylindricalCell Cell[N_series,N_parallel](
     each SOC=SOC,

@@ -1,4 +1,4 @@
-within ThermalManagement.Components.HeatTransfer.HTCorrelations.ExternalConvection;
+within DynTherM.Components.HeatTransfer.HTCorrelations.ExternalConvection;
 model HelicopterFlying
   "Flying: Convection during hover and low forward speed (helicopter) for rotor-induced surfaces"
   // Reference: ASHRAE Handbook - HVAC Applications, chapter 13

@@ -1,4 +1,4 @@
-within ThermalManagement.Materials.AirbusEES;
+within DynTherM.Materials.AirbusEES;
 model TransmissionAluminium "NH90: Transmission wall aluminium"
   extends Modelica.Icons.MaterialProperty;
   extends Materials.Properties(

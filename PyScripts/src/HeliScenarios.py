@@ -1,4 +1,6 @@
-"""This module contains the classes required to run the helicopter models of the thermalmanagement Dymola package"""
+"""
+DEPRECATED - TO BE MODIFIED
+"""
 
 import pandas as pd
 import numpy as np
@@ -6,11 +8,11 @@ from dymola.dymola_interface import DymolaInterface # type: ignore
 from dymola.dymola_exception import DymolaException # type: ignore
 
 dymola_exe_directory = "C:\\Program Files\\Dymola 2018 FD01\\bin64\\Dymola.exe"
-dymola_package_directory="C:\\Users\kikow\\Dropbox\\Thesis - Kiko Guimaraes\\ModelicaCodeLocalChanges\\thermalmanagement\\package.mo"
+dymola_package_directory="C:\\Users\kikow\\Dropbox\\Thesis - Kiko Guimaraes\\ModelicaCodeLocalChanges\\DynTherM\\package.mo"
 
 class FuselagePanelTest: 
     """Model of Fuselage for testing"""
-    def __init__(self, ext_sw, case_dir="ThermalManagement.Systems.Helicopter.Tests.Fuselage",
+    def __init__(self, ext_sw, case_dir="DynTherM.Systems.Helicopter.Tests.Fuselage",
                  dymola_exe_dir=dymola_exe_directory,
                  package_dir=dymola_package_directory,
                  excel_file='HeliTestCases.xlsx'):
@@ -48,7 +50,7 @@ class FuselagePanelTest:
 
 class PressuredCabin: 
     """Model of PressuredCabin for testing of a single cabin segment"""
-    def __init__(self, ext_sw, case_dir="ThermalManagement.Systems.Helicopter.Tests.PressuredCabin",
+    def __init__(self, ext_sw, case_dir="DynTherM.Systems.Helicopter.Tests.PressuredCabin",
                  dymola_exe_dir=dymola_exe_directory,
                  package_dir=dymola_package_directory,
                  excel_file='HeliTestCases.xlsx'):
@@ -105,9 +107,9 @@ class PressuredCabin:
 
         return
 
-class ThermalManagement:
+class DynTherM:
     def __init__(self, ext_sw, n_secs, dymola_exe_dir="C:\\Program Files\\Dymola 2018 FD01\\bin64\\Dymola.exe",
-                 package_dir="C:\\Users\\kikow\\OneDrive\\02 - TUDelft - AE\\Thesis\\ModelicaCode\\thermalmanagement",
+                 package_dir="C:\\Users\\kikow\\OneDrive\\02 - TUDelft - AE\\Thesis\\ModelicaCode\\DynTherM",
                  excel_file='HeliTestCases.xlsx'):
         # Instantiate the Dymola interface and start Dymola
         self.dymola = DymolaInterface(dymola_exe_dir)
@@ -223,7 +225,7 @@ class ThermalManagement:
 
 class HeliCombined: 
     """Model of HeliCombined for testing of a various"""
-    def __init__(self, conditions, ext_sw, case_idx, case_dir="ThermalManagement.Systems.Helicopter.NH90.ComplexAirbusEES.HeliCombined",
+    def __init__(self, conditions, ext_sw, case_idx, case_dir="DynTherM.Systems.Helicopter.NH90.ComplexAirbusEES.HeliCombined",
                  dymola_exe_dir=dymola_exe_directory,
                  package_dir=dymola_package_directory,
                  excel_file='HeliTestCases.xlsx'):

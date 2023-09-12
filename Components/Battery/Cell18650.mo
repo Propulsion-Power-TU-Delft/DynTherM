@@ -1,4 +1,4 @@
-within ThermalManagement.Components.Battery;
+within DynTherM.Components.Battery;
 model Cell18650
   extends CylindricalCell(
     H_cell=0.065,

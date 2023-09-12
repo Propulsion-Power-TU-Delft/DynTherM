@@ -1,8 +1,8 @@
-within ThermalManagement.Components.Battery;
+within DynTherM.Components.Battery;
 model CylindricalCell
 
-  replaceable model CellMat=ThermalManagement.Materials.NCA18650  constrainedby
-    ThermalManagement.Materials.CellProperties "Material properties of the prescribed cell type" annotation (choicesAllMatching=true);
+  replaceable model CellMat=DynTherM.Materials.NCA18650 constrainedby
+    DynTherM.Materials.CellProperties          "Material properties of the prescribed cell type" annotation (choicesAllMatching=true);
 
   parameter Real SOC "State-of-charge [%]";
   parameter Modelica.Units.SI.Length H_cell "Height of the cell";
@@ -10,12 +10,14 @@ model CylindricalCell
   parameter Modelica.Units.SI.Length D_pin "Diameter of the central pin";
   parameter Modelica.Units.SI.Mass M_cell "Weight of the cell portion";
   parameter Modelica.Units.NonSI.Energy_kWh E_cell "Energy stored in the cell (SOC = 100%)";
-  parameter ThermalManagement.CustomUnits.VolumetricHeatFlowRate Q_vol "Volumetric heat flow rate";
+  parameter DynTherM.CustomUnits.VolumetricHeatFlowRate Q_vol
+    "Volumetric heat flow rate";
   final parameter Modelica.Units.SI.Volume V_cell = Modelica.Constants.pi*D_cell^2/4*H_cell;
 
   // Initialization
   parameter Modelica.Units.SI.Temperature Tstart "Temperature start value" annotation (Dialog(tab="Initialization"));
-  parameter ThermalManagement.Choices.InitOpt initOpt "Initialization option" annotation (Dialog(tab="Initialization"));
+  parameter DynTherM.Choices.InitOpt initOpt "Initialization option"
+    annotation (Dialog(tab="Initialization"));
 
   CylindricalCellPortion northPortion(
     redeclare model CellMat = CellMat,

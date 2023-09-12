@@ -1,4 +1,4 @@
-within ThermalManagement.Materials;
+within DynTherM.Materials;
 partial model NCA18650
 
   // References:

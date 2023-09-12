@@ -1,4 +1,4 @@
-within ThermalManagement.Materials;
+within DynTherM.Materials;
 model TemperedGlass "Tempered glass"
   // References:
   // [1] J. Deng et al. - Study on the thermodynamic characteristic matching property and limit

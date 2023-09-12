@@ -1,18 +1,18 @@
-within ThermalManagement.Systems.Aircraft.Subsystems;
+within DynTherM.Systems.Aircraft.Subsystems;
 model FuselageHeatTransferWindow
   "Model of heat transfer from external environment to inner section of upper fuselage (with transparencies)"
-  outer ThermalManagement.Components.Environment environment "Environmental properties";
+  outer DynTherM.Components.Environment environment "Environmental properties";
 
   replaceable model HTC_int =
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
     constrainedby
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
     annotation (choicesAllMatching=true);
 
   replaceable model HTC_ext =
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassExternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal
     constrainedby
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassExternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal
     annotation (choicesAllMatching=true);
 
   parameter Real coeff "Fraction of cylinder with active heat transfer";

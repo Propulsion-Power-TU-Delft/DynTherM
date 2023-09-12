@@ -1,4 +1,4 @@
-within ThermalManagement.Examples.Aircraft.TrimAirManual;
+within DynTherM.Examples.Aircraft.TrimAirManual;
 model A320GroundCockpit "Aircraft on ground, two temperature zones"
   // Pack discharge temperature determined by cockpit cooling requirement
   // Trim air flow determined by cabin temperature set point
@@ -61,7 +61,7 @@ model A320GroundCockpit "Aircraft on ground, two temperature zones"
     T_ground(displayUnit="degC") = 323.15,
     use_ext_sw=true,
     allowFlowReversal=false,
-    initOpt=ThermalManagement.Choices.InitOpt.steadyState)
+    initOpt=DynTherM.Choices.InitOpt.steadyState)
     annotation (Placement(transformation(extent={{-100,-20},{-66,14}})));
   Modelica.Blocks.Math.Add add_T(k1=+1, k2=-1) annotation (Placement(
         transformation(

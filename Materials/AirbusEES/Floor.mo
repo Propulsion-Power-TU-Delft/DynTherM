@@ -1,4 +1,4 @@
-within ThermalManagement.Materials.AirbusEES;
+within DynTherM.Materials.AirbusEES;
 model Floor "NH90: Floor material"
   extends Modelica.Icons.MaterialProperty;
   extends Materials.Properties(

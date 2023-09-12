@@ -1,4 +1,4 @@
-within ThermalManagement.Tests.Battery;
+within DynTherM.Tests.Battery;
 model CylindricalCell
   BoundaryConditions.thermal N(T=273.15, use_T=true)
     annotation (Placement(transformation(extent={{-12,94},{6,106}})));
@@ -12,7 +12,7 @@ model CylindricalCell
   Components.Battery.Cell18650 cell18650(
     SOC=100,
     Tstart=293.15,
-    initOpt=ThermalManagement.Choices.InitOpt.fixedState)
+    initOpt=DynTherM.Choices.InitOpt.fixedState)
     annotation (Placement(transformation(extent={{-26,-26},{26,26}})));
   Modelica.Thermal.HeatTransfer.Components.Convection southConvection
     annotation (Placement(transformation(

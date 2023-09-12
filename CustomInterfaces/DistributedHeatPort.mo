@@ -1,4 +1,4 @@
-within ThermalManagement.CustomInterfaces;
+within DynTherM.CustomInterfaces;
 connector DistributedHeatPort "Distributed heat port (1D)"
   parameter Integer N "Number of ports";
   Modelica.Units.SI.Temperature T[N] "Ports' temperature";

@@ -1,8 +1,7 @@
 within ;
-package ThermalManagement "Thermal modeling of aircraft/rotorcraft cabin using moist air"
+package DynTherM "Dynamic modeling and simulation of Thermal Management systems"
 
-  annotation (uses(
-      Modelica(version="4.0.0"), ThermoPower(version="3.2")),
-                                  version="2",
-  conversion(noneFromVersion="1"));
-end ThermalManagement;
+  annotation (uses(Modelica(version="4.0.0")),
+      version="2",
+      conversion(noneFromVersion="1"));
+end DynTherM;

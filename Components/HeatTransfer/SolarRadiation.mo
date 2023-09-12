@@ -1,11 +1,11 @@
-﻿within ThermalManagement.Components.HeatTransfer;
+﻿within DynTherM.Components.HeatTransfer;
 model SolarRadiation
   "Model of direct, diffuse and reflected solar irradiance on a planar, arbitrary oriented surface"
   // Reference: ASHRAE Handbook – Fundamentals, chapter 14, 2013.
   // The following models are strictly valid only for clear-sky at ground level
   // Corrections for cloudy-sky and altitude effects should be implemented
 
-  outer ThermalManagement.Components.Environment environment;
+  outer DynTherM.Components.Environment environment;
   constant Modelica.Units.SI.Irradiance E_sc=1367 "Solar constant";
   parameter Modelica.Units.SI.Irradiance E_tb_fixed=0.0
     "Fixed value of the beam component of the clear-sky solar irradiance" annotation (Dialog(tab="Coupling with external sw"));

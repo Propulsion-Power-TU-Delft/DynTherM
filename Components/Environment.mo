@@ -1,4 +1,4 @@
-within ThermalManagement.Components;
+within DynTherM.Components;
 model Environment "Environmental properties (moist air)"
   // References:
   // [1] ISA model to compute variation of properties with altitude
@@ -42,7 +42,8 @@ model Environment "Environmental properties (moist air)"
     "Bypass solar radiation calculations and get E_dir, E_diff, E_refl, theta from an external sw" annotation (Dialog(group="External inputs"), choices(checkBox=true));
   parameter Boolean allowFlowReversal=true
     "= false to restrict to design flow direction (inlet -> outlet)" annotation (Dialog(tab="Simulation options"));
-  parameter ThermalManagement.Choices.InitOpt initOpt=ThermalManagement.Choices.InitOpt.steadyState annotation (Dialog(tab="Simulation options"));
+  parameter DynTherM.Choices.InitOpt initOpt=DynTherM.Choices.InitOpt.steadyState
+    annotation (Dialog(tab="Simulation options"));
   constant Real sigma( final quantity="Stefan-Boltzmann constant", final unit="W/(m2.K4)")=5.67e-8;
   constant Modelica.Units.SI.Acceleration g=9.80665
     "Gravitational acceleration";

@@ -1,4 +1,4 @@
-within ThermalManagement.Systems.Helicopter.Tests;
+within DynTherM.Systems.Helicopter.Tests;
 model Cockpit "Testing the cockpit and evaporator together"
   package Medium = Modelica.Media.Air.MoistAir;
   parameter Medium.MassFraction X_env=0.01867;

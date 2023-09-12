@@ -1,4 +1,4 @@
-within ThermalManagement.Systems.Helicopter.NH90.AdvancedModels;
+within DynTherM.Systems.Helicopter.NH90.AdvancedModels;
 model HeliCabin
   "Helicopter cabin advanced model made to match with basic NH90 Airbus"
   outer Components.Environment environment;
@@ -66,54 +66,54 @@ model HeliCabin
 
   // Materials
   replaceable model Fuselage_int =
-      ThermalManagement.Materials.AirbusEES.Fuselage                              constrainedby
-    ThermalManagement.Materials.Properties
+      DynTherM.Materials.AirbusEES.Fuselage constrainedby
+    DynTherM.Materials.Properties
     "Internal fuselage material" annotation (choicesAllMatching=true, Dialog(tab="Materials + Correlations", group="Materials"));
   replaceable model Fuselage_core =
-      ThermalManagement.Materials.AirbusEES.Fuselage                               constrainedby
-    ThermalManagement.Materials.Properties
+      DynTherM.Materials.AirbusEES.Fuselage constrainedby
+    DynTherM.Materials.Properties
     "Core fuselage material" annotation (choicesAllMatching=true, Dialog(tab="Materials + Correlations", group="Materials"));
   replaceable model Fuselage_ext =
-      ThermalManagement.Materials.AirbusEES.Fuselage                              constrainedby
-    ThermalManagement.Materials.Properties
+      DynTherM.Materials.AirbusEES.Fuselage constrainedby
+    DynTherM.Materials.Properties
     "External fuselage material" annotation (choicesAllMatching=true, Dialog(tab="Materials + Correlations", group="Materials"));
   // Heat correlations
   replaceable model HTC_int =
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
     constrainedby
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
     "Internal heat correlation" annotation (choicesAllMatching=true, Dialog(tab="Materials + Correlations", group="Heat Correlations"));
   replaceable model HTC_ext =
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassExternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal
     constrainedby
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassExternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal
     "External heat correlation" annotation (choicesAllMatching=true, Dialog(tab="Materials + Correlations", group="Heat Correlations"));
   replaceable model HTC_floor =
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
     constrainedby
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
     "Floor heat correlation" annotation (choicesAllMatching=true, Dialog(tab="Materials + Correlations", group="Heat Correlations"));
   replaceable model HTC_duct =
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
     constrainedby
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
     "Duct heat correlation" annotation (choicesAllMatching=true, Dialog(tab="Materials + Correlations", group="Heat Correlations"));
   replaceable model HTC_engine =
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
     constrainedby
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
     "Engine heat correlation" annotation (choicesAllMatching=true, Dialog(tab="Materials + Correlations", group="Heat Correlations"));
   replaceable model HTC_btp =
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
     constrainedby
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
     "Transmission heat correlation" annotation (choicesAllMatching=true, Dialog(tab="Materials + Correlations", group="Heat Correlations"));
   // Floor
   Components.HeatTransfer.WallConduction floorConduction(
     t=t_floor,
     A=A_floor,
     redeclare model Mat = Materials.AirbusEES.Floor,
-    initOpt=ThermalManagement.Choices.InitOpt.fixedState,
+    initOpt=DynTherM.Choices.InitOpt.fixedState,
     Tstart=313.15)
     annotation (Placement(transformation(extent={{-48,-40},{-28,-20}})));
   Components.HeatTransfer.InternalConvection floorIntConvection(A=A_floor,
@@ -253,7 +253,7 @@ model HeliCabin
   Components.HeatTransfer.InternalConvection ductIntConvection(A=A_duct,
     redeclare model HTC = HTC_int) annotation (Placement(transformation(extent={{44,-30},{64,-10}})));
   Components.HeatTransfer.WallConduction ductConduction(
-    initOpt=ThermalManagement.Choices.InitOpt.fixedState,
+    initOpt=DynTherM.Choices.InitOpt.fixedState,
     redeclare model Mat = Materials.AirbusEES.Duct,
     t=t_duct,
     A=A_duct,

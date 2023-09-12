@@ -1,10 +1,10 @@
-within ThermalManagement.Systems.Aircraft.Subsystems;
+within DynTherM.Systems.Aircraft.Subsystems;
 model FlightDeckWindshield
   "Model of flight deck windshield, made of glass-faced acrylic"
   // Reference: F. Zanghirella, et al. - A Numerical Model to Evaluate the thermal Behaviour of Active Transparent Facades, 2011.
   // Hp: air leakage from pressurized cabin to environment is neglected
 
-  outer ThermalManagement.Components.Environment environment "Environmental properties";
+  outer DynTherM.Components.Environment environment "Environmental properties";
 
   parameter Modelica.Units.SI.Length t_glass=0.005 "Thickness of the tempered glass layer";
   parameter Modelica.Units.SI.Length t_outer_acrylic=0.02 "Thickness of the external stretched acrylic layer";
@@ -13,10 +13,10 @@ model FlightDeckWindshield
   parameter Modelica.Units.SI.Temperature Tstart "Tmperature of the window - starting value" annotation (Dialog(tab="Initialization"));
 
   Components.HeatTransfer.WindowRadiation glassRadiation(redeclare model Mat =
-        ThermalManagement.Materials.TemperedGlass, A=A_windshield)
+        DynTherM.Materials.TemperedGlass,          A=A_windshield)
     annotation (Placement(transformation(extent={{-62,132},{2,68}})));
   Components.HeatTransfer.WallConduction glassConduction(
-    redeclare model Mat = ThermalManagement.Materials.TemperedGlass,
+    redeclare model Mat = DynTherM.Materials.TemperedGlass,
     t=t_glass,
     A=A_windshield,
     Tstart=Tstart,

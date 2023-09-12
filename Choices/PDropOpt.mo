@@ -1,4 +1,4 @@
-within ThermalManagement.Choices;
+within DynTherM.Choices;
 type PDropOpt = enumeration(
     fixed "Constant pressure drop",
     linear "Linear pressure drop computed with hydraulic resistance",

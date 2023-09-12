@@ -1,4 +1,4 @@
-within ThermalManagement.Sensors;
+within DynTherM.Sensors;
 model PressureSensor "Absolute pressure sensor"
   extends Modelica.Icons.RoundSensor;
   Modelica.Blocks.Interfaces.RealOutput y annotation (Placement(transformation(extent={{100,-10},{120,10}})));

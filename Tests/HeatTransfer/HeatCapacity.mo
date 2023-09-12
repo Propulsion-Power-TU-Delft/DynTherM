@@ -1,7 +1,7 @@
-within ThermalManagement.Tests.HeatTransfer;
+within DynTherM.Tests.HeatTransfer;
 model HeatCapacity
   Components.HeatTransfer.HeatCapacity heatCapacity(
-    initOpt=ThermalManagement.Choices.InitOpt.fixedState,
+    initOpt=DynTherM.Choices.InitOpt.fixedState,
     m=20*180,
     c=1000,
     A=2*180)
@@ -17,7 +17,7 @@ model HeatCapacity
     Altitude(displayUnit="km") = 11000,
     phi_amb=0.2,
     allowFlowReversal=true,
-    initOpt=ThermalManagement.Choices.InitOpt.steadyState)
+    initOpt=DynTherM.Choices.InitOpt.steadyState)
     annotation (Placement(transformation(extent={{-100,60},{-60,100}})));
 equation
   connect(heatCapacity.irradiancePort, solarRadiation.inlet) annotation (

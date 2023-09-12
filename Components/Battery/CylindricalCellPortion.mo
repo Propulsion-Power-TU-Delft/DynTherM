@@ -1,8 +1,8 @@
-within ThermalManagement.Components.Battery;
+within DynTherM.Components.Battery;
 model CylindricalCellPortion "1D thermal model of 1/4 portion of a cylindrical cell"
 
-  replaceable model CellMat=ThermalManagement.Materials.NCA18650  constrainedby
-    ThermalManagement.Materials.CellProperties "Material properties of the prescribed cell type" annotation (choicesAllMatching=true);
+  replaceable model CellMat=DynTherM.Materials.NCA18650 constrainedby
+    DynTherM.Materials.CellProperties          "Material properties of the prescribed cell type" annotation (choicesAllMatching=true);
 
   parameter Real SOC "State-of-charge [%]";
   parameter Modelica.Units.SI.Length H_cell "Height of the cell";
@@ -13,7 +13,8 @@ model CylindricalCellPortion "1D thermal model of 1/4 portion of a cylindrical c
 
   // Initialization
   parameter Modelica.Units.SI.Temperature Tstart "Temperature start value" annotation (Dialog(tab="Initialization"));
-  parameter ThermalManagement.Choices.InitOpt initOpt "Initialization option" annotation (Dialog(tab="Initialization"));
+  parameter DynTherM.Choices.InitOpt initOpt "Initialization option"
+    annotation (Dialog(tab="Initialization"));
 
   Modelica.Units.SI.SpecificHeatCapacity cm "Specific heat capacity at the prescribed SOC";
   Modelica.Units.SI.ThermalConductivity lambda "Thermal conductivity at the prescribed SOC";
@@ -61,9 +62,9 @@ equation
   assert(SOC <= 100, "SOC must be lower or equal to 100%");
 
 initial equation
-  if initOpt == ThermalManagement.Choices.InitOpt.steadyState then
+  if initOpt == DynTherM.Choices.InitOpt.steadyState then
     der(T_cell) = 0;
-  elseif initOpt == ThermalManagement.Choices.InitOpt.fixedState then
+  elseif initOpt == DynTherM.Choices.InitOpt.fixedState then
     T_cell = Tstart;
   else
     // do nothing

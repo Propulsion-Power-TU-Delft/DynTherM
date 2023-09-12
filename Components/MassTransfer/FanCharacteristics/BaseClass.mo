@@ -1,4 +1,4 @@
-within ThermalManagement.Components.MassTransfer.FanCharacteristics;
+within DynTherM.Components.MassTransfer.FanCharacteristics;
 class BaseClass
   input Modelica.Units.SI.AngularVelocity omega_nom
     "Nominal rotational speed";

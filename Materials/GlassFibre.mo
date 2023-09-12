@@ -1,4 +1,4 @@
-within ThermalManagement.Materials;
+within DynTherM.Materials;
 model GlassFibre "Glass fibre used for insulation blankets"
   extends Modelica.Icons.MaterialProperty;
   extends Materials.Properties(

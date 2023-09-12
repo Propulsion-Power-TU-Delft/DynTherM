@@ -1,4 +1,4 @@
-within ThermalManagement.Materials.AirbusEES;
+within DynTherM.Materials.AirbusEES;
 model Fuselage "NH90: Fuselage material"
   extends Modelica.Icons.MaterialProperty;
   extends Materials.Properties(

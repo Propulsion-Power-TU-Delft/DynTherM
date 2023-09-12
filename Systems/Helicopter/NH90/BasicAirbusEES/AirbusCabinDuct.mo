@@ -1,4 +1,4 @@
-within ThermalManagement.Systems.Helicopter.NH90.BasicAirbusEES;
+within DynTherM.Systems.Helicopter.NH90.BasicAirbusEES;
 model AirbusCabinDuct
   outer Components.Environment environment;
   parameter Modelica.Units.SI.Temperature T_start=300 "Start temperature";
@@ -128,7 +128,7 @@ model AirbusCabinDuct
   Components.MassTransfer.Plenum plenum(
     noInitialPressure=false,
     noInitialTemperature=false,
-    initOpt=ThermalManagement.Choices.InitOpt.fixedState,
+    initOpt=DynTherM.Choices.InitOpt.fixedState,
     Q_int=Q_avionics,
     Q_sens_fixed=N_occupants[1]*Q_occupants,
     m_H2O_fixed=N_occupants[1]*m_H2O,

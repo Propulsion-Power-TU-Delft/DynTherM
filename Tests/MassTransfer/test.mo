@@ -1,4 +1,4 @@
-within ThermalManagement.Tests.MassTransfer;
+within DynTherM.Tests.MassTransfer;
 model test
   "Simple test of components SourceMassFlow, Plenum, ValveLin, PressureSink"
   Modelica.Blocks.Sources.Constant m_fromMix(k=1)

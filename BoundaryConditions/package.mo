@@ -1,4 +1,4 @@
-within ThermalManagement;
+within DynTherM;
 package BoundaryConditions "Package to add boundary conditions"
 
 

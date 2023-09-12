@@ -1,20 +1,19 @@
-within ThermalManagement.Systems.Aircraft.Subsystems;
+within DynTherM.Systems.Aircraft.Subsystems;
 model CargoBay "Lower section of the fuselage: cargo bay"
   // Hp: the fuselage is modelled as a hollow cylinder
 
-  outer ThermalManagement.Components.Environment environment
-    "Environmental properties";
+  outer DynTherM.Components.Environment environment "Environmental properties";
 
   replaceable model HTC_int =
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
     constrainedby
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
     annotation (choicesAllMatching=true);
 
   replaceable model HTC_ext =
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassExternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal
     constrainedby
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassExternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal
     annotation (choicesAllMatching=true);
 
   parameter Modelica.Units.SI.HeatFlowRate Q_int "Internal heat load";
@@ -75,8 +74,7 @@ model CargoBay "Lower section of the fuselage: cargo bay"
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b cargoToFloor
     annotation (Placement(transformation(extent={{-10,90},{10,110}}),
         iconTransformation(extent={{-70,70},{-50,90}})));
-  ThermalManagement.Systems.Aircraft.Subsystems.LowerFuselageHeatTransfer
-    section_6(
+  DynTherM.Systems.Aircraft.Subsystems.LowerFuselageHeatTransfer section_6(
     redeclare model HTC_int = HTC_int,
     redeclare model HTC_ext = HTC_ext,
     coeff=1/8,
@@ -90,8 +88,7 @@ model CargoBay "Lower section of the fuselage: cargo bay"
     theta=theta_6,
     Tstart_fuselage=Tstart_fuselage)
     annotation (Placement(transformation(extent={{-80,-56},{-40,-96}})));
-  ThermalManagement.Systems.Aircraft.Subsystems.LowerFuselageHeatTransfer
-    section_7(
+  DynTherM.Systems.Aircraft.Subsystems.LowerFuselageHeatTransfer section_7(
     redeclare model HTC_int = HTC_int,
     redeclare model HTC_ext = HTC_ext,
     coeff=1/8,
@@ -105,8 +102,7 @@ model CargoBay "Lower section of the fuselage: cargo bay"
     theta=theta_7,
     Tstart_fuselage=Tstart_fuselage)
     annotation (Placement(transformation(extent={{-20,-56},{20,-96}})));
-  ThermalManagement.Systems.Aircraft.Subsystems.LowerFuselageHeatTransfer
-    section_8(
+  DynTherM.Systems.Aircraft.Subsystems.LowerFuselageHeatTransfer section_8(
     redeclare model HTC_int = HTC_int,
     redeclare model HTC_ext = HTC_ext,
     coeff=1/8,

@@ -1,4 +1,4 @@
-within ThermalManagement.Tests.HeatTransfer;
+within DynTherM.Tests.HeatTransfer;
 model ConductionWallSteady
   "Validation test case of steady-state conduction (wall). Reference: es.8, pag.92 fisica tecnica"
   BoundaryConditions.thermal cold_side(
@@ -7,16 +7,16 @@ model ConductionWallSteady
     use_in_T=false)
     annotation (Placement(transformation(extent={{-20,-98},{10,-80}})));
   Components.HeatTransfer.WallConduction wall_A(
-    redeclare model Mat = ThermalManagement.Materials.Aluminium,
+    redeclare model Mat = DynTherM.Materials.Aluminium,
     t=0.1,
     A=0.4,
-    initOpt=ThermalManagement.Choices.InitOpt.steadyState)
+    initOpt=DynTherM.Choices.InitOpt.steadyState)
     annotation (Placement(transformation(extent={{-20,46},{20,8}})));
   Components.HeatTransfer.WallConduction wall_D(
-    redeclare model Mat = ThermalManagement.Materials.Aluminium,
+    redeclare model Mat = DynTherM.Materials.Aluminium,
     t=0.1,
     A=0.4,
-    initOpt=ThermalManagement.Choices.InitOpt.steadyState)
+    initOpt=DynTherM.Choices.InitOpt.steadyState)
     annotation (Placement(transformation(extent={{-20,-6},{20,-44}})));
   BoundaryConditions.thermal hot_side(
     T=373.15,
@@ -24,16 +24,16 @@ model ConductionWallSteady
     use_in_T=false)
     annotation (Placement(transformation(extent={{-20,80},{10,98}})));
   Components.HeatTransfer.WallConduction wall_B(
-    redeclare model Mat = ThermalManagement.Materials.Aluminium,
+    redeclare model Mat = DynTherM.Materials.Aluminium,
     t=0.1,
     A=0.18,
-    initOpt=ThermalManagement.Choices.InitOpt.steadyState)
+    initOpt=DynTherM.Choices.InitOpt.steadyState)
     annotation (Placement(transformation(extent={{-60,20},{-20,-18}})));
   Components.HeatTransfer.WallConduction wall_C(
-    redeclare model Mat = ThermalManagement.Materials.Aluminium,
+    redeclare model Mat = DynTherM.Materials.Aluminium,
     t=0.1,
     A=0.22,
-    initOpt=ThermalManagement.Choices.InitOpt.steadyState)
+    initOpt=DynTherM.Choices.InitOpt.steadyState)
     annotation (Placement(transformation(extent={{20,20},{60,-18}})));
   Modelica.Thermal.HeatTransfer.Components.Convection convection_1 annotation (
       Placement(transformation(

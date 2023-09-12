@@ -1,4 +1,4 @@
-within ThermalManagement.Components.HeatTransfer.HTCorrelations.InternalConvection;
+within DynTherM.Components.HeatTransfer.HTCorrelations.InternalConvection;
 model Cylinder
   "Internal convection for cylindrical shape"
   extends BaseClassInternal;

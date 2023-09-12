@@ -1,4 +1,4 @@
-within ThermalManagement.Components.HeatTransfer.HTCorrelations.ExternalConvection;
+within DynTherM.Components.HeatTransfer.HTCorrelations.ExternalConvection;
 model HelicopterFlyingAircraft
   "FlyingAircraft: Convection during low forward speed (aircraft) used for comparison to helicopters"
   // Reference: ASHRAE Handbook - HVAC Applications, chapter 13

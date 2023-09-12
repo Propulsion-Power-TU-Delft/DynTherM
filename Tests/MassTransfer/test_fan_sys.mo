@@ -1,4 +1,4 @@
-within ThermalManagement.Tests.MassTransfer;
+within DynTherM.Tests.MassTransfer;
 model test_fan_sys "Simple test of component simpleFan"
 
   Modelica.Blocks.Interfaces.RealInput T_fromMix annotation (Placement(
@@ -20,7 +20,7 @@ model test_fan_sys "Simple test of component simpleFan"
         origin={-40,60})));
   inner Components.Environment environment(
     allowFlowReversal=false,
-    initOpt=ThermalManagement.Choices.InitOpt.fixedState)
+    initOpt=DynTherM.Choices.InitOpt.fixedState)
     annotation (Placement(transformation(extent={{60,60},{100,100}})));
   Components.MassTransfer.Plenum cabin(
     V=186,

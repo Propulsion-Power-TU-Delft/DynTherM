@@ -1,4 +1,4 @@
-within ThermalManagement.Materials;
+within DynTherM.Materials;
 model Glass "Common glass"
   // References:
   // [1] J. Deng et al. - Study on the thermodynamic characteristic matching property and limit

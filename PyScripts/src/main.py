@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ########################################################################################################################
-# ThermalManagement
+# DynTherM: Dynamic modeling and simulation of Thermal Management systems
 # Author: ir. A. Giuffre'
 # Content: main program
 # 2022 - TU Delft - All rights reserved
@@ -15,7 +15,7 @@ from src.aircraft import Aircraft
 
 
 # user-defined input
-package_dir = "C:\\Users\\agiuffre\\Projects\\ModelicaProjects\\thermalmanagement\\package.mo"
+package_dir = "C:\\Users\\agiuffre\\Projects\\ModelicaProjects\\DynTherM\\package.mo"
 cfg_file = "config_validation"
 res_file = "validation"
 
@@ -28,10 +28,14 @@ n_cases = df_aircraft.shape[0]
 # initialize dataframe to store results
 df_res = init_output_df()
 
+# create Simulations folder (if it does not exist already)
+if not os.path.isdir(os.path.join('..', '..', 'Simulations')):
+    os.makedirs(os.path.join('..', '..', 'Simulations'))
+
 warnings.filterwarnings("ignore")
 print("\n********************************************************")
-print("  ThermalManagement - Aircraft Heat Loads Estimation")
-print("  Author: ir. A. Giuffre'")
+print("  DynTherM - Dynamic modeling and simulation of Thermal Management systems")
+print("  Author: Dr. ir. A. Giuffre'")
 print("  Delft University of Technology - All rights reserved")
 print("********************************************************")
 

@@ -1,19 +1,19 @@
-within ThermalManagement.Components.MassTransfer;
+within DynTherM.Components.MassTransfer;
 model ValveLin "Valve for gas flows with linear pressure drop"
   package Medium = Modelica.Media.Air.MoistAir;
-  parameter ThermalManagement.CustomUnits.HydraulicConductance Kv
+  parameter DynTherM.CustomUnits.HydraulicConductance Kv
     "Hydraulic conductance";
   parameter Boolean allowFlowReversal=environment.allowFlowReversal
     "= true to allow flow reversal, false restricts to design direction";
-  outer ThermalManagement.Components.Environment environment "Environmental properties";
+  outer DynTherM.Components.Environment environment "Environmental properties";
   Medium.MassFlowRate massFlow "Mass flowrate";
-  ThermalManagement.CustomInterfaces.FluidPort_A inlet(m_flow(min=if
-          allowFlowReversal then -Modelica.Constants.inf else 0)) annotation (
-      Placement(transformation(extent={{-120,-20},{-80,20}}, rotation=0),
+  DynTherM.CustomInterfaces.FluidPort_A inlet(m_flow(min=if allowFlowReversal
+           then -Modelica.Constants.inf else 0)) annotation (Placement(
+        transformation(extent={{-120,-20},{-80,20}}, rotation=0),
         iconTransformation(extent={{-110,-10},{-90,10}})));
-  ThermalManagement.CustomInterfaces.FluidPort_B outlet(m_flow(max=if
-          allowFlowReversal then +Modelica.Constants.inf else 0)) annotation (
-      Placement(transformation(extent={{80,-20},{120,20}}, rotation=0),
+  DynTherM.CustomInterfaces.FluidPort_B outlet(m_flow(max=if allowFlowReversal
+           then +Modelica.Constants.inf else 0)) annotation (Placement(
+        transformation(extent={{80,-20},{120,20}}, rotation=0),
         iconTransformation(extent={{90,-10},{110,10}})));
   Modelica.Blocks.Interfaces.RealInput opening annotation (Placement(
         transformation(

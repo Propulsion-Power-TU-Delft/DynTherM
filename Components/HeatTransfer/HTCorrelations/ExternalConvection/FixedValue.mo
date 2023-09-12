@@ -1,4 +1,4 @@
-within ThermalManagement.Components.HeatTransfer.HTCorrelations.ExternalConvection;
+within DynTherM.Components.HeatTransfer.HTCorrelations.ExternalConvection;
 model FixedValue "Fixed ht value"
   extends BaseClassExternal;
   parameter Modelica.Units.SI.CoefficientOfHeatTransfer ht_fixed

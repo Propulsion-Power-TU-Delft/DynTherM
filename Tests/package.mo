@@ -1,4 +1,4 @@
-within ThermalManagement;
+within DynTherM;
 package Tests
   extends Modelica.Icons.ExamplesPackage;
 

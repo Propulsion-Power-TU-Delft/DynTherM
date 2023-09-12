@@ -1,14 +1,13 @@
-within ThermalManagement.Components.HeatTransfer;
+within DynTherM.Components.HeatTransfer;
 model ExternalConvection "0D model of external convection"
   package Medium = Modelica.Media.Air.MoistAir;
-  outer ThermalManagement.Components.Environment environment
-    "Environmental properties";
+  outer DynTherM.Components.Environment environment "Environmental properties";
   parameter Modelica.Units.SI.Area A "Heat transfer area";
   replaceable model HTC =
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassExternal
-     constrainedby
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassExternal(
-    T_skin=inlet.T)
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal
+    constrainedby
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal(T_skin=
+        inlet.T)
     annotation (choicesAllMatching=true);
   HTC ht_correlation;
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a inlet

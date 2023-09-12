@@ -1,13 +1,13 @@
-within ThermalManagement.Components.HeatTransfer;
+within DynTherM.Components.HeatTransfer;
 model WallRadiation "0D model of incident and emitted thermal radiation"
   // References:
   // [1] F. Goia, et al. - A Numerical Model to Evaluate the thermal Behaviour of PCM Glazing System Configurations, 2012.
 
-  replaceable model Material=ThermalManagement.Materials.Paints.WhitePaint constrainedby
-    ThermalManagement.Materials.Paints.BasePaint "Material choice" annotation (choicesAllMatching=true);
+  replaceable model Material=DynTherM.Materials.Paints.WhitePaint
+    constrainedby DynTherM.Materials.Paints.BasePaint
+                                                 "Material choice" annotation (choicesAllMatching=true);
   Material Mat;
-  outer ThermalManagement.Components.Environment environment
-    "Environmental properties";
+  outer DynTherM.Components.Environment environment "Environmental properties";
   parameter Modelica.Units.SI.Area A "Heat transfer surface";
   parameter Modelica.Units.SI.Angle csi
     "Tilt angle of the surface wrt horizontal";

@@ -1,4 +1,4 @@
-within ThermalManagement.Materials;
+within DynTherM.Materials;
 model Properties
   constant Modelica.Units.SI.Density rho "Material density";
   constant Modelica.Units.SI.ThermalConductivity lambda "Thermal conductivity";

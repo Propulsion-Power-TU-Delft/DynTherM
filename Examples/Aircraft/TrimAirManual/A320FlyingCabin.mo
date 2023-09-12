@@ -1,4 +1,4 @@
-within ThermalManagement.Examples.Aircraft.TrimAirManual;
+within DynTherM.Examples.Aircraft.TrimAirManual;
 model A320FlyingCabin "Aircraft is flying, two temperature zones"
   // Pack discharge temperature determined by cabin cooling requirement
   // Trim air flow determined by cockpit temperature set point
@@ -57,7 +57,7 @@ model A320FlyingCabin "Aircraft is flying, two temperature zones"
     T_ground(displayUnit="degC"),
     use_ext_sw=true,
     allowFlowReversal=false,
-    initOpt=ThermalManagement.Choices.InitOpt.steadyState)
+    initOpt=DynTherM.Choices.InitOpt.steadyState)
     annotation (Placement(transformation(extent={{-100,-20},{-66,14}})));
   Modelica.Blocks.Math.Add add_T(k1=+1, k2=-1) annotation (Placement(
         transformation(
@@ -78,13 +78,13 @@ model A320FlyingCabin "Aircraft is flying, two temperature zones"
     redeclare model HTC_int_lower =
         Components.HeatTransfer.HTCorrelations.InternalConvection.Cylinder,
     redeclare model HTC_ext_upper =
-        ThermalManagement.Components.HeatTransfer.HTCorrelations.ExternalConvection.AircraftFlying
+        DynTherM.Components.HeatTransfer.HTCorrelations.ExternalConvection.AircraftFlying
         (
         L=A320.L_fuselage,
         R_ext=A320.R_fuselage,
         L_nose=A320.R_fuselage/2),
     redeclare model HTC_ext_lower =
-        ThermalManagement.Components.HeatTransfer.HTCorrelations.ExternalConvection.AircraftFlying
+        DynTherM.Components.HeatTransfer.HTCorrelations.ExternalConvection.AircraftFlying
         (
         L=A320.L_fuselage,
         R_ext=A320.R_fuselage,

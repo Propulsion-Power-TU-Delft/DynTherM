@@ -1,6 +1,6 @@
-within ThermalManagement.BoundaryConditions;
+within DynTherM.BoundaryConditions;
 model mechanical "Model to impose torque and rotational speed"
-  extends ThermalManagement.Base.min1;
+  extends DynTherM.Base.min1;
   parameter Modelica.Units.SI.Torque M=0 "Torque"
     annotation (Dialog(tab="Boundary conditions", enable=use_M));
   parameter Modelica.Units.SI.AngularVelocity omega=3000 "Rotational speed"

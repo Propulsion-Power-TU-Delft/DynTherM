@@ -1,7 +1,7 @@
-within ThermalManagement.Components.MassTransfer;
+within DynTherM.Components.MassTransfer;
 model simpleFan
   package Medium = Modelica.Media.Air.MoistAir;
-  outer ThermalManagement.Components.Environment environment "Environmental properties";
+  outer DynTherM.Components.Environment environment "Environmental properties";
   parameter Boolean allowFlowReversal=environment.allowFlowReversal
      "= true to allow flow reversal, false restricts to design direction";
   parameter Real eta_is "Isentropic efficiency at design point";
@@ -29,9 +29,9 @@ model simpleFan
   Real beta "Compression ratio";
 
   replaceable
-    ThermalManagement.Components.MassTransfer.FanCharacteristics.FlowCharacteristics.dummyFlow
+    DynTherM.Components.MassTransfer.FanCharacteristics.FlowCharacteristics.dummyFlow
     flowModel constrainedby
-    ThermalManagement.Components.MassTransfer.FanCharacteristics.BaseClass(
+    DynTherM.Components.MassTransfer.FanCharacteristics.BaseClass(
     omega_nom=omega_nom,
     omega=shaft.omega,
     volFlow_nom=volFlow_nom,

@@ -1,4 +1,4 @@
-within ThermalManagement.Materials;
+within DynTherM.Materials;
 partial model CellProperties
 
   constant Real poly_cm_SOC0[2] "Polynomial coefficient of specific heat capacity fitting at SOC=0%";

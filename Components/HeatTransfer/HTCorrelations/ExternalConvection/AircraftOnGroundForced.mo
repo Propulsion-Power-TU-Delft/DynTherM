@@ -1,4 +1,4 @@
-within ThermalManagement.Components.HeatTransfer.HTCorrelations.ExternalConvection;
+within DynTherM.Components.HeatTransfer.HTCorrelations.ExternalConvection;
 model AircraftOnGroundForced
   "Forced convection along the fuselage of an aircraft on ground"
   // Reference: ASHRAE Handbook - HVAC Applications, chapter 13

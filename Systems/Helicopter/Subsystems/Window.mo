@@ -1,4 +1,4 @@
-within ThermalManagement.Systems.Helicopter.Subsystems;
+within DynTherM.Systems.Helicopter.Subsystems;
 model Window
   outer Components.Environment environment;
   parameter Modelica.Units.SI.Length L "Window length"
@@ -15,15 +15,15 @@ model Window
   final parameter Modelica.Units.SI.Area A=L*W "Window area";
 
   replaceable model HTC_int =
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
     constrainedby
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
     annotation (choicesAllMatching=true, Dialog(group="Heat Correlations"));
 
   replaceable model HTC_ext =
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassExternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal
     constrainedby
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassExternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal
     annotation (choicesAllMatching=true, Dialog(group="Heat Correlations"));
 
   //Window Radiation

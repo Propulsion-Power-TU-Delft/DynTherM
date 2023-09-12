@@ -1,4 +1,4 @@
-within ThermalManagement.Tests.HeatTransfer;
+within DynTherM.Tests.HeatTransfer;
 model ConductionConvectionUnsteady
   "Validation test case of unsteady conduction (tube) + convection"
 
@@ -10,7 +10,7 @@ model ConductionConvectionUnsteady
     L(displayUnit="m") = 1,
     R_ext(displayUnit="mm") = 0.11,
     R_int(displayUnit="mm") = 0.105,
-    initOpt=ThermalManagement.Choices.InitOpt.steadyState,
+    initOpt=DynTherM.Choices.InitOpt.steadyState,
     coeff=1,
     redeclare model Mat = Materials.Aluminium)
     annotation (Placement(transformation(extent={{-28,2},{28,-42}})));
@@ -18,13 +18,13 @@ model ConductionConvectionUnsteady
     L(displayUnit="m") = 1,
     R_ext(displayUnit="mm") = 0.15,
     R_int(displayUnit="mm") = 0.11,
-    initOpt=ThermalManagement.Choices.InitOpt.steadyState,
+    initOpt=DynTherM.Choices.InitOpt.steadyState,
     coeff=1,
-    redeclare model Mat = ThermalManagement.Materials.GlassFibre)
+    redeclare model Mat = DynTherM.Materials.GlassFibre)
     annotation (Placement(transformation(extent={{-28,42},{28,-2}})));
   Components.HeatTransfer.ExternalConvection Convection(A=A_ext,
                                                         redeclare model HTC =
-        ThermalManagement.Components.HeatTransfer.HTCorrelations.ExternalConvection.FixedValue
+        DynTherM.Components.HeatTransfer.HTCorrelations.ExternalConvection.FixedValue
         (ht_fixed=20))
     annotation (Placement(transformation(extent={{-28,96},{28,42}})));
   inner Components.Environment environment(
@@ -39,8 +39,8 @@ model ConductionConvectionUnsteady
     annotation (Placement(transformation(extent={{-20,-96},{10,-78}})));
   Components.HeatTransfer.InternalConvection internalConvection(A=A_int,
                                                                 redeclare model
-            HTC =
-        ThermalManagement.Components.HeatTransfer.HTCorrelations.InternalConvection.FixedValue
+      HTC =
+        DynTherM.Components.HeatTransfer.HTCorrelations.InternalConvection.FixedValue
         (ht_fixed=10))
     annotation (Placement(transformation(extent={{-24,-82},{24,-34}})));
   Modelica.Blocks.Sources.Step step(

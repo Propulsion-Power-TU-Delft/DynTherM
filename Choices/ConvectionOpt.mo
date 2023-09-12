@@ -1,4 +1,4 @@
-within ThermalManagement.Choices;
+within DynTherM.Choices;
 type ConvectionOpt = enumeration(
     fixedValue "Fixed heat transfer coefficient",
     groundFree "Ground condition, free convection",

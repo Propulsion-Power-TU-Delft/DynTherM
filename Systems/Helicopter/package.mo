@@ -1,4 +1,4 @@
-within ThermalManagement.Systems;
+within DynTherM.Systems;
 package Helicopter "Helicopter specific subsystems"
 
 

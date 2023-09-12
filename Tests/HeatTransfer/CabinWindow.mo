@@ -1,4 +1,4 @@
-within ThermalManagement.Tests.HeatTransfer;
+within DynTherM.Tests.HeatTransfer;
 model CabinWindow
   Components.HeatTransfer.SolarRadiation solarRadiation(csi=0.5235987755983)
     annotation (Placement(transformation(extent={{-22,98},{22,54}})));
@@ -6,7 +6,7 @@ model CabinWindow
     Altitude(displayUnit="km") = 11000,
     phi_amb=0.2,
     allowFlowReversal=true,
-    initOpt=ThermalManagement.Choices.InitOpt.steadyState)
+    initOpt=DynTherM.Choices.InitOpt.steadyState)
     annotation (Placement(transformation(extent={{-100,60},{-60,100}})));
   CustomInterfaces.IrradiancePort irradiancePort
     annotation (Placement(transformation(extent={{-50,-90},{-30,-70}})));

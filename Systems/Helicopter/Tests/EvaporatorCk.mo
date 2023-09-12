@@ -1,4 +1,4 @@
-within ThermalManagement.Systems.Helicopter.Tests;
+within DynTherM.Systems.Helicopter.Tests;
 model EvaporatorCk
   "Testing the evaporator solely with EES cockpit inputs"
   package Medium = Modelica.Media.Air.MoistAir;

@@ -1,4 +1,4 @@
-within ThermalManagement.Tests.HeatTransfer;
+within DynTherM.Tests.HeatTransfer;
 model ConductionConvectionRadiationSteady
   "Validation test case of steady-state conduction (tube) + convection + radiation"
 
@@ -10,7 +10,7 @@ model ConductionConvectionRadiationSteady
     L(displayUnit="m") = 1,
     R_ext(displayUnit="mm") = 0.11,
     R_int(displayUnit="mm") = 0.105,
-    initOpt=ThermalManagement.Choices.InitOpt.steadyState,
+    initOpt=DynTherM.Choices.InitOpt.steadyState,
     coeff=1,
     redeclare model Mat = Materials.Aluminium)
     annotation (Placement(transformation(extent={{-22,-8},{22,-50}})));
@@ -18,13 +18,13 @@ model ConductionConvectionRadiationSteady
     L(displayUnit="m") = 1,
     R_ext(displayUnit="mm") = 0.15,
     R_int(displayUnit="mm") = 0.11,
-    initOpt=ThermalManagement.Choices.InitOpt.steadyState,
+    initOpt=DynTherM.Choices.InitOpt.steadyState,
     coeff=1,
-    redeclare model Mat = ThermalManagement.Materials.GlassFibre)
+    redeclare model Mat = DynTherM.Materials.GlassFibre)
     annotation (Placement(transformation(extent={{-22,24},{22,-18}})));
   Components.HeatTransfer.ExternalConvection Convection(A=A_ext,
                                                         redeclare model HTC =
-        ThermalManagement.Components.HeatTransfer.HTCorrelations.ExternalConvection.FixedValue
+        DynTherM.Components.HeatTransfer.HTCorrelations.ExternalConvection.FixedValue
         (ht_fixed=20))
     annotation (Placement(transformation(extent={{20,62},{60,22}})));
   inner Components.Environment environment(
@@ -39,13 +39,13 @@ model ConductionConvectionRadiationSteady
     annotation (Placement(transformation(extent={{-20,-96},{10,-78}})));
   Components.HeatTransfer.InternalConvection internalConvection(A=A_int,
                                                                 redeclare model
-            HTC =
-        ThermalManagement.Components.HeatTransfer.HTCorrelations.InternalConvection.FixedValue
+      HTC =
+        DynTherM.Components.HeatTransfer.HTCorrelations.InternalConvection.FixedValue
         (ht_fixed=10))
     annotation (Placement(transformation(extent={{-20,-80},{20,-40}})));
   Components.HeatTransfer.WallRadiation wallRadiation(
     redeclare model Material =
-        ThermalManagement.Materials.Paints.WhitePaint,
+        DynTherM.Materials.Paints.WhitePaint,
     A=A_ext,
     csi=0)
     annotation (Placement(transformation(extent={{-60,62},{-20,22}})));

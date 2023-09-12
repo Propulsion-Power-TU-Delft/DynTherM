@@ -1,4 +1,4 @@
-within ThermalManagement.Components.Adaptors;
+within DynTherM.Components.Adaptors;
 model irradianceToHeatFlow
   "Model used to convert from irradiance to heat port"
 

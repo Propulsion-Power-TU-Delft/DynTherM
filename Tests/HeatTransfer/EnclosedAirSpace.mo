@@ -1,4 +1,4 @@
-within ThermalManagement.Tests.HeatTransfer;
+within DynTherM.Tests.HeatTransfer;
 model EnclosedAirSpace
   Components.HeatTransfer.EnclosedAirSpace enclosedAirSpace(
     w(displayUnit="mm") = 0.007,

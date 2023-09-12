@@ -1,4 +1,4 @@
-within ThermalManagement.Choices;
+within DynTherM.Choices;
 type GreyBodyOpt = enumeration(
     Greybody
            "Grey body (eps = abs)",

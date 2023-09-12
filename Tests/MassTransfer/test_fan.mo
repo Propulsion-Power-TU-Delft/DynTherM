@@ -1,4 +1,4 @@
-within ThermalManagement.Tests.MassTransfer;
+within DynTherM.Tests.MassTransfer;
 model test_fan "Simple test of component simpleFan"
   Modelica.Blocks.Sources.Constant m_fromMix(k=1)
     annotation (Placement(transformation(extent={{-80,-50},{-60,-30}})));

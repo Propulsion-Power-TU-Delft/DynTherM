@@ -1,4 +1,4 @@
-within ThermalManagement;
+within DynTherM;
 package Materials "Materials Library for Aerospace Applications"
 
   annotation (Icon(graphics={

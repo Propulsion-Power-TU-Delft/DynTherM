@@ -1,8 +1,8 @@
-within ThermalManagement.Materials.Paints;
+within DynTherM.Materials.Paints;
 model ExteriorGreyMetal
   extends Modelica.Icons.MaterialProperty;
-  extends ThermalManagement.Materials.Paints.BasePaint(
-    eps0 = 0.92,
-    abs0 = 0,
-    greybody = ThermalManagement.Choices.GreyBodyOpt.Greybody);
+  extends DynTherM.Materials.Paints.BasePaint(
+    eps0=0.92,
+    abs0=0,
+    greybody=DynTherM.Choices.GreyBodyOpt.Greybody);
 end ExteriorGreyMetal;

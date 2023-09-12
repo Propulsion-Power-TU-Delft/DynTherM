@@ -1,4 +1,4 @@
-within ThermalManagement.Materials;
+within DynTherM.Materials;
 model CarbonPhenolic "Carbon phenolic"
   extends Modelica.Icons.MaterialProperty;
   extends Materials.Properties(

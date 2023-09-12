@@ -1,12 +1,12 @@
-within ThermalManagement.Components.HeatTransfer;
+within DynTherM.Components.HeatTransfer;
 model WindowRadiation
   "0D model of transmitted, absorbed and reflected irradiance through transparent surfaces"
   // Reference: F. Zanghirella, et al. - A Numerical Model to Evaluate the thermal Behaviour of Active Transparent Facades, 2011.
   // Hp: only one internal reflection is considered
 
-  replaceable model Mat=ThermalManagement.Materials.Opticor constrainedby
-    ThermalManagement.Materials.Properties "Material choice" annotation (choicesAllMatching=true);
-  outer ThermalManagement.Components.Environment environment "Environmental properties";
+  replaceable model Mat=DynTherM.Materials.Opticor constrainedby
+    DynTherM.Materials.Properties          "Material choice" annotation (choicesAllMatching=true);
+  outer DynTherM.Components.Environment environment "Environmental properties";
 
   parameter Modelica.Units.SI.Area A "Heat transfer surface";
   parameter Modelica.Units.SI.Angle theta_start=0.17 "Refraction angle - starting value" annotation (Dialog(tab="Initialization"));

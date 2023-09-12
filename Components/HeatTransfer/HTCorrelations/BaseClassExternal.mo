@@ -1,8 +1,7 @@
-within ThermalManagement.Components.HeatTransfer.HTCorrelations;
+within DynTherM.Components.HeatTransfer.HTCorrelations;
 partial model BaseClassExternal
   package Medium = Modelica.Media.Air.MoistAir;
-  outer ThermalManagement.Components.Environment environment
-    "Environmental properties";
+  outer DynTherM.Components.Environment environment "Environmental properties";
   input Modelica.Units.SI.Temperature T_skin
     "Fuselage outer skin temperature";
   parameter Modelica.Units.SI.CoefficientOfHeatTransfer ht_start=10

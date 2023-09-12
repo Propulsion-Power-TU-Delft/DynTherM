@@ -1,4 +1,4 @@
-within ThermalManagement.Choices;
+within DynTherM.Choices;
 type BatteryChemistry = enumeration(
     NCA "Nickel-Cobalt-Aluminum",
     NMC "Nickel-Manganese-Cobalt",

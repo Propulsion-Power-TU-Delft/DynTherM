@@ -1,10 +1,10 @@
-within ThermalManagement.Systems.Helicopter.Subsystems;
+within DynTherM.Systems.Helicopter.Subsystems;
 model SandwichPanel
   "Sandwich panel model of NH90 - Aluminium and FibrelamAramid6100"
   // Reference (composite material):
   // M. Van Tooren, L. Krakers. Multi-disciplinary Design of Aircraft Fuselage Structures, 2007.
   // Hp: same materials and composite structure of cabin floor
-  outer ThermalManagement.Components.Environment environment "Environmental properties";
+  outer DynTherM.Components.Environment environment "Environmental properties";
   parameter Modelica.Units.SI.Temperature T_start=300
     "Temperature start value of inner panel"
     annotation (Dialog(tab="Initialization"));
@@ -26,16 +26,16 @@ model SandwichPanel
 
   // Materials
   replaceable model Fuselage_int =
-      ThermalManagement.Materials.AirbusEES.Fuselage                              constrainedby
-    ThermalManagement.Materials.Properties
+      DynTherM.Materials.AirbusEES.Fuselage constrainedby
+    DynTherM.Materials.Properties
     "Internal fuselage material" annotation (choicesAllMatching=true, Dialog(group="Materials"));
   replaceable model Fuselage_core =
-      ThermalManagement.Materials.AirbusEES.Fuselage                               constrainedby
-    ThermalManagement.Materials.Properties
+      DynTherM.Materials.AirbusEES.Fuselage constrainedby
+    DynTherM.Materials.Properties
     "Core fuselage material" annotation (choicesAllMatching=true, Dialog(group="Materials"));
   replaceable model Fuselage_ext =
-      ThermalManagement.Materials.AirbusEES.Fuselage                              constrainedby
-    ThermalManagement.Materials.Properties
+      DynTherM.Materials.AirbusEES.Fuselage constrainedby
+    DynTherM.Materials.Properties
     "External fuselage material" annotation (choicesAllMatching=true, Dialog(group="Materials"));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b ext
     annotation (Placement(transformation(extent={{-10,60},{10,80}})));

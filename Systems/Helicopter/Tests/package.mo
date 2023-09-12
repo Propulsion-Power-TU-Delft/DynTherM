@@ -1,4 +1,4 @@
-within ThermalManagement.Systems.Helicopter;
+within DynTherM.Systems.Helicopter;
 package Tests
 
 

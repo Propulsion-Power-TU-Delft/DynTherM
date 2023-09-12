@@ -1,4 +1,4 @@
-within ThermalManagement.Systems.Helicopter.NH90.BasicAirbusEES;
+within DynTherM.Systems.Helicopter.NH90.BasicAirbusEES;
 model AirbusCockpitDuct
   outer Components.Environment environment;
   parameter Modelica.Units.SI.Temperature T_start=300 "Start temperature";

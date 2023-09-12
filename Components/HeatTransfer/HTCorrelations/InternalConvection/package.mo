@@ -1,4 +1,4 @@
-within ThermalManagement.Components.HeatTransfer.HTCorrelations;
+within DynTherM.Components.HeatTransfer.HTCorrelations;
 package InternalConvection
 
 

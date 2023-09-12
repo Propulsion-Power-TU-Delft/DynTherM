@@ -1,4 +1,4 @@
-﻿within ThermalManagement.Tests.HeatTransfer;
+﻿within DynTherM.Tests.HeatTransfer;
 model RadiationGround
   "Validation test case for thermal radiation. Reference: example 8, pag. 298, ASHRAE Handbook – Fundamentals, chapter 14, 2013."
   Components.HeatTransfer.SolarRadiation thermalRadiation1(csi=0)
@@ -16,7 +16,7 @@ model RadiationGround
     Day=202,
     Hour=14,
     allowFlowReversal=false,
-    initOpt=ThermalManagement.Choices.InitOpt.steadyState)
+    initOpt=DynTherM.Choices.InitOpt.steadyState)
     annotation (Placement(transformation(extent={{66,66},{100,100}})));
   Components.HeatTransfer.WallRadiation wallRadiation1(A=1, csi=0)
     annotation (Placement(transformation(extent={{-12,70},{12,46}})));

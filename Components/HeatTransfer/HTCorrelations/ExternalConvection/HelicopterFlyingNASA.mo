@@ -1,4 +1,4 @@
-within ThermalManagement.Components.HeatTransfer.HTCorrelations.ExternalConvection;
+within DynTherM.Components.HeatTransfer.HTCorrelations.ExternalConvection;
 model HelicopterFlyingNASA
   "FlyingNASA: Convection during low forward speed (helicopter) for rotor-induced surfaces using wake-based induced velocity"
   // Reference: ASHRAE Handbook - HVAC Applications, chapter 13, NACA - Evaluation of Induced Field

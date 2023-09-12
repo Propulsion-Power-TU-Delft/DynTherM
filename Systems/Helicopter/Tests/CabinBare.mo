@@ -1,4 +1,4 @@
-within ThermalManagement.Systems.Helicopter.Tests;
+within DynTherM.Systems.Helicopter.Tests;
 model CabinBare
   "Testing the cabin bare elements and evaporator together"
   package Medium = Modelica.Media.Air.MoistAir;
@@ -116,7 +116,7 @@ model CabinBare
   Components.MassTransfer.Plenum plenum(
     noInitialPressure=false,
     noInitialTemperature=false,
-    initOpt=ThermalManagement.Choices.InitOpt.fixedState,
+    initOpt=DynTherM.Choices.InitOpt.fixedState,
     Q_int=Q_avionics,
     Q_sens_fixed=N_occupants[1]*Q_occupants,
     m_H2O_fixed=N_occupants[1]*m_H2O,

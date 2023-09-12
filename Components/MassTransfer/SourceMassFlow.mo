@@ -1,12 +1,13 @@
-within ThermalManagement.Components.MassTransfer;
+within DynTherM.Components.MassTransfer;
 model SourceMassFlow "Flow rate source for gas flows"
   package Medium = Modelica.Media.Air.MoistAir;
-  outer ThermalManagement.Components.Environment environment "Environmental properties";
+  outer DynTherM.Components.Environment environment "Environmental properties";
   parameter Medium.AbsolutePressure P_nom=101325 "Nominal pressure";
   parameter Medium.Temperature T_nom=300 "Nominal temperature" annotation(Dialog(enable=not use_in_T and not use_di_T));
   parameter Medium.MassFraction Xw_nom=0 "Nominal water mass fraction" annotation(Dialog(enable=not use_in_Xw and not use_di_Xw));
   parameter Medium.MassFlowRate massFlow_nom=0 "Nominal mass flowrate" annotation(Dialog(enable=not use_in_massFlow and not use_di_massFlow));
-  parameter ThermalManagement.CustomUnits.HydraulicConductance G=0 "HydraulicConductance";
+  parameter DynTherM.CustomUnits.HydraulicConductance G=0
+    "HydraulicConductance";
   parameter Boolean allowFlowReversal=environment.allowFlowReversal
     "= true to allow flow reversal, false restricts to design direction";
   // External Inputs
@@ -27,10 +28,9 @@ model SourceMassFlow "Flow rate source for gas flows"
   Medium.MassFraction X[2](start={Xw_nom, 1 - Xw_nom}) "Mass fractions";
   Real phi "Relative humidity";
   Medium.ThermodynamicState state "Thermodynamic state";
-  ThermalManagement.CustomInterfaces.FluidPort_B outlet(
-    m_flow(max=if allowFlowReversal then +Modelica.Constants.inf
-    else 0)) annotation (
-      Placement(transformation(extent={{80,-20},{120,20}}, rotation=0),
+  DynTherM.CustomInterfaces.FluidPort_B outlet(m_flow(max=if allowFlowReversal
+           then +Modelica.Constants.inf else 0)) annotation (Placement(
+        transformation(extent={{80,-20},{120,20}}, rotation=0),
         iconTransformation(extent={{90,-10},{110,10}})));
   Modelica.Blocks.Interfaces.RealInput in_massFlow if use_in_massFlow annotation (Placement(
         transformation(

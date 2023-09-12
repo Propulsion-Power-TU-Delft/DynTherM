@@ -1,4 +1,4 @@
-within ThermalManagement.Materials;
+within DynTherM.Materials;
 model Aluminium "Aluminium used for aircraft skin"
   extends Modelica.Icons.MaterialProperty;
   extends Materials.Properties(

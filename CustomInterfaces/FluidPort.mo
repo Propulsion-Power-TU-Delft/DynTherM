@@ -1,4 +1,4 @@
-within ThermalManagement.CustomInterfaces;
+within DynTherM.CustomInterfaces;
 connector FluidPort "Connector for moist air flows"
   package Medium = Modelica.Media.Air.MoistAir;
   flow Medium.MassFlowRate m_flow

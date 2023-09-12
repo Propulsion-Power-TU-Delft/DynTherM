@@ -1,4 +1,4 @@
-within ThermalManagement.Choices;
+within DynTherM.Choices;
 type InitOpt = enumeration(
     noInit "No initial equations",
     fixedState "Fixed initial state variables",

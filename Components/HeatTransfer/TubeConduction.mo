@@ -1,7 +1,7 @@
-within ThermalManagement.Components.HeatTransfer;
+within DynTherM.Components.HeatTransfer;
 model TubeConduction "0D Dynamic model of conduction in a hollow cylinder"
-  replaceable model Mat=ThermalManagement.Materials.Aluminium constrainedby
-    ThermalManagement.Materials.Properties "Material choice" annotation (choicesAllMatching=true);
+  replaceable model Mat=DynTherM.Materials.Aluminium constrainedby
+    DynTherM.Materials.Properties          "Material choice" annotation (choicesAllMatching=true);
   parameter Real coeff "Fraction of cylinder with active heat transfer";
   parameter Modelica.Units.SI.Length L "Tube length";
   parameter Modelica.Units.SI.Length L_window=0 "Window length";
@@ -11,7 +11,8 @@ model TubeConduction "0D Dynamic model of conduction in a hollow cylinder"
   parameter Modelica.Units.SI.Length R_int "Tube internal radius";
   parameter Modelica.Units.SI.Temperature Tstart=300
     "Temperature start value" annotation (Dialog(tab="Initialization"));
-  parameter ThermalManagement.Choices.InitOpt initOpt "Initialization option" annotation (Dialog(tab="Initialization"));
+  parameter DynTherM.Choices.InitOpt initOpt "Initialization option"
+    annotation (Dialog(tab="Initialization"));
   constant Real pi=Modelica.Constants.pi;
   final parameter Modelica.Units.SI.Mass m=coeff*Mat.rho*L*pi*(R_ext^2 -
       R_int^2) "Mass of the tube";
@@ -37,9 +38,9 @@ equation
     Modelica.Math.log((2*R_ext)/(R_int + R_ext))
     "Heat conduction through the external half-thickness";
 initial equation
-  if initOpt == ThermalManagement.Choices.InitOpt.steadyState then
+  if initOpt == DynTherM.Choices.InitOpt.steadyState then
     der(T_vol) = 0;
-  elseif initOpt == ThermalManagement.Choices.InitOpt.fixedState then
+  elseif initOpt == DynTherM.Choices.InitOpt.fixedState then
     T_vol = Tstart;
   else
     // do nothing

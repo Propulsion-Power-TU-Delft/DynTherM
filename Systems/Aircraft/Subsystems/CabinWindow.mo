@@ -1,10 +1,10 @@
-within ThermalManagement.Systems.Aircraft.Subsystems;
+within DynTherM.Systems.Aircraft.Subsystems;
 model CabinWindow
   "Model of cabin window, featuring double glazing and air cavity"
   // Reference: F. Zanghirella, et al. - A Numerical Model to Evaluate the thermal Behaviour of Active Transparent Facades, 2011.
   // Hp: air leakage from pressurized cabin to environment is neglected
 
-  outer ThermalManagement.Components.Environment environment "Environmental properties";
+  outer DynTherM.Components.Environment environment "Environmental properties";
 
   parameter Modelica.Units.SI.Length t_outer=0.01 "Thickness of the external layer";
   parameter Modelica.Units.SI.Length t_inner=0.005 "Thickness of the internal layer";

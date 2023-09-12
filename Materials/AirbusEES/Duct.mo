@@ -1,4 +1,4 @@
-within ThermalManagement.Materials.AirbusEES;
+within DynTherM.Materials.AirbusEES;
 model Duct "NH90: Duct material"
   extends Modelica.Icons.MaterialProperty;
   extends Materials.Properties(

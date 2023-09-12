@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ########################################################################################################################
-# ThermalManagement
+# DynTherM: Dynamic modeling and simulation of Thermal Management systems
 # Author: ir. A. Giuffre'
 # Content: run aircraft thermal model in Dymola
 # 2022 - TU Delft - All rights reserved
@@ -14,7 +14,7 @@ from dymola.dymola_interface import DymolaInterface
 class Aircraft:
     def __init__(self, package_dir, n_cab_secs=1, n_fus_secs=8):
         """
-        :param package_dir: absolute path to the ThermalManagement package.mo file
+        :param package_dir: absolute path to the DynTherM package.mo file
         :param n_cab_secs: number of ventilation zones in which the cabin is divided
         :param n_fus_secs: number of circumferential sections in which the fuselage is divided
         """
@@ -105,7 +105,7 @@ class Aircraft:
         dymola.openModel(path=self.package_dir)
 
         # translate the prescribed model to avoid issues with non-evaluated parameters
-        dymola.translateModel("ThermalManagement.Examples.Aircraft." + data['Model_dir'][case_idx] + "." +
+        dymola.translateModel("DynTherM.Examples.Aircraft." + data['Model_dir'][case_idx] + "." +
                               data['Case_name'][case_idx] + "(environment.Altitude=%10.4f,environment.ISA_plus=%d)"
                               % (data['Height'][case_idx], data['Delta_ISA'][case_idx]))
 

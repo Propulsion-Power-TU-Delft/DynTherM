@@ -1,3 +1,7 @@
+"""
+DEPRECATED - TO BE MODIFIED
+"""
+
 import os
 import time
 import warnings
@@ -37,7 +41,7 @@ ground_type = 35            # select an index [3 - 66] corresponding to a ground
 
 class SMARTS:
     def __init__(self, name, lat, long, az, alt, height, y, m, d, h, tz, tilt, vis, atm, aer, ground,
-                 folder='C:\\Users\\kikow\\Dropbox\\Thesis - Kiko Guimaraes\\ModelicaCodeLocalChanges\\thermalmanagement\\SMARTS_2.9.5', input_file='smarts295.inp.txt', output_file='smarts295.out.txt'):
+                 folder='C:\\Users\\kikow\\Dropbox\\Thesis - Kiko Guimaraes\\ModelicaCodeLocalChanges\\DynTherM\\SMARTS_2.9.5', input_file='smarts295.inp.txt', output_file='smarts295.out.txt'):
         self.run_name = name
         self.latitude = lat
         self.longitude = long

@@ -1,4 +1,4 @@
-within ThermalManagement.Components.HeatTransfer;
+within DynTherM.Components.HeatTransfer;
 model EnclosedAirSpace
   "0D Dynamic model for non-ventilated closed air cavities in double glazing"
   // Hp: accumulation of energy, but negligible accumulation of mass and species
@@ -7,8 +7,8 @@ model EnclosedAirSpace
   // F. Zanghirella et al. - A numerical model to evaluate the thermal behaviour of active transparent facades, 2011.
 
   package Medium = Modelica.Media.Air.MoistAir;
-  outer ThermalManagement.Components.Environment environment "Environmental properties";
-  parameter ThermalManagement.Choices.InitOpt initOpt=environment.initOpt
+  outer DynTherM.Components.Environment environment "Environmental properties";
+  parameter DynTherM.Choices.InitOpt initOpt=environment.initOpt
     "Initialization option" annotation (Dialog(tab="Initialization"));
   parameter Modelica.Units.SI.Length w "Width of the air cavity";
   parameter Modelica.Units.SI.Length h "Height of the air cavity";

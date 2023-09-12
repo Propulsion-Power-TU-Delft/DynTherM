@@ -1,4 +1,4 @@
-within ThermalManagement.Examples.Helicopter;
+within DynTherM.Examples.Helicopter;
 model NH90 "NH90 running model"
   parameter Modelica.Units.SI.CoefficientOfHeatTransfer ht_int_fixed=15
     "Internal convection fixed heat transfer coefficient"
@@ -41,7 +41,7 @@ model NH90 "NH90 running model"
     P_amb_di(displayUnit="bar"),
     use_T_amb=true,
     use_ext_sw=true,
-    initOpt=ThermalManagement.Choices.InitOpt.fixedState,
+    initOpt=DynTherM.Choices.InitOpt.fixedState,
     Altitude=2000,
     phi_amb=0.4,
     T_ground=313.15,

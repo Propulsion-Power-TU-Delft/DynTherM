@@ -1,11 +1,11 @@
-within ThermalManagement.Tests.HeatTransfer;
+within DynTherM.Tests.HeatTransfer;
 model ConductionSphereUnsteady
   "Validation test case of unsteady conduction in a hollow sphere"
   Components.HeatTransfer.SphereConduction sphereConduction(
-    redeclare model Mat = ThermalManagement.Materials.Aluminium,
+    redeclare model Mat = DynTherM.Materials.Aluminium,
     R_ext=0.6,
     R_int=0.1,
-    initOpt=ThermalManagement.Choices.InitOpt.steadyState)
+    initOpt=DynTherM.Choices.InitOpt.steadyState)
     annotation (Placement(transformation(extent={{-40,24},{40,-24}})));
   BoundaryConditions.thermal cold_side(
     T=283.15,

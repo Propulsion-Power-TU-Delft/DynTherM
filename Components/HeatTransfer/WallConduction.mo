@@ -1,14 +1,14 @@
-within ThermalManagement.Components.HeatTransfer;
+within DynTherM.Components.HeatTransfer;
 model WallConduction "0D Dynamic model of conduction in a planar surface"
-  replaceable model Mat=ThermalManagement.Materials.Aluminium constrainedby
-    ThermalManagement.Materials.Properties "Material choice" annotation (choicesAllMatching=true);
+  replaceable model Mat=DynTherM.Materials.Aluminium constrainedby
+    DynTherM.Materials.Properties          "Material choice" annotation (choicesAllMatching=true);
   parameter Modelica.Units.SI.Length t "Wall thickness";
   parameter Modelica.Units.SI.Area A "Wall surface";
   parameter Modelica.Units.SI.Area A_window=0 "Window area";
   parameter Integer Nw_side=0 "Number of windows per fuselage side";
   parameter Modelica.Units.SI.Temperature Tstart=300
     "Temperature start value" annotation (Dialog(tab="Initialization"));
-  parameter ThermalManagement.Choices.InitOpt initOpt "Initialization option"
+  parameter DynTherM.Choices.InitOpt initOpt "Initialization option"
     annotation (Dialog(tab="Initialization"));
   final parameter Modelica.Units.SI.Mass m=Mat.rho*A*t "Mass of the wall";
   final parameter Modelica.Units.SI.HeatCapacity Cm=m*Mat.cm
@@ -26,9 +26,9 @@ equation
   outlet.Q_flow = (Mat.lambda*(A - A_window)*(outlet.T - T_vol))/(t/2)
     "Heat conduction through the external half-thickness";
 initial equation
-  if initOpt == ThermalManagement.Choices.InitOpt.steadyState then
+  if initOpt == DynTherM.Choices.InitOpt.steadyState then
     der(T_vol) = 0;
-  elseif initOpt == ThermalManagement.Choices.InitOpt.fixedState then
+  elseif initOpt == DynTherM.Choices.InitOpt.fixedState then
     T_vol = Tstart;
   else
     // do nothing

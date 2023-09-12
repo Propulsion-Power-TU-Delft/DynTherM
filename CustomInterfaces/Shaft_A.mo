@@ -1,4 +1,4 @@
-within ThermalManagement.CustomInterfaces;
+within DynTherM.CustomInterfaces;
 connector Shaft_A "A-type mechanical connector"
   extends MechanicalPort;
   annotation (Icon(graphics={                                                                                     Polygon(

@@ -1,4 +1,4 @@
-within ThermalManagement.Components.HeatTransfer;
+within DynTherM.Components.HeatTransfer;
 package HTCorrelations
 
 

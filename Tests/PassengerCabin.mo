@@ -1,4 +1,4 @@
-within ThermalManagement.Tests;
+within DynTherM.Tests;
 model PassengerCabin
 
   parameter Real N_pax=0 "Number of passengers inside the aircraft" annotation (Dialog(tab="Flight conditions"));
@@ -113,12 +113,14 @@ model PassengerCabin
   parameter Modelica.Units.SI.VolumeFlowRate volFlow_nom=0.7
     "Fan: nominal volumetric flow rate" annotation (Dialog(tab="Air distribution"));
   parameter Modelica.Units.SI.SpecificEnergy Head_nom=400 "Fan: nominal head" annotation (Dialog(tab="Air distribution"));
-  parameter ThermalManagement.CustomUnits.HydraulicConductance Kv=0.005
-    "Outflow valve: hydraulic conductance" annotation (Dialog(tab="Air distribution"));
-  parameter ThermalManagement.CustomUnits.HydraulicResistance R_HEPA=2000
+  parameter DynTherM.CustomUnits.HydraulicConductance Kv=0.005
+    "Outflow valve: hydraulic conductance"
+    annotation (Dialog(tab="Air distribution"));
+  parameter DynTherM.CustomUnits.HydraulicResistance R_HEPA=2000
     "Filter: hydraulic Resistance" annotation (Dialog(tab="Air distribution"));
-  parameter ThermalManagement.CustomUnits.HydraulicResistance R_dado=100
-    "Dado panel: hydraulic Resistance" annotation (Dialog(tab="Air distribution"));
+  parameter DynTherM.CustomUnits.HydraulicResistance R_dado=100
+    "Dado panel: hydraulic Resistance"
+    annotation (Dialog(tab="Air distribution"));
 
   parameter Modelica.Units.SI.Temperature Tstart_fuselage=323.15
     "Fuselage temperature - start value" annotation (Dialog(tab="Initialization"));
@@ -178,7 +180,7 @@ model PassengerCabin
     T_ground(displayUnit="degC") = 323.15,
     use_ext_sw=true,
     allowFlowReversal=false,
-    initOpt=ThermalManagement.Choices.InitOpt.fixedState)
+    initOpt=DynTherM.Choices.InitOpt.fixedState)
     annotation (Placement(transformation(extent={{66,66},{100,100}})));
   Components.MassTransfer.SourceMassFlow                   cabinTrimFlow(
     use_in_massFlow=false,
@@ -191,9 +193,9 @@ model PassengerCabin
     annotation (Placement(transformation(extent={{20,-90},{40,-70}})));
   Systems.Aircraft.Subsystems.PassengerCabin cabin(
     redeclare model HTC_int =
-        ThermalManagement.Components.HeatTransfer.HTCorrelations.InternalConvection.Cylinder,
+        DynTherM.Components.HeatTransfer.HTCorrelations.InternalConvection.Cylinder,
     redeclare model HTC_ext =
-        ThermalManagement.Components.HeatTransfer.HTCorrelations.ExternalConvection.AircraftOnGroundFree
+        DynTherM.Components.HeatTransfer.HTCorrelations.ExternalConvection.AircraftOnGroundFree
         (R_ext=R_fuselage),
     N_occupants={N_pax,N_crew,0},
     Q_int=Q_utilities,

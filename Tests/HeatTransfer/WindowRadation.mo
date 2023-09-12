@@ -1,4 +1,4 @@
-within ThermalManagement.Tests.HeatTransfer;
+within DynTherM.Tests.HeatTransfer;
 model WindowRadation
   inner Components.Environment environment(
     Mach_inf=0,

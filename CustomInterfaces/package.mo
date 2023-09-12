@@ -1,4 +1,4 @@
-within ThermalManagement;
+within DynTherM;
 package CustomInterfaces "Additional (wrt standard Modelica library) tailor made connectors"
 
 

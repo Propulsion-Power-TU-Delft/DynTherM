@@ -1,4 +1,4 @@
-within ThermalManagement.Components;
+within DynTherM.Components;
 package Battery
 
 

@@ -1,3 +1,3 @@
-within ThermalManagement.Systems.Aircraft;
+within DynTherM.Systems.Aircraft;
 package Subsystems
 end Subsystems;

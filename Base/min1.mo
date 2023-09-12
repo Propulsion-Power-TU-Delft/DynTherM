@@ -1,4 +1,4 @@
-within ThermalManagement.Base;
+within DynTherM.Base;
 partial model min1 "One mechanical inlet"
   CustomInterfaces.Shaft_A mechanical
     annotation (Placement(transformation(extent={{90,-10},{110,10}})));

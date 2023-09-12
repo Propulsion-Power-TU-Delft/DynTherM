@@ -1,4 +1,4 @@
-within ThermalManagement;
+within DynTherM;
 package CustomUnits "Types with custom units"
   extends Modelica.Icons.Package;
 

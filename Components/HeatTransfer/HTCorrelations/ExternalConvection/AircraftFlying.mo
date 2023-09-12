@@ -1,4 +1,4 @@
-within ThermalManagement.Components.HeatTransfer.HTCorrelations.ExternalConvection;
+within DynTherM.Components.HeatTransfer.HTCorrelations.ExternalConvection;
 model AircraftFlying
   "Convection during flight (aircraft)"
   // Reference: ASHRAE Handbook - HVAC Applications, chapter 13

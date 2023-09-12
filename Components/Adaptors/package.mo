@@ -1,3 +1,3 @@
-within ThermalManagement.Components;
+within DynTherM.Components;
 package Adaptors
 end Adaptors;

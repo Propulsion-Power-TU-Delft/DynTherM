@@ -1,4 +1,4 @@
-within ThermalManagement.Materials;
+within DynTherM.Materials;
 model Opticor "Transparent plastic material used for aircraft glazing"
   // References:
   // [1] Opticor, Advanced Transparencies Material - Technical Data Brochure.

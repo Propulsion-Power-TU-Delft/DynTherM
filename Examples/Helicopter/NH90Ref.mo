@@ -1,4 +1,4 @@
-within ThermalManagement.Examples.Helicopter;
+within DynTherM.Examples.Helicopter;
 model NH90Ref
   "NH90 with reference Airbus provided values for comparison to the EES model"
   parameter Modelica.Units.SI.CoefficientOfHeatTransfer ht_int_fixed=15
@@ -86,7 +86,7 @@ model NH90Ref
     P_amb_di(displayUnit="bar"),
     T_amb_di=313.15,
     use_T_amb=true, Error,
-    initOpt=ThermalManagement.Choices.InitOpt.fixedState,
+    initOpt=DynTherM.Choices.InitOpt.fixedState,
     Altitude=0,
     phi_amb=0.1,
     T_ground=313.15,

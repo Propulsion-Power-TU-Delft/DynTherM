@@ -1,4 +1,4 @@
-within ThermalManagement.Systems.Aircraft;
+within DynTherM.Systems.Aircraft;
 model AirbusA320
   "Model of an Airbus A320: cabin + cargo + cockpit (no leakage) + recirculation"
   // Reference: Airbus A320, Aircraft Characteristics Airport and Maintenance Planning.
@@ -42,13 +42,14 @@ model AirbusA320
     Kv=0.005,
     R_HEPA=2000,
     R_dado=100,
-    distributionPipeCabin(option=ThermalManagement.Choices.PDropOpt.darcyWeisbach,
+    distributionPipeCabin(option=DynTherM.Choices.PDropOpt.darcyWeisbach,
         Roughness(displayUnit="mm") = 4.5e-05),
-    distributionPipeCockpit(option=ThermalManagement.Choices.PDropOpt.darcyWeisbach,
+    distributionPipeCockpit(option=DynTherM.Choices.PDropOpt.darcyWeisbach,
         Roughness(displayUnit="mm") = 4.5e-05));
 
   annotation (Icon(coordinateSystem(extent={{-180,-140},{100,100}}),
-                   graphics={Bitmap(extent={{-106,-10},{-28,20}}, fileName="modelica://ThermalManagement/Figures/AirbusLogo.png"),
+                   graphics={Bitmap(extent={{-106,-10},{-28,20}}, fileName=
+              "modelica://DynTherM/Figures/AirbusLogo.png"),
           Text(
           extent={{-68,6},{-42,-20}},
           lineColor={0,32,91},

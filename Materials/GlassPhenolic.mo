@@ -1,4 +1,4 @@
-within ThermalManagement.Materials;
+within DynTherM.Materials;
 model GlassPhenolic "Glass phenolic"
   extends Modelica.Icons.MaterialProperty;
   extends Materials.Properties(

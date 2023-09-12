@@ -1,4 +1,4 @@
-within ThermalManagement.Components.MassTransfer;
+within DynTherM.Components.MassTransfer;
 model Plenum
   "Plenum with heat and mass transfer + internal sensible and latent heat generation from occupants"
   // Reference (for metabolic heat load calculations):
@@ -9,10 +9,10 @@ model Plenum
   // generate is transferred to the environemnt as latent and sensible heat.
 
   package Medium = Modelica.Media.Air.MoistAir;
-  outer ThermalManagement.Components.Environment environment "Environmental properties";
+  outer DynTherM.Components.Environment environment "Environmental properties";
   parameter Boolean allowFlowReversal=environment.allowFlowReversal
     "= true to allow flow reversal, false restricts to design direction";
-  parameter ThermalManagement.Choices.InitOpt initOpt=environment.initOpt
+  parameter DynTherM.Choices.InitOpt initOpt=environment.initOpt
     "Initialization option" annotation (Dialog(tab="Initialization"));
   parameter Modelica.Units.SI.Volume V "Inner volume";
   parameter Real N_occupants[3]={0,0,0}
@@ -60,20 +60,22 @@ model Plenum
   Modelica.Units.SI.HeatFlowRate Q_lat[3]
     "Latent heat flow rate from occupants";
 
-  ThermalManagement.CustomInterfaces.FluidPort_A inlet(
-    m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0, start=m_flow_start),
+  DynTherM.CustomInterfaces.FluidPort_A inlet(
+    m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0, start=
+          m_flow_start),
     P(start=P_start),
     h_outflow(start=Medium.specificEnthalpy(state_start)),
-    Xi_outflow(start=X_start)) annotation (
-      Placement(transformation(extent={{-120,-20},{-80,20}}, rotation=0),
-        iconTransformation(extent={{-110,-10},{-90,10}})));
-  ThermalManagement.CustomInterfaces.FluidPort_B outlet(
-    m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0, start=-m_flow_start),
+    Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{-120,
+            -20},{-80,20}}, rotation=0), iconTransformation(extent={{-110,-10},
+            {-90,10}})));
+  DynTherM.CustomInterfaces.FluidPort_B outlet(
+    m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0, start=
+          -m_flow_start),
     P(start=P_start),
     h_outflow(start=Medium.specificEnthalpy(state_start)),
-    Xi_outflow(start=X_start)) annotation (
-      Placement(transformation(extent={{80,-20},{120,20}}, rotation=0),
-        iconTransformation(extent={{90,-10},{110,10}})));
+    Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{80,
+            -20},{120,20}}, rotation=0), iconTransformation(extent={{90,-10},{
+            110,10}})));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a thermalPort annotation (Placement(transformation(extent={{-18,62},{18,98}}),
         iconTransformation(extent={{-10,80},{10,100}})));
 equation
@@ -135,9 +137,9 @@ equation
 
 initial equation
   // Initial conditions
-  if initOpt == ThermalManagement.Choices.InitOpt.noInit then
+  if initOpt == DynTherM.Choices.InitOpt.noInit then
     // do nothing
-  elseif initOpt == ThermalManagement.Choices.InitOpt.fixedState then
+  elseif initOpt == DynTherM.Choices.InitOpt.fixedState then
     if not noInitialPressure then
       P = P_start;
     end if;
@@ -145,7 +147,7 @@ initial equation
       T = T_start;
     end if;
     X = X_start;
-  elseif initOpt == ThermalManagement.Choices.InitOpt.steadyState then
+  elseif initOpt == DynTherM.Choices.InitOpt.steadyState then
     if not noInitialPressure then
       der(P) = 0;
     end if;

@@ -1,4 +1,4 @@
-within ThermalManagement;
+within DynTherM;
 package Examples "Collection of examples of ThermalManagement models"
 
 

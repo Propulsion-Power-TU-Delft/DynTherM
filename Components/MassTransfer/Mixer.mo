@@ -1,14 +1,14 @@
-within ThermalManagement.Components.MassTransfer;
+within DynTherM.Components.MassTransfer;
 model Mixer "Mixer of two streams with adiabatic walls (no heat transfer)"
   package Medium = Modelica.Media.Air.MoistAir;
   parameter Modelica.Units.SI.Volume V "Inner volume";
   parameter Boolean allowFlowReversal=environment.allowFlowReversal
     "= true to allow flow reversal, false restricts to design direction";
-  outer ThermalManagement.Components.Environment environment "Environmental properties";
+  outer DynTherM.Components.Environment environment "Environmental properties";
   parameter Medium.AbsolutePressure P_start=101325 "Pressure start value" annotation (Dialog(tab="Initialization"));
   parameter Medium.Temperature T_start=300 "Temperature start value" annotation (Dialog(tab="Initialization"));
   parameter Medium.MassFraction X_start[2]={0,1} "Start gas composition" annotation (Dialog(tab="Initialization"));
-  parameter ThermalManagement.Choices.InitOpt initOpt=environment.initOpt
+  parameter DynTherM.Choices.InitOpt initOpt=environment.initOpt
     "Initialization option" annotation (Dialog(tab="Initialization"));
   parameter Boolean noInitialPressure=false "Remove initial equation on pressure" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
   parameter Boolean noInitialTemperature=false "Remove initial equation on temperature" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
@@ -22,14 +22,13 @@ model Mixer "Mixer of two streams with adiabatic walls (no heat transfer)"
   Medium.ThermodynamicState state "Thermodynamic state";
   Modelica.Units.SI.Time Tr "Residence Time";
 
-  ThermalManagement.CustomInterfaces.FluidPort_A inlet1(m_flow(min=if
-          allowFlowReversal then -Modelica.Constants.inf else 0)) annotation (
-      Placement(transformation(extent={{-120,-60},{-80,-20}},
-                                                            rotation=0),
+  DynTherM.CustomInterfaces.FluidPort_A inlet1(m_flow(min=if allowFlowReversal
+           then -Modelica.Constants.inf else 0)) annotation (Placement(
+        transformation(extent={{-120,-60},{-80,-20}}, rotation=0),
         iconTransformation(extent={{-90,-50},{-70,-30}})));
-  ThermalManagement.CustomInterfaces.FluidPort_B outlet(m_flow(max=if
-          allowFlowReversal then +Modelica.Constants.inf else 0)) annotation (
-      Placement(transformation(extent={{80,-20},{120,20}}, rotation=0),
+  DynTherM.CustomInterfaces.FluidPort_B outlet(m_flow(max=if allowFlowReversal
+           then +Modelica.Constants.inf else 0)) annotation (Placement(
+        transformation(extent={{80,-20},{120,20}}, rotation=0),
         iconTransformation(extent={{90,-10},{110,10}})));
 
   CustomInterfaces.FluidPort_A inlet2(m_flow(min=if allowFlowReversal then -
@@ -70,9 +69,9 @@ equation
 
 initial equation
   // Initial conditions
-  if initOpt == ThermalManagement.Choices.InitOpt.noInit then
+  if initOpt == DynTherM.Choices.InitOpt.noInit then
     // do nothing
-  elseif initOpt == ThermalManagement.Choices.InitOpt.fixedState then
+  elseif initOpt == DynTherM.Choices.InitOpt.fixedState then
     if not noInitialPressure then
       P = P_start;
     end if;
@@ -80,7 +79,7 @@ initial equation
       T = T_start;
     end if;
     X = X_start;
-  elseif initOpt == ThermalManagement.Choices.InitOpt.steadyState then
+  elseif initOpt == DynTherM.Choices.InitOpt.steadyState then
     if not noInitialPressure then
       der(P) = 0;
     end if;

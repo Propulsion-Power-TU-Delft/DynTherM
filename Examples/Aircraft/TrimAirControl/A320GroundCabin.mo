@@ -1,4 +1,4 @@
-within ThermalManagement.Examples.Aircraft.TrimAirControl;
+within DynTherM.Examples.Aircraft.TrimAirControl;
 model A320GroundCabin "Aircraft on ground, two temperature zones"
   // Pack discharge temperature determined by cabin cooling requirement
   // Trim air flow determined by cockpit temperature set point
@@ -48,7 +48,7 @@ model A320GroundCabin "Aircraft on ground, two temperature zones"
     T_ground(displayUnit="degC") = 323.15,
     use_ext_sw=true,
     allowFlowReversal=false,
-    initOpt=ThermalManagement.Choices.InitOpt.steadyState)
+    initOpt=DynTherM.Choices.InitOpt.steadyState)
     annotation (Placement(transformation(extent={{-100,-20},{-66,14}})));
   Systems.Aircraft.AirbusA320 A320(
     redeclare model HTC_int_upper =

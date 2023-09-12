@@ -1,4 +1,4 @@
-within ThermalManagement.CustomInterfaces;
+within DynTherM.CustomInterfaces;
 connector MechanicalPort "Connector for exchange of mechanical power"
   Modelica.Units.SI.Torque M "Torque";
   Modelica.Units.SI.AngularVelocity omega "Angular velocity";

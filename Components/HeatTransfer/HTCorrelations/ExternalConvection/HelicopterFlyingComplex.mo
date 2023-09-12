@@ -1,4 +1,4 @@
-within ThermalManagement.Components.HeatTransfer.HTCorrelations.ExternalConvection;
+within DynTherM.Components.HeatTransfer.HTCorrelations.ExternalConvection;
 model HelicopterFlyingComplex
   "FlyingComplex: Convection during low forward speed (helicopter) for rotor-induced surfaces using rotor based pressure distribution"
   // Reference: ASHRAE Handbook - HVAC Applications, chapter 13, A. Kusyomov - Simulation Flow around Helicopter Fuselage

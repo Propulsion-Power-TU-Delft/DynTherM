@@ -1,4 +1,4 @@
-within ThermalManagement.Base;
+within DynTherM.Base;
 partial model tin1 "One thermal inlet"
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a thermal
     annotation (Placement(transformation(extent={{90,-10},{110,10}})));

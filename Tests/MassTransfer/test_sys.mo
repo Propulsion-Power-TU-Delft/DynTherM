@@ -1,4 +1,4 @@
-within ThermalManagement.Tests.MassTransfer;
+within DynTherM.Tests.MassTransfer;
 model test_sys
   "Simple test of components SourceMassFlow, Plenum, ValveLin, PressureSink"
 
@@ -21,7 +21,7 @@ model test_sys
         origin={-10,60})));
   inner Components.Environment environment(
     allowFlowReversal=false,
-    initOpt=ThermalManagement.Choices.InitOpt.fixedState)
+    initOpt=DynTherM.Choices.InitOpt.fixedState)
     annotation (Placement(transformation(extent={{60,60},{100,100}})));
   Components.MassTransfer.Plenum cabin(
     V=186,

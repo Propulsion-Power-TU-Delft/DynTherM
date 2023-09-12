@@ -1,4 +1,4 @@
-within ThermalManagement.CustomInterfaces;
+within DynTherM.CustomInterfaces;
 connector DistributedHeatPort_A
   extends DistributedHeatPort;
   annotation (Icon(graphics={      Rectangle(

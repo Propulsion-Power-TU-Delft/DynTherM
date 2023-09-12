@@ -1,10 +1,8 @@
-within ThermalManagement.Components.MassTransfer;
+within DynTherM.Components.MassTransfer;
 model PressureSink "Pressure sink"
   package Medium = Modelica.Media.Air.MoistAir;
-  outer ThermalManagement.Components.Environment environment
-    "Environmental properties";
-  parameter ThermalManagement.CustomUnits.HydraulicResistance R=0
-    "Hydraulic Resistance";
+  outer DynTherM.Components.Environment environment "Environmental properties";
+  parameter DynTherM.CustomUnits.HydraulicResistance R=0 "Hydraulic Resistance";
   parameter Boolean allowFlowReversal=environment.allowFlowReversal
     "= true to allow flow reversal, false restricts to design direction";
   parameter Boolean use_ambient=true "Use ambient conditions for the plenum";
@@ -15,9 +13,9 @@ model PressureSink "Pressure sink"
   Modelica.Units.SI.Pressure P_sink "Pressure of the sink";
   Medium.ThermodynamicState state_sink "Thermodynamic state of the sink";
 
-  ThermalManagement.CustomInterfaces.FluidPort_A inlet(m_flow(min=if
-          allowFlowReversal then -Modelica.Constants.inf else 0)) annotation (
-      Placement(transformation(extent={{-120,-20},{-80,20}}, rotation=0),
+  DynTherM.CustomInterfaces.FluidPort_A inlet(m_flow(min=if allowFlowReversal
+           then -Modelica.Constants.inf else 0)) annotation (Placement(
+        transformation(extent={{-120,-20},{-80,20}}, rotation=0),
         iconTransformation(extent={{-110,-10},{-90,10}})));
 equation
   if use_ambient then

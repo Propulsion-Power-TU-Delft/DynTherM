@@ -1,14 +1,15 @@
-within ThermalManagement.Components.HeatTransfer;
+within DynTherM.Components.HeatTransfer;
 model SphereConduction
   "0D Dynamic model of conduction in a hollow sphere"
-  replaceable model Mat=ThermalManagement.Materials.Aluminium constrainedby
-    ThermalManagement.Materials.Properties "Material choice" annotation (choicesAllMatching=true);
+  replaceable model Mat=DynTherM.Materials.Aluminium constrainedby
+    DynTherM.Materials.Properties          "Material choice" annotation (choicesAllMatching=true);
   parameter Real coeff=1 "Fraction of sphere with active heat transfer";
   parameter Modelica.Units.SI.Length R_ext "Sphere external radius";
   parameter Modelica.Units.SI.Length R_int "Sphere internal radius";
   parameter Modelica.Units.SI.Temperature Tstart=300
     "Temperature start value" annotation (Dialog(tab="Initialization"));
-  parameter ThermalManagement.Choices.InitOpt initOpt "Initialization option" annotation (Dialog(tab="Initialization"));
+  parameter DynTherM.Choices.InitOpt initOpt "Initialization option"
+    annotation (Dialog(tab="Initialization"));
   constant Real pi=Modelica.Constants.pi;
   final parameter Modelica.Units.SI.Mass m=coeff*Mat.rho*4/3*pi*(R_ext^3 -
       R_int^3) "Mass of the sphere";
@@ -28,9 +29,9 @@ equation
   outlet.Q_flow = coeff*(4*pi*Mat.lambda*R_ext*R_int)*(outlet.T - T_vol)/
     (R_ext - (R_ext + R_int)/2) "Heat conduction through the external half-thickness";
 initial equation
-  if initOpt == ThermalManagement.Choices.InitOpt.steadyState then
+  if initOpt == DynTherM.Choices.InitOpt.steadyState then
     der(T_vol) = 0;
-  elseif initOpt == ThermalManagement.Choices.InitOpt.fixedState then
+  elseif initOpt == DynTherM.Choices.InitOpt.fixedState then
     T_vol = Tstart;
   else
     // do nothing

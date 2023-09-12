@@ -1,4 +1,4 @@
-within ThermalManagement.Systems.Battery;
+within DynTherM.Systems.Battery;
 record BatteryPackData "Data for battery packs made by stacking multiple lithium-ion cells"
 
   extends Modelica.Icons.Record;

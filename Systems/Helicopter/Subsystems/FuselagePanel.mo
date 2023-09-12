@@ -1,7 +1,7 @@
-within ThermalManagement.Systems.Helicopter.Subsystems;
+within DynTherM.Systems.Helicopter.Subsystems;
 model FuselagePanel
   "Basic rectangular fuselage panel consisting of radiation and convection effects on a sandwich panel with window."
-  outer ThermalManagement.Components.Environment environment "Environmental properties";
+  outer DynTherM.Components.Environment environment "Environmental properties";
   parameter Modelica.Units.SI.Temperature T_start=300 "Temperature start value"
     annotation (Dialog(group="Initialization"));
   parameter Modelica.Units.SI.Length W "Panel width"
@@ -32,38 +32,37 @@ model FuselagePanel
     "Radiative fuselage area";
   // Materials
   replaceable model Fuselage_int =
-      ThermalManagement.Materials.AirbusEES.Fuselage                              constrainedby
-    ThermalManagement.Materials.Properties
+      DynTherM.Materials.AirbusEES.Fuselage constrainedby
+    DynTherM.Materials.Properties
     "Internal fuselage material" annotation (choicesAllMatching=true, Dialog(tab="Materials + Correlations", group="Materials"));
   replaceable model Fuselage_core =
-      ThermalManagement.Materials.AirbusEES.Fuselage                               constrainedby
-    ThermalManagement.Materials.Properties
+      DynTherM.Materials.AirbusEES.Fuselage constrainedby
+    DynTherM.Materials.Properties
     "Core fuselage material" annotation (choicesAllMatching=true, Dialog(tab="Materials + Correlations", group="Materials"));
   replaceable model Fuselage_ext =
-      ThermalManagement.Materials.AirbusEES.Fuselage                              constrainedby
-    ThermalManagement.Materials.Properties
+      DynTherM.Materials.AirbusEES.Fuselage constrainedby
+    DynTherM.Materials.Properties
     "External fuselage material" annotation (choicesAllMatching=true, Dialog(tab="Materials + Correlations", group="Materials"));
   // User Heat Correlations Choices
   replaceable model HTC_int =
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
     constrainedby
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
     annotation (choicesAllMatching=true, Dialog(tab="Materials + Correlations", group="Heat Correlations"));
   replaceable model HTC_ext =
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassExternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal
     constrainedby
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassExternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal
     annotation (choicesAllMatching=true, Dialog(tab="Materials + Correlations", group="Heat Correlations"));
   // External Radiation
   Components.HeatTransfer.WallRadiation wallRadiation(csi=csi,
-    redeclare model Material = Materials.Paints.ExteriorGreyMetal (greybody=
-            ThermalManagement.Choices.GreyBodyOpt.Greybody),
+    redeclare model Material = Materials.Paints.ExteriorGreyMetal (greybody=DynTherM.Choices.GreyBodyOpt.Greybody),
     A=A_fus_rad)                                                                                             annotation (Placement(transformation(extent={{-10,10},{
             10,-10}},
         rotation=90,
         origin={-60,50})));
-  Components.HeatTransfer.WindowRadiation windowRadiation(redeclare model Mat =
-        Materials.AirbusEES.Window,
+  Components.HeatTransfer.WindowRadiation windowRadiation(redeclare model Mat
+      = Materials.AirbusEES.Window,
                                A=A_tot_window,
     use_r_eff=use_r_eff,
     r_eff_di=r_eff_di)                         if include_window annotation (Placement(
@@ -120,9 +119,9 @@ model FuselagePanel
         rotation=-90,
         origin={44,-30})));
   // Ports
-  ThermalManagement.CustomInterfaces.IrradiancePort irradiancePort
-    annotation (Placement(transformation(extent={{-100,-10},{-80,10}}),
-        iconTransformation(extent={{-100,-10},{-80,10}})));
+  DynTherM.CustomInterfaces.IrradiancePort irradiancePort annotation (Placement(
+        transformation(extent={{-100,-10},{-80,10}}), iconTransformation(extent
+          ={{-100,-10},{-80,10}})));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a thermalPortInner
     annotation (Placement(transformation(extent={{80,20},{100,40}}),
         iconTransformation(extent={{80,20},{100,40}})));

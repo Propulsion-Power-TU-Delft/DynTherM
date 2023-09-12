@@ -1,6 +1,6 @@
-within ThermalManagement.BoundaryConditions;
+within DynTherM.BoundaryConditions;
 model thermal "Model to impose heat flow rate and temperature"
-  extends ThermalManagement.Base.tin1;
+  extends DynTherM.Base.tin1;
   parameter Modelica.Units.SI.Temperature T=273.15 "Temperature"
     annotation (Dialog(tab="Boundary conditions", enable=use_T));
   parameter Modelica.Units.SI.HeatFlowRate Q=1e3 "Heat flow rate"

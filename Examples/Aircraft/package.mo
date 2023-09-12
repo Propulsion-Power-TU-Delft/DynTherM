@@ -1,4 +1,4 @@
-within ThermalManagement.Examples;
+within DynTherM.Examples;
 package Aircraft "Collection of test cases for Airbus A320"
 
 

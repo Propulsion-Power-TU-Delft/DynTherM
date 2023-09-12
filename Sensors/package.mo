@@ -1,4 +1,4 @@
-within ThermalManagement;
+within DynTherM;
 package Sensors
 
   annotation (Icon(graphics={

@@ -1,4 +1,4 @@
-﻿within ThermalManagement.Systems.Aircraft.Subsystems;
+﻿within DynTherM.Systems.Aircraft.Subsystems;
 model CabinFloor
   "Simplified model of cabin floor separating cabin and cargo bay"
   // References:
@@ -6,7 +6,7 @@ model CabinFloor
   // [2] SAE AIR 1168/3, section 7.2
   // [3] Gillfab 4117 product data sheet
 
-  outer ThermalManagement.Components.Environment environment "Environmental properties";
+  outer DynTherM.Components.Environment environment "Environmental properties";
   parameter Modelica.Units.SI.Temperature Tstart=300 "Temperature start value"
     annotation (Dialog(tab="Initialization"));
   parameter Modelica.Units.SI.Area A "Surface of the cabin floor";
