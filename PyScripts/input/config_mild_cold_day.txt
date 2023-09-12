@@ -1,0 +1,45 @@
+[ECS]
+Model_dir      =   TrimAirManual       TrimAirManual       TrimAirManual       TrimAirManual       TrimAirManual       TrimAirManual       TrimAirManual       TrimAirManual       TrimAirManual       TrimAirManual
+Case_name      =   A320GroundCabin     A320FlyingCabin     A320FlyingCabin     A320FlyingCabin     A320FlyingCabin     A320FlyingCabin     A320FlyingCabin     A320FlyingCabin     A320FlyingCabin     A320FlyingCabin
+Run_name       =   GroundMildCold      Climb1MildCold      Climb2MildCold      Climb3MildCold      Climb4MildCold      Climb5MildCold      Climb6MildCold      Climb7MildCold      CruiseMildCold      FaultyPackMildCold
+M_pack         =   1.000               1.060               1.060               1.060               1.060               1.060               1.060               1.060               1.060               0.880              kg/s
+Rec_ratio      =   0.450               0.500               0.500               0.500               0.500               0.500               0.500               0.500               0.500               0.500              -
+Xw_pack        =   0.000               0.000               0.000               0.000               0.000               0.000               0.000               0.000               0.000               0.000              -
+T_target       =   24.00               24.00               24.00               24.00               24.00               24.00               24.00               24.00               24.00               24.00              °C
+M_trim_cab     =   0.000               0.000               0.000               0.000               0.000               0.000               0.000               0.000               0.000               0.000              kg/s
+M_trim_fd      =   0.009               0.013               0.013               0.013               0.013               0.013               0.014               0.014               0.016               0.016              kg/s
+T_trim         =   100.0               100.0               100.0               100.0               100.0               100.0               100.0               100.0               100.0               100.0              °C
+
+[Environment]
+Mach_inf       =   0.000               0.600               0.650               0.700               0.750               0.780               0.780               0.780               0.780               0.780              -
+Delta_ISA      =   -16.0               -16.0               -16.0               -16.0               -16.0               -16.0               -16.0               -16.0               -16.0               -16.0              °C
+Phi_amb        =   20.00               10.00               10.00               10.00               10.00               10.00               10.00               10.00               10.00               10.00              pct.
+Phi_ground     =   20.00               20.00               20.00               20.00               20.00               20.00               20.00               20.00               20.00               20.00              pct.
+T_ground       =   0.000               0.000               0.000               0.000               0.000               0.000               0.000               0.000               0.000               0.000              °C
+
+[Location]
+Latitude       =   33.754              33.754              33.754              33.754              33.754              33.754              33.754              33.754              33.754              33.754             deg
+Longitude      =   -84.39              -84.39              -84.39              -84.39              -84.39              -84.39              -84.39              -84.39              -84.39              -84.39             deg
+Azimuth        =   240.00              240.00              240.00              240.00              240.00              240.00              240.00              240.00              240.00              240.00             deg
+Altitude       =   0.3000              0.3000              0.3000              0.3000              0.3000              0.3000              0.3000              0.3000              0.3000              0.3000             km
+Height         =   0.000               6.000               6.500               7.000               7.500               8.000               8.500               9.000               11.887              11.887             km
+Year           =   2020                2020                2020                2020                2020                2020                2020                2020                2020                2020               -
+Month          =   1                   1                   1                   1                   1                   1                   1                   1                   1                   1                  -
+Day            =   20                  20                  20                  20                  20                  20                  20                  20                  20                  20                 -
+Hour           =   9.0                 9.0                 9.0                 9.0                 9.0                 9.0                 9.0                 9.0                 9.0                 9.0                -
+Time_zone      =   -4                  -4                  -4                  -4                  -4                  -4                  -4                  -4                  -4                  -4                 -
+Ref_atmosphere =   USSA                USSA                USSA                USSA                USSA                USSA                USSA                USSA                USSA                USSA               -
+Season         =   WINTER              WINTER              WINTER              WINTER              WINTER              WINTER              WINTER              WINTER              WINTER              WINTER             -
+Visibility     =   700                 700                 700                 700                 700                 700                 700                 700                 700                 700                km
+Ground_type    =   18                  18                  18                  18                  18                  18                  18                  18                  18                  18                 -
+Aerosol        =   S&F_URBAN           S&F_URBAN           S&F_URBAN           S&F_URBAN           S&F_URBAN           S&F_URBAN           S&F_URBAN           S&F_URBAN           S&F_URBAN           S&F_URBAN          -
+
+[Heat_Loads]
+N_pax          =   140                 140                 140                 140                 140                 140                 140                 140                 140                 140                -
+N_crew         =   6                   6                   6                   6                   6                   6                   6                   6                   6                   6                  -
+N_pilots       =   3                   3                   3                   3                   3                   3                   3                   3                   3                   3                  -
+Q_electronics  =   1200.0              1200.0              1200.0              1200.0              1200.0              1200.0              1200.0              1200.0              1200.0              1200.0             W
+Q_galley       =   1500.0              1500.0              1500.0              1500.0              1500.0              1500.0              1500.0              1500.0              1500.0              1500.0             W
+Q_avionics     =   0.000               0.000               0.000               0.000               0.000               0.000               0.000               0.000               0.000               0.000              W
+Cabin_lights   =   100.00              100.00              100.00              100.00              100.00              100.00              100.00              100.00              100.00              100.00             pct.
+IFE            =   100.00              100.00              100.00              100.00              100.00              100.00              100.00              100.00              100.00              100.00             pct.

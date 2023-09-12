@@ -1,0 +1,10 @@
+IrradiancePort
+FluidPort
+FluidPort_A
+FluidPort_B
+MechanicalPort
+Shaft_A
+Shaft_B
+DistributedHeatPort
+DistributedHeatPort_A
+DistributedHeatPort_B
