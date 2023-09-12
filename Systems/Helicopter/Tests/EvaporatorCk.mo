@@ -27,8 +27,6 @@ model EvaporatorCk
     m_fan=0.3,
     T_start_out=280.32,
     X_start_out=0.00628,
-    T_start_in=T_plenum,
-    X_start_in=X_plenum,
     nu_fan=0.9)
     annotation (Placement(transformation(extent={{-10,10},{10,30}})));
   Components.MassTransfer.PressureSink plenumOut(

@@ -98,9 +98,9 @@ model CabinBare
   parameter Modelica.Units.SI.MassFraction X_start[2]={0.0124,0.9876}
     "Start gas composition" annotation (Dialog(tab="Initialization"));
   Modelica.Blocks.Sources.Constant targetTempCabin(k=301.15)
-    annotation (Placement(transformation(extent={{-66,-92},{-46,-72}})));
+    annotation (Placement(transformation(extent={{-70,-2},{-50,18}})));
   Modelica.Blocks.Sources.RealExpression realExpression(y=301.15)
-    annotation (Placement(transformation(extent={{-78,-56},{-58,-36}})));
+    annotation (Placement(transformation(extent={{-72,30},{-52,50}})));
 
   Components.MassTransfer.SourceMassFlow sourceMassFlow(
     Xw_di=X_env,
@@ -110,28 +110,28 @@ model CabinBare
     massFlow_di=evaporator.m_fan*(1 - tau_cb),
     allowFlowReversal=false,
     T_di=313.15)
-    annotation (Placement(transformation(extent={{60,-82},{40,-62}})));
+    annotation (Placement(transformation(extent={{60,-30},{40,-10}})));
   Subsystems.Evaporator evaporator(m_fan=0.3, T_start_out=553.47)
-    annotation (Placement(transformation(extent={{-2,-64},{18,-44}})));
+    annotation (Placement(transformation(extent={{-16,-16},{16,16}})));
   Components.MassTransfer.Plenum plenum(
     noInitialPressure=false,
     noInitialTemperature=false,
     initOpt=DynTherM.Choices.InitOpt.fixedState,
     Q_int=Q_avionics,
-    Q_sens_fixed=N_occupants[1]*Q_occupants,
-    m_H2O_fixed=N_occupants[1]*m_H2O,
+    Q_sens_fixed=N_occupants*Q_occupants,
+    m_H2O_fixed=N_occupants*m_H2O,
     N_occupants=N_occupants,
     allowFlowReversal=false,
     X_start=X_start,
-    fixed_Q_sens=true,
+    fixed_Q=false,
     V=A_floor*A_fus/2/LX)
-    annotation (Placement(transformation(extent={{-6,-8},{14,12}})));
+    annotation (Placement(transformation(extent={{-14,46},{14,74}})));
   inner Components.Environment environment
-    annotation (Placement(transformation(extent={{46,70},{66,90}})));
+    annotation (Placement(transformation(extent={{60,60},{100,100}})));
   BoundaryConditions.thermal duct(use_Q=true, Q=-200)
-    annotation (Placement(transformation(extent={{-34,-32},{-26,-36}})));
+    annotation (Placement(transformation(extent={{-48,4},{-36,-4}})));
   BoundaryConditions.thermal plenumheat(use_Q=true, Q=-2000)
-    annotation (Placement(transformation(extent={{-2,22},{4,18}})));
+    annotation (Placement(transformation(extent={{-8,90},{4,82}})));
   Components.MassTransfer.SourceMassFlow leakInCabin(
     use_in_massFlow=false,
     use_in_T=false,
@@ -144,7 +144,7 @@ model CabinBare
     massFlow_di=m_leak_in_cb,
     Xw_di=0.0187,
     T_di=313.15)                                         "air mass entering"
-    annotation (Placement(transformation(extent={{-64,-8},{-44,12}})));
+    annotation (Placement(transformation(extent={{-60,-30},{-40,-10}})));
   Components.MassTransfer.SourceMassFlow airTransferCabin(
     use_in_massFlow=false,
     use_in_T=false,
@@ -156,29 +156,30 @@ model CabinBare
     massFlow_di=-m_transfer,
     T_di=plenum.T,
     Xw_di=plenum.X[1])
-    annotation (Placement(transformation(extent={{52,-50},{32,-30}})));
+    annotation (Placement(transformation(extent={{60,10},{40,30}})));
 equation
 
-  connect(evaporator.plenumTemp, realExpression.y) annotation (Line(points={{-2,-45},
-          {-12,-45},{-12,-46},{-57,-46}},  color={0,0,127}));
-  connect(targetTempCabin.y, evaporator.targetTemp) annotation (Line(points={{-45,-82},
-          {-26,-82},{-26,-49},{-2,-49}},   color={0,0,127}));
+  connect(evaporator.plenumTemp, realExpression.y) annotation (Line(points={{-16,
+          14.4},{-16,14},{-30,14},{-30,40},{-51,40}},
+                                           color={0,0,127}));
+  connect(targetTempCabin.y, evaporator.targetTemp) annotation (Line(points={{-49,8},
+          {-16,8}},                        color={0,0,127}));
   connect(sourceMassFlow.outlet, evaporator.inletPortFresh) annotation (Line(
-        points={{40,-72},{28,-72},{28,-59.4},{17,-59.4}},
+        points={{40,-20},{20,-20},{20,-8.64},{14.4,-8.64}},
                                                    color={0,0,0}));
-  connect(plenum.outlet, evaporator.inletPortRecirc)
-    annotation (Line(points={{14,2},{24,2},{24,-55},{17,-55}}, color={0,0,0}));
-  connect(plenum.inlet, evaporator.outletPort) annotation (Line(points={{-6,2},{
-          -14,2},{-14,-59},{-1,-59}}, color={0,0,0}));
-  connect(duct.thermal, evaporator.thermalPort) annotation (Line(points={{
-          -28.6667,-34},{-30,-34},{-30,-54},{-1.4,-54}},
-                                                color={191,0,0}));
+  connect(duct.thermal, evaporator.thermalPort) annotation (Line(points={{-40,0},
+          {-15.04,0}},                          color={191,0,0}));
   connect(plenumheat.thermal, plenum.thermalPort)
-    annotation (Line(points={{2,20},{2,11},{4,11}},       color={191,0,0}));
-  connect(leakInCabin.outlet, evaporator.outletPort) annotation (Line(points=
-          {{-44,2},{-14,2},{-14,-59},{-1,-59}}, color={0,0,0}));
-  connect(airTransferCabin.outlet, evaporator.inletPortRecirc) annotation (
-      Line(points={{32,-40},{24,-40},{24,-55},{17,-55}}, color={0,0,0}));
+    annotation (Line(points={{0,86},{0,78.3},{1.77636e-15,78.3},{1.77636e-15,
+          72.6}},                                         color={191,0,0}));
+  connect(leakInCabin.outlet, evaporator.outletPort) annotation (Line(points={{
+          -40,-20},{-20,-20},{-20,-8},{-14.4,-8}}, color={0,0,0}));
+  connect(evaporator.outletPort, plenum.inlet) annotation (Line(points={{-14.4,
+          -8},{-26,-8},{-26,60},{-14,60}}, color={0,0,0}));
+  connect(evaporator.inletPortRecirc, plenum.outlet) annotation (Line(points={{
+          14.4,-1.6},{14.4,-2},{20,-2},{20,60},{14,60}}, color={0,0,0}));
+  connect(evaporator.inletPortRecirc, airTransferCabin.outlet) annotation (Line(
+        points={{14.4,-1.6},{20,-1.6},{20,20},{40,20}}, color={0,0,0}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false)),
     Diagram(coordinateSystem(preserveAspectRatio=false), graphics={Text(

@@ -207,12 +207,12 @@ model HeliCombined
       Placement(transformation(
         extent={{15,-15},{-15,15}},
         rotation=-90,
-        origin={49,-79})));
+        origin={33,-81})));
   Modelica.Blocks.Interfaces.RealInput targetTempCockpitInput annotation (
       Placement(transformation(
         extent={{15,-15},{-15,15}},
         rotation=-90,
-        origin={-51,-79})));
+        origin={-63,-89})));
   Modelica.Blocks.Interfaces.RealInput floorTempCockpitInput annotation (
       Placement(transformation(
         extent={{-15,-15},{15,15}},
@@ -236,7 +236,7 @@ model HeliCombined
     massFlow_di=m_ext_ck,
     T_di=environment.T_amb,
     Xw_di=environment.X_amb[1])
-    annotation (Placement(transformation(extent={{-6,-32},{-26,-12}})));
+    annotation (Placement(transformation(extent={{-6,-28},{-24,-10}})));
   Components.MassTransfer.SourceMassFlow extAirCb(
     allowFlowReversal=false,
     use_di_T=true,
@@ -245,7 +245,7 @@ model HeliCombined
     massFlow_di=m_ext_cb,
     T_di=environment.T_amb,
     Xw_di=environment.X_amb[1])
-    annotation (Placement(transformation(extent={{96,-30},{76,-10}})));
+    annotation (Placement(transformation(extent={{90,-28},{72,-10}})));
   Components.MassTransfer.PressureSink pressureSinkCockpit
     annotation (Placement(transformation(extent={{-32,24},{-12,44}})));
   Components.MassTransfer.PressureSink pressureSinkCabin
@@ -285,10 +285,9 @@ equation
         points={{43,-19},{30,-19},{30,19.6},{45,19.6}},
                                                       color={0,0,0}));
   connect(evaporatorCabin.targetTemp, targetTempCabinInput) annotation (Line(
-        points={{42,-9},{40,-9},{40,-10},{34,-10},{34,-79},{49,-79}},
-                                                                color={0,0,127}));
+        points={{42,-9},{33,-9},{33,-81}},                      color={0,0,127}));
   connect(evaporatorCabin.thermalPort, heliCabin.ductThermalPort) annotation (
-      Line(points={{42.6,-14},{38,-14},{38,14},{66,14},{66,24.6},{58.6,24.6}},
+      Line(points={{42.6,-14},{38,-14},{38,14},{66,14},{66,23.3},{58.1,23.3}},
         color={191,0,0}));
   connect(evaporatorCabin.inletPortRecirc, heliCabin.outletPort) annotation (
       Line(points={{61,-15},{62,-15},{62,19.6},{50,19.6}},
@@ -301,8 +300,7 @@ equation
                                                                          color={
           0,0,127}));
   connect(evaporatorCockpit.targetTemp, targetTempCockpitInput) annotation (
-      Line(points={{-56,-9},{-58,-9},{-58,-12},{-62,-12},{-62,-79},{-51,-79}},
-                                                                         color={
+      Line(points={{-56,-9},{-63,-9},{-63,-89}},                         color={
           0,0,127}));
   connect(evaporatorCockpit.outletPort, heliCockpit.inletPort) annotation (Line(
         points={{-55,-19},{-66,-19},{-66,11.4},{-50,11.4}}, color={0,0,0}));
@@ -311,10 +309,10 @@ equation
           14.8}},
         color={191,0,0}));
   connect(extAirCk.outlet, evaporatorCockpit.inletPortFresh)
-    annotation (Line(points={{-26,-22},{-37,-22},{-37,-19.4}},
+    annotation (Line(points={{-24,-19},{-37,-19},{-37,-19.4}},
                                                           color={0,0,0}));
   connect(extAirCb.outlet, evaporatorCabin.inletPortFresh)
-    annotation (Line(points={{76,-20},{66,-20},{66,-19.4},{61,-19.4}},
+    annotation (Line(points={{72,-19},{66,-19},{66,-19.4},{61,-19.4}},
                                                                color={0,0,0}));
   connect(pressureSinkCockpit.inlet, leakOutCockpit.outlet)
     annotation (Line(points={{-32,34},{-32,12},{-26,12}}, color={0,0,0}));

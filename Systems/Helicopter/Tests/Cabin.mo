@@ -19,9 +19,7 @@ model Cabin "Testing the cabin and evaporator together"
   Subsystems.Evaporator evaporator(
     m_fan=0.6,
     T_start_out=285.98,
-    X_start_out=0.00922,
-    T_start_in=301.15,
-    X_start_in=0.012)
+    X_start_out=0.00922)
     annotation (Placement(transformation(extent={{-10,10},{10,30}})));
   NH90.BasicAirbusEES.AirbusCabinDuct airbusCabin(
     T_engine=353.15,

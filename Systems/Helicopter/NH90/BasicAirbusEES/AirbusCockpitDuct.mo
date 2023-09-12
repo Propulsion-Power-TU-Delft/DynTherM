@@ -3,28 +3,17 @@ model AirbusCockpitDuct
   outer Components.Environment environment;
   parameter Modelica.Units.SI.Temperature T_start=300 "Start temperature";
   parameter Modelica.Units.SI.Length LX=1
-    "Fuselage X-length (Arbitrary - used for units)"
-    annotation (Dialog(group="Dimensions"));
-  parameter Modelica.Units.SI.Area A_fus=2.5 "Fuselage wall surface area"
-    annotation (Dialog(group="Dimensions"));
-  parameter Modelica.Units.SI.Length t_fus=0.03 "Fuselage wall thickness"
-    annotation (Dialog(group="Dimensions"));
-  parameter Modelica.Units.SI.Area A_floor=2.5 "Floor surface area"
-    annotation (Dialog(group="Dimensions"));
-  parameter Modelica.Units.SI.Length t_floor=0.025 "Floor thickness"
-    annotation (Dialog(group="Dimensions"));
-  parameter Modelica.Units.SI.Area A_duct=2 "Duct surface area"
-    annotation (Dialog(group="Dimensions"));
-  parameter Modelica.Units.SI.Length t_duct=0.0001 "Duct thickness"
-    annotation (Dialog(group="Dimensions"));
-  parameter Modelica.Units.SI.Area A_win=4.3 "Window area"
-    annotation (Dialog(group="Dimensions"));
-  parameter Modelica.Units.SI.Area Ap_win=3.5 "Window projected area"
-    annotation (Dialog(group="Dimensions"));
-  parameter Modelica.Units.SI.Length t_win=0.01 "Window thickness"
-    annotation (Dialog(group="Dimensions"));
-  parameter Modelica.Units.SI.Length LX_win=1 "Window length"
-    annotation (Dialog(group="Dimensions"));
+    "Fuselage X-length (Arbitrary - used for units)" annotation (Dialog(group="Dimensions"));
+  parameter Modelica.Units.SI.Area A_fus=2.5 "Fuselage wall surface area" annotation (Dialog(group="Dimensions"));
+  parameter Modelica.Units.SI.Length t_fus=0.03 "Fuselage wall thickness" annotation (Dialog(group="Dimensions"));
+  parameter Modelica.Units.SI.Area A_floor=2.5 "Floor surface area" annotation (Dialog(group="Dimensions"));
+  parameter Modelica.Units.SI.Length t_floor=0.025 "Floor thickness" annotation (Dialog(group="Dimensions"));
+  parameter Modelica.Units.SI.Area A_duct=2 "Duct surface area" annotation (Dialog(group="Dimensions"));
+  parameter Modelica.Units.SI.Length t_duct=0.0001 "Duct thickness" annotation (Dialog(group="Dimensions"));
+  parameter Modelica.Units.SI.Area A_win=4.3 "Window area" annotation (Dialog(group="Dimensions"));
+  parameter Modelica.Units.SI.Area Ap_win=3.5 "Window projected area" annotation (Dialog(group="Dimensions"));
+  parameter Modelica.Units.SI.Length t_win=0.01 "Window thickness" annotation (Dialog(group="Dimensions"));
+  parameter Modelica.Units.SI.Length LX_win=1 "Window length" annotation (Dialog(group="Dimensions"));
   parameter Real R_win = 0.98 "Window transmissivity coefficient";
   parameter Modelica.Units.SI.HeatFlowRate W_vitre_ck=-433 "Window heat input";
   parameter Modelica.Units.SI.Irradiance E_sun=900;
@@ -37,7 +26,8 @@ model AirbusCockpitDuct
   parameter Modelica.Units.SI.CoefficientOfHeatTransfer ht_int_duct=80
     "Duct internal convection fixed heat transfer coefficient";
   parameter Modelica.Units.SI.Temperature T_floor=323.15 "Floor temperature";
-  parameter Real N_occupants[3] "Number of: passengers, cabin crew, pilots inside the cabin" annotation(Dialog(group="Inputs"));
+  parameter Real N_occupants[3]
+    "Number of: passengers, cabin crew, pilots inside the cabin" annotation(Dialog(group="Inputs"));
   parameter Modelica.Units.SI.MassFlowRate m_H2O=0.00005
     "Water vapour per occupant" annotation (Dialog(group="Inputs"));
   parameter Modelica.Units.SI.HeatFlowRate Q_occupants=130
@@ -122,12 +112,12 @@ model AirbusCockpitDuct
     initOpt=environment.initOpt,
     noInitialTemperature=false,
     Q_int=Q_avionics,
-    m_H2O_fixed=N_occupants[3]*m_H2O,
-    Q_sens_fixed=N_occupants[3]*Q_occupants,
+    m_H2O_fixed=N_occupants*m_H2O,
+    Q_sens_fixed=N_occupants*Q_occupants,
     N_occupants=N_occupants,
     allowFlowReversal=false,
     X_start=X_start,
-    fixed_Q_sens=true)
+    fixed_Q=false)
     annotation (Placement(transformation(extent={{-10,-80},{10,-60}})));
   Modelica.Thermal.HeatTransfer.Sensors.TemperatureSensor temperatureSensor
     annotation (Placement(transformation(extent={{-40,-70},{-60,-50}})));

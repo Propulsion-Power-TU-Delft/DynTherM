@@ -2,61 +2,41 @@ within DynTherM.Systems.Helicopter.NH90.AdvancedModels;
 model HeliCockpit
   "Helicopter cockpit advanced model made to match with basic NH90 Airbus"
   outer Components.Environment environment;
-  parameter Modelica.Units.SI.Length LX=0.446 "Fuselage X-length"
-    annotation (Dialog(tab="Dimensions", group="General"));
-  parameter Modelica.Units.SI.Length WY=2.6 "Fuselage Y-length"
-    annotation (Dialog(tab="Dimensions", group="General"));
-  parameter Modelica.Units.SI.Length HZ=2.8 "Fuselage Z-length"
-    annotation (Dialog(tab="Dimensions", group="General"));
+  parameter Modelica.Units.SI.Length LX=0.446 "Fuselage X-length" annotation (Dialog(tab="Dimensions", group="General"));
+  parameter Modelica.Units.SI.Length WY=2.6 "Fuselage Y-length" annotation (Dialog(tab="Dimensions", group="General"));
+  parameter Modelica.Units.SI.Length HZ=2.8 "Fuselage Z-length" annotation (Dialog(tab="Dimensions", group="General"));
 
-  parameter Modelica.Units.SI.Length t_fus=0.03 "Fuselage wall thickness"
-    annotation (Dialog(tab="Dimensions", group="Fuselage"));
+  parameter Modelica.Units.SI.Length t_fus=0.03 "Fuselage wall thickness" annotation (Dialog(tab="Dimensions", group="Fuselage"));
   parameter Modelica.Units.SI.Area A_floor=2.5 "Floor surface area";
-  parameter Modelica.Units.SI.Length t_floor=0.025 "Floor thickness"
-    annotation (Dialog(tab="Dimensions", group="Fuselage"));
-  parameter Modelica.Units.SI.Area A_duct=2 "Duct surface area"
-    annotation (Dialog(tab="Dimensions", group="Fuselage"));
-  parameter Modelica.Units.SI.Length t_duct=0.0004785 "Duct thickness"
-    annotation (Dialog(tab="Dimensions", group="Fuselage"));
+  parameter Modelica.Units.SI.Length t_floor=0.025 "Floor thickness" annotation (Dialog(tab="Dimensions", group="Fuselage"));
+  parameter Modelica.Units.SI.Area A_duct=2 "Duct surface area" annotation (Dialog(tab="Dimensions", group="Fuselage"));
+  parameter Modelica.Units.SI.Length t_duct=0.0004785 "Duct thickness" annotation (Dialog(tab="Dimensions", group="Fuselage"));
   parameter Modelica.Units.SI.Angle csi_fus=90*pi/180
-    "Angle of panels (acute)"
-    annotation (Dialog(tab="Dimensions", group="Fuselage"));
+    "Angle of panels (acute)" annotation (Dialog(tab="Dimensions", group="Fuselage"));
 
-  parameter Modelica.Units.SI.Area A_window=0 "Window area"
-    annotation (Dialog(tab="Dimensions", group="Window"));
-  parameter Modelica.Units.SI.Area Ap_window=0 "Window projected area"
-    annotation (Dialog(tab="Dimensions", group="Window"));
-  parameter Modelica.Units.SI.Length t_window=0.01 "Window thickness"
-    annotation (Dialog(tab="Dimensions", group="Window"));
-  parameter Modelica.Units.SI.Length LX_window=1 "Window X-length"
-    annotation (Dialog(tab="Dimensions", group="Window"));
+  parameter Modelica.Units.SI.Area A_window=0 "Window area" annotation (Dialog(tab="Dimensions", group="Window"));
+  parameter Modelica.Units.SI.Area Ap_window=0 "Window projected area" annotation (Dialog(tab="Dimensions", group="Window"));
+  parameter Modelica.Units.SI.Length t_window=0.01 "Window thickness" annotation (Dialog(tab="Dimensions", group="Window"));
+  parameter Modelica.Units.SI.Length LX_window=1 "Window X-length" annotation (Dialog(tab="Dimensions", group="Window"));
 
-  parameter Modelica.Units.SI.Length HZ_ws=2 "Windscreen total Z-length"
-    annotation (Dialog(tab="Dimensions", group="Windscreen"));
-  parameter Modelica.Units.SI.Length WY_ws=2.15 "Windscreen total Y-length"
-    annotation (Dialog(tab="Dimensions", group="Windscreen"));
-  parameter Modelica.Units.SI.Area A_ws=4.3 "Windscreen area"
-    annotation (Dialog(tab="Dimensions", group="Windscreen"));
-  parameter Modelica.Units.SI.Area Ap_ws=3.5 "Windscreen projected area"
-    annotation (Dialog(tab="Dimensions", group="Windscreen"));
-  parameter Modelica.Units.SI.Length t_ws=0.03 "Windscreen thickness"
-    annotation (Dialog(tab="Dimensions", group="Windscreen"));
+  parameter Modelica.Units.SI.Length HZ_ws=2 "Windscreen total Z-length" annotation (Dialog(tab="Dimensions", group="Windscreen"));
+  parameter Modelica.Units.SI.Length WY_ws=2.15 "Windscreen total Y-length" annotation (Dialog(tab="Dimensions", group="Windscreen"));
+  parameter Modelica.Units.SI.Area A_ws=4.3 "Windscreen area" annotation (Dialog(tab="Dimensions", group="Windscreen"));
+  parameter Modelica.Units.SI.Area Ap_ws=3.5 "Windscreen projected area" annotation (Dialog(tab="Dimensions", group="Windscreen"));
+  parameter Modelica.Units.SI.Length t_ws=0.03 "Windscreen thickness" annotation (Dialog(tab="Dimensions", group="Windscreen"));
   parameter Modelica.Units.SI.Angle csi_ws=90*pi/180
-    "Angle of windscreen (acute)"
-    annotation (Dialog(tab="Dimensions", group="Windscreen"));
+    "Angle of windscreen (acute)" annotation (Dialog(tab="Dimensions", group="Windscreen"));
 
-  parameter Modelica.Units.SI.Mass m_cockpit "Material mass within cockpit"
-    annotation (Dialog(group="Specifications"));
+  parameter Modelica.Units.SI.Mass m_cockpit "Material mass within cockpit" annotation (Dialog(group="Specifications"));
   parameter Modelica.Units.SI.SpecificHeatCapacity cp_cockpit=900
-    "Specific heat capacity of cockpit material"
-    annotation (Dialog(group="Specifications"));
+    "Specific heat capacity of cockpit material" annotation (Dialog(group="Specifications"));
   parameter Integer N_occupants[3]  "Number of occupants: passengers, crew, pilots" annotation(Dialog(group="Specifications"));
   parameter Modelica.Units.SI.HeatFlowRate Q_int=1000
     "Avionics heat generation";
   parameter Boolean fixed_Q = false "Use fixed heat and water input for occupants";
-  parameter Modelica.Units.SI.HeatFlowRate Q_occupants=0
+  parameter Modelica.Units.SI.HeatFlowRate Q_occupants[3]={0,0,0}
     "Total heat input from occupants" annotation (Dialog(enable=fixed_Q));
-  parameter Modelica.Units.SI.MassFlowRate m_H20_occupants=0
+  parameter Modelica.Units.SI.MassFlowRate m_H20_occupants[3]={0,0,0}
     "Total water input from occupants" annotation (Dialog(enable=fixed_Q));
   //parameter Boolean use_E_fixed=false "Use the provided E_fixed value";
   //parameter Boolean use_E_fixed_ws=false "Use the provided E_fixed_ws value";
@@ -67,15 +47,12 @@ model HeliCockpit
   parameter Real r_eff_di_ws=0.02 "Reflection coefficient of windscreen" annotation (Dialog(enable=use_r_eff));
   parameter Boolean use_fus_radiation=true "Use the component for fuselage radiation";
 
-  parameter Modelica.Units.SI.MassFraction X_start=0.00894
-    annotation (Dialog(group="Start Values"));
-  parameter Modelica.Units.SI.Temperature T_start=301.15
-    annotation (Dialog(group="Start Values"));
+  parameter Modelica.Units.SI.MassFraction X_start=0.00894 annotation (Dialog(group="Start Values"));
+  parameter Modelica.Units.SI.Temperature T_start=301.15 annotation (Dialog(group="Start Values"));
 
   final parameter Modelica.Units.SI.Length HZ_fus=HZ/2/sin(csi_fus)
     "diagonal height per panel";
   final parameter Modelica.Units.SI.Length HZ_ws_angled=HZ_ws/sin(csi_ws);
-
   constant Real pi = Modelica.Constants.pi;
 
   // Materials
@@ -147,7 +124,7 @@ model HeliCockpit
     X_start={X_start,1 - X_start},
     Q_sens_fixed=Q_occupants,
     m_H2O_fixed=m_H20_occupants,
-    fixed_Q_sens=fixed_Q)
+    fixed_Q=false)
     annotation (Placement(transformation(extent={{-10,-80},{10,-60}})));
   Subsystems.FuselagePanel fuselagePanel_TL(
     redeclare model HTC_int = HTC_int,

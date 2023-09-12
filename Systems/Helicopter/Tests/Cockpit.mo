@@ -19,7 +19,7 @@ model Cockpit "Testing the cockpit and evaporator together"
     allowFlowReversal=false,
     T_di=313.15)
     annotation (Placement(transformation(extent={{52,-8},{32,12}})));
-  Subsystems.Evaporator evaporator(m_fan=0.3, T_start=280.32)
+  Subsystems.Evaporator evaporator(m_fan=0.3)
     annotation (Placement(transformation(extent={{-10,10},{10,30}})));
   NH90.BasicAirbusEES.AirbusCockpitDuct
                     airbusCockpit(N_occupants={20,0,2})

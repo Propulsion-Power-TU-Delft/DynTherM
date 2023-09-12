@@ -130,13 +130,13 @@ model AirbusCabinDuct
     noInitialTemperature=false,
     initOpt=DynTherM.Choices.InitOpt.fixedState,
     Q_int=Q_avionics,
-    Q_sens_fixed=N_occupants[1]*Q_occupants,
-    m_H2O_fixed=N_occupants[1]*m_H2O,
+    Q_sens_fixed=N_occupants*Q_occupants,
+    m_H2O_fixed=N_occupants*m_H2O,
     N_occupants=N_occupants,
     allowFlowReversal=false,
     X_start=X_start,
-    fixed_Q_sens=true,
-    V=A_floor*A_fus/2/LX)
+    V=A_floor*A_fus/2/LX,
+    fixed_Q=false)
     annotation (Placement(transformation(extent={{-6,-86},{14,-66}})));
   Components.HeatTransfer.ExternalConvection fusExtConvection(A=A_fus,
       redeclare model HTC =

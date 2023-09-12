@@ -46,7 +46,7 @@ model NH90 "NH90 running model"
     phi_amb=0.4,
     T_ground=313.15,
     use_P_amb=true)
-    annotation (Placement(transformation(extent={{-92,8},{-72,28}})));
+    annotation (Placement(transformation(extent={{70,70},{100,100}})));
   Modelica.Blocks.Sources.Constant engineTemp(k=T_engine)
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
         rotation=0,
@@ -98,9 +98,9 @@ equation
     annotation (Line(points={{-2.2,33.04},{-2.2,62},{-28.6,62},{-28.6,33.68}},
         color={0,0,127}));
   connect(targetTempCockpit.y, heliCombined.targetTempCockpitInput) annotation (
-     Line(points={{-35,-70},{-22.44,-70},{-22.44,-23.28}}, color={0,0,127}));
+     Line(points={{-35,-70},{-27.72,-70},{-27.72,-26.48}}, color={0,0,127}));
   connect(targetTempCabin.y, heliCombined.targetTempCabinInput) annotation (
-      Line(points={{11,-72},{21.56,-72},{21.56,-23.28}}, color={0,0,127}));
+      Line(points={{11,-72},{14.52,-72},{14.52,-23.92}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)),
     experiment(StopTime=2000, __Dymola_NumberOfIntervals=1000));

@@ -2,51 +2,36 @@ within DynTherM.Systems.Helicopter.NH90.AdvancedModels;
 model HeliCabin
   "Helicopter cabin advanced model made to match with basic NH90 Airbus"
   outer Components.Environment environment;
-  parameter Modelica.Units.SI.Length LX=4.85 "Fuselage X-length"
-    annotation (Dialog(tab="Dimensions", group="General"));
-  parameter Modelica.Units.SI.Length WY=2.6 "Fuselage Y-length"
-    annotation (Dialog(tab="Dimensions", group="General"));
-  parameter Modelica.Units.SI.Length HZ=2.8 "Fuselage Z-length"
-    annotation (Dialog(tab="Dimensions", group="General"));
+  parameter Modelica.Units.SI.Length LX=4.85 "Fuselage X-length" annotation (Dialog(tab="Dimensions", group="General"));
+  parameter Modelica.Units.SI.Length WY=2.6 "Fuselage Y-length" annotation (Dialog(tab="Dimensions", group="General"));
+  parameter Modelica.Units.SI.Length HZ=2.8 "Fuselage Z-length" annotation (Dialog(tab="Dimensions", group="General"));
 
-  parameter Modelica.Units.SI.Length t_fus=0.03 "Fuselage wall thickness"
-    annotation (Dialog(tab="Dimensions", group="Fuselage"));
+  parameter Modelica.Units.SI.Length t_fus=0.03 "Fuselage wall thickness" annotation (Dialog(tab="Dimensions", group="Fuselage"));
   parameter Modelica.Units.SI.Area A_floor=12.6 "Floor surface area";
-  parameter Modelica.Units.SI.Length t_floor=0.025 "Floor thickness"
-    annotation (Dialog(tab="Dimensions", group="Fuselage"));
-  parameter Modelica.Units.SI.Area A_duct=2 "Duct surface area"
-    annotation (Dialog(tab="Dimensions", group="Fuselage"));
-  parameter Modelica.Units.SI.Length t_duct=0.005 "Duct thickness"
-    annotation (Dialog(tab="Dimensions", group="Fuselage"));
+  parameter Modelica.Units.SI.Length t_floor=0.025 "Floor thickness" annotation (Dialog(tab="Dimensions", group="Fuselage"));
+  parameter Modelica.Units.SI.Area A_duct=2 "Duct surface area" annotation (Dialog(tab="Dimensions", group="Fuselage"));
+  parameter Modelica.Units.SI.Length t_duct=0.005 "Duct thickness" annotation (Dialog(tab="Dimensions", group="Fuselage"));
   parameter Modelica.Units.SI.Angle csi_fus=90*pi/180
-    "Angle of panels (acute)"
-    annotation (Dialog(tab="Dimensions", group="Fuselage"));
+    "Angle of panels (acute)" annotation (Dialog(tab="Dimensions", group="Fuselage"));
 
-  parameter Modelica.Units.SI.Area A_engine=4.2 "Engine area"
-    annotation (Dialog(tab="Dimensions", group="Engine"));
-  parameter Modelica.Units.SI.Area A_btp=4.2 "Transmission area"
-    annotation (Dialog(tab="Dimensions", group="Engine"));
+  parameter Modelica.Units.SI.Area A_engine=4.2 "Engine area" annotation (Dialog(tab="Dimensions", group="Engine"));
+  parameter Modelica.Units.SI.Area A_btp=4.2 "Transmission area" annotation (Dialog(tab="Dimensions", group="Engine"));
 
-  parameter Modelica.Units.SI.Area A_window=2.5 "Window area per side"
-    annotation (Dialog(tab="Dimensions", group="Window"));
+  parameter Modelica.Units.SI.Area A_window=2.5 "Window area per side" annotation (Dialog(tab="Dimensions", group="Window"));
   //parameter Modelica.SIunits.Area Ap_window=0.25 "Window projected area" annotation(Dialog(tab="Dimensions", group="Window"));
-  parameter Modelica.Units.SI.Length t_window=0.01 "Window wall thickness"
-    annotation (Dialog(tab="Dimensions", group="Window"));
-  parameter Modelica.Units.SI.Length LX_window=2 "Window length"
-    annotation (Dialog(tab="Dimensions", group="Window"));
+  parameter Modelica.Units.SI.Length t_window=0.01 "Window wall thickness" annotation (Dialog(tab="Dimensions", group="Window"));
+  parameter Modelica.Units.SI.Length LX_window=2 "Window length" annotation (Dialog(tab="Dimensions", group="Window"));
 
-  parameter Modelica.Units.SI.Mass m_cabin "Material mass within cabin"
-    annotation (Dialog(group="Specifications"));
+  parameter Modelica.Units.SI.Mass m_cabin "Material mass within cabin" annotation (Dialog(group="Specifications"));
   parameter Modelica.Units.SI.SpecificHeatCapacity cp_cabin=900
-    "Specific heat capacity of cabin material"
-    annotation (Dialog(group="Specifications"));
+    "Specific heat capacity of cabin material" annotation (Dialog(group="Specifications"));
   parameter Integer N_occupants[3] "Number of occupants: passengers, crew, pilots" annotation(Dialog(group="Specifications"));
   parameter Modelica.Units.SI.HeatFlowRate Q_int=750
     "Avionics heat generation";
   parameter Boolean fixed_Q = false "Use fixed heat and water input for occupants";
-  parameter Modelica.Units.SI.HeatFlowRate Q_occupants=0
+  parameter Modelica.Units.SI.HeatFlowRate Q_occupants[3]={0,0,0}
     "Total heat input from occupants" annotation (Dialog(enable=fixed_Q));
-  parameter Modelica.Units.SI.MassFlowRate m_H20_occupants=0
+  parameter Modelica.Units.SI.MassFlowRate m_H20_occupants[3]={0,0,0}
     "Total water input from occupants" annotation (Dialog(enable=fixed_Q));
   //parameter Boolean use_E_fixed=false "Use the provided E_fixed value";
   //parameter Modelica.Units.SI.Irradiance E_fixed=900 "Fixed solar radiation" annotation (Dialog(enable=use_E_fixed));
@@ -54,14 +39,11 @@ model HeliCabin
   parameter Real r_eff_di=0.02 "Reflection coefficient" annotation (Dialog(enable=use_r_eff));
   parameter Boolean use_fus_radiation=true "Use the component for fuselage radiation";
 
-  parameter Modelica.Units.SI.MassFraction X_start=0.0120
-    annotation (Dialog(group="Start Values"));
-  parameter Modelica.Units.SI.Temperature T_start=28 + 273.15
-    annotation (Dialog(group="Start Values"));
+  parameter Modelica.Units.SI.MassFraction X_start=0.0120 annotation (Dialog(group="Start Values"));
+  parameter Modelica.Units.SI.Temperature T_start=28 + 273.15 annotation (Dialog(group="Start Values"));
 
   final parameter Modelica.Units.SI.Length HZ_fus=HZ/2/sin(csi_fus)
     "Panel Z-length accounting for angle";
-
   constant Real pi = Modelica.Constants.pi;
 
   // Materials
@@ -210,8 +192,7 @@ model HeliCabin
     T_start=T_start,
     X_start={X_start,1 - X_start},
     Q_sens_fixed=Q_occupants,
-    m_H2O_fixed=m_H20_occupants,
-    fixed_Q_sens=fixed_Q)
+    m_H2O_fixed=m_H20_occupants)
     annotation (Placement(transformation(extent={{-10,-82},{10,-62}})));
   // Ports
   CustomInterfaces.FluidPort_A inletPort
@@ -262,7 +243,8 @@ model HeliCabin
   Components.HeatTransfer.InternalConvection ductExtConduction(A=A_duct,
     redeclare model HTC = HTC_duct) annotation (Placement(transformation(extent={{44,-54},{64,-34}})));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a ductThermalPort
-    annotation (Placement(transformation(extent={{96,-44},{116,-24}})));
+    annotation (Placement(transformation(extent={{92,-56},{110,-38}}),
+        iconTransformation(extent={{92,-56},{110,-38}})));
   Modelica.Blocks.Interfaces.RealInput engineTempInput annotation (Placement(
         transformation(
         extent={{-15,-15},{15,15}},
@@ -288,8 +270,8 @@ equation
     annotation (Line(points={{-38,-38.6},{-38,-33.4}},
                                                      color={191,0,0}));
   connect(floorExtTempInput.thermal, floorExtConvection.outlet)
-    annotation (Line(points={{-37.3333,-51},{-37.3333,-48},{-38,-48},{-38,
-          -45.4}},                               color={191,0,0}));
+    annotation (Line(points={{-37.3333,-51},{-37.3333,-48},{-38,-48},{-38,-45.4}},
+                                                 color={191,0,0}));
   connect(outletPort, outletPort)
     annotation (Line(points={{20,-84},{20,-84}},          color={0,0,0}));
   connect(outletPort, plenum.outlet)
@@ -312,10 +294,10 @@ equation
   connect(ductExtConduction.inlet, ductConduction.outlet)
     annotation (Line(points={{54,-40.6},{54,-35.4}}, color={191,0,0}));
   connect(ductThermalPort, ductExtConduction.outlet) annotation (Line(
-        points={{106,-34},{106,-47.4},{54,-47.4}},
+        points={{101,-47},{101,-47.4},{54,-47.4}},
                                                  color={191,0,0}));
-  connect(ductThermalPort, ductThermalPort) annotation (Line(points={{106,-34},{
-          106,-34}},               color={191,0,0}));
+  connect(ductThermalPort, ductThermalPort) annotation (Line(points={{101,-47},{
+          101,-47}},               color={191,0,0}));
   connect(radiation_BL.radiative,fuselagePanel_BL. irradiancePort)
     annotation (Line(points={{-44,10},{-33,10},{-33,6}},  color={191,0,0}));
   connect(radiation_BR.radiative,fuselagePanel_BR. irradiancePort) annotation (

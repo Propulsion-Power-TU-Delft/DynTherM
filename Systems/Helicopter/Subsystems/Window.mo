@@ -28,9 +28,7 @@ model Window
 
   //Window Radiation
   Components.HeatTransfer.WindowRadiation windowRadiation(A=A, redeclare model
-      Mat = Materials.AirbusEES.Window,
-    use_r_eff=use_r_eff,
-    r_eff_di=r_eff_di)                                         annotation (Placement(
+      Mat = Materials.AirbusEES.Window)                        annotation (Placement(
         transformation(
         extent={{-10,10},{10,-10}},
         rotation=90,
@@ -66,8 +64,12 @@ model Window
     annotation (Placement(transformation(extent={{80,26},{100,46}}),
         iconTransformation(extent={{80,26},{100,46}})));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a thermalPortToSeats
-    annotation (Placement(transformation(extent={{80,-2},{100,18}}),
+    annotation (Placement(transformation(extent={{80,-4},{100,16}}),
         iconTransformation(extent={{80,-40},{100,-20}})));
+  Components.Adaptors.irradianceToHeatFlow irradianceToHeatFlow(A=A)
+    annotation (Placement(transformation(extent={{-18,-18},{18,18}},
+        rotation=-90,
+        origin={0,6})));
 equation
   connect(externalConvection.inlet,wallConduction.outlet) annotation (
       Line(points={{-46.6,34},{-15.4,34}},                   color={191,0,0}));
@@ -78,13 +80,15 @@ equation
   connect(externalConvection.inlet, wallConduction.outlet) annotation (Line(
         points={{-46.6,34},{-15.4,34}},                   color={191,0,0}));
   connect(windowRadiation.inlet_absorbed, wallConduction.outlet) annotation (
-      Line(points={{-46.6,12.6},{-16,12.6},{-16,34},{-15.4,34}}, color={191,0,0}));
+      Line(points={{-46.6,13.4},{-16,13.4},{-16,34},{-15.4,34}}, color={191,0,0}));
   connect(thermalPortToSeats,thermalPortToSeats)
-    annotation (Line(points={{90,8},{90,8}},   color={191,0,0}));
-  connect(windowRadiation.inlet_transmitted, thermalPortToSeats)
-    annotation (Line(points={{-46.6,7.4},{90,7.4},{90,8}}, color={191,0,0}));
+    annotation (Line(points={{90,6},{90,6}},   color={191,0,0}));
   connect(internalConvection.inlet, thermalPortInner)
     annotation (Line(points={{17.4,34},{90,34},{90,36}}, color={191,0,0}));
+  connect(windowRadiation.inlet_transmitted, irradianceToHeatFlow.outlet)
+    annotation (Line(points={{-46.6,6.6},{-46.6,6},{-10.8,6}}, color={191,0,0}));
+  connect(irradianceToHeatFlow.inlet, thermalPortToSeats)
+    annotation (Line(points={{10.8,6},{90,6}}, color={191,0,0}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Rectangle(
           extent={{100,-10},{-100,10}},

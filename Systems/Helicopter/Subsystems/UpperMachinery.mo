@@ -3,32 +3,25 @@ model UpperMachinery
   "Represents engien and transmission component on upper section."
   outer Components.Environment environment;
   parameter Modelica.Units.SI.Temperature T_start=400 "Start temperature";
-  parameter Modelica.Units.SI.Area A_engine=4.2 "Engine wall surface area"
-    annotation (Dialog(group="Dimensions"));
-  parameter Modelica.Units.SI.Area A_btp=4.2 "Transmission wall surface area"
-    annotation (Dialog(group="Dimensions"));
-  parameter Modelica.Units.SI.Length t_engine=0.04 "Engine wall thickness"
-    annotation (Dialog(group="Dimensions"));
-  parameter Modelica.Units.SI.Length t_btp=0.04 "Exhaust wall thickness"
-    annotation (Dialog(group="Dimensions"));
+  parameter Modelica.Units.SI.Area A_engine=4.2 "Engine wall surface area" annotation (Dialog(group="Dimensions"));
+  parameter Modelica.Units.SI.Area A_btp=4.2 "Transmission wall surface area" annotation (Dialog(group="Dimensions"));
+  parameter Modelica.Units.SI.Length t_engine=0.04 "Engine wall thickness" annotation (Dialog(group="Dimensions"));
+  parameter Modelica.Units.SI.Length t_btp=0.04 "Exhaust wall thickness" annotation (Dialog(group="Dimensions"));
 
   replaceable model HTC_int =
     DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
     constrainedby
-    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
-    annotation (choicesAllMatching=true);
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal annotation (choicesAllMatching=true);
 
   replaceable model HTC_ext_btp =
     DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
     constrainedby
-    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
-    annotation (choicesAllMatching=true);
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal annotation (choicesAllMatching=true);
 
   replaceable model HTC_ext_engine =
     DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
     constrainedby
-    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
-    annotation (choicesAllMatching=true);
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal annotation (choicesAllMatching=true);
 
   // Engine
   Components.HeatTransfer.InternalConvection engineIntConvection(A=A_engine,
