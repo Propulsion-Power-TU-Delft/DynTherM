@@ -4,12 +4,17 @@
 
 ### Description
 
-A Modelica library for the estimation of the heat loads in aircraft and helicopeters intended for ECS preliminary sizing.
+A Modelica library for the Dynamic simulation of Thermal Management systems.
+The following applications are currently covered:
+1. Aircraft fuselage model (tested and validated with proprietary industrial data)
+2. Helicopter cabin model (developed, but not extensively tested)
+3. Hydrogen tank model (developed, but not extensively tested)
+4. Battery pack model (initial development phase)
 
 ---
 
 ### Author
-* **A. Giuffré**, PhD Researcher, Propulsion & Power, TU Delft
+* **A. Giuffré**, Post Doctoral Researcher, Propulsion & Power, TU Delft
 
 ### Acknowledgements
 * **C. De Servi**, Assistant Professor, Propulsion & Power, TU Delft
@@ -18,9 +23,9 @@ A Modelica library for the estimation of the heat loads in aircraft and helicope
 ---
 
 ### Pre-requisites
-##### [Modelica 3.2.3](https://www.modelica.org/)
-##### [Dymola 2020](https://www.3ds.com/products-services/catia/products/dymola/) (not tested with OpenModelica)
-##### [Python 3.7](https://python.org)
+##### [Modelica 4.0](https://www.modelica.org/)
+##### [Dymola 2022](https://www.3ds.com/products-services/catia/products/dymola/) (not tested with OpenModelica)
+##### [Python 3.9](https://python.org)
 ##### [NumPy](https://numpy.org)
 ```
 sudo pip install numpy
@@ -32,6 +37,10 @@ sudo pip install matplotlib
 ##### [pandas](https://pandas.pydata.org/)
 ```
 sudo pip install pandas
+```
+##### [tqdm](https://pypi.org/project/tqdm/)
+```
+sudo pip install tqdm
 ```
 ##### [SMARTS 2.9.5](https://www.nrel.gov/grid/solar-resource/smarts.html) (optional, only for Python - Dymola interface)
 
