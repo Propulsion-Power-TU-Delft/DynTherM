@@ -7,6 +7,7 @@ model Environment "Environmental properties (moist air)"
   // [4] Earth System Research Laboratory (NOAA) https://psl.noaa.gov/cgi-bin/data/timeseries/timeseries1.pl
 
   package Medium = Modelica.Media.Air.MoistAir;
+
   parameter Real Mach_inf=0 "Aircraft/rotorcraft Mach number";
   parameter Modelica.Units.SI.Length Altitude=0
     "Aircraft altitude with respect to sea level";

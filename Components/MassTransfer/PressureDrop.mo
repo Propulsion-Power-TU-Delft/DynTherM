@@ -1,7 +1,9 @@
 within DynTherM.Components.MassTransfer;
 model PressureDrop "Simple concentrated pressure drop: constant or linear"
-  package Medium = Modelica.Media.Air.MoistAir;
+  replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
+    Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
   outer DynTherM.Components.Environment environment "Environmental properties";
+
   parameter Boolean allowFlowReversal=environment.allowFlowReversal
     "= true to allow flow reversal, false restricts to design direction";
   parameter DynTherM.Choices.PDropOpt option
@@ -16,13 +18,14 @@ model PressureDrop "Simple concentrated pressure drop: constant or linear"
     "Pressure - start value" annotation (Dialog(tab="Initialization"));
   parameter Modelica.Units.SI.Temperature T_start=300
     "Temperature - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.MassFraction X_start[2]={0,1}
+  parameter Modelica.Units.SI.MassFraction X_start[Medium.nX]=Medium.reference_X
     "Mass fractions - start value" annotation (Dialog(tab="Initialization"));
   parameter Medium.ThermodynamicState state_start = Medium.setState_pTX(P_start, T_start, X_start)
     "Starting thermodynamic state" annotation (Dialog(tab="Initialization"));
   Modelica.Units.SI.Pressure dP(start=dP_start) "Pressure drop";
 
   DynTherM.CustomInterfaces.FluidPort_A inlet(
+    redeclare package Medium = Medium,
     m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0, start=
           m_flow_start),
     P(start=P_start),
@@ -31,6 +34,7 @@ model PressureDrop "Simple concentrated pressure drop: constant or linear"
             -20},{-80,20}}, rotation=0), iconTransformation(extent={{-110,-10},
             {-90,10}})));
   DynTherM.CustomInterfaces.FluidPort_B outlet(
+    redeclare package Medium = Medium,
     m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0, start=
           -m_flow_start),
     P(start=P_start),

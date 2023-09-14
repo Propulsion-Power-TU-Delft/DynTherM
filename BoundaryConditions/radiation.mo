@@ -3,8 +3,8 @@ model radiation "Model to impose irradiance"
   // Irradiance is imposed as beam component,
   // whereas the diffused and ground-reflected components are set to zero by default
   extends DynTherM.Base.rin1;
-  parameter Modelica.Units.SI.Irradiance E "Incident irradiance" annotation (Dialog(tab="Boundary conditions", enable=use_E));
-  parameter Modelica.Units.SI.Angle theta "Incidence angle" annotation (Dialog(tab="Boundary conditions", enable=use_theta));
+  input Modelica.Units.SI.Irradiance E "Incident irradiance" annotation (Dialog(tab="Boundary conditions", enable=use_E));
+  input Modelica.Units.SI.Angle theta "Incidence angle" annotation (Dialog(tab="Boundary conditions", enable=use_theta));
   parameter Boolean use_E = false "True if irradiance is given" annotation (Dialog(tab="Boundary conditions"));
   parameter Boolean use_in_E = false "Use connector input for the irradiance" annotation (Dialog(group="External inputs"), choices(checkBox=true));
   parameter Boolean use_theta = false "True if theta is given" annotation (Dialog(tab="Boundary conditions"));

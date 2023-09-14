@@ -43,23 +43,21 @@ class Aircraft:
                   ["A320.E_td_%s" % str(x) for x in range(1, self.n_fus_secs + 1)] + \
                   ["A320.E_tr_%s" % str(x) for x in range(1, self.n_fus_secs + 1)]
         theta_input = ["A320.theta_%s" % str(x) for x in range(1, self.n_fus_secs + 1)]
-        input_keys = ["m_ECS.k", "A320.rec_target", "Xw_ECS.k", "T_target.k", "m_trim_cab.k", "m_trim_fd.k",
-                      "T_trim.k", "environment.Mach_inf", "environment.Altitude", "environment.ISA_plus",
+        input_keys = ["m_ECS.k", "A320.rec_target", "T_target.k", "m_trim_cab.k", "m_trim_fd.k", "T_trim.k",
+                      "environment.Mach_inf", "environment.Altitude", "environment.ISA_plus",
                       "environment.phi_amb", "environment.phi_amb_ground", "environment.T_ground", "A320.N_pax",
                       "A320.N_crew", "A320.N_pilots", "A320.Q_el", "A320.Q_galley", "A320.Q_avionics",
-                      "A320.cabinLights", "A320.inFlightEntertainment"] + \
-                     E_input + theta_input + \
+                      "A320.cabinLights", "A320.inFlightEntertainment"] + E_input + theta_input + \
                      ["A320.E_tb_front", "A320.E_td_front", "A320.E_tr_front", "A320.theta_front"]
 
         # define input values
-        input_values = [data['M_pack'][case_idx], data['Rec_ratio'][case_idx], data['Xw_pack'][case_idx],
-                        data['T_target'][case_idx], data['M_trim_cab'][case_idx], data['M_trim_fd'][case_idx],
-                        data['T_trim'][case_idx], data['Mach_inf'][case_idx], data['Height'][case_idx],
-                        data['Delta_ISA'][case_idx], data['Phi_amb'][case_idx], data['Phi_ground'][case_idx],
-                        data['T_ground'][case_idx], data['N_pax'][case_idx], data['N_crew'][case_idx],
-                        data['N_pilots'][case_idx], data['Q_electronics'][case_idx],
-                        data['Q_galley'][case_idx], data['Q_avionics'][case_idx], data['Cabin_lights'][case_idx],
-                        data['IFE'][case_idx]] + \
+        input_values = [data['M_pack'][case_idx], data['Rec_ratio'][case_idx], data['T_target'][case_idx],
+                        data['M_trim_cab'][case_idx], data['M_trim_fd'][case_idx], data['T_trim'][case_idx],
+                        data['Mach_inf'][case_idx], data['Height'][case_idx], data['Delta_ISA'][case_idx],
+                        data['Phi_amb'][case_idx], data['Phi_ground'][case_idx], data['T_ground'][case_idx],
+                        data['N_pax'][case_idx], data['N_crew'][case_idx], data['N_pilots'][case_idx],
+                        data['Q_electronics'][case_idx], data['Q_galley'][case_idx], data['Q_avionics'][case_idx],
+                        data['Cabin_lights'][case_idx], data['IFE'][case_idx]] + \
                        [radiation.E_direct[i] for i in range(self.n_fus_secs)] + \
                        [radiation.E_diffuse[i] for i in range(self.n_fus_secs)] + \
                        [radiation.E_reflected[i] for i in range(self.n_fus_secs)] + \
@@ -71,8 +69,7 @@ class Aircraft:
                     "A320.cargo.cargo.T", "A320.EEbay.cargo.T", "A320.mixingManifold.T"]
         P_output = ["A320.packFlow.outlet.P", "A320.cockpit.flightDeck.P", "A320.cabin.cabin.P", "A320.cargo.cargo.P",
                     "A320.EEbay.cargo.P", "A320.recirculationFan.inlet.P", "A320.mixingManifold.P"]
-        phi_output = ["A320.cockpit.flightDeck.phi", "A320.cabin.cabin.phi", "A320.cargo.cargo.phi",
-                      "A320.EEbay.cargo.phi", "A320.mixingManifold.phi"]
+        phi_output = ["A320.phi_cockpit", "A320.phi_cabin", "A320.phi_cargo", "A320.phi_EE_bay", "A320.phi_mix"]
         mass_output = ["A320.mixingManifold.outlet.m_flow", "A320.cockpit.cockpitInflow.m_flow",
                        "A320.cabin.cabinInflow.m_flow", "A320.cargo.cargoToCabin.m_flow",
                        "A320.EEbay.cargoToCabin.m_flow", "A320.recirculationFan.inlet.m_flow",

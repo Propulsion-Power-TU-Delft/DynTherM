@@ -1,7 +1,7 @@
 within DynTherM.Systems.Helicopter.Subsystems;
 model Evaporator
   "Ideal evaporator for air-side calculations based on temperature control, with two intake streams"
-  package Medium = Modelica.Media.Air.MoistAir;
+  replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
   parameter Modelica.Units.SI.MassFlowRate m_fan "Fan air through-flow"
     annotation (Dialog(group="Airflow"));
   parameter Medium.Temperature T_start_out=283.15 "Initial temperature of evaporator outflow" annotation(Dialog(tab="Initialisation"));

@@ -1,10 +1,9 @@
 within DynTherM.Examples.Aircraft;
 model A320PullDown "Aircraft on ground, pull down test case"
 
-  import ThermalManagement =
-         DynTherM;
-
-  package Medium = Modelica.Media.Air.MoistAir;
+  import DynTherM;
+  replaceable package Medium = Modelica.Media.Air.MoistAir
+    constrainedby Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
 
   parameter Real N_pax=0 "Number of passengers inside the aircraft" annotation (Dialog(tab="Flight conditions"));
   parameter Real N_crew=6 "Number of cabin crew members inside the aircraft" annotation (Dialog(tab="Flight conditions"));
@@ -150,11 +149,11 @@ model A320PullDown "Aircraft on ground, pull down test case"
   parameter Modelica.Units.SI.VolumeFlowRate volFlow_nom=0.7
     "Fan: nominal volumetric flow rate" annotation (Dialog(tab="Air distribution"));
   parameter Modelica.Units.SI.SpecificEnergy Head_nom=400 "Fan: nominal head" annotation (Dialog(tab="Air distribution"));
-  parameter ThermalManagement.CustomUnits.HydraulicConductance Kv=0.005
+  parameter DynTherM.CustomUnits.HydraulicConductance Kv=0.005
     "Outflow valve: hydraulic conductance" annotation (Dialog(tab="Air distribution"));
-  parameter ThermalManagement.CustomUnits.HydraulicResistance R_HEPA=2000
+  parameter DynTherM.CustomUnits.HydraulicResistance R_HEPA=2000
     "Filter: hydraulic Resistance" annotation (Dialog(tab="Air distribution"));
-  parameter ThermalManagement.CustomUnits.HydraulicResistance R_dado=100
+  parameter DynTherM.CustomUnits.HydraulicResistance R_dado=100
     "Dado panel: hydraulic Resistance" annotation (Dialog(tab="Air distribution"));
 
   parameter Modelica.Units.SI.Temperature Tstart_fuselage=323.15
@@ -261,7 +260,7 @@ model A320PullDown "Aircraft on ground, pull down test case"
     annotation (Placement(transformation(extent={{10,-80},{30,-100}})));
   Components.MassTransfer.PressureSink pressureSink
     annotation (Placement(transformation(extent={{50,-100},{70,-80}})));
-  Components.MassTransfer.PressureDrop HEPAFilter(option=ThermalManagement.Choices.PDropOpt.linear, R=R_HEPA)
+  Components.MassTransfer.PressureDrop HEPAFilter(option=DynTherM.Choices.PDropOpt.linear, R=R_HEPA)
              annotation (Placement(transformation(
         extent={{12,10},{-12,-10}},
         rotation=0,
@@ -270,18 +269,16 @@ model A320PullDown "Aircraft on ground, pull down test case"
     T_nom=258.15,
     massFlow_nom=1,
     use_in_massFlow=false,
-    use_in_T=false,
-    use_in_Xw=false)
-                    annotation (Placement(transformation(
+    use_in_T=false) annotation (Placement(transformation(
         extent={{10,10},{-10,-10}},
         rotation=-90,
         origin={-156,-60})));
 
-  ThermalManagement.Systems.Aircraft.Subsystems.CargoBay cargo(
+  DynTherM.Systems.Aircraft.Subsystems.CargoBay cargo(
     redeclare model HTC_int =
-        ThermalManagement.Components.HeatTransfer.HTCorrelations.InternalConvection.Cylinder,
+        DynTherM.Components.HeatTransfer.HTCorrelations.InternalConvection.Cylinder,
     redeclare model HTC_ext =
-        ThermalManagement.Components.HeatTransfer.HTCorrelations.ExternalConvection.AircraftOnGroundFree
+        DynTherM.Components.HeatTransfer.HTCorrelations.ExternalConvection.AircraftOnGroundFree
         (R_ext=R_fuselage),
     Q_int=0,
     R_ext=R_fuselage,
@@ -307,28 +304,28 @@ model A320PullDown "Aircraft on ground, pull down test case"
     noInitialTemperature=noInitialTemperature_cargo)
     annotation (Placement(transformation(extent={{42,-54},{-2,-10}})));
 
-  ThermalManagement.Sensors.MassflowSensor recirculatedMassflowSensor
+  DynTherM.Sensors.MassflowSensor recirculatedMassflowSensor
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={-40,-90})));
-  ThermalManagement.Systems.Aircraft.Subsystems.CabinFloor cabinFloor(Tstart=
+  DynTherM.Systems.Aircraft.Subsystems.CabinFloor cabinFloor(Tstart=
         Tstart_floor, A=A_floor_cargo)
     annotation (Placement(transformation(extent={{16,-4},{50,18}})));
-  ThermalManagement.Components.MassTransfer.PressureDrop dadoPanelCabin(option=
-        ThermalManagement.Choices.PDropOpt.linear, R=R_dado) annotation (
+  DynTherM.Components.MassTransfer.PressureDrop dadoPanelCabin(option=
+        DynTherM.Choices.PDropOpt.linear, R=R_dado) annotation (
       Placement(transformation(
         extent={{12,10},{-12,-10}},
         rotation=90,
         origin={-6,10})));
-  ThermalManagement.Components.MassTransfer.Mixer mixingManifoldOutlet(
+  DynTherM.Components.MassTransfer.Mixer mixingManifoldOutlet(
     V=V_mixingManifold/10,
     P_start=Pstart_mixingManifold,
     T_start=Tstart_mixingManifold) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=-90,
         origin={-20,-70})));
-  inner ThermalManagement.Components.Environment
+  inner DynTherM.Components.Environment
                                environment(
     Mach_inf=0,
     Altitude=0,
@@ -338,10 +335,10 @@ model A320PullDown "Aircraft on ground, pull down test case"
     T_ground(displayUnit="degC") = 323.15,
     use_ext_sw=true,
     allowFlowReversal=false,
-    initOpt=ThermalManagement.Choices.InitOpt.fixedState)
+    initOpt=DynTherM.Choices.InitOpt.fixedState)
     annotation (Placement(transformation(extent={{86,66},{120,100}})));
-  ThermalManagement.Components.MassTransfer.Pipe distributionPipeCabin(
-    option=ThermalManagement.Choices.PDropOpt.linear,
+  DynTherM.Components.MassTransfer.Pipe distributionPipeCabin(
+    option=DynTherM.Choices.PDropOpt.linear,
     R=500,
     Roughness(displayUnit="mm") = 4.5e-05,
     L=L_pipe_cab,
@@ -349,11 +346,11 @@ model A320PullDown "Aircraft on ground, pull down test case"
         extent={{14,14},{-14,-14}},
         rotation=-90,
         origin={-160,14})));
-  ThermalManagement.Systems.Aircraft.Subsystems.Cockpit cockpit(
+  DynTherM.Systems.Aircraft.Subsystems.Cockpit cockpit(
     redeclare model HTC_int =
-        ThermalManagement.Components.HeatTransfer.HTCorrelations.InternalConvection.Cylinder,
+        DynTherM.Components.HeatTransfer.HTCorrelations.InternalConvection.Cylinder,
     redeclare model HTC_ext =
-        ThermalManagement.Components.HeatTransfer.HTCorrelations.ExternalConvection.AircraftOnGroundFree
+        DynTherM.Components.HeatTransfer.HTCorrelations.ExternalConvection.AircraftOnGroundFree
         (R_ext=R_fuselage),
     N_occupants={0,0,N_pilots},
     Q_int=Q_el,
@@ -399,25 +396,25 @@ model A320PullDown "Aircraft on ground, pull down test case"
     noInitialTemperature=noInitialTemperature_cockpit)
     annotation (Placement(transformation(extent={{-126,22},{-76,70}})));
 
-  ThermalManagement.Systems.Aircraft.Subsystems.CabinWall cabinWall(Tstart=
+  DynTherM.Systems.Aircraft.Subsystems.CabinWall cabinWall(Tstart=
         Tstart_wall, A=A_wall) annotation (Placement(transformation(
         extent={{-16,-12},{16,12}},
         rotation=-90,
         origin={-32,46})));
-  ThermalManagement.Systems.Aircraft.Subsystems.CabinFloor cockpitFloor(Tstart=
+  DynTherM.Systems.Aircraft.Subsystems.CabinFloor cockpitFloor(Tstart=
         Tstart_floor, A=A_floor_cockpit)
     annotation (Placement(transformation(extent={{-116,0},{-82,22}})));
-  ThermalManagement.Components.MassTransfer.PressureDrop dadoPanelCockpit(option=
-        ThermalManagement.Choices.PDropOpt.linear, R=R_dado) annotation (
+  DynTherM.Components.MassTransfer.PressureDrop dadoPanelCockpit(option=
+        DynTherM.Choices.PDropOpt.linear, R=R_dado) annotation (
       Placement(transformation(
         extent={{12,10},{-12,-10}},
         rotation=90,
         origin={-60,8})));
-  ThermalManagement.Systems.Aircraft.Subsystems.CargoBay EEbay(
+  DynTherM.Systems.Aircraft.Subsystems.CargoBay EEbay(
     redeclare model HTC_int =
-        ThermalManagement.Components.HeatTransfer.HTCorrelations.InternalConvection.Cylinder,
+        DynTherM.Components.HeatTransfer.HTCorrelations.InternalConvection.Cylinder,
     redeclare model HTC_ext =
-        ThermalManagement.Components.HeatTransfer.HTCorrelations.ExternalConvection.AircraftOnGroundFree
+        DynTherM.Components.HeatTransfer.HTCorrelations.ExternalConvection.AircraftOnGroundFree
         (R_ext=R_fuselage),
     Q_int=Q_avionics,
     R_ext=R_fuselage,
@@ -443,8 +440,8 @@ model A320PullDown "Aircraft on ground, pull down test case"
     noInitialTemperature=noInitialTemperature_cargo)
     annotation (Placement(transformation(extent={{-108,-54},{-64,-10}})));
 
-  ThermalManagement.Components.MassTransfer.Pipe distributionPipeCockpit(
-    option=ThermalManagement.Choices.PDropOpt.linear,
+  DynTherM.Components.MassTransfer.Pipe distributionPipeCockpit(
+    option=DynTherM.Choices.PDropOpt.linear,
     R=5000,
     Roughness(displayUnit="mm") = 4.5e-05,
     L=L_pipe_fd,
@@ -491,28 +488,25 @@ model A320PullDown "Aircraft on ground, pull down test case"
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={40,-120})));
-  ThermalManagement.Components.MassTransfer.SourceMassFlow cockpitTrimFlow(
+  DynTherM.Components.MassTransfer.SourceMassFlow cockpitTrimFlow(
     T_nom=373.15,
     use_in_massFlow=false,
-    use_in_T=false,
-    use_in_Xw=false)
-                    annotation (Placement(transformation(
+    use_in_T=false) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=180,
         origin={-60,88})));
-  ThermalManagement.Components.MassTransfer.SourceMassFlow cabinTrimFlow(
+  DynTherM.Components.MassTransfer.SourceMassFlow cabinTrimFlow(
     T_nom=373.15,
     use_in_massFlow=false,
-    use_in_T=false,
-    use_in_Xw=false) annotation (Placement(transformation(
+    use_in_T=false) annotation (Placement(transformation(
         extent={{10,10},{-10,-10}},
         rotation=180,
         origin={10,88})));
-  ThermalManagement.Systems.Aircraft.Subsystems.PassengerCabin cabin(
+  DynTherM.Systems.Aircraft.Subsystems.PassengerCabin cabin(
     redeclare model HTC_int =
-        ThermalManagement.Components.HeatTransfer.HTCorrelations.InternalConvection.Cylinder,
+        DynTherM.Components.HeatTransfer.HTCorrelations.InternalConvection.Cylinder,
     redeclare model HTC_ext =
-        ThermalManagement.Components.HeatTransfer.HTCorrelations.ExternalConvection.AircraftOnGroundFree
+        DynTherM.Components.HeatTransfer.HTCorrelations.ExternalConvection.AircraftOnGroundFree
         (R_ext=R_fuselage),
     N_occupants={N_pax,N_crew,0},
     Q_int=Q_utilities,

@@ -1,35 +1,38 @@
 within DynTherM.Components.MassTransfer;
 model SourceMassFlow "Flow rate source for gas flows"
-  package Medium = Modelica.Media.Air.MoistAir;
   outer DynTherM.Components.Environment environment "Environmental properties";
+  replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
+    Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
+
   parameter Medium.AbsolutePressure P_nom=101325 "Nominal pressure";
   parameter Medium.Temperature T_nom=300 "Nominal temperature" annotation(Dialog(enable=not use_in_T and not use_di_T));
-  parameter Medium.MassFraction Xw_nom=0 "Nominal water mass fraction" annotation(Dialog(enable=not use_in_Xw and not use_di_Xw));
+  parameter Medium.MassFraction X_nom[Medium.nX]=Medium.reference_X "Nominal mass fractions" annotation(Dialog(enable=not use_in_Xw and not use_di_Xw));
   parameter Medium.MassFlowRate massFlow_nom=0 "Nominal mass flowrate" annotation(Dialog(enable=not use_in_massFlow and not use_di_massFlow));
   parameter DynTherM.CustomUnits.HydraulicConductance G=0
     "HydraulicConductance";
   parameter Boolean allowFlowReversal=environment.allowFlowReversal
     "= true to allow flow reversal, false restricts to design direction";
+
   // External Inputs
   parameter Boolean use_in_massFlow = false "Use connector input for the nominal flow rate" annotation(Dialog(tab="Inputs", group="External inputs"), choices(checkBox=true));
   parameter Boolean use_in_T = false "Use connector input for the temperature" annotation(Dialog(tab="Inputs", group="External inputs"), choices(checkBox=true));
-  parameter Boolean use_in_Xw = false "Use connector input for the composition" annotation(Dialog(tab="Inputs", group="External inputs"), choices(checkBox=true));
+
   // Direct Inputs
   parameter Boolean use_di_massFlow=false "Use text-based defined mass flow rate" annotation(Dialog(tab="Inputs", group="Direct inputs"), choices(checkBox=true));
   parameter Boolean use_di_T=false "Use text-based defined temperature" annotation(Dialog(tab="Inputs", group="Direct inputs"), choices(checkBox=true));
-  parameter Boolean use_di_Xw=false "Use text-based defined composition" annotation(Dialog(tab="Inputs", group="Direct inputs"), choices(checkBox=true));
+  parameter Boolean use_di_X=false "Use text-based defined composition" annotation(Dialog(tab="Inputs", group="Direct inputs"), choices(checkBox=true));
   input Medium.MassFlowRate massFlow_di=massFlow_nom "Mass flow" annotation(Dialog(tab="Inputs", group="Direct inputs", enable=use_di_massFlow));
   input Medium.Temperature T_di=T_nom "Temperature" annotation(Dialog(tab="Inputs", group="Direct inputs", enable=use_di_T));
-  input Medium.MassFraction Xw_di=Xw_nom "Water mass fraction" annotation(Dialog(tab="Inputs", group="Direct inputs", enable=use_di_Xw));
+  input Medium.MassFraction X_di[Medium.nX]=X_nom "Water mass fraction" annotation(Dialog(tab="Inputs", group="Direct inputs", enable=use_di_X));
 
   Medium.MassFlowRate massFlow "Mass flow rate";
   Medium.AbsolutePressure P(start=P_nom) "Pressure";
   Medium.Temperature T(start=T_nom) "Temperature";
-  Medium.MassFraction X[2](start={Xw_nom, 1 - Xw_nom}) "Mass fractions";
-  Real phi "Relative humidity";
+  Medium.MassFraction X[Medium.nX](start=X_nom) "Mass fractions";
   Medium.ThermodynamicState state "Thermodynamic state";
-  DynTherM.CustomInterfaces.FluidPort_B outlet(m_flow(max=if allowFlowReversal
-           then +Modelica.Constants.inf else 0)) annotation (Placement(
+
+  DynTherM.CustomInterfaces.FluidPort_B outlet(redeclare package Medium = Medium,
+    m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0)) annotation (Placement(
         transformation(extent={{80,-20},{120,20}}, rotation=0),
         iconTransformation(extent={{90,-10},{110,10}})));
   Modelica.Blocks.Interfaces.RealInput in_massFlow if use_in_massFlow annotation (Placement(
@@ -48,22 +51,13 @@ model SourceMassFlow "Flow rate source for gas flows"
         extent={{10,-10},{-10,10}},
         rotation=90,
         origin={-20,70})));
-  Modelica.Blocks.Interfaces.RealInput in_Xw if use_in_Xw annotation (Placement(
-        transformation(
-        origin={60,50},
-        extent={{-10,-10},{10,10}},
-        rotation=270), iconTransformation(
-        extent={{-10,-10},{10,10}},
-        rotation=270,
-        origin={40,70})));
+
 protected
   Modelica.Blocks.Interfaces.RealInput in_massFlow_internal;
   Modelica.Blocks.Interfaces.RealInput in_T_internal;
-  Modelica.Blocks.Interfaces.RealInput in_Xw_internal;
 
 equation
   state = Medium.setState_pTX(P, T, X);
-  phi = Medium.relativeHumidity(state);
 
   if G > 0 then
     outlet.m_flow = -massFlow + (outlet.P - P_nom)*G;
@@ -85,11 +79,10 @@ equation
     in_T_internal = T_di "Temperature set by direct inputs";
   end if;
 
-  X = {in_Xw_internal, 1 - in_Xw_internal};
-  if not use_in_Xw and not use_di_Xw then
-    in_Xw_internal = Xw_nom "Composition set by parameter";
-  elseif use_di_Xw and not use_in_Xw then
-    in_Xw_internal = Xw_di "Composition set by direct inputs";
+  if use_di_X then
+    X = X_di "Composition set by direct inputs";
+  else
+    X = X_nom "Composition set by parameter";
   end if;
 
   outlet.P = P;
@@ -99,7 +92,6 @@ equation
   // Connect protected connectors to public conditional connectors
   connect(in_massFlow, in_massFlow_internal);
   connect(in_T, in_T_internal);
-  connect(in_Xw, in_Xw_internal);
 
   annotation (Documentation(info="<html>
 <p><b>Modelling options</b></p>

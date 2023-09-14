@@ -3,6 +3,7 @@ model AirbusA320
   "Model of an Airbus A320: cabin + cargo + cockpit (no leakage) + recirculation"
   // Reference: Airbus A320, Aircraft Characteristics Airport and Maintenance Planning.
   extends CommercialAircraft(
+    X_ECS={0,1},
     R_fuselage=2.07,
     R_cockpit=R_fuselage,
     L_fuselage=26.9,

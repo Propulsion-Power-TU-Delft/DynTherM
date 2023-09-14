@@ -30,7 +30,6 @@ def read_config_file(config_file):
         'Run_name': [config['ECS']['Run_name'].split()[i] for i in range(n_cases)],
         'M_pack': [float(config['ECS']['M_pack'].split()[i]) for i in range(n_cases)],
         'Rec_ratio': [float(config['ECS']['Rec_ratio'].split()[i]) for i in range(n_cases)],
-        'Xw_pack': [float(config['ECS']['Xw_pack'].split()[i]) for i in range(n_cases)],
         'T_target': [float(config['ECS']['T_target'].split()[i]) + 273.15 for i in range(n_cases)],
         'M_trim_cab': [float(config['ECS']['M_trim_cab'].split()[i]) for i in range(n_cases)],
         'M_trim_fd': [float(config['ECS']['M_trim_fd'].split()[i]) for i in range(n_cases)],

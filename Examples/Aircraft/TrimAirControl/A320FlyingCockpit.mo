@@ -7,10 +7,6 @@ model A320FlyingCockpit "Aircraft is flying, two temperature zones"
     "Minimum mass flow rate of fresh air that must be provided by the ECS - fixed by standard CFR 25.831";
   Modelica.Blocks.Sources.Constant m_ECS(k=1.0)
     annotation (Placement(transformation(extent={{30,80},{10,100}})));
-  Modelica.Blocks.Sources.Constant Xw_ECS(k=0)
-    annotation (Placement(transformation(extent={{-10,-10},{10,10}},
-        rotation=0,
-        origin={-90,-50})));
   Modelica.Blocks.Continuous.PID PID_m_rec(
     k=500,
     Ti=5,
@@ -135,8 +131,6 @@ equation
   m_fresh_min = 0.25/60*(A320.N_pax + A320.N_crew + A320.N_pilots);
   connect(add_m_rec.y, PID_m_rec.u)
     annotation (Line(points={{45,70},{30,70},{30,62}}, color={0,0,127}));
-  connect(Xw_ECS.y, A320.Xw_ECS) annotation (Line(points={{-79,-50},{
-          -28.4286,-50},{-28.4286,-17.5}},                color={0,0,127}));
   connect(m_ECS.y, A320.m_ECS) annotation (Line(points={{9,90},{4.71429,90},{
           4.71429,25.25}},
                        color={0,0,127}));
@@ -146,8 +140,6 @@ equation
   connect(PID_m_rec.y, A320.fanSpeed) annotation (Line(points={{30,39},{30,
           25.125},{29.5714,25.125},{29.5714,25.25}},
                                         color={0,0,127}));
-  connect(Xw_ECS.y, A320.Xw_trim) annotation (Line(points={{-79,-50},{
-          -36.7143,-50},{-36.7143,-17.5}}, color={0,0,127}));
   connect(m_trim_fd.y, A320.m_trim_cockpit) annotation (Line(points={{-79,-90},
           {30,-90},{30,-18},{29.5714,-18},{29.5714,-17.5}},
                                                 color={0,0,127}));
@@ -175,8 +167,8 @@ equation
     annotation (Line(points={{-45,70},{-28,70},{-28,62}}, color={0,0,127}));
   connect(target_P_cab.y, add_P_cab.u1)
     annotation (Line(points={{-79,76},{-68,76}}, color={0,0,127}));
-  connect(A320.cabinPressure, add_P_cab.u2) annotation (Line(points={{
-          -36.7143,25.25},{-80,25.25},{-80,64},{-68,64}}, color={0,0,127}));
+  connect(A320.cabinPressure, add_P_cab.u2) annotation (Line(points={{-36.7143,
+          25.25},{-80,25.25},{-80,64},{-68,64}},          color={0,0,127}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false)),
     Diagram(coordinateSystem(preserveAspectRatio=false)),

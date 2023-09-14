@@ -1,19 +1,21 @@
 within DynTherM.Components.MassTransfer;
 model PressureSink "Pressure sink"
-  package Medium = Modelica.Media.Air.MoistAir;
+  replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
+    Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
   outer DynTherM.Components.Environment environment "Environmental properties";
+
   parameter DynTherM.CustomUnits.HydraulicResistance R=0 "Hydraulic Resistance";
   parameter Boolean allowFlowReversal=environment.allowFlowReversal
     "= true to allow flow reversal, false restricts to design direction";
   parameter Boolean use_ambient=true "Use ambient conditions for the plenum";
   parameter Modelica.Units.SI.Pressure P_di=101325 "Fixed value of pressure" annotation (Dialog(enable=not use_ambient));
   parameter Modelica.Units.SI.Temperature T_di=288.15 "Fixed value of temperature" annotation (Dialog(enable=not use_ambient));
-  parameter Medium.MassFraction Xw_di=0.001 "Fixed value of water mass fraction" annotation (Dialog(enable=not use_ambient));
+  parameter Medium.MassFraction X_di[Medium.nX]=Medium.reference_X "Fixed value of mass fractions" annotation (Dialog(enable=not use_ambient));
 
-  Modelica.Units.SI.Pressure P_sink "Pressure of the sink";
   Medium.ThermodynamicState state_sink "Thermodynamic state of the sink";
 
-  DynTherM.CustomInterfaces.FluidPort_A inlet(m_flow(min=if allowFlowReversal
+  DynTherM.CustomInterfaces.FluidPort_A inlet(redeclare package Medium = Medium,
+                                              m_flow(min=if allowFlowReversal
            then -Modelica.Constants.inf else 0)) annotation (Placement(
         transformation(extent={{-120,-20},{-80,20}}, rotation=0),
         iconTransformation(extent={{-110,-10},{-90,10}})));
@@ -21,23 +23,21 @@ equation
   if use_ambient then
 
     if R > 0 then
-      P_sink = environment.P_amb + inlet.m_flow*R;
+      inlet.P = environment.P_amb + inlet.m_flow*R;
     else
-      P_sink = environment.P_amb;
+      inlet.P = environment.P_amb;
     end if;
 
-    state_sink = Medium.setState_pTX(P_sink, environment.T_amb, environment.X_amb);
+    inlet.Xi_outflow = environment.X_amb;
+    state_sink = Medium.setState_pTX(environment.P_amb, environment.T_amb, environment.X_amb);
 
   else
-
-    P_sink = P_di;
-    state_sink = Medium.setState_pTX(P_sink, T_di, {Xw_di, 1 - Xw_di});
-
+    inlet.P = P_di;
+    inlet.Xi_outflow = X_di;
+    state_sink = Medium.setState_pTX(P_di, T_di, X_di);
   end if;
 
-  inlet.P = P_sink;
   inlet.h_outflow = Medium.specificEnthalpy(state_sink);
-  inlet.Xi_outflow = state_sink.X;
 
   annotation (Documentation(info="<html>
 <p><b>Modelling options</b></p>

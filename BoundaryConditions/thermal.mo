@@ -1,8 +1,8 @@
 within DynTherM.BoundaryConditions;
 model thermal "Model to impose heat flow rate and temperature"
   extends DynTherM.Base.tin1;
-  parameter Modelica.Units.SI.Temperature T=273.15 "Temperature" annotation (Dialog(tab="Boundary conditions", enable=use_T));
-  parameter Modelica.Units.SI.HeatFlowRate Q=1e3 "Heat flow rate" annotation (Dialog(tab="Boundary conditions", enable=use_Q));
+  input Modelica.Units.SI.Temperature T=273.15 "Temperature" annotation (Dialog(tab="Boundary conditions", enable=use_T));
+  input Modelica.Units.SI.HeatFlowRate Q=1e3 "Heat flow rate" annotation (Dialog(tab="Boundary conditions", enable=use_Q));
   parameter Boolean use_Q = false "True if heat flow rate is given"  annotation (Dialog(tab="Boundary conditions"));
   parameter Boolean use_T = false "True if temperature is given" annotation (Dialog(tab="Boundary conditions"));
   parameter Boolean use_in_T = false "Use connector input for the temperature" annotation (Dialog(group="External inputs"), choices(checkBox=true));

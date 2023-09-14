@@ -7,10 +7,6 @@ model A320GroundCabin "Aircraft on ground, two temperature zones"
     "Minimum mass flow rate of fresh air that must be provided by the ECS - fixed by standard CFR 25.831";
   Modelica.Blocks.Sources.Constant m_ECS(k=1.0)
     annotation (Placement(transformation(extent={{30,80},{10,100}})));
-  Modelica.Blocks.Sources.Constant Xw_ECS(k=0)
-    annotation (Placement(transformation(extent={{-10,-10},{10,10}},
-        rotation=0,
-        origin={-90,-50})));
   Modelica.Blocks.Continuous.PID PID_m_rec(
     k=500,
     Ti=5,
@@ -136,11 +132,9 @@ equation
     annotation (Line(points={{90,-42},{90,-79}}, color={0,0,127}));
   connect(add_T.y, PID_T.u)
     annotation (Line(points={{84,-19},{84,4},{78,4}}, color={0,0,127}));
-  connect(Xw_ECS.y, A320.Xw_ECS) annotation (Line(points={{-79,-50},{
-          -26.4286,-50},{-26.4286,-11.5}},                color={0,0,127}));
-  connect(A320.cabinPressure, add_P_cab.u2) annotation (Line(points={{
-          -34.7143,31.25},{-34.7143,30},{-36,30},{-36,34},{-80,34},{-80,78},
-          {-74,78}},                           color={0,0,127}));
+  connect(A320.cabinPressure, add_P_cab.u2) annotation (Line(points={{-34.7143,
+          31.25},{-34.7143,30},{-36,30},{-36,34},{-80,34},{-80,78},{-74,78}},
+                                               color={0,0,127}));
   connect(A320.recirculatedMassflow, add_m_rec.u1) annotation (Line(points={{39.8571,
           31.25},{39.8571,30},{40,30},{40,34},{80,34},{80,78},{72,78}},
                                                  color={0,0,127}));
@@ -150,20 +144,16 @@ equation
   connect(A320.T_trim, T_trim.y) annotation (Line(points={{-1.57143,31.25},{
           -4,31.25},{-4,90},{-9,90}},
                         color={0,0,127}));
-  connect(A320.T_ECS, PID_T.y) annotation (Line(points={{39.8571,12.5},{
-          39.8571,4},{55,4}},
-                      color={0,0,127}));
-  connect(PID_m_rec.y, A320.fanSpeed) annotation (Line(points={{46,45},{46,
-          42},{31.5714,42},{31.5714,31.25}},
-                                        color={0,0,127}));
+  connect(A320.T_ECS, PID_T.y) annotation (Line(points={{39.8571,12.5},{39.8571,
+          4},{55,4}}, color={0,0,127}));
+  connect(PID_m_rec.y, A320.fanSpeed) annotation (Line(points={{46,45},{46,42},
+          {31.5714,42},{31.5714,31.25}},color={0,0,127}));
   connect(PID_P_cab.y, A320.outflowValveOpening) annotation (Line(points={{-48,45},
           {-48,42},{-26.4286,42},{-26.4286,31.25}},        color={0,0,127}));
-  connect(Xw_ECS.y, A320.Xw_trim) annotation (Line(points={{-79,-50},{
-          -34.7143,-50},{-34.7143,-11.5}}, color={0,0,127}));
   connect(m_trim_cab.y, A320.m_trim_cabin) annotation (Line(points={{-19,-90},
           {-1.57143,-90},{-1.57143,-11.5}}, color={0,0,127}));
-  connect(m_trim_fd.y, A320.m_trim_cockpit) annotation (Line(points={{39,-90},
-          {32,-90},{32,-11.5},{31.5714,-11.5}}, color={0,0,127}));
+  connect(m_trim_fd.y, A320.m_trim_cockpit) annotation (Line(points={{39,-90},{
+          32,-90},{32,-11.5},{31.5714,-11.5}},  color={0,0,127}));
   connect(A320.cabinTemperature, add_T.u2) annotation (Line(points={{6.71429,-11.5},
           {6.71429,-50},{78,-50},{78,-42}}, color={0,0,127}));
   annotation (

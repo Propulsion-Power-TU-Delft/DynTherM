@@ -1,12 +1,9 @@
 within DynTherM.BoundaryConditions;
 model mechanical "Model to impose torque and rotational speed"
   extends DynTherM.Base.min1;
-  parameter Modelica.Units.SI.Torque M=0 "Torque"
-    annotation (Dialog(tab="Boundary conditions", enable=use_M));
-  parameter Modelica.Units.SI.AngularVelocity omega=3000 "Rotational speed"
-    annotation (Dialog(tab="Boundary conditions", enable=use_omega));
-  parameter Modelica.Units.SI.Power W=1e3 "Power"
-    annotation (Dialog(tab="Boundary conditions", enable=use_W));
+  input Modelica.Units.SI.Torque M=0 "Torque" annotation (Dialog(tab="Boundary conditions", enable=use_M));
+  input Modelica.Units.SI.AngularVelocity omega=3000 "Rotational speed" annotation (Dialog(tab="Boundary conditions", enable=use_omega));
+  input Modelica.Units.SI.Power W=1e3 "Power" annotation (Dialog(tab="Boundary conditions", enable=use_W));
   parameter Boolean use_M = false "True if torque is given"  annotation (Dialog(tab="Boundary conditions"));
   parameter Boolean use_omega = false "True if rotational speed is given"  annotation (Dialog(tab="Boundary conditions"));
   parameter Boolean use_W = false "True if mechanical power is given"  annotation (Dialog(tab="Boundary conditions"));

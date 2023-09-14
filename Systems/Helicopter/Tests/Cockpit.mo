@@ -1,6 +1,6 @@
 within DynTherM.Systems.Helicopter.Tests;
 model Cockpit "Testing the cockpit and evaporator together"
-  package Medium = Modelica.Media.Air.MoistAir;
+  replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
   parameter Medium.MassFraction X_env=0.01867;
   parameter Medium.MassFraction X_plenum=0.00894;
   parameter Medium.Temperature T_plenum = 28+273.15;

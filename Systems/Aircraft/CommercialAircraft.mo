@@ -2,11 +2,9 @@ within DynTherM.Systems.Aircraft;
 model CommercialAircraft
   "Model of a commercial passenger aircraft"
 
-  import ThermalManagement =
-         DynTherM;
-
-  package Medium = Modelica.Media.Air.MoistAir;
-
+  import ThermalManagement = DynTherM;
+  replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
+    Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
   outer ThermalManagement.Components.Environment environment
     "Environmental properties";
 
@@ -34,18 +32,16 @@ model CommercialAircraft
     ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassExternal
     annotation (choicesAllMatching=true);
 
+  parameter Medium.MassFraction X_ECS[Medium.nX]=Medium.reference_X "Mass fractions";
   parameter Real N_pax=0 "Number of passengers inside the aircraft" annotation (Dialog(tab="Flight conditions"));
   parameter Real N_crew=0 "Number of cabin crew members inside the aircraft" annotation (Dialog(tab="Flight conditions"));
   parameter Real N_pilots=0 "Number of pilots inside the aircraft" annotation (Dialog(tab="Flight conditions"));
   parameter Modelica.Units.SI.HeatFlowRate Q_el=0
-    "Internal heat load due to flight deck electronics"
-    annotation (Dialog(tab="Flight conditions"));
+    "Internal heat load due to flight deck electronics" annotation (Dialog(tab="Flight conditions"));
   parameter Modelica.Units.SI.HeatFlowRate Q_galley=0
-    "Internal heat load due to galleys"
-    annotation (Dialog(tab="Flight conditions"));
+    "Internal heat load due to galleys" annotation (Dialog(tab="Flight conditions"));
   parameter Modelica.Units.SI.HeatFlowRate Q_avionics=0
-    "Internal heat load due to avionics"
-    annotation (Dialog(tab="Flight conditions"));
+    "Internal heat load due to avionics" annotation (Dialog(tab="Flight conditions"));
   parameter Real cabinLights=0 "Percentage of usage [0-100] of cabin lights" annotation (Dialog(tab="Flight conditions"));
   parameter Real inFlightEntertainment=0 "Percentage of usage [0-100] of in-flight entertainment" annotation (Dialog(tab="Flight conditions"));
   parameter Real rec_target=0.5
@@ -208,16 +204,22 @@ model CommercialAircraft
     "Flight deck pressure start value" annotation (Dialog(tab="Initialization"));
   parameter Modelica.Units.SI.Pressure Pstart_mixingManifold=101325
     "Mixing manifold pressure - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Density rho_start_fan=1.1 "Density - start value"
-    annotation (Dialog(tab="Initialization"));
+  parameter Modelica.Units.SI.Density rho_start_fan=1.1
+    "Density - start value" annotation (Dialog(tab="Initialization"));
   parameter Modelica.Units.SI.SpecificEnthalpy h_start_fan=1e5
     "Specific enthalpy - start value" annotation (Dialog(tab="Initialization"));
-  parameter Boolean noInitialPressure_cabin=false "Remove initial equation on pressure - cabin" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
-  parameter Boolean noInitialTemperature_cabin=false "Remove initial equation on temperature - cabin" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
-  parameter Boolean noInitialPressure_cargo=false "Remove initial equation on pressure - cargo" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
-  parameter Boolean noInitialTemperature_cargo=false "Remove initial equation on temperature - cargo" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
-  parameter Boolean noInitialPressure_cockpit=false "Remove initial equation on pressure - cockpit" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
-  parameter Boolean noInitialTemperature_cockpit=false "Remove initial equation on temperature - cockpit" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
+  parameter Boolean noInitialPressure_cabin=false
+    "Remove initial equation on pressure - cabin" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
+  parameter Boolean noInitialTemperature_cabin=false
+    "Remove initial equation on temperature - cabin" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
+  parameter Boolean noInitialPressure_cargo=false
+    "Remove initial equation on pressure - cargo" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
+  parameter Boolean noInitialTemperature_cargo=false
+    "Remove initial equation on temperature - cargo" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
+  parameter Boolean noInitialPressure_cockpit=false
+    "Remove initial equation on pressure - cockpit" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
+  parameter Boolean noInitialTemperature_cockpit=false
+    "Remove initial equation on temperature - cockpit" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
 
   final parameter Modelica.Units.SI.HeatFlux Q_light_m2=11.2
     "Internal heat load due to cabin lights / cabin floor m2";
@@ -259,6 +261,11 @@ model CommercialAircraft
     "Thermodynamic state at the pack discharge";
   Medium.Temperature T_rec "Temperature at the outlet of recirculation fan";
   Real phi_pack "Relative humidity at pack discharge";
+  Real phi_cockpit "Relative humidity in the cockpit";
+  Real phi_cabin "Relative humidity in the cabin";
+  Real phi_cargo "Relative humidity in the cargo bay";
+  Real phi_EE_bay "Relative humidity in the E/E bay";
+  Real phi_mix "Relative humidity in the mixing manifold";
 
   Components.MassTransfer.Mixer mixingManifold(
     V=V_mixingManifold,
@@ -312,9 +319,9 @@ model CommercialAircraft
         rotation=0,
         origin={-70,-98})));
   Components.MassTransfer.SourceMassFlow packFlow(
+    X_nom=X_ECS,
     use_in_massFlow=true,
-    use_in_T=true,
-    use_in_Xw=true) annotation (Placement(transformation(
+    use_in_T=true) annotation (Placement(transformation(
         extent={{10,10},{-10,-10}},
         rotation=-90,
         origin={-156,-60})));
@@ -334,14 +341,6 @@ model CommercialAircraft
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={90,0})));
-  Modelica.Blocks.Interfaces.RealInput Xw_ECS annotation (Placement(
-        transformation(
-        extent={{10,10},{-10,-10}},
-        rotation=180,
-        origin={-182,-44}), iconTransformation(
-        extent={{10,-10},{-10,10}},
-        rotation=270,
-        origin={-70,-64})));
   ThermalManagement.Systems.Aircraft.Subsystems.CargoBay cargo(
     redeclare model HTC_int=HTC_int_lower,
     redeclare model HTC_ext=HTC_ext_lower,
@@ -461,9 +460,9 @@ model CommercialAircraft
         rotation=90,
         origin={90,-64})));
   ThermalManagement.Components.MassTransfer.SourceMassFlow cockpitTrimFlow(
+    X_nom=X_ECS,
     use_in_massFlow=true,
-    use_in_T=true,
-    use_in_Xw=true) annotation (Placement(transformation(
+    use_in_T=true) annotation (Placement(transformation(
         extent={{10,10},{-10,-10}},
         rotation=180,
         origin={-98,80})));
@@ -475,14 +474,6 @@ model CommercialAircraft
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={-10,50})));
-  Modelica.Blocks.Interfaces.RealInput Xw_trim annotation (Placement(
-        transformation(
-        extent={{10,10},{-10,-10}},
-        rotation=90,
-        origin={-40,108}),iconTransformation(
-        extent={{10,-10},{-10,10}},
-        rotation=270,
-        origin={-90,-64})));
   ThermalManagement.Components.MassTransfer.Pipe distributionPipeCockpit(L=
         L_pipe_fd, D=D_pipe_fd) annotation (Placement(transformation(
         extent={{14,14},{-14,-14}},
@@ -518,9 +509,9 @@ model CommercialAircraft
         Tstart_floor, A=A_floor_cockpit)
     annotation (Placement(transformation(extent={{-116,-4},{-82,18}})));
   ThermalManagement.Components.MassTransfer.SourceMassFlow cabinTrimFlow(
+    X_nom=X_ECS,
     use_in_massFlow=true,
-    use_in_T=true,
-    use_in_Xw=true) annotation (Placement(transformation(
+    use_in_T=true) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=180,
         origin={60,80})));
@@ -595,6 +586,7 @@ model CommercialAircraft
     noInitialPressure=noInitialPressure_cabin,
     noInitialTemperature=noInitialTemperature_cabin)
     annotation (Placement(transformation(extent={{22,26},{66,70}})));
+
 equation
   rec = mixingManifold.inlet2.m_flow/
     (mixingManifold.inlet1.m_flow + mixingManifold.inlet2.m_flow);
@@ -627,6 +619,11 @@ equation
   state_pack = Medium.setState_phX(packFlow.outlet.P,
     packFlow.outlet.h_outflow, packFlow.outlet.Xi_outflow);
   phi_pack = Medium.relativeHumidity(state_pack);
+  phi_cockpit = Medium.relativeHumidity(cockpit.flightDeck.state);
+  phi_cabin = Medium.relativeHumidity(cabin.cabin.state);
+  phi_cargo = Medium.relativeHumidity(cargo.cargo.state);
+  phi_EE_bay = Medium.relativeHumidity(EEbay.cargo.state);
+  phi_mix = Medium.relativeHumidity(mixingManifold.state);
 
   connect(outflowValve.outlet, pressureSink.inlet)
     annotation (Line(points={{70,-80},{82,-80}}, color={0,0,0}));
@@ -644,9 +641,6 @@ equation
   connect(mixingManifold.inlet1,packFlow. outlet)
     annotation (Line(points={{-156,-42},{-156,-50}},
                                                  color={0,0,0}));
-  connect(Xw_ECS,packFlow. in_Xw) annotation (Line(points={{-182,-44},{-168,-44},
-          {-168,-56},{-163,-56}},
-                               color={0,0,127}));
   connect(T_ECS,packFlow. in_T)
     annotation (Line(points={{-182,-62},{-163,-62}},color={0,0,127}));
   connect(m_ECS,packFlow. in_massFlow) annotation (Line(points={{-182,-78},{-168,
@@ -686,10 +680,6 @@ equation
     annotation (Line(points={{-106,87},{-106,108}}, color={0,0,127}));
   connect(cockpit.cockpitToCabin, cabinWall.int) annotation (Line(points={{-74,46},
           {-74,48},{-72,48},{-72,46},{-38.4,46}}, color={191,0,0}));
-  connect(cockpitTrimFlow.in_Xw, Xw_trim) annotation (Line(points={{-94,87},{-94,
-          90},{-40,90},{-40,108}}, color={0,0,127}));
-  connect(cabinTrimFlow.in_Xw, Xw_trim) annotation (Line(points={{56,87},{56,90},
-          {-40,90},{-40,108}}, color={0,0,127}));
   connect(T_trim, cabinTrimFlow.in_T) annotation (Line(points={{0,108},{0,94},{62,
           94},{62,87}}, color={0,0,127}));
   connect(T_trim, cockpitTrimFlow.in_T) annotation (Line(points={{0,108},{0,94},

@@ -1,6 +1,6 @@
 within DynTherM.Systems.Helicopter.Tests;
 model Cabin "Testing the cabin and evaporator together"
-  package Medium = Modelica.Media.Air.MoistAir;
+  replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
   parameter Medium.MassFraction X_env=0.01867;
   parameter Real tau=5/6 "Recirculation ratio";
 

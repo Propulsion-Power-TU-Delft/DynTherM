@@ -96,8 +96,8 @@ equation
           {88,0},{100,0}}, color={191,0,0}));
   connect(S, southPortion.ext)
     annotation (Line(points={{0,-100},{0,-76}}, color={191,0,0}));
-  connect(W, westPortion.ext) annotation (Line(points={{-102,-2},{-88,-2},{
-          -88,3.10862e-15},{-76,3.10862e-15}},
+  connect(W, westPortion.ext) annotation (Line(points={{-102,-2},{-88,-2},{-88,
+          3.10862e-15},{-76,3.10862e-15}},
                               color={191,0,0}));
   connect(N, northPortion.ext)
     annotation (Line(points={{-2,98},{-2,88},{0,88},{0,76}},

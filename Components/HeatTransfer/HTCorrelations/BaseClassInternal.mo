@@ -1,6 +1,6 @@
 within DynTherM.Components.HeatTransfer.HTCorrelations;
 partial model BaseClassInternal
-  package Medium = Modelica.Media.Air.MoistAir;
+  replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
   outer DynTherM.Components.Environment environment "Environmental properties";
   parameter Modelica.Units.SI.CoefficientOfHeatTransfer ht_start=10
     "Heat transfer coefficient - starting value";

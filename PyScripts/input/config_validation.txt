@@ -4,7 +4,6 @@ Case_name      =   A320GroundCockpit   A320FlyingCabin     A320FlyingCabin
 Run_name       =   HotGround           StdCruise           FaultyPack
 M_pack         =   1.000               1.060               0.880         kg/s
 Rec_ratio      =   0.500               0.500               0.500         -
-Xw_pack        =   0.000               0.000               0.000         -
 T_target       =   27.00               24.00               27.00         °C
 M_trim_cab     =   0.035               0.000               0.000         kg/s
 M_trim_fd      =   0.000               0.017               0.017         kg/s

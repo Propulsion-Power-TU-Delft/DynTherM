@@ -1,7 +1,9 @@
 within DynTherM.Components.MassTransfer;
 model simpleFan
-  package Medium = Modelica.Media.Air.MoistAir;
+  replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
+    Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
   outer DynTherM.Components.Environment environment "Environmental properties";
+
   parameter Boolean allowFlowReversal=environment.allowFlowReversal
      "= true to allow flow reversal, false restricts to design direction";
   parameter Real eta_is "Isentropic efficiency at design point";
@@ -11,13 +13,10 @@ model simpleFan
   parameter Modelica.Units.SI.VolumeFlowRate volFlow_nom
     "Nominal volumetric flow rate" annotation (Dialog(tab="Nominal values"));
   parameter Modelica.Units.SI.SpecificEnergy Head_nom
-    "Nominal head provided by the fan"
-    annotation (Dialog(tab="Nominal values"));
+    "Nominal head provided by the fan" annotation (Dialog(tab="Nominal values"));
   parameter Modelica.Units.SI.SpecificEnthalpy h_start=1e5
-    "Specific enthalpy - start value"
-    annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Density rho_start=1.1 "Density - start value"
-    annotation (Dialog(tab="Initialization"));
+    "Specific enthalpy - start value" annotation (Dialog(tab="Initialization"));
+  parameter Modelica.Units.SI.Density rho_start=1.1 "Density - start value" annotation (Dialog(tab="Initialization"));
 
   Medium.ThermodynamicState state_in "Inlet thermodynamic state";
   Modelica.Units.SI.Density rho(start=rho_start)
@@ -40,11 +39,13 @@ model simpleFan
 
    CustomInterfaces.Shaft_A shaft annotation (Placement(transformation(extent={{-10,90},{10,110}}), iconTransformation(extent={{-10,90},{10,110}})));
    CustomInterfaces.FluidPort_A inlet(
+    redeclare package Medium = Medium,
      h_outflow(start=h_start),
      m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0)) annotation (Placement(transformation(
            extent={{-110,-10},{-90,10}}), iconTransformation(extent={{-110,-10},{
              -90,10}})));
    CustomInterfaces.FluidPort_B outlet(
+    redeclare package Medium = Medium,
      h_outflow(start=h_start),
      m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0)) annotation (Placement(transformation(
            extent={{90,-10},{110,10}}), iconTransformation(extent={{90,-10},{110,

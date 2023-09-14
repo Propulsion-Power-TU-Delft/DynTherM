@@ -1,6 +1,6 @@
 within DynTherM.Components.HeatTransfer.HTCorrelations;
 partial model BaseClassExternal
-  package Medium = Modelica.Media.Air.MoistAir;
+  replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
   outer DynTherM.Components.Environment environment "Environmental properties";
   input Modelica.Units.SI.Temperature T_skin
     "Fuselage outer skin temperature";

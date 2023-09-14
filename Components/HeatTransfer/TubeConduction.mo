@@ -1,7 +1,7 @@
 within DynTherM.Components.HeatTransfer;
 model TubeConduction "0D Dynamic model of conduction in a hollow cylinder"
   replaceable model Mat=DynTherM.Materials.Aluminium constrainedby
-    DynTherM.Materials.Properties          "Material choice" annotation (choicesAllMatching=true);
+    DynTherM.Materials.Properties "Material choice" annotation (choicesAllMatching=true);
   parameter Real coeff "Fraction of cylinder with active heat transfer";
   parameter Modelica.Units.SI.Length L "Tube length";
   parameter Modelica.Units.SI.Length L_window=0 "Window length";
@@ -14,8 +14,8 @@ model TubeConduction "0D Dynamic model of conduction in a hollow cylinder"
   parameter DynTherM.Choices.InitOpt initOpt "Initialization option"
     annotation (Dialog(tab="Initialization"));
   constant Real pi=Modelica.Constants.pi;
-  final parameter Modelica.Units.SI.Mass m=coeff*Mat.rho*L*pi*(R_ext^2 -
-      R_int^2) "Mass of the tube";
+  final parameter Modelica.Units.SI.Mass
+    m=coeff*Mat.rho*L*pi*(R_ext^2 - R_int^2) "Mass of the tube";
   final parameter Modelica.Units.SI.HeatCapacity Cm=m*Mat.cm
     "Heat capacity of the tube";
   Modelica.Units.SI.Temperature T_vol(start=Tstart)

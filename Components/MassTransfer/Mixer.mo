@@ -1,13 +1,15 @@
 within DynTherM.Components.MassTransfer;
 model Mixer "Mixer of two streams with adiabatic walls (no heat transfer)"
-  package Medium = Modelica.Media.Air.MoistAir;
+  replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
+    Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
+
   parameter Modelica.Units.SI.Volume V "Inner volume";
   parameter Boolean allowFlowReversal=environment.allowFlowReversal
     "= true to allow flow reversal, false restricts to design direction";
   outer DynTherM.Components.Environment environment "Environmental properties";
   parameter Medium.AbsolutePressure P_start=101325 "Pressure start value" annotation (Dialog(tab="Initialization"));
   parameter Medium.Temperature T_start=300 "Temperature start value" annotation (Dialog(tab="Initialization"));
-  parameter Medium.MassFraction X_start[2]={0,1} "Start gas composition" annotation (Dialog(tab="Initialization"));
+  parameter Medium.MassFraction X_start[Medium.nX]=Medium.reference_X "Start gas composition" annotation (Dialog(tab="Initialization"));
   parameter DynTherM.Choices.InitOpt initOpt=environment.initOpt
     "Initialization option" annotation (Dialog(tab="Initialization"));
   parameter Boolean noInitialPressure=false "Remove initial equation on pressure" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
@@ -17,27 +19,28 @@ model Mixer "Mixer of two streams with adiabatic walls (no heat transfer)"
   Modelica.Units.SI.InternalEnergy E "Total internal energy";
   Medium.AbsolutePressure P(start=P_start) "Pressure";
   Medium.Temperature T(start=T_start) "Temperature";
-  Medium.MassFraction X[2](start=X_start) "Mass fractions";
-  Real phi "Relative humidity";
+  Medium.MassFraction X[Medium.nX](start=X_start) "Mass fractions";
   Medium.ThermodynamicState state "Thermodynamic state";
   Modelica.Units.SI.Time Tr "Residence Time";
 
-  DynTherM.CustomInterfaces.FluidPort_A inlet1(m_flow(min=if allowFlowReversal
+  DynTherM.CustomInterfaces.FluidPort_A inlet1(redeclare package Medium =
+        Medium,                                m_flow(min=if allowFlowReversal
            then -Modelica.Constants.inf else 0)) annotation (Placement(
         transformation(extent={{-120,-60},{-80,-20}}, rotation=0),
         iconTransformation(extent={{-90,-50},{-70,-30}})));
-  DynTherM.CustomInterfaces.FluidPort_B outlet(m_flow(max=if allowFlowReversal
+  DynTherM.CustomInterfaces.FluidPort_B outlet(redeclare package Medium =
+        Medium,                                m_flow(max=if allowFlowReversal
            then +Modelica.Constants.inf else 0)) annotation (Placement(
         transformation(extent={{80,-20},{120,20}}, rotation=0),
         iconTransformation(extent={{90,-10},{110,10}})));
 
-  CustomInterfaces.FluidPort_A inlet2(m_flow(min=if allowFlowReversal then -
+  CustomInterfaces.FluidPort_A inlet2(redeclare package Medium = Medium,
+                                      m_flow(min=if allowFlowReversal then -
           Modelica.Constants.inf else 0)) annotation (Placement(
         transformation(extent={{-120,20},{-80,60}}, rotation=0),
         iconTransformation(extent={{-90,30},{-70,50}})));
 equation
   state = Medium.setState_pTX(P, T, X);
-  phi = Medium.relativeHumidity(state);
 
   // Conservation equations
   M = Medium.density(state)*V "Gas mass";
