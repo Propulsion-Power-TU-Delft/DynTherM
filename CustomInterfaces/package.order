@@ -5,6 +5,10 @@ FluidPort_B
 MechanicalPort
 Shaft_A
 Shaft_B
-DistributedHeatPort
+HeatFluxPort
+HeatFluxPort_A
+HeatFluxPort_B
+DistributedHeatFluxPort_A
+DistributedHeatFluxPort_B
 DistributedHeatPort_A
 DistributedHeatPort_B

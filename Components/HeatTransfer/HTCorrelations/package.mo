@@ -1,8 +1,5 @@
 within DynTherM.Components.HeatTransfer;
-package HTCorrelations
-
-
-
+package HTCorrelations "Package collecting correlations for the estimation of the hea transfer coefficient"
 
   annotation (Icon(graphics={
       Rectangle(

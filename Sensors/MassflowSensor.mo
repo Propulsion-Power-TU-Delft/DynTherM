@@ -1,7 +1,8 @@
 within DynTherM.Sensors;
 model MassflowSensor "Mass flow rate sensor"
   extends Modelica.Icons.RoundSensor;
-  replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
+  replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
+    Modelica.Media.Interfaces.PartialMedium                                                                      "Medium model" annotation(choicesAllMatching = true);
   outer DynTherM.Components.Environment environment "Environmental properties";
   parameter Boolean allowFlowReversal=environment.allowFlowReversal
     "= true to allow flow reversal, false restricts to design direction";

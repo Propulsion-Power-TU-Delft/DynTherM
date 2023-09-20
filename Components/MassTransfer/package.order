@@ -1,3 +1,4 @@
+DPCorrelations
 PressureSink
 FanCharacteristics
 simpleFan
@@ -6,4 +7,6 @@ Mixer
 ValveLin
 SourceMassFlow
 Plenum
-Pipe
+CircularPipe
+RectangularPipe
+PipeGeometry

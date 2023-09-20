@@ -1,6 +1,8 @@
 test
 test_fan
-test_pipe
+test_circular_pipe
+test_rectangular_pipe
 test_sys
 test_fan_sys
-test_pipe_sys
+test_circular_pipe_sys
+test_rectangular_pipe_sys

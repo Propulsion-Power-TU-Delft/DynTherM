@@ -6,7 +6,8 @@ model EnclosedAirSpace
   // References
   // F. Zanghirella et al. - A numerical model to evaluate the thermal behaviour of active transparent facades, 2011.
 
-  replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
+  replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
+    Modelica.Media.Interfaces.PartialMedium                                                                      "Medium model" annotation(choicesAllMatching = true);
   outer DynTherM.Components.Environment environment "Environmental properties";
   parameter DynTherM.Choices.InitOpt initOpt=environment.initOpt
     "Initialization option" annotation (Dialog(tab="Initialization"));

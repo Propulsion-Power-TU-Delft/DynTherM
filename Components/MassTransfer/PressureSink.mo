@@ -28,15 +28,15 @@ equation
       inlet.P = environment.P_amb;
     end if;
 
-    inlet.Xi_outflow = environment.X_amb;
     state_sink = Medium.setState_pTX(environment.P_amb, environment.T_amb, environment.X_amb);
 
   else
+
     inlet.P = P_di;
-    inlet.Xi_outflow = X_di;
     state_sink = Medium.setState_pTX(P_di, T_di, X_di);
   end if;
 
+  inlet.Xi_outflow = X_di;
   inlet.h_outflow = Medium.specificEnthalpy(state_sink);
 
   annotation (Documentation(info="<html>

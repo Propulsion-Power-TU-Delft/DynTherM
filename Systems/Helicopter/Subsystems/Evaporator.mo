@@ -1,7 +1,8 @@
 within DynTherM.Systems.Helicopter.Subsystems;
 model Evaporator
   "Ideal evaporator for air-side calculations based on temperature control, with two intake streams"
-  replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
+  replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
+    Modelica.Media.Interfaces.PartialMedium                                                                      "Medium model" annotation(choicesAllMatching = true);
   parameter Modelica.Units.SI.MassFlowRate m_fan "Fan air through-flow"
     annotation (Dialog(group="Airflow"));
   parameter Medium.Temperature T_start_out=283.15 "Initial temperature of evaporator outflow" annotation(Dialog(tab="Initialisation"));
@@ -74,7 +75,8 @@ model Evaporator
     annotation (Placement(transformation(extent={{-120,70},{-80,110}})));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a thermalPort
     annotation (Placement(transformation(extent={{-104,-10},{-84,10}})));
-  Components.MassTransfer.Pipe duct(option=DynTherM.Choices.PDropOpt.fixed,
+  Components.MassTransfer.CircularPipe duct(
+    option=DynTherM.Choices.PDropOpt.fixed,
     m_flow_start=m_fan,
     T_start=T_start_out,
     X_start={X_start_out,1 - X_start_out})

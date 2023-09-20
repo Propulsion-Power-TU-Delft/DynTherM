@@ -84,6 +84,7 @@ model CommercialAircraft
     "Overall fuselage thickness - upper part";
   parameter Modelica.Units.SI.Length t_lower
     "Overall fuselage thickness - lower part";
+  parameter Modelica.Units.SI.Length Roughness "Roughness of ditribution pipes";
 
   parameter Modelica.Units.SI.Irradiance E_tb_1=0
     "Beam component of the clear-sky solar irradiance - section 1" annotation (Dialog(tab="Solar radiation"));
@@ -449,8 +450,12 @@ model CommercialAircraft
         extent={{12,10},{-12,-10}},
         rotation=90,
         origin={-60,8})));
-  ThermalManagement.Components.MassTransfer.Pipe distributionPipeCabin(L=
-        L_pipe_cab, D=D_pipe_cab) annotation (Placement(transformation(
+  ThermalManagement.Components.MassTransfer.CircularPipe distributionPipeCabin(
+    DP_opt=DynTherM.Choices.PDropOpt.correlation,
+    L=L_pipe_cab,
+    D=D_pipe_cab,
+    Roughness=Roughness)
+                  annotation (Placement(transformation(
         extent={{14,14},{-14,-14}},
         rotation=-90,
         origin={-160,14})));
@@ -474,8 +479,13 @@ model CommercialAircraft
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={-10,50})));
-  ThermalManagement.Components.MassTransfer.Pipe distributionPipeCockpit(L=
-        L_pipe_fd, D=D_pipe_fd) annotation (Placement(transformation(
+  ThermalManagement.Components.MassTransfer.CircularPipe
+    distributionPipeCockpit(
+    DP_opt=DynTherM.Choices.PDropOpt.correlation,
+    L=L_pipe_fd,
+    D=D_pipe_fd,
+    Roughness=Roughness)
+                 annotation (Placement(transformation(
         extent={{14,14},{-14,-14}},
         rotation=-90,
         origin={-140,14})));

@@ -43,11 +43,7 @@ model AirbusA320
     Kv=0.005,
     R_HEPA=2000,
     R_dado=100,
-    distributionPipeCabin(option=DynTherM.Choices.PDropOpt.darcyWeisbach,
-        Roughness(displayUnit="mm") = 4.5e-05),
-    distributionPipeCockpit(option=DynTherM.Choices.PDropOpt.darcyWeisbach,
-        Roughness(displayUnit="mm") = 4.5e-05));
-
+    Roughness=4.5e-05);
   annotation (Icon(coordinateSystem(extent={{-180,-140},{100,100}}),
                    graphics={Bitmap(extent={{-106,-10},{-28,20}}, fileName=
               "modelica://DynTherM/Figures/AirbusLogo.png"),

@@ -1,3 +1,6 @@
 thermal
+thermal_flux
+thermal_distributed
+thermal_flux_distributed
 mechanical
 radiation

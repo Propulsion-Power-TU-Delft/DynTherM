@@ -267,6 +267,7 @@ model A320PullDown "Aircraft on ground, pull down test case"
         origin={-70,-90})));
   Components.MassTransfer.SourceMassFlow packFlow(
     T_nom=258.15,
+    X_nom={0,1},
     massFlow_nom=1,
     use_in_massFlow=false,
     use_in_T=false) annotation (Placement(transformation(
@@ -337,12 +338,12 @@ model A320PullDown "Aircraft on ground, pull down test case"
     allowFlowReversal=false,
     initOpt=DynTherM.Choices.InitOpt.fixedState)
     annotation (Placement(transformation(extent={{86,66},{120,100}})));
-  DynTherM.Components.MassTransfer.Pipe distributionPipeCabin(
-    option=DynTherM.Choices.PDropOpt.linear,
-    R=500,
+  DynTherM.Components.MassTransfer.CircularPipe distributionPipeCabin(
+    DP_opt=DynTherM.Choices.PDropOpt.correlation,
+    Rh=1,
     Roughness(displayUnit="mm") = 4.5e-05,
     L=L_pipe_cab,
-    D=D_pipe_cab)                 annotation (Placement(transformation(
+    D=D_pipe_cab) annotation (Placement(transformation(
         extent={{14,14},{-14,-14}},
         rotation=-90,
         origin={-160,14})));
@@ -440,12 +441,12 @@ model A320PullDown "Aircraft on ground, pull down test case"
     noInitialTemperature=noInitialTemperature_cargo)
     annotation (Placement(transformation(extent={{-108,-54},{-64,-10}})));
 
-  DynTherM.Components.MassTransfer.Pipe distributionPipeCockpit(
-    option=DynTherM.Choices.PDropOpt.linear,
-    R=5000,
+  DynTherM.Components.MassTransfer.CircularPipe distributionPipeCockpit(
+    DP_opt=DynTherM.Choices.PDropOpt.correlation,
+    Rh=1,
     Roughness(displayUnit="mm") = 4.5e-05,
     L=L_pipe_fd,
-    D=D_pipe_fd)                annotation (Placement(transformation(
+    D=D_pipe_fd) annotation (Placement(transformation(
         extent={{14,14},{-14,-14}},
         rotation=-90,
         origin={-140,14})));
