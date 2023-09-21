@@ -12,29 +12,31 @@ model RectangularPipe "Model of pipe with rectangular cross-section"
     "Select the type of pressure drop to impose";
   parameter DynTherM.CustomUnits.HydraulicResistance Rh=0
     "Hydraulic Resistance" annotation (Dialog(enable=DP_opt == Choices.PDropOpt.linear));
-  parameter Modelica.Units.SI.MassFlowRate m_flow_start=1
+  parameter MassFlowRate m_flow_start=1
     "Mass flow rate - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Pressure P_start=101325
+  parameter Pressure P_start=101325
     "Pressure - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Temperature T_start=300
+  parameter Temperature T_start=300
     "Temperature - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.MassFraction X_start[Medium.nX]=Medium.reference_X
+  parameter MassFraction X_start[Medium.nX]=Medium.reference_X
     "Mass fractions - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Velocity u_start=20
+  parameter Velocity u_start=20
     "Flow velocity in the pipe - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Pressure dP_start=100
+  parameter Density rho_start=1
+    "Average density of fluid in the pipe - start value" annotation (Dialog(tab="Initialization"));
+  parameter Pressure dP_start=100
     "Pressure drop - start value" annotation (Dialog(tab="Initialization",
         enable=option <> Choices.PDropOpt.fixed));
-  parameter Modelica.Units.SI.Pressure dP_fixed=0 "Fixed pressure drop" annotation (Dialog(enable=DP_opt == Choices.PDropOpt.fixed));
+  parameter Pressure dP_fixed=0 "Fixed pressure drop" annotation (Dialog(enable=DP_opt == Choices.PDropOpt.fixed));
   parameter Medium.ThermodynamicState state_start = Medium.setState_pTX(P_start, T_start, X_start)
     "Starting thermodynamic state" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.ReynoldsNumber Re_start=20e3 "Reynolds number - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.PrandtlNumber Pr_start=1.5 "Prandtl number - start value" annotation (Dialog(tab="Initialization"));
+  parameter ReynoldsNumber Re_start=20e3 "Reynolds number - start value" annotation (Dialog(tab="Initialization"));
+  parameter PrandtlNumber Pr_start=1.5 "Prandtl number - start value" annotation (Dialog(tab="Initialization"));
 
   // Geometry
-  parameter Modelica.Units.SI.Length L "Length" annotation (Dialog(tab="Geometry"));
-  parameter Modelica.Units.SI.Length W "Width of rectangular channel" annotation (Dialog(tab="Geometry"));
-  parameter Modelica.Units.SI.Length H "Height of rectangular channel" annotation (Dialog(tab="Geometry"));
+  parameter Length L "Length" annotation (Dialog(tab="Geometry"));
+  parameter Length W "Width of rectangular channel" annotation (Dialog(tab="Geometry"));
+  parameter Length H "Height of rectangular channel" annotation (Dialog(tab="Geometry"));
 
   model GEO =
     DynTherM.Components.MassTransfer.PipeGeometry.Rectangular (
@@ -62,10 +64,11 @@ model RectangularPipe "Model of pipe with rectangular cross-section"
   DPC friction;
   GEO geometry;
 
-  Modelica.Units.SI.ReynoldsNumber Re(start=Re_start) "Reynolds number";
-  Modelica.Units.SI.PrandtlNumber Pr(start=Pr_start) "Prandtl number";
-  Modelica.Units.SI.Velocity u(start=u_start) "Flow velocity in the pipe";
-  Modelica.Units.SI.Pressure dP(start=dP_start) "Pressure drop";
+  ReynoldsNumber Re(start=Re_start) "Reynolds number";
+  PrandtlNumber Pr(start=Pr_start) "Prandtl number";
+  Velocity u(start=u_start) "Flow velocity in the pipe";
+  Density rho(start=rho_start) "Average density of fluid in the pipe";
+  Pressure dP(start=dP_start) "Pressure drop";
   Medium.ThermodynamicState state "Average thermodynamic state";
   Medium.ThermodynamicState state_inlet "Inlet state";
   Medium.ThermodynamicState state_outlet "Outlet state";
@@ -108,8 +111,9 @@ equation
   thermalPort.Q_flow = convection.ht*geometry.A_ht*(thermalPort.T - Medium.temperature(state));
 
   // Non-dimensional numbers
-  u = inlet.m_flow/(Medium.density(state)*geometry.A_cs);
-  Re = Medium.density(state)*u*geometry.Dh/Medium.dynamicViscosity(state);
+  rho = Medium.density(state);
+  u = inlet.m_flow/(rho*geometry.A_cs);
+  Re = rho*u*geometry.Dh/Medium.dynamicViscosity(state);
   Pr = Medium.specificHeatCapacityCp(state)*Medium.dynamicViscosity(state)/
     Medium.thermalConductivity(state);
 
@@ -117,7 +121,7 @@ equation
   if DP_opt == Choices.PDropOpt.fixed then
     dP = dP_fixed;
   elseif DP_opt == Choices.PDropOpt.correlation then
-    dP = 0.5*friction.f*Medium.density(state)*u^2/geometry.Dh*geometry.L;
+    dP = 0.5*friction.f*rho*u^2/geometry.Dh*geometry.L;
   elseif DP_opt == Choices.PDropOpt.linear then
     dP = Rh*inlet.m_flow;
   else

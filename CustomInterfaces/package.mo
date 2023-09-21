@@ -1,11 +1,6 @@
 within DynTherM;
 package CustomInterfaces "Additional (wrt standard Modelica library) tailor made connectors"
 
-
-
-
-
-
   annotation (Icon(graphics={
         Rectangle(
           lineColor={200,200,200},

@@ -1,5 +1,5 @@
-within DynTherM.Components.MassTransfer;
-model PressureSink "Pressure sink"
+within DynTherM.BoundaryConditions;
+model pressure_sink "Pressure sink"
   replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
   outer DynTherM.Components.Environment environment "Environmental properties";
@@ -69,4 +69,4 @@ equation
           fillColor={159,159,223},
           fillPattern=FillPattern.None,
           textString="P SINK")}));
-end PressureSink;
+end pressure_sink;

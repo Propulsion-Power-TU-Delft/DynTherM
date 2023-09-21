@@ -1,5 +1,5 @@
 within DynTherM.CustomInterfaces;
-connector DistributedHeatFluxPort_B
+connector DistributedHeatFluxPort_B "B-type distributed heat flux port connector"
   connector HeatPort = CustomInterfaces.HeatFluxPort_B;
   parameter Integer N(min=1) "Number of ports";
   HeatPort ports[N];

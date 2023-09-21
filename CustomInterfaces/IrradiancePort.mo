@@ -1,5 +1,5 @@
 within DynTherM.CustomInterfaces;
-connector IrradiancePort "1D connector for irradiance"
+connector IrradiancePort "Irradiance connector"
   Modelica.Units.SI.Irradiance E_tb "Beam component of the clear-sky solar irradiance";
   Modelica.Units.SI.Irradiance E_td "Diffuse component of the clear-sky solar irradiance";
   Modelica.Units.SI.Irradiance E_tr "Ground reflected component of the clear-sky solar irradiance";

@@ -15,7 +15,7 @@ model EvaporatorCk
   Modelica.Blocks.Sources.RealExpression realExpression(y=301.15)
     annotation (Placement(transformation(extent={{-64,18},{-44,38}})));
 
-  Components.MassTransfer.SourceMassFlow sourceMassFlow(
+  BoundaryConditions.flow_source sourceMassFlow(
     Xw_di=X_env,
     use_di_massFlow=true,
     use_di_T=true,
@@ -30,12 +30,12 @@ model EvaporatorCk
     X_start_out=0.00628,
     nu_fan=0.9)
     annotation (Placement(transformation(extent={{-10,10},{10,30}})));
-  Components.MassTransfer.PressureSink plenumOut(
+  BoundaryConditions.pressure_sink plenumOut(
     use_ambient=false,
     T_di=T_plenum,
     Xw_di=X_plenum)
     annotation (Placement(transformation(extent={{32,10},{52,30}})));
-  Components.MassTransfer.PressureSink plenumIn(
+  BoundaryConditions.pressure_sink plenumIn(
     use_ambient=false,
     T_di=T_plenum,
     Xw_di=X_plenum)

@@ -27,7 +27,7 @@ model test_sys
     V=186,
     noInitialPressure=false)
     annotation (Placement(transformation(extent={{-24,-44},{4,-16}})));
-  Components.MassTransfer.SourceMassFlow ECSFlow(
+  BoundaryConditions.flow_source ECSFlow(
     use_in_massFlow=true,
     use_in_T=true,
     use_in_Xw=true)
@@ -46,7 +46,7 @@ model test_sys
   Modelica.Blocks.Interfaces.RealInput m_fromMix annotation (Placement(
         transformation(extent={{-130,-30},{-90,10}}),iconTransformation(
           extent={{-106,-70},{-86,-50}})));
-  Components.MassTransfer.PressureSink pressureSink
+  BoundaryConditions.pressure_sink pressureSink
     annotation (Placement(transformation(extent={{66,-44},{94,-16}})));
   Modelica.Blocks.Interfaces.RealInput valveOpening annotation (Placement(
         transformation(

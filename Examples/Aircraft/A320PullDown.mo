@@ -258,14 +258,14 @@ model A320PullDown "Aircraft on ground, pull down test case"
         origin={-131,-112})));
   Components.MassTransfer.ValveLin outflowValve(Kv=Kv)
     annotation (Placement(transformation(extent={{10,-80},{30,-100}})));
-  Components.MassTransfer.PressureSink pressureSink
+  BoundaryConditions.pressure_sink pressureSink
     annotation (Placement(transformation(extent={{50,-100},{70,-80}})));
   Components.MassTransfer.PressureDrop HEPAFilter(option=DynTherM.Choices.PDropOpt.linear, R=R_HEPA)
              annotation (Placement(transformation(
         extent={{12,10},{-12,-10}},
         rotation=0,
         origin={-70,-90})));
-  Components.MassTransfer.SourceMassFlow packFlow(
+  DynTherM.BoundaryConditions.flow_source packFlow(
     T_nom=258.15,
     X_nom={0,1},
     massFlow_nom=1,
@@ -489,14 +489,14 @@ model A320PullDown "Aircraft on ground, pull down test case"
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={40,-120})));
-  DynTherM.Components.MassTransfer.SourceMassFlow cockpitTrimFlow(
+  DynTherM.BoundaryConditions.flow_source cockpitTrimFlow(
     T_nom=373.15,
     use_in_massFlow=false,
     use_in_T=false) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=180,
         origin={-60,88})));
-  DynTherM.Components.MassTransfer.SourceMassFlow cabinTrimFlow(
+  DynTherM.BoundaryConditions.flow_source cabinTrimFlow(
     T_nom=373.15,
     use_in_massFlow=false,
     use_in_T=false) annotation (Placement(transformation(

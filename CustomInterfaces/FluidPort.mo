@@ -1,7 +1,7 @@
 within DynTherM.CustomInterfaces;
 connector FluidPort "Flow connector"
   replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
-    Modelica.Media.Interfaces.PartialMedium                                                                      "Medium model" annotation(choicesAllMatching = true);
+    Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
   flow Medium.MassFlowRate m_flow
     "Mass flow rate from the connection point into the component";
   Medium.AbsolutePressure P "Pressure in the connection point";

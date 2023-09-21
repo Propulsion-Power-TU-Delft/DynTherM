@@ -26,7 +26,7 @@ model test_fan_sys "Simple test of component simpleFan"
     V=186,
     noInitialPressure=false)
     annotation (Placement(transformation(extent={{-52,-42},{-28,-18}})));
-  Components.MassTransfer.SourceMassFlow ECSFlow(
+  BoundaryConditions.flow_source ECSFlow(
     use_in_massFlow=true,
     use_in_T=true,
     use_in_Xw=true)
@@ -45,7 +45,7 @@ model test_fan_sys "Simple test of component simpleFan"
   Modelica.Blocks.Interfaces.RealInput m_fromMix annotation (Placement(
         transformation(extent={{-130,-30},{-90,10}}),iconTransformation(
           extent={{-106,-70},{-86,-50}})));
-  Components.MassTransfer.PressureSink pressureSink
+  BoundaryConditions.pressure_sink pressureSink
     annotation (Placement(transformation(extent={{76,-42},{100,-18}})));
   Modelica.Blocks.Interfaces.RealInput valveOpening annotation (Placement(
         transformation(

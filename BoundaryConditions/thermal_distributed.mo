@@ -16,6 +16,7 @@ equation
   if use_T then
     thermal.ports.T = T;
   end if;
+
   if use_Q then
     thermal.ports.Q_flow + Q = zeros(N);
   end if;

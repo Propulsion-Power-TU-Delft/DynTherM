@@ -11,7 +11,7 @@ model Cockpit "Testing the cockpit and evaporator together"
   Modelica.Blocks.Sources.RealExpression realExpression(y=301.15)
     annotation (Placement(transformation(extent={{-86,18},{-66,38}})));
 
-  Components.MassTransfer.SourceMassFlow sourceMassFlow(
+  BoundaryConditions.flow_source sourceMassFlow(
     Xw_di=X_env,
     use_di_massFlow=true,
     use_di_T=true,

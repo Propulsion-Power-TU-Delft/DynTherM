@@ -182,14 +182,14 @@ model PassengerCabin
     allowFlowReversal=false,
     initOpt=DynTherM.Choices.InitOpt.fixedState)
     annotation (Placement(transformation(extent={{66,66},{100,100}})));
-  Components.MassTransfer.SourceMassFlow                   cabinTrimFlow(
+  BoundaryConditions.flow_source cabinTrimFlow(
     use_in_massFlow=false,
     use_in_T=false,
     use_in_Xw=false) annotation (Placement(transformation(
         extent={{10,10},{-10,-10}},
         rotation=180,
         origin={-24,80})));
-  Components.MassTransfer.PressureSink pressureSink
+  BoundaryConditions.pressure_sink pressureSink
     annotation (Placement(transformation(extent={{20,-90},{40,-70}})));
   Systems.Aircraft.Subsystems.PassengerCabin cabin(
     redeclare model HTC_int =

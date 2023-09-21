@@ -1,5 +1,5 @@
-within DynTherM.Components.MassTransfer;
-model SourceMassFlow "Flow rate source for gas flows"
+within DynTherM.BoundaryConditions;
+model flow_source "Flow rate source"
   outer DynTherM.Components.Environment environment "Environmental properties";
   replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
@@ -7,7 +7,7 @@ model SourceMassFlow "Flow rate source for gas flows"
   parameter Medium.AbsolutePressure P_nom=101325 "Nominal pressure";
   parameter Medium.Temperature T_nom=300 "Nominal temperature" annotation(Dialog(enable=not use_in_T and not use_di_T));
   parameter Medium.MassFraction X_nom[Medium.nX]=Medium.reference_X "Nominal mass fractions" annotation(Dialog(enable=not use_in_Xw and not use_di_Xw));
-  parameter Medium.MassFlowRate massFlow_nom=0 "Nominal mass flowrate" annotation(Dialog(enable=not use_in_massFlow and not use_di_massFlow));
+  parameter Medium.MassFlowRate massFlow_nom=1 "Nominal mass flowrate" annotation(Dialog(enable=not use_in_massFlow and not use_di_massFlow));
   parameter DynTherM.CustomUnits.HydraulicConductance G=0
     "HydraulicConductance";
   parameter Boolean allowFlowReversal=environment.allowFlowReversal
@@ -25,7 +25,7 @@ model SourceMassFlow "Flow rate source for gas flows"
   input Medium.Temperature T_di=T_nom "Temperature" annotation(Dialog(tab="Inputs", group="Direct inputs", enable=use_di_T));
   input Medium.MassFraction X_di[Medium.nX]=X_nom "Water mass fraction" annotation(Dialog(tab="Inputs", group="Direct inputs", enable=use_di_X));
 
-  Medium.MassFlowRate massFlow "Mass flow rate";
+  Medium.MassFlowRate massFlow(start=massFlow_nom) "Mass flow rate";
   Medium.AbsolutePressure P(start=P_nom) "Pressure";
   Medium.Temperature T(start=T_nom) "Temperature";
   Medium.MassFraction X[Medium.nX](start=X_nom) "Mass fractions";
@@ -122,4 +122,4 @@ equation
           lineColor={0,0,0},
           fillColor={0,0,0},
           fillPattern=FillPattern.Solid)}));
-end SourceMassFlow;
+end flow_source;

@@ -1,13 +1,15 @@
-IrradiancePort
 FluidPort
 FluidPort_A
 FluidPort_B
+DistributedFluidPort_A
+DistributedFluidPort_B
 MechanicalPort
 Shaft_A
 Shaft_B
 HeatFluxPort
 HeatFluxPort_A
 HeatFluxPort_B
+IrradiancePort
 DistributedHeatFluxPort_A
 DistributedHeatFluxPort_B
 DistributedHeatPort_A

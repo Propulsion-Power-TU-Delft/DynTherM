@@ -10,7 +10,7 @@ model test_rectangular_pipe_sys "Simple test of component pipe"
     allowFlowReversal=false,
     initOpt=DynTherM.Choices.InitOpt.fixedState)
     annotation (Placement(transformation(extent={{60,60},{100,100}})));
-  Components.MassTransfer.SourceMassFlow ECSFlow(
+  BoundaryConditions.flow_source ECSFlow(
     redeclare package Medium = Refrigerant,
     use_in_massFlow=true,
     use_in_T=true) annotation (Placement(transformation(
@@ -20,7 +20,7 @@ model test_rectangular_pipe_sys "Simple test of component pipe"
   Modelica.Blocks.Interfaces.RealInput m_fromMix annotation (Placement(
         transformation(extent={{-130,-30},{-90,10}}),iconTransformation(
           extent={{-106,-70},{-86,-50}})));
-  Components.MassTransfer.PressureSink pressureSink(redeclare package Medium =
+  BoundaryConditions.pressure_sink pressureSink(redeclare package Medium =
         Refrigerant)
     annotation (Placement(transformation(extent={{76,-42},{100,-18}})));
   Components.MassTransfer.RectangularPipe pipe(

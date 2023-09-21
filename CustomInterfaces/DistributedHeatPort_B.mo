@@ -1,5 +1,5 @@
 within DynTherM.CustomInterfaces;
-connector DistributedHeatPort_B
+connector DistributedHeatPort_B "B-type distributed heat connector"
   connector HeatPort = Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b;
   parameter Integer N(min=1) "Number of ports";
   HeatPort ports[N];

@@ -26,7 +26,7 @@ model NH90Combined "Basic component built model (1:1 with EES)"
     "Cockpit leak out air flow";
   final parameter Modelica.Units.SI.MassFlowRate m_leak_out_cb=(1 - tau_leak)*(
       m_leak_in_ck + m_leak_in_cb + m_ext_ck + m_ext_cb) "Cabin leak out flow";
-  Components.MassTransfer.SourceMassFlow leakInCabin(
+  BoundaryConditions.flow_source leakInCabin(
     use_in_massFlow=false,
     use_in_T=false,
     use_in_Xw=false,
@@ -37,7 +37,7 @@ model NH90Combined "Basic component built model (1:1 with EES)"
     Xw_di=0.0187,
     T_di=313.15)                                         "air mass entering"
     annotation (Placement(transformation(extent={{-2,24},{18,44}})));
-  Components.MassTransfer.SourceMassFlow leakOutCabin(
+  BoundaryConditions.flow_source leakOutCabin(
     allowFlowReversal=false,
     T_di=airbusCabin.plenum.T,
     Xw_di=airbusCabin.plenum.X[1],
@@ -46,7 +46,7 @@ model NH90Combined "Basic component built model (1:1 with EES)"
     use_di_T=true,
     use_di_Xw=true)
     annotation (Placement(transformation(extent={{92,34},{72,54}})));
-  Components.MassTransfer.SourceMassFlow leakInCockpit(
+  BoundaryConditions.flow_source leakInCockpit(
     use_in_massFlow=false,
     use_in_T=false,
     use_in_Xw=false,
@@ -59,7 +59,7 @@ model NH90Combined "Basic component built model (1:1 with EES)"
     annotation (Placement(transformation(extent={{-82,34},{-62,54}})));
   Subsystems.Evaporator evaporator_cb(m_fan=m_fan_cb)
     annotation (Placement(transformation(extent={{34,4},{54,24}})));
-  Components.MassTransfer.SourceMassFlow airTransferCabin(
+  BoundaryConditions.flow_source airTransferCabin(
     use_in_massFlow=false,
     use_in_T=false,
     use_in_Xw=false,
@@ -80,7 +80,7 @@ model NH90Combined "Basic component built model (1:1 with EES)"
     T_engine=373.15,
     T_btp=353.15)
     annotation (Placement(transformation(extent={{32,30},{52,50}})));
-  Components.MassTransfer.SourceMassFlow leakOutCockpit(
+  BoundaryConditions.flow_source leakOutCockpit(
     use_in_massFlow=false,
     use_in_T=false,
     use_in_Xw=false,
@@ -93,7 +93,7 @@ model NH90Combined "Basic component built model (1:1 with EES)"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
         rotation=-90,
         origin={-20,74})));
-  Components.MassTransfer.SourceMassFlow airTransferCockpit(
+  BoundaryConditions.flow_source airTransferCockpit(
     use_in_massFlow=false,
     use_in_T=false,
     use_in_Xw=false,
@@ -110,7 +110,7 @@ model NH90Combined "Basic component built model (1:1 with EES)"
     annotation (Placement(transformation(extent={{-82,-78},{-62,-58}})));
   Subsystems.Evaporator evaporator_ck(m_fan=m_fan_ck)
     annotation (Placement(transformation(extent={{-46,10},{-26,30}})));
-  Components.MassTransfer.SourceMassFlow extAirCb(
+  BoundaryConditions.flow_source extAirCb(
     allowFlowReversal=false,
     use_di_T=true,
     use_di_Xw=true,
@@ -120,7 +120,7 @@ model NH90Combined "Basic component built model (1:1 with EES)"
     massFlow_di=m_ext_cb,
     T_di=313.15)
     annotation (Placement(transformation(extent={{92,0},{72,20}})));
-  Components.MassTransfer.SourceMassFlow extAirCk(
+  BoundaryConditions.flow_source extAirCk(
     allowFlowReversal=false,
     use_di_T=true,
     use_di_Xw=true,

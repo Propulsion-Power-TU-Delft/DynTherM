@@ -103,7 +103,7 @@ model CabinBare
   Modelica.Blocks.Sources.RealExpression realExpression(y=301.15)
     annotation (Placement(transformation(extent={{-72,30},{-52,50}})));
 
-  Components.MassTransfer.SourceMassFlow sourceMassFlow(
+  BoundaryConditions.flow_source sourceMassFlow(
     Xw_di=X_env,
     use_di_massFlow=true,
     use_di_T=true,
@@ -133,7 +133,7 @@ model CabinBare
     annotation (Placement(transformation(extent={{-48,4},{-36,-4}})));
   BoundaryConditions.thermal plenumheat(use_Q=true, Q=-2000)
     annotation (Placement(transformation(extent={{-8,90},{4,82}})));
-  Components.MassTransfer.SourceMassFlow leakInCabin(
+  BoundaryConditions.flow_source leakInCabin(
     use_in_massFlow=false,
     use_in_T=false,
     use_in_Xw=false,
@@ -146,7 +146,7 @@ model CabinBare
     Xw_di=0.0187,
     T_di=313.15)                                         "air mass entering"
     annotation (Placement(transformation(extent={{-60,-30},{-40,-10}})));
-  Components.MassTransfer.SourceMassFlow airTransferCabin(
+  BoundaryConditions.flow_source airTransferCabin(
     use_in_massFlow=false,
     use_in_T=false,
     use_in_Xw=false,

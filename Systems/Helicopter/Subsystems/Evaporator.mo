@@ -32,7 +32,7 @@ model Evaporator
   Real H_rel_evap "Relative humidity of air flow leaving evaporator";
   // Inlet Flow
   Medium.ThermodynamicState state_inlet "State of inlet flow";
-  Components.MassTransfer.SourceMassFlow outletMassFlow(
+  BoundaryConditions.flow_source outletMassFlow(
     use_in_massFlow=false,
     allowFlowReversal=false,
     use_in_T=true,
@@ -43,7 +43,7 @@ model Evaporator
     Xw_di=X_evap,
     use_di_T=false)
     annotation (Placement(transformation(extent={{-2,-60},{-22,-40}})));
-  Components.MassTransfer.SourceMassFlow inletMassFlow(
+  BoundaryConditions.flow_source inletMassFlow(
     use_in_massFlow=false,
     allowFlowReversal=true,
     massFlow_nom=-m_fan,

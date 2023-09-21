@@ -1,7 +1,6 @@
 within DynTherM;
 package BoundaryConditions "Package to add boundary conditions"
 
-
   annotation (Icon(graphics={
         Rectangle(
           lineColor={200,200,200},

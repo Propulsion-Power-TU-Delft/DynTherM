@@ -296,7 +296,7 @@ model CommercialAircraft
         origin={-103,-120})));
   Components.MassTransfer.ValveLin outflowValve(Kv=Kv)
     annotation (Placement(transformation(extent={{50,-70},{70,-90}})));
-  Components.MassTransfer.PressureSink pressureSink
+  BoundaryConditions.pressure_sink pressureSink
     annotation (Placement(transformation(extent={{82,-90},{102,-70}})));
   Modelica.Blocks.Interfaces.RealInput outflowValveOpening annotation (
       Placement(transformation(
@@ -319,7 +319,7 @@ model CommercialAircraft
         extent={{12,10},{-12,-10}},
         rotation=0,
         origin={-70,-98})));
-  Components.MassTransfer.SourceMassFlow packFlow(
+  BoundaryConditions.flow_source packFlow(
     X_nom=X_ECS,
     use_in_massFlow=true,
     use_in_T=true) annotation (Placement(transformation(
@@ -464,7 +464,7 @@ model CommercialAircraft
         extent={{10,-10},{-10,10}},
         rotation=90,
         origin={90,-64})));
-  ThermalManagement.Components.MassTransfer.SourceMassFlow cockpitTrimFlow(
+  ThermalManagement.BoundaryConditions.flow_source cockpitTrimFlow(
     X_nom=X_ECS,
     use_in_massFlow=true,
     use_in_T=true) annotation (Placement(transformation(
@@ -518,7 +518,7 @@ model CommercialAircraft
   ThermalManagement.Systems.Aircraft.Subsystems.CabinFloor cockpitFloor(Tstart=
         Tstart_floor, A=A_floor_cockpit)
     annotation (Placement(transformation(extent={{-116,-4},{-82,18}})));
-  ThermalManagement.Components.MassTransfer.SourceMassFlow cabinTrimFlow(
+  ThermalManagement.BoundaryConditions.flow_source cabinTrimFlow(
     X_nom=X_ECS,
     use_in_massFlow=true,
     use_in_T=true) annotation (Placement(transformation(

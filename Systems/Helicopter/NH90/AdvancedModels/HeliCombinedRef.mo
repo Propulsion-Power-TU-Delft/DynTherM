@@ -100,7 +100,7 @@ model HeliCombinedRef
     DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
     "Transmission heat correlation" annotation (choicesAllMatching=true, Dialog(tab="Heat Correlations"));
 
-  Components.MassTransfer.SourceMassFlow leakOutCockpit(
+  BoundaryConditions.flow_source leakOutCockpit(
     use_in_massFlow=false,
     use_in_T=false,
     use_in_Xw=false,
@@ -111,7 +111,7 @@ model HeliCombinedRef
     allowFlowReversal=true,
     massFlow_nom=-m_leak_out_ck)
     annotation (Placement(transformation(extent={{-12,4},{-32,24}})));
-  Components.MassTransfer.SourceMassFlow leakInCockpit(
+  BoundaryConditions.flow_source leakInCockpit(
     use_in_massFlow=false,
     use_in_T=false,
     use_in_Xw=false,
@@ -122,7 +122,7 @@ model HeliCombinedRef
     T_di=environment.T_amb,
     Xw_di=X_env)
     annotation (Placement(transformation(extent={{-96,2},{-76,22}})));
-  Components.MassTransfer.SourceMassFlow airTransferCockpit(
+  BoundaryConditions.flow_source airTransferCockpit(
     use_in_massFlow=false,
     use_in_T=false,
     use_in_Xw=false,
@@ -150,7 +150,7 @@ model HeliCombinedRef
     use_fus_radiation=false,
     use_r_eff=true)
     annotation (Placement(transformation(extent={{-64,12},{-44,32}})));
-  Components.MassTransfer.SourceMassFlow leakInCabin(
+  BoundaryConditions.flow_source leakInCabin(
     use_in_massFlow=false,
     use_in_T=false,
     use_in_Xw=false,
@@ -161,7 +161,7 @@ model HeliCombinedRef
     T_di=environment.T_amb,
     Xw_di=X_env)                 "air mass entering"
     annotation (Placement(transformation(extent={{-4,4},{16,24}})));
-  Components.MassTransfer.SourceMassFlow leakOutCabin(
+  BoundaryConditions.flow_source leakOutCabin(
     use_di_T=true,
     use_di_Xw=true,
     T_di=heliCabin.plenum.T,
@@ -169,7 +169,7 @@ model HeliCombinedRef
     allowFlowReversal=true,
     massFlow_nom=-m_leak_out_cb)
     annotation (Placement(transformation(extent={{80,12},{60,32}})));
-  Components.MassTransfer.SourceMassFlow airTransferCabin(
+  BoundaryConditions.flow_source airTransferCabin(
     use_in_massFlow=false,
     use_in_T=false,
     use_in_Xw=false,
@@ -238,7 +238,7 @@ model HeliCombinedRef
     X_start_out=X_start_cb,
     m_fan=m_fan_cb)
     annotation (Placement(transformation(extent={{32,-22},{52,-2}})));
-  Components.MassTransfer.SourceMassFlow extAirCk(
+  BoundaryConditions.flow_source extAirCk(
     allowFlowReversal=false,
     use_di_T=true,
     use_di_Xw=true,
@@ -247,7 +247,7 @@ model HeliCombinedRef
     T_di=environment.T_amb,
     Xw_di=X_env)
     annotation (Placement(transformation(extent={{-12,-30},{-32,-10}})));
-  Components.MassTransfer.SourceMassFlow extAirCb(
+  BoundaryConditions.flow_source extAirCb(
     allowFlowReversal=false,
     use_di_T=true,
     use_di_Xw=true,
@@ -256,13 +256,13 @@ model HeliCombinedRef
     T_di=environment.T_amb,
     Xw_di=X_env)
     annotation (Placement(transformation(extent={{86,-28},{66,-8}})));
-  Components.MassTransfer.PressureSink pressureSinkCockpit(
+  BoundaryConditions.pressure_sink pressureSinkCockpit(
     use_ambient=false,
     P_di=environment.P_amb_di,
     T_di=environment.T_amb_di,
     Xw_di=X_env)
     annotation (Placement(transformation(extent={{-36,24},{-16,44}})));
-  Components.MassTransfer.PressureSink pressureSinkCabin(
+  BoundaryConditions.pressure_sink pressureSinkCabin(
     use_ambient=false,
     P_di=environment.P_amb_di,
     T_di=environment.T_amb_di,

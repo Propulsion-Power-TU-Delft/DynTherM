@@ -8,7 +8,7 @@ model Cabin "Testing the cabin and evaporator together"
   Modelica.Blocks.Sources.Constant targetTempCabin(k=301.15)
     annotation (Placement(transformation(extent={{-52,14},{-32,34}})));
 
-  Components.MassTransfer.SourceMassFlow sourceMassFlow(
+  BoundaryConditions.flow_source sourceMassFlow(
     Xw_di=X_env,
     use_di_massFlow=true,
     use_di_T=true,
