@@ -42,6 +42,7 @@ sudo pip install tqdm
 ---
 
 ### Citations
+A. Giuffré, P. Colonna, and C. De Servi. "Dynamic Thermal Model of Passenger Aircraft for the Estimation of the Cabin Cooling and Heating Requirements", Applied Thermal Engineering, 2023 (article under review).
 
 ---
 
