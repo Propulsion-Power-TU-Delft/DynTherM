@@ -5,11 +5,6 @@
 ### Description
 
 A Modelica library for the Dynamic simulation of Thermal Management systems.
-The following applications are currently covered:
-1. Aircraft fuselage model (tested and validated with proprietary industrial data)
-2. Helicopter cabin model (developed, but not extensively tested)
-3. Hydrogen tank model (developed, but not extensively tested)
-4. Battery pack model (initial development phase)
 
 ---
 
@@ -51,20 +46,23 @@ sudo pip install tqdm
 ---
 
 ### Setting Python - Dymola interface
-The following instructions are tested for Python 3.7 and Dymola 2020, assuming the Dymola installation folder to be the standard one.
 
-1. Add to Path (environment variable): C:\\Program Files\\Dymola 2020\\bin64\\Dymola.exe
+Disclaimer: the Python scripts are not released open-source yet, since they still need to be cleaned and extensively tested.
 
-2. Create PYTHONPATH (environment variable), if not existing yet, and add: C:\Program Files\Dymola 2020\Modelica\Library\python_interface\dymola.egg
+The following instructions are tested for Python 3.7+ and Dymola 2022, assuming the Dymola installation folder to be the standard one.
 
-3. Set package_dir in main.py as "path-to-package.mo (inside thermalmanagement)" according to your system directory; set model_dir accordingly
+1. Add to Path (environment variable): C:\\Program Files\\Dymola 2022\\bin64\\Dymola.exe
 
-4. Download SMARTS from NREL website and install it in the thermalmanagement root folder
+2. Create PYTHONPATH (environment variable), if not existing yet, and add: C:\Program Files\Dymola 2022\Modelica\Library\python_interface\dymola.egg
+
+3. Set package_dir in main.py as "path-to-package.mo (inside DynTherM)" according to your system directory; set model_dir accordingly
+
+4. Download SMARTS from NREL website and install it in the DynTherM root folder
 
     Upon completion of the previous steps, you should be able to run main.py from command line or python IDLE (remember to open the Dymola app before running main.py).
     The next step is only required to run main.py from PyCharm.
 
-5. Open PyCharm and go to File/Settings/Project Interpreter. At the top right, select show all, show paths for the selected interpreter and add: C:\Program Files\Dymola 2020\Modelica\Library\python_interface/dymola.egg
+5. Open PyCharm and go to File/Settings/Project Interpreter. At the top right, select show all, show paths for the selected interpreter and add: C:\Program Files\Dymola 2022\Modelica\Library\python_interface/dymola.egg
     
 ---
 
@@ -73,5 +71,5 @@ The following instructions are tested for Python 3.7 and Dymola 2020, assuming t
   
 2. Open and run one of the models in package Examples.mo
 
-3. Analyze the results and check the sub-models in Components.mo
+3. Analyze the results
 
