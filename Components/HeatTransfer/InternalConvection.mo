@@ -1,9 +1,8 @@
 within DynTherM.Components.HeatTransfer;
-model InternalConvection
-  "0D model of internal convection with a cylinder"
-  // Reference: SAE AIR 1168/3, section 3.2.2
+model InternalConvection "Model of internal convection"
+
   replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
-    Modelica.Media.Interfaces.PartialMedium                                                                      "Medium model" annotation(choicesAllMatching = true);
+    Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
   outer DynTherM.Components.Environment environment "Environmental properties";
   parameter Modelica.Units.SI.Area A "Heat transfer area";
   replaceable model HTC =

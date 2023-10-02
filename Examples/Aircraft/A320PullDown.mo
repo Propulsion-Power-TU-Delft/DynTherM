@@ -237,7 +237,7 @@ model A320PullDown "Aircraft on ground, pull down test case"
     annotation (Placement(transformation(extent={{10,-10},{-10,10}},
         rotation=-90,
         origin={-152,-34})));
-  Components.MassTransfer.simpleFan recirculationFan(
+  DynTherM.Components.MassTransfer.Fan recirculationFan(
     eta_is=eta_is,
     eta_m=eta_m,
     omega_nom(displayUnit="rpm") = omega_nom,

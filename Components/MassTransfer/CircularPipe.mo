@@ -1,5 +1,5 @@
 within DynTherM.Components.MassTransfer;
-model CircularPipe "Model of pipe with arbitrary cross-section"
+model CircularPipe "Model of pipe with circular cross-section"
 
   outer DynTherM.Components.Environment environment "Environmental properties";
   replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby

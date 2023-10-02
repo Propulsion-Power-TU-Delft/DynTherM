@@ -1,6 +1,5 @@
 within DynTherM.Systems.Aircraft;
-model CommercialAircraft
-  "Model of a commercial passenger aircraft"
+model PassengerAircraft "Model of a passenger aircraft"
 
   import ThermalManagement = DynTherM;
   replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
@@ -275,7 +274,7 @@ model CommercialAircraft
     annotation (Placement(transformation(extent={{10,-10},{-10,10}},
         rotation=-90,
         origin={-152,-34})));
-  Components.MassTransfer.simpleFan recirculationFan(
+  ThermalManagement.Components.MassTransfer.Fan recirculationFan(
     eta_is=eta_is,
     eta_m=eta_m,
     omega_nom(displayUnit="rpm") = omega_nom,
@@ -747,4 +746,4 @@ Heat is accounted for as positive when entering the control volume.<br>
 Composite materials of FuselageSandwichStructure, CabinFloor, CabinWall referred to an Airbus A320.<br>
 Manually edit those classes if you have specific information about the aircraft under analysis.
 </html>"));
-end CommercialAircraft;
+end PassengerAircraft;

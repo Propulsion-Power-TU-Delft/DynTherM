@@ -1,6 +1,5 @@
 within DynTherM.Systems.Aircraft.Subsystems;
 model CargoBay "Lower section of the fuselage: cargo bay"
-  // Hp: the fuselage is modelled as a hollow cylinder
 
   outer DynTherM.Components.Environment environment "Environmental properties";
 

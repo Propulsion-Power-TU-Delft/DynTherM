@@ -1,8 +1,6 @@
 within DynTherM;
 package Systems
 
-
-
   annotation (Icon(graphics={
         Rectangle(
           lineColor={200,200,200},

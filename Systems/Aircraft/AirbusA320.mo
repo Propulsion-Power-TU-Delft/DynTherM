@@ -1,8 +1,8 @@
 within DynTherM.Systems.Aircraft;
 model AirbusA320
   "Model of an Airbus A320: cabin + cargo + cockpit (no leakage) + recirculation"
-  // Reference: Airbus A320, Aircraft Characteristics Airport and Maintenance Planning.
-  extends CommercialAircraft(
+
+  extends PassengerAircraft(
     X_ECS={0,1},
     R_fuselage=2.07,
     R_cockpit=R_fuselage,
@@ -52,5 +52,9 @@ model AirbusA320
           lineColor={0,32,91},
           textString="A320",
           textStyle={TextStyle.Bold})}), Diagram(coordinateSystem(extent={{-180,
-            -140},{100,100}})));
+            -140},{100,100}})),
+    Documentation(info="<html>
+<p>Reference:</p>
+<p>[1] Airbus&nbsp;A320,&nbsp;Aircraft&nbsp;Characteristics&nbsp;Airport&nbsp;and&nbsp;Maintenance&nbsp;Planning.</p>
+</html>"));
 end AirbusA320;

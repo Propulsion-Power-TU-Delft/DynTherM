@@ -1,6 +1,5 @@
 within DynTherM.Components.HeatTransfer;
-model SphereConduction
-  "0D Dynamic model of conduction in a hollow sphere"
+model SphereConduction "Dynamic model of conduction in a hollow sphere"
   replaceable model Mat=DynTherM.Materials.Aluminium constrainedby
     DynTherM.Materials.Properties          "Material choice" annotation (choicesAllMatching=true);
   parameter Real coeff=1 "Fraction of sphere with active heat transfer";

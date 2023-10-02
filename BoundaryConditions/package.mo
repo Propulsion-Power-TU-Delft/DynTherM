@@ -1,5 +1,5 @@
 within DynTherM;
-package BoundaryConditions "Package to add boundary conditions"
+package BoundaryConditions "Package collecting different types of boundary conditions"
 
   annotation (Icon(graphics={
         Rectangle(

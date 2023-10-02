@@ -85,7 +85,7 @@ model Evaporator
     annotation (Placement(transformation(extent={{-120,30},{-80,70}})));
   CustomInterfaces.FluidPort_A inletPortFresh
     annotation (Placement(transformation(extent={{80,-64},{100,-44}})));
-  Components.MassTransfer.simpleFan simpleFan(
+  Components.MassTransfer.Fan simpleFan(
     redeclare
       Components.MassTransfer.FanCharacteristics.FlowCharacteristics.linearFlow
       flowModel,

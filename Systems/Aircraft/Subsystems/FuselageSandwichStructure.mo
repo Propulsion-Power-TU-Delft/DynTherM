@@ -1,10 +1,6 @@
 within DynTherM.Systems.Aircraft.Subsystems;
 model FuselageSandwichStructure
   "Model of sandwich shell fuselage (cabin and cockpit sections)"
-  // Hp: fin effect of structural members attached to the skin and protruding into the cabin is neglected in first approximation.
-  // References:
-  // [1] L. Krakers. Parametric fuselage design: integration of mechanics, acoustic and thermal insulation, 2009.
-  // [2] SAE AIR 1168/3, section 7.2
 
   outer DynTherM.Components.Environment environment "Environmental properties";
   parameter Real coeff "Fraction of fuselage with active heat transfer";
@@ -163,5 +159,11 @@ equation
           fillColor={215,215,215},
           fillPattern=FillPattern.Forward,
           textString="FUSELAGE")}),                              Diagram(
-        coordinateSystem(preserveAspectRatio=false)));
+        coordinateSystem(preserveAspectRatio=false)),
+    Documentation(info="<html>
+<p>Hp:&nbsp;fin&nbsp;effect&nbsp;of&nbsp;structural&nbsp;members&nbsp;attached&nbsp;to&nbsp;the&nbsp;skin&nbsp;and&nbsp;protruding&nbsp;into&nbsp;the&nbsp;cabin&nbsp;is&nbsp;neglected&nbsp;in&nbsp;first&nbsp;approximation.</p>
+<p>References:</p>
+<p>[1]&nbsp;L.&nbsp;Krakers.&nbsp;Parametric&nbsp;fuselage&nbsp;design:&nbsp;integration&nbsp;of&nbsp;mechanics,&nbsp;acoustic&nbsp;and&nbsp;thermal&nbsp;insulation,&nbsp;2009.</p>
+<p>[2]&nbsp;SAE&nbsp;AIR&nbsp;1168/3,&nbsp;section&nbsp;7.2</p>
+</html>"));
 end FuselageSandwichStructure;

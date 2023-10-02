@@ -1,12 +1,6 @@
 within DynTherM.Components.MassTransfer;
 model Plenum
   "Plenum with heat and mass transfer + internal sensible and latent heat generation from occupants"
-  // Reference (for metabolic heat load calculations):
-  // C. Giaconia, et al. Air Quality and Relative Humidity in Commercial Aircraft:
-  // An Experimental Investigation on Short-Haul Domestic Flights, 2013.
-  // ASHRAE Handbook - Fundamentals, chapter 9.
-  // Hp: the occupants are always in thermal equilibrium, i.e. all the heat they
-  // generate is transferred to the environemnt as latent and sensible heat.
 
   replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
@@ -162,9 +156,11 @@ initial equation
   end if;
   annotation (
     Documentation(info="<html>
-<p>This model describes a rigid, adiabatic control volume.
-<p><b>Modelling options</b></p>
-<p>The actual gas used in the component is determined by the replaceable <tt>Medium</tt> package. In the case of multiple component, variable composition gases, the start composition is given by <tt>Xstart</tt>, whose default value is <tt>Medium.reference_X</tt> .
+<p>Reference&nbsp;(for&nbsp;metabolic&nbsp;heat&nbsp;load&nbsp;calculations):</p>
+<p>[1] C.&nbsp;Giaconia,&nbsp;et&nbsp;al.&nbsp;Air&nbsp;Quality&nbsp;and&nbsp;Relative&nbsp;Humidity&nbsp;in&nbsp;Commercial&nbsp;Aircraft:</p>
+<p>[2] An&nbsp;Experimental&nbsp;Investigation&nbsp;on&nbsp;Short-Haul&nbsp;Domestic&nbsp;Flights,&nbsp;2013.</p>
+<p>[3] ASHRAE&nbsp;Handbook&nbsp;-&nbsp;Fundamentals,&nbsp;chapter&nbsp;9.</p>
+<p>Hp:&nbsp;the&nbsp;occupants&nbsp;are&nbsp;always&nbsp;in&nbsp;thermal&nbsp;equilibrium,&nbsp;i.e.&nbsp;all&nbsp;the&nbsp;heat&nbsp;they generate&nbsp;is&nbsp;transferred&nbsp;to&nbsp;the&nbsp;environemnt&nbsp;as&nbsp;latent&nbsp;and&nbsp;sensible&nbsp;heat.</p>
 </html>",
         revisions="<html>
 <ul>

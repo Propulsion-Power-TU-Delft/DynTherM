@@ -1,5 +1,5 @@
 within DynTherM.Components.MassTransfer;
-model PressureDrop "Simple concentrated pressure drop: constant or linear"
+model PressureDrop "Simple concentrated pressure drop, featuring a constant or linear characteristic"
   replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
   outer DynTherM.Components.Environment environment "Environmental properties";

@@ -1,7 +1,7 @@
 within DynTherM.Components.HeatTransfer;
-model WallConduction "0D Dynamic model of conduction in a planar surface"
+model WallConduction "Dynamic model of conduction in a planar surface"
   replaceable model Mat=DynTherM.Materials.Aluminium constrainedby
-    DynTherM.Materials.Properties          "Material choice" annotation (choicesAllMatching=true);
+    DynTherM.Materials.Properties "Material choice" annotation (choicesAllMatching=true);
   parameter Modelica.Units.SI.Length t "Wall thickness";
   parameter Modelica.Units.SI.Area A "Wall surface";
   parameter Modelica.Units.SI.Area A_window=0 "Window area";

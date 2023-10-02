@@ -1,8 +1,8 @@
 within DynTherM.Components.Battery;
-model CylindricalCellPortion "1D thermal model of 1/4 portion of a cylindrical cell"
+model CylindricalCellPortion "Model of 1/4 portion of a cylindrical cell"
 
   replaceable model CellMat=DynTherM.Materials.NCA18650 constrainedby
-    DynTherM.Materials.CellProperties          "Material properties of the prescribed cell type" annotation (choicesAllMatching=true);
+    DynTherM.Materials.CellProperties "Material properties of the prescribed cell type" annotation (choicesAllMatching=true);
 
   parameter Real SOC "State-of-charge [%]";
   parameter Modelica.Units.SI.Length H_cell "Height of the cell";

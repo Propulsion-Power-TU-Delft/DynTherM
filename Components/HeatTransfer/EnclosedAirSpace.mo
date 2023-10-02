@@ -1,13 +1,8 @@
 within DynTherM.Components.HeatTransfer;
-model EnclosedAirSpace
-  "0D Dynamic model for non-ventilated closed air cavities in double glazing"
-  // Hp: accumulation of energy, but negligible accumulation of mass and species
-  // Hp: leakage flow is allowed only from inlet to outlet
-  // References
-  // F. Zanghirella et al. - A numerical model to evaluate the thermal behaviour of active transparent facades, 2011.
+model EnclosedAirSpace "Dynamic model for non-ventilated closed air cavities in double glazing"
 
   replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
-    Modelica.Media.Interfaces.PartialMedium                                                                      "Medium model" annotation(choicesAllMatching = true);
+    Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
   outer DynTherM.Components.Environment environment "Environmental properties";
   parameter DynTherM.Choices.InitOpt initOpt=environment.initOpt
     "Initialization option" annotation (Dialog(tab="Initialization"));
@@ -102,16 +97,12 @@ equation
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid,
           textString="AIR GAP")}),
-    Documentation(info="<HTML>
-<p>This is the model of a cylindrical tube of solid material.
-<p>The heat capacity (which is lumped at the center of the tube thickness) is accounted for, as well as the thermal resistance due to the finite heat conduction coefficient. Longitudinal heat conduction is neglected.
-<p><b>Modelling options</b></p>
-<p>The following options are available:
-<ul>
-<li><tt>WallRes = false</tt>: the thermal resistance of the tube wall is neglected.
-<li><tt>WallRes = true</tt>: the thermal resistance of the tube wall is accounted for.
-</ul>
-</HTML>",
+    Documentation(info="<html>
+<p>Hp:&nbsp;accumulation&nbsp;of&nbsp;energy,&nbsp;but&nbsp;negligible&nbsp;accumulation&nbsp;of&nbsp;mass&nbsp;and&nbsp;species</p>
+<p>Hp:&nbsp;leakage&nbsp;flow&nbsp;is&nbsp;allowed&nbsp;only&nbsp;from&nbsp;inlet&nbsp;to&nbsp;outlet</p>
+<p>References:</p>
+<p>[1] F.&nbsp;Zanghirella&nbsp;et&nbsp;al.&nbsp;&quot;A&nbsp;numerical&nbsp;model&nbsp;to&nbsp;evaluate&nbsp;the&nbsp;thermal&nbsp;behaviour&nbsp;of&nbsp;active&nbsp;transparent&nbsp;facades&quot;,&nbsp;2011.</p>
+</html>",
         revisions="<html>
 <ul>
 <li><i>30 May 2005</i>

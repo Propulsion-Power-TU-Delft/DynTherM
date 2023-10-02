@@ -1,6 +1,6 @@
 within DynTherM.Components.Adaptors;
 model irradianceToHeatFlow
-  "Model used to convert from irradiance to heat port"
+  "Model used to convert from irradiance port to heat port"
 
   parameter Modelica.Units.SI.Area A "Heat transfer surface";
 

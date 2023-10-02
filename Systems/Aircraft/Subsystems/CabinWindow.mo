@@ -1,8 +1,6 @@
 within DynTherM.Systems.Aircraft.Subsystems;
 model CabinWindow
   "Model of cabin window, featuring double glazing and air cavity"
-  // Reference: F. Zanghirella, et al. - A Numerical Model to Evaluate the thermal Behaviour of Active Transparent Facades, 2011.
-  // Hp: air leakage from pressurized cabin to environment is neglected
 
   outer DynTherM.Components.Environment environment "Environmental properties";
 
@@ -121,5 +119,10 @@ equation
         Line(points={{3,5},{-3,-5}},      color={0,127,255},
           origin={35,13},
           rotation=-90)}),                                       Diagram(
-        coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
+        coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+    Documentation(info="<html>
+<p>Hp: air leakage from pressurized cabin to environment is neglected.</p>
+<p>Reference:</p>
+<p>[1] F.&nbsp;Zanghirella,&nbsp;et&nbsp;al. &quot;A&nbsp;Numerical&nbsp;Model&nbsp;to&nbsp;Evaluate&nbsp;the&nbsp;thermal&nbsp;Behaviour&nbsp;of&nbsp;Active&nbsp;Transparent&nbsp;Facades&quot;,&nbsp;2011.</p>
+</html>"));
 end CabinWindow;

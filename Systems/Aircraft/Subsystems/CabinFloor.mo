@@ -1,10 +1,6 @@
 ﻿within DynTherM.Systems.Aircraft.Subsystems;
 model CabinFloor
   "Simplified model of cabin floor separating cabin and cargo bay"
-  // References:
-  // [1] L. Krakers. Parametric fuselage design: integration of mechanics, acoustic and thermal insulation, 2009.
-  // [2] SAE AIR 1168/3, section 7.2
-  // [3] Gillfab 4117 product data sheet
 
   outer DynTherM.Components.Environment environment "Environmental properties";
   parameter Modelica.Units.SI.Temperature Tstart=300 "Temperature start value"
@@ -84,5 +80,11 @@ equation
           fillColor={215,215,215},
           fillPattern=FillPattern.Forward,
           textString="FLOOR")}),                                 Diagram(
-        coordinateSystem(preserveAspectRatio=false)));
+        coordinateSystem(preserveAspectRatio=false)),
+    Documentation(info="<html>
+<p>References:</p>
+<p>[1]&nbsp;L.&nbsp;Krakers.&nbsp;Parametric&nbsp;fuselage&nbsp;design:&nbsp;integration&nbsp;of&nbsp;mechanics,&nbsp;acoustic&nbsp;and&nbsp;thermal&nbsp;insulation,&nbsp;2009.</p>
+<p>[2]&nbsp;SAE&nbsp;AIR&nbsp;1168/3,&nbsp;section&nbsp;7.2</p>
+<p>[3]&nbsp;Gillfab&nbsp;4117&nbsp;product&nbsp;data&nbsp;sheet</p>
+</html>"));
 end CabinFloor;

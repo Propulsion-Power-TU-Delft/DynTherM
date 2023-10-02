@@ -8,3 +8,4 @@ ConductionConvectionRadiationSteady
 CabinWindow
 EnclosedAirSpace
 HeatCapacity
+WallConduction

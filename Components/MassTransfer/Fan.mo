@@ -1,5 +1,5 @@
 within DynTherM.Components.MassTransfer;
-model simpleFan
+model Fan "Model of a fan"
   replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
   outer DynTherM.Components.Environment environment "Environmental properties";
@@ -96,4 +96,4 @@ equation
        Line(points={{60,0},{92,0}}, color={0,0,0}),
        Rectangle(extent={{-4,90},{4,60}}, lineColor={0,0,0})}), Diagram(
        coordinateSystem(preserveAspectRatio=false)));
-end simpleFan;
+end Fan;

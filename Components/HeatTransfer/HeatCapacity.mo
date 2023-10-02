@@ -1,6 +1,6 @@
 within DynTherM.Components.HeatTransfer;
 model HeatCapacity
-    "0D dynamic model of heat capacity element"
+    "Dynamic model of heat capacity element"
     outer DynTherM.Components.Environment environment
     "Environmental properties";
     parameter DynTherM.Choices.InitOpt initOpt=environment.initOpt
@@ -95,53 +95,5 @@ initial equation
             textString="T"),
           Line(points={{0,-12},{0,-96}}, color={255,0,0})}),
       Documentation(info="<html>
-<p>
-This is a generic model for the heat capacity of a material.
-No specific geometry is assumed beyond a total volume with
-uniform temperature for the entire volume.
-Furthermore, it is assumed that the heat capacity
-is constant (independent of temperature).
-</p>
-<p>
-The temperature T [Kelvin] of this component is a <strong>state</strong>.
-A default of T = 25 degree Celsius (= SIunits.Conversions.from_degC(25))
-is used as start value for initialization.
-This usually means that at start of integration the temperature of this
-component is 25 degrees Celsius. You may, of course, define a different
-temperature as start value for initialization. Alternatively, it is possible
-to set parameter <strong>steadyStateStart</strong> to <strong>true</strong>. In this case
-the additional equation '<strong>der</strong>(T) = 0' is used during
-initialization, i.e., the temperature T is computed in such a way that
-the component starts in <strong>steady state</strong>. This is useful in cases,
-where one would like to start simulation in a suitable operating
-point without being forced to integrate for a long time to arrive
-at this point.
-</p>
-<p>
-Note, that parameter <strong>steadyStateStart</strong> is not available in
-the parameter menu of the simulation window, because its value
-is utilized during translation to generate quite different
-equations depending on its setting. Therefore, the value of this
-parameter can only be changed before translating the model.
-</p>
-<p>
-This component may be used for complicated geometries where
-the heat capacity C is determined my measurements. If the component
-consists mainly of one type of material, the <strong>mass m</strong> of the
-component may be measured or calculated and multiplied with the
-<strong>specific heat capacity cp</strong> of the component material to
-compute C:
-</p>
-<pre>
-   C = cp*m.
-   Typical values for cp at 20 degC in J/(kg.K):
-      aluminium   896
-      concrete    840
-      copper      383
-      iron        452
-      silver      235
-      steel       420 ... 500 (V2A)
-      wood       2500
-</pre>
 </html>"));
 end HeatCapacity;

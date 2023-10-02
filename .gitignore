@@ -6,6 +6,9 @@
 # Compiled Python bytecode
 *.py[cod]
 
+# Python scripts
+PyScripts/*
+
 # JetBrains IDE
 .idea/
 
@@ -29,5 +32,16 @@ ds*
 # Modelica automatic back-ups
 *.bak-mo
 
+# Helicopter models
+Examples/Helicopter/*
+Systems/Helicopter/*
+Materials/AirbusEES/*
 
+# Battery models
+Components/Battery/*
+Systems/Battery/*
+Tests/Battery/*
+Choices/BatteryChemistry
 
+# F9X models
+Systems/F9X/*

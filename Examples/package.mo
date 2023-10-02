@@ -1,5 +1,5 @@
 within DynTherM;
-package Examples "Collection of examples of ThermalManagement models"
+package Examples "Collection of exemplary models built with DynTherM"
 
 
 

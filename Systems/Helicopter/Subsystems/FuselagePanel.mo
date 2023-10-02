@@ -61,8 +61,8 @@ model FuselagePanel
             10,-10}},
         rotation=90,
         origin={-60,50})));
-  Components.HeatTransfer.WindowRadiation windowRadiation(redeclare model Mat =
-        Materials.AirbusEES.Window,
+  Components.HeatTransfer.WindowRadiation windowRadiation(redeclare model Mat
+      = Materials.AirbusEES.Window,
                                A=A_tot_window) if include_window annotation (Placement(
         transformation(
         extent={{10,-10},{-10,10}},

@@ -1,8 +1,6 @@
 within DynTherM.Components.HeatTransfer;
 model WindowRadiation
-  "0D model of transmitted, absorbed and reflected irradiance through transparent surfaces"
-  // Reference: F. Zanghirella, et al. - A Numerical Model to Evaluate the thermal Behaviour of Active Transparent Facades, 2011.
-  // Hp: only one internal reflection is considered
+  "Model of transmitted, absorbed and reflected irradiance through transparent surfaces"
 
   replaceable model Mat=DynTherM.Materials.Opticor constrainedby
     DynTherM.Materials.Properties          "Material choice" annotation (choicesAllMatching=true);
@@ -75,6 +73,8 @@ equation
         Line(points={{66,-18},{60,-28}}, color={238,46,47})}),   Diagram(
         coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>
-<p><img src=\"modelica://ThermalManagement/ThermalManagement/Figures/ThermalRadiationASHRAE.PNG\"/></p>
+<p>Hp: only one internal reflection is considered.</p>
+<p>Reference:</p>
+<p>[1] F.&nbsp;Zanghirella,&nbsp;et&nbsp;al.&nbsp;-&nbsp;A&nbsp;Numerical&nbsp;Model&nbsp;to&nbsp;Evaluate&nbsp;the&nbsp;thermal&nbsp;Behaviour&nbsp;of&nbsp;Active&nbsp;Transparent&nbsp;Facades,&nbsp;2011.</p>
 </html>"));
 end WindowRadiation;

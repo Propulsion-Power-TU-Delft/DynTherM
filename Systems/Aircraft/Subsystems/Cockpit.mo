@@ -1,7 +1,5 @@
 within DynTherM.Systems.Aircraft.Subsystems;
 model Cockpit "Upper section of the fuselage: cockpit section"
-  // Hp: the fuselage is modelled as a hollow cylinder
-  // Hp: the heat transfer through the aft pressure bulkhead is neglected
 
   outer DynTherM.Components.Environment environment "Environmental properties";
 

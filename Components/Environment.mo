@@ -1,10 +1,5 @@
 within DynTherM.Components;
 model Environment "Environmental properties (moist air)"
-  // References:
-  // [1] ISA model to compute variation of properties with altitude
-  // [2] X. Fang. Study on saturated water vapor pressure equations for calculation of aircraft air-conditioning systems, 1995.
-  // [3] Q. Dai, X. Fang. A new model for atmospheric radiation under clear sky condition at various altitudes, 2014.
-  // [4] Earth System Research Laboratory (NOAA) https://psl.noaa.gov/cgi-bin/data/timeseries/timeseries1.pl
 
   package Medium = Modelica.Media.Air.MoistAir;
 
@@ -297,5 +292,12 @@ equation
           extent={{-36,-26},{6,-58}},
           fillColor={215,215,215},
           fillPattern=FillPattern.Solid,
-          pattern=LinePattern.None)}));
+          pattern=LinePattern.None)}),
+    Documentation(info="<html>
+<p>References:</p>
+<p>[1]&nbsp;ISA&nbsp;model&nbsp;to&nbsp;compute&nbsp;variation&nbsp;of&nbsp;properties&nbsp;with&nbsp;altitude</p>
+<p>[2]&nbsp;X.&nbsp;Fang.&nbsp;Study&nbsp;on&nbsp;saturated&nbsp;water&nbsp;vapor&nbsp;pressure&nbsp;equations&nbsp;for&nbsp;calculation&nbsp;of&nbsp;aircraft&nbsp;air-conditioning&nbsp;systems,&nbsp;1995.</p>
+<p>[3]&nbsp;Q.&nbsp;Dai,&nbsp;X.&nbsp;Fang.&nbsp;A&nbsp;new&nbsp;model&nbsp;for&nbsp;atmospheric&nbsp;radiation&nbsp;under&nbsp;clear&nbsp;sky&nbsp;condition&nbsp;at&nbsp;various&nbsp;altitudes,&nbsp;2014.</p>
+<p>[4]&nbsp;Earth&nbsp;System&nbsp;Research&nbsp;Laboratory&nbsp;(NOAA)&nbsp;https://psl.noaa.gov/cgi-bin/data/timeseries/timeseries1.pl</p>
+</html>"));
 end Environment;

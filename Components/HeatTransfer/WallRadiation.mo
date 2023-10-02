@@ -1,11 +1,8 @@
 within DynTherM.Components.HeatTransfer;
-model WallRadiation "0D model of incident and emitted thermal radiation"
-  // References:
-  // [1] F. Goia, et al. - A Numerical Model to Evaluate the thermal Behaviour of PCM Glazing System Configurations, 2012.
+model WallRadiation "Model of incident and emitted thermal radiation"
 
   replaceable model Material=DynTherM.Materials.Paints.WhitePaint
-    constrainedby DynTherM.Materials.Paints.BasePaint
-                                                 "Material choice" annotation (choicesAllMatching=true);
+    constrainedby DynTherM.Materials.Paints.BasePaint "Material choice" annotation (choicesAllMatching=true);
   Material Mat;
   outer DynTherM.Components.Environment environment "Environmental properties";
   parameter Modelica.Units.SI.Area A "Heat transfer surface";
@@ -64,6 +61,7 @@ equation
         Line(points={{36,-66},{30,-76}}, color={238,46,47})}),   Diagram(
         coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>
-<p><img src=\"modelica://ThermalManagement/ThermalManagement/Figures/ThermalRadiationASHRAE.PNG\"/></p>
+<p>Reference:</p>
+<p>[1]&nbsp;F.&nbsp;Goia,&nbsp;et&nbsp;al.&nbsp;-&nbsp;A&nbsp;Numerical&nbsp;Model&nbsp;to&nbsp;Evaluate&nbsp;the&nbsp;thermal&nbsp;Behaviour&nbsp;of&nbsp;PCM&nbsp;Glazing&nbsp;System&nbsp;Configurations,&nbsp;2012.</p>
 </html>"));
 end WallRadiation;

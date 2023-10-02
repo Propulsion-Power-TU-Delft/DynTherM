@@ -1,9 +1,6 @@
-﻿within DynTherM.Components.HeatTransfer;
+within DynTherM.Components.HeatTransfer;
 model SolarRadiation
   "Model of direct, diffuse and reflected solar irradiance on a planar, arbitrary oriented surface"
-  // Reference: ASHRAE Handbook – Fundamentals, chapter 14, 2013.
-  // The following models are strictly valid only for clear-sky at ground level
-  // Corrections for cloudy-sky and altitude effects should be implemented
 
   outer DynTherM.Components.Environment environment;
   constant Modelica.Units.SI.Irradiance E_sc=1367 "Solar constant";
@@ -204,6 +201,10 @@ equation
         Line(points={{30,44},{36,34}},    color={238,46,47})}),  Diagram(
         coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>
-<p><img src=\"modelica://ThermalManagement/Figures/ThermalRadiationASHRAE.PNG\"/></p>
+<p>The following models are strictly valid only for clear-sky at ground level.</p>
+<p>Corrections for cloudy-sky and altitude effects should be implemented.</p>
+<p>Reference</p>
+<p>[1] ASHRAE&nbsp;Handbook&nbsp;&ndash;&nbsp;Fundamentals,&nbsp;chapter&nbsp;14,&nbsp;2013.</p>
+<p><img src=\"modelica://DynTherM/Figures/ThermalRadiationASHRAE.PNG\"/></p>
 </html>"));
 end SolarRadiation;

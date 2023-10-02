@@ -1,6 +1,5 @@
 ﻿within DynTherM.Systems.Aircraft.Subsystems;
 model CabinWall "Simplified model of cabin wall separating cabin and cockpit"
-  // Hp: same structure and materials as cabin floor
 
   outer DynTherM.Components.Environment environment "Environmental properties";
   parameter Modelica.Units.SI.Temperature Tstart=300 "Temperature start value"
@@ -80,5 +79,8 @@ equation
           fillColor={215,215,215},
           fillPattern=FillPattern.Forward,
           textString="WALL")}),                                  Diagram(
-        coordinateSystem(preserveAspectRatio=false)));
+        coordinateSystem(preserveAspectRatio=false)),
+    Documentation(info="<html>
+<p>Hp:&nbsp;same&nbsp;structure&nbsp;and&nbsp;materials&nbsp;as&nbsp;cabin&nbsp;floor.</p>
+</html>"));
 end CabinWall;

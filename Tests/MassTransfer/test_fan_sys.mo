@@ -55,7 +55,7 @@ model test_fan_sys "Simple test of component simpleFan"
         extent={{-12,-12},{12,12}},
         rotation=-90,
         origin={0,92})));
-  Components.MassTransfer.simpleFan simpleFan(
+  Components.MassTransfer.Fan simpleFan(
     eta_is=0.7,
     eta_m=0.95,
     omega_nom(displayUnit="rpm") = 314.15926535898,

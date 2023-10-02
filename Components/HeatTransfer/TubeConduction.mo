@@ -1,5 +1,5 @@
 within DynTherM.Components.HeatTransfer;
-model TubeConduction "0D Dynamic model of conduction in a hollow cylinder"
+model TubeConduction "Dynamic model of conduction in a hollow cylinder"
   replaceable model Mat=DynTherM.Materials.Aluminium constrainedby
     DynTherM.Materials.Properties "Material choice" annotation (choicesAllMatching=true);
   parameter Real coeff "Fraction of cylinder with active heat transfer";

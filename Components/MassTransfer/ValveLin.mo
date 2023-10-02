@@ -1,5 +1,5 @@
 within DynTherM.Components.MassTransfer;
-model ValveLin "Valve for gas flows with linear pressure drop"
+model ValveLin "Valve with linear pressure drop"
   replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
   parameter DynTherM.CustomUnits.HydraulicConductance Kv

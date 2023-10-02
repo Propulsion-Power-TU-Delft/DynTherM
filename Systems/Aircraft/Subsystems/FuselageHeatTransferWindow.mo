@@ -117,8 +117,8 @@ equation
   connect(solarRadiation.inlet, cabinWindow.irradianceExt) annotation (Line(
         points={{-20,59.6},{-54,59.6},{-54,10.3333},{-54.4,10.3333}}, color={191,
           0,0}));
-  connect(heatTransmitted, cabinWindow.heatTransmitted) annotation (Line(points=
-         {{-54,-100},{-54.4,-100},{-54.4,-10.1111}}, color={191,0,0}));
+  connect(heatTransmitted, cabinWindow.heatTransmitted) annotation (Line(points={{-54,
+          -100},{-54.4,-100},{-54.4,-10.1111}},      color={191,0,0}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Ellipse(
           extent={{-100,-180},{100,20}},
