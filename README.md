@@ -20,20 +20,20 @@ A Modelica library for the Dynamic simulation of Thermal Management systems.
 ### Pre-requisites
 ##### [Modelica 4.0](https://www.modelica.org/)
 ##### [Dymola 2022](https://www.3ds.com/products-services/catia/products/dymola/) (not tested with OpenModelica)
-##### [Python 3.9](https://python.org)
-##### [NumPy](https://numpy.org)
+##### [Python 3.9](https://python.org) (optional, only for Python - Dymola interface)
+##### [NumPy](https://numpy.org) (optional, only for Python - Dymola interface)
 ```
 sudo pip install numpy
 ```
-##### [MatPlotLib](https://matplotlib.org)
+##### [MatPlotLib](https://matplotlib.org) (optional, only for Python - Dymola interface)
 ```
 sudo pip install matplotlib
 ```
-##### [pandas](https://pandas.pydata.org/)
+##### [pandas](https://pandas.pydata.org/) (optional, only for Python - Dymola interface)
 ```
 sudo pip install pandas
 ```
-##### [tqdm](https://pypi.org/project/tqdm/)
+##### [tqdm](https://pypi.org/project/tqdm/) (optional, only for Python - Dymola interface)
 ```
 sudo pip install tqdm
 ```
