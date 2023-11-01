@@ -5,11 +5,6 @@
 ### Description
 
 A Modelica library for the Dynamic simulation of Thermal Management systems.
-The following applications are currently covered:
-1. Aircraft fuselage model (tested and validated with proprietary industrial data)
-2. Helicopter cabin model (developed, but not extensively tested)
-3. Hydrogen tank model (developed, but not extensively tested)
-4. Battery pack model (initial development phase)
 
 ---
 
@@ -25,20 +20,20 @@ The following applications are currently covered:
 ### Pre-requisites
 ##### [Modelica 4.0](https://www.modelica.org/)
 ##### [Dymola 2022](https://www.3ds.com/products-services/catia/products/dymola/) (not tested with OpenModelica)
-##### [Python 3.9](https://python.org)
-##### [NumPy](https://numpy.org)
+##### [Python 3.9](https://python.org) (optional, only for Python - Dymola interface)
+##### [NumPy](https://numpy.org) (optional, only for Python - Dymola interface)
 ```
 sudo pip install numpy
 ```
-##### [MatPlotLib](https://matplotlib.org)
+##### [MatPlotLib](https://matplotlib.org) (optional, only for Python - Dymola interface)
 ```
 sudo pip install matplotlib
 ```
-##### [pandas](https://pandas.pydata.org/)
+##### [pandas](https://pandas.pydata.org/) (optional, only for Python - Dymola interface)
 ```
 sudo pip install pandas
 ```
-##### [tqdm](https://pypi.org/project/tqdm/)
+##### [tqdm](https://pypi.org/project/tqdm/) (optional, only for Python - Dymola interface)
 ```
 sudo pip install tqdm
 ```
@@ -47,24 +42,28 @@ sudo pip install tqdm
 ---
 
 ### Citations
+A. Giuffré, P. Colonna, and C. De Servi. "Dynamic Thermal Model of Passenger Aircraft for the Estimation of the Cabin Cooling and Heating Requirements", Applied Thermal Engineering, 2023 (article under review).
 
 ---
 
 ### Setting Python - Dymola interface
-The following instructions are tested for Python 3.7 and Dymola 2020, assuming the Dymola installation folder to be the standard one.
 
-1. Add to Path (environment variable): C:\\Program Files\\Dymola 2020\\bin64\\Dymola.exe
+Disclaimer: the Python scripts are not released open-source yet, since they still need to be cleaned and extensively tested.
 
-2. Create PYTHONPATH (environment variable), if not existing yet, and add: C:\Program Files\Dymola 2020\Modelica\Library\python_interface\dymola.egg
+The following instructions are tested for Python 3.7+ and Dymola 2022, assuming the Dymola installation folder to be the standard one.
 
-3. Set package_dir in main.py as "path-to-package.mo (inside thermalmanagement)" according to your system directory; set model_dir accordingly
+1. Add to Path (environment variable): C:\\Program Files\\Dymola 2022\\bin64\\Dymola.exe
 
-4. Download SMARTS from NREL website and install it in the thermalmanagement root folder
+2. Create PYTHONPATH (environment variable), if not existing yet, and add: C:\Program Files\Dymola 2022\Modelica\Library\python_interface\dymola.egg
+
+3. Set package_dir in main.py as "path-to-package.mo (inside DynTherM)" according to your system directory; set model_dir accordingly
+
+4. Download SMARTS from NREL website and install it in the DynTherM root folder
 
     Upon completion of the previous steps, you should be able to run main.py from command line or python IDLE (remember to open the Dymola app before running main.py).
     The next step is only required to run main.py from PyCharm.
 
-5. Open PyCharm and go to File/Settings/Project Interpreter. At the top right, select show all, show paths for the selected interpreter and add: C:\Program Files\Dymola 2020\Modelica\Library\python_interface/dymola.egg
+5. Open PyCharm and go to File/Settings/Project Interpreter. At the top right, select show all, show paths for the selected interpreter and add: C:\Program Files\Dymola 2022\Modelica\Library\python_interface/dymola.egg
     
 ---
 
@@ -73,5 +72,5 @@ The following instructions are tested for Python 3.7 and Dymola 2020, assuming t
   
 2. Open and run one of the models in package Examples.mo
 
-3. Analyze the results and check the sub-models in Components.mo
+3. Analyze the results
 
