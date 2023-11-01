@@ -1,5 +1,5 @@
 within DynTherM.Components.MassTransfer;
-model Mixer "Mixer of two streams with adiabatic walls (no heat transfer)"
+model Mixer "Mixer of two streams with heat and mass transfer"
   replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
 
@@ -39,6 +39,9 @@ model Mixer "Mixer of two streams with adiabatic walls (no heat transfer)"
           Modelica.Constants.inf else 0)) annotation (Placement(
         transformation(extent={{-120,20},{-80,60}}, rotation=0),
         iconTransformation(extent={{-90,30},{-70,50}})));
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a thermalPort annotation (Placement(transformation(extent={{-18,62},
+            {18,98}}),
+        iconTransformation(extent={{-10,80},{10,100}})));
 equation
   state = Medium.setState_pTX(P, T, X);
 
@@ -48,8 +51,10 @@ equation
   der(M) = inlet1.m_flow + inlet2.m_flow + outlet.m_flow "Mass balance";
   der(E) = inlet1.m_flow*actualStream(inlet1.h_outflow) +
     inlet2.m_flow*actualStream(inlet2.h_outflow) +
-    outlet.m_flow*actualStream(outlet.h_outflow) "Energy balance";
-  for j in 1:2 loop
+    outlet.m_flow*actualStream(outlet.h_outflow) +
+    thermalPort.Q_flow "Energy balance";
+
+  for j in 1:Medium.nX loop
     M*der(X[j]) = inlet1.m_flow*(actualStream(inlet1.Xi_outflow[j]) - X[j]) +
       inlet2.m_flow*(actualStream(inlet2.Xi_outflow[j]) - X[j]) +
       outlet.m_flow*(actualStream(outlet.Xi_outflow[j]) - X[j])
@@ -66,6 +71,7 @@ equation
   outlet.P = P;
   outlet.h_outflow = Medium.specificEnthalpy(state);
   outlet.Xi_outflow = X;
+  thermalPort.T = T;
 
   Tr = noEvent(M/max(abs(-outlet.m_flow), Modelica.Constants.eps))
     "Residence time";
@@ -89,7 +95,7 @@ initial equation
     if not noInitialTemperature then
       der(T) = 0;
     end if;
-    der(X) = zeros(2);
+    der(X) = zeros(Medium.nX);
   else
     assert(false, "Unsupported initialisation option");
   end if;

@@ -64,6 +64,7 @@ model RectangularPipe "Model of pipe with rectangular cross-section"
   DPC friction;
   GEO geometry;
 
+  DynTherM.CustomUnits.MassFlux G "Mass flux";
   ReynoldsNumber Re(start=Re_start) "Reynolds number";
   PrandtlNumber Pr(start=Pr_start) "Prandtl number";
   Velocity u(start=u_start) "Flow velocity in the pipe";
@@ -100,6 +101,7 @@ equation
 
   // Mass balance
   inlet.m_flow + outlet.m_flow = 0;
+  G = abs(inlet.m_flow)/geometry.A_cs;
 
   // Independent composition mass balances
   inlet.Xi_outflow = inStream(outlet.Xi_outflow);

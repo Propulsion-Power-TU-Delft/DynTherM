@@ -2,9 +2,10 @@ DPCorrelations
 FanCharacteristics
 Fan
 PressureDrop
-Mixer
 ValveLin
+PlenumSimple
 Plenum
+Mixer
 CircularPipe
 RectangularPipe
 PipeGeometry

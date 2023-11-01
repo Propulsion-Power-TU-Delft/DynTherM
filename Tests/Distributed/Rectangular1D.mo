@@ -1,6 +1,6 @@
 within DynTherM.Tests.Distributed;
 model Rectangular1D
-  package Refrigerant = DynTherM.Media.IncompressibleTableBased.MEG(X=0.1)
+  package Refrigerant = Modelica.Media.Water.StandardWater
     "Refrigerant";
 
   parameter Integer N=3 "Number of longitudinal sections in which the tube is discretized";
@@ -63,8 +63,9 @@ model Rectangular1D
     N=N) annotation (Placement(transformation(extent={{-30,-30},{30,30}})));
 
   BoundaryConditions.thermal_flux_distributed thermal_distributed(
-    N=N,
-    phi=phi*ones(N))
+    Nx=N,
+    Ny=1,
+    phi=phi*ones(N, 1))
     annotation (Placement(transformation(extent={{-40,48},{-4,70}})));
 equation
 

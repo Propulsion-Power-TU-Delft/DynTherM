@@ -2,7 +2,7 @@ within DynTherM.BoundaryConditions;
 model thermal_flux "Model to impose heat flux and temperature"
   extends DynTherM.Base.tfin1;
   input Modelica.Units.SI.Temperature T=273.15 "Temperature" annotation (Dialog(tab="Boundary conditions", enable=use_T));
-  input Modelica.Units.SI.HeatFlux phi=1e3 "Heat flux" annotation (Dialog(tab="Boundary conditions", enable=use_Q));
+  input Modelica.Units.SI.HeatFlux phi=1e3 "Heat flux" annotation (Dialog(tab="Boundary conditions", enable=use_phi));
   parameter Boolean use_phi = true "True if heat flux is given"  annotation (Dialog(tab="Boundary conditions"));
   parameter Boolean use_T = false "True if temperature is given" annotation (Dialog(tab="Boundary conditions"));
   parameter Boolean use_in_T = false "Use connector input for the temperature" annotation (Dialog(group="External inputs"), choices(checkBox=true));

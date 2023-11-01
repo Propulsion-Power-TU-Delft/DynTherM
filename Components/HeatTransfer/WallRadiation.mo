@@ -1,10 +1,12 @@
 within DynTherM.Components.HeatTransfer;
 model WallRadiation "Model of incident and emitted thermal radiation"
 
-  replaceable model Material=DynTherM.Materials.Paints.WhitePaint
+  outer DynTherM.Components.Environment environment "Environmental properties";
+  replaceable model Material =
+    DynTherM.Materials.Paints.WhiteCoatings.CatalacWhitePaint
     constrainedby DynTherM.Materials.Paints.BasePaint "Material choice" annotation (choicesAllMatching=true);
   Material Mat;
-  outer DynTherM.Components.Environment environment "Environmental properties";
+
   parameter Modelica.Units.SI.Area A "Heat transfer surface";
   parameter Modelica.Units.SI.Angle csi
     "Tilt angle of the surface wrt horizontal";
@@ -29,7 +31,7 @@ model WallRadiation "Model of incident and emitted thermal radiation"
     annotation (Placement(transformation(extent={{-14,-28},{14,0}})));
 equation
   // Solar irradiative heat flux
-  Q_absorbed = -A*Mat.abs*(outlet.E_tb + outlet.E_td + outlet.E_tr);
+  Q_absorbed + A*Mat.abs*(outlet.E_tb + outlet.E_td + outlet.E_tr) = 0;
 
   // Long-wave (infrared) radiative heat flux
   F_sky = (1 + cos(csi))/2;

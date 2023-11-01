@@ -1,34 +1,33 @@
 within DynTherM.Systems.Aircraft;
 model PassengerAircraft "Model of a passenger aircraft"
 
-  import ThermalManagement = DynTherM;
   replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
-  outer ThermalManagement.Components.Environment environment
+  outer DynTherM.Components.Environment environment
     "Environmental properties";
 
   replaceable model HTC_int_upper =
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
     constrainedby
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
     annotation (choicesAllMatching=true);
 
   replaceable model HTC_int_lower =
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
     constrainedby
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
     annotation (choicesAllMatching=true);
 
   replaceable model HTC_ext_upper =
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassExternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal
     constrainedby
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassExternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal
     annotation (choicesAllMatching=true);
 
   replaceable model HTC_ext_lower =
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassExternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal
     constrainedby
-    ThermalManagement.Components.HeatTransfer.HTCorrelations.BaseClassExternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal
     annotation (choicesAllMatching=true);
 
   parameter Medium.MassFraction X_ECS[Medium.nX]=Medium.reference_X "Mass fractions";
@@ -175,11 +174,11 @@ model PassengerAircraft "Model of a passenger aircraft"
   parameter Modelica.Units.SI.VolumeFlowRate volFlow_nom
     "Fan: nominal volumetric flow rate" annotation (Dialog(tab="Air distribution"));
   parameter Modelica.Units.SI.SpecificEnergy Head_nom "Fan: nominal head" annotation (Dialog(tab="Air distribution"));
-  parameter ThermalManagement.CustomUnits.HydraulicConductance Kv
+  parameter DynTherM.CustomUnits.HydraulicConductance Kv
     "Outflow valve: hydraulic conductance" annotation (Dialog(tab="Air distribution"));
-  parameter ThermalManagement.CustomUnits.HydraulicResistance R_HEPA
+  parameter DynTherM.CustomUnits.HydraulicResistance R_HEPA
     "Filter: hydraulic Resistance" annotation (Dialog(tab="Air distribution"));
-  parameter ThermalManagement.CustomUnits.HydraulicResistance R_dado
+  parameter DynTherM.CustomUnits.HydraulicResistance R_dado
     "Dado panel: hydraulic Resistance" annotation (Dialog(tab="Air distribution"));
 
   parameter Modelica.Units.SI.Temperature Tstart_fuselage=313.15
@@ -274,7 +273,7 @@ model PassengerAircraft "Model of a passenger aircraft"
     annotation (Placement(transformation(extent={{10,-10},{-10,10}},
         rotation=-90,
         origin={-152,-34})));
-  ThermalManagement.Components.MassTransfer.Fan recirculationFan(
+  DynTherM.Components.MassTransfer.Fan recirculationFan(
     eta_is=eta_is,
     eta_m=eta_m,
     omega_nom(displayUnit="rpm") = omega_nom,
@@ -313,7 +312,7 @@ model PassengerAircraft "Model of a passenger aircraft"
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={70,50})));
-  Components.MassTransfer.PressureDrop HEPAFilter(option=ThermalManagement.Choices.PDropOpt.linear, R=R_HEPA)
+  Components.MassTransfer.PressureDrop HEPAFilter(option=DynTherM.Choices.PDropOpt.linear, R=R_HEPA)
              annotation (Placement(transformation(
         extent={{12,10},{-12,-10}},
         rotation=0,
@@ -341,7 +340,7 @@ model PassengerAircraft "Model of a passenger aircraft"
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={90,0})));
-  ThermalManagement.Systems.Aircraft.Subsystems.CargoBay cargo(
+  DynTherM.Systems.Aircraft.Subsystems.CargoBay cargo(
     redeclare model HTC_int=HTC_int_lower,
     redeclare model HTC_ext=HTC_ext_lower,
     Q_int=0,
@@ -367,7 +366,7 @@ model PassengerAircraft "Model of a passenger aircraft"
     noInitialPressure=noInitialPressure_cargo,
     noInitialTemperature=noInitialTemperature_cargo)
     annotation (Placement(transformation(extent={{42,-54},{-2,-10}})));
-  ThermalManagement.Systems.Aircraft.Subsystems.Cockpit cockpit(
+  DynTherM.Systems.Aircraft.Subsystems.Cockpit cockpit(
     redeclare model HTC_int=HTC_int_upper,
     redeclare model HTC_ext=HTC_ext_upper,
     N_occupants={0,0,N_pilots},
@@ -430,26 +429,26 @@ model PassengerAircraft "Model of a passenger aircraft"
         iconTransformation(extent={{10,-10},{-10,10}},
         rotation=-90,
         origin={90,50})));
-  ThermalManagement.Sensors.MassflowSensor recirculatedMassflowSensor
+  DynTherM.Sensors.MassflowSensor recirculatedMassflowSensor
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={-40,-98})));
-  ThermalManagement.Systems.Aircraft.Subsystems.CabinWall cabinWall(Tstart=
+  DynTherM.Systems.Aircraft.Subsystems.CabinWall cabinWall(Tstart=
         Tstart_wall, A=A_wall) annotation (Placement(transformation(
         extent={{-16,-12},{16,12}},
         rotation=-90,
         origin={-30,46})));
-  ThermalManagement.Systems.Aircraft.Subsystems.CabinFloor cabinFloor(Tstart=
+  DynTherM.Systems.Aircraft.Subsystems.CabinFloor cabinFloor(Tstart=
         Tstart_floor, A=A_floor_cargo)
     annotation (Placement(transformation(extent={{16,-4},{50,18}})));
-  ThermalManagement.Components.MassTransfer.PressureDrop dadoPanelCockpit(option=
-        ThermalManagement.Choices.PDropOpt.linear, R=R_dado) annotation (
+  DynTherM.Components.MassTransfer.PressureDrop dadoPanelCockpit(option=
+        DynTherM.Choices.PDropOpt.linear, R=R_dado) annotation (
       Placement(transformation(
         extent={{12,10},{-12,-10}},
         rotation=90,
         origin={-60,8})));
-  ThermalManagement.Components.MassTransfer.CircularPipe distributionPipeCabin(
+  DynTherM.Components.MassTransfer.CircularPipe distributionPipeCabin(
     DP_opt=DynTherM.Choices.PDropOpt.correlation,
     L=L_pipe_cab,
     D=D_pipe_cab,
@@ -463,7 +462,7 @@ model PassengerAircraft "Model of a passenger aircraft"
         extent={{10,-10},{-10,10}},
         rotation=90,
         origin={90,-64})));
-  ThermalManagement.BoundaryConditions.flow_source cockpitTrimFlow(
+  DynTherM.BoundaryConditions.flow_source cockpitTrimFlow(
     X_nom=X_ECS,
     use_in_massFlow=true,
     use_in_T=true) annotation (Placement(transformation(
@@ -478,7 +477,7 @@ model PassengerAircraft "Model of a passenger aircraft"
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={-10,50})));
-  ThermalManagement.Components.MassTransfer.CircularPipe
+  DynTherM.Components.MassTransfer.CircularPipe
     distributionPipeCockpit(
     DP_opt=DynTherM.Choices.PDropOpt.correlation,
     L=L_pipe_fd,
@@ -488,7 +487,7 @@ model PassengerAircraft "Model of a passenger aircraft"
         extent={{14,14},{-14,-14}},
         rotation=-90,
         origin={-140,14})));
-  ThermalManagement.Systems.Aircraft.Subsystems.CargoBay EEbay(
+  DynTherM.Systems.Aircraft.Subsystems.CargoBay EEbay(
     redeclare model HTC_int = HTC_int_lower,
     redeclare model HTC_ext = HTC_ext_lower,
     Q_int=Q_avionics,
@@ -514,10 +513,10 @@ model PassengerAircraft "Model of a passenger aircraft"
     noInitialPressure=noInitialPressure_cargo,
     noInitialTemperature=noInitialTemperature_cargo)
     annotation (Placement(transformation(extent={{-108,-54},{-64,-10}})));
-  ThermalManagement.Systems.Aircraft.Subsystems.CabinFloor cockpitFloor(Tstart=
+  DynTherM.Systems.Aircraft.Subsystems.CabinFloor cockpitFloor(Tstart=
         Tstart_floor, A=A_floor_cockpit)
     annotation (Placement(transformation(extent={{-116,-4},{-82,18}})));
-  ThermalManagement.BoundaryConditions.flow_source cabinTrimFlow(
+  DynTherM.BoundaryConditions.flow_source cabinTrimFlow(
     X_nom=X_ECS,
     use_in_massFlow=true,
     use_in_T=true) annotation (Placement(transformation(
@@ -540,20 +539,20 @@ model PassengerAircraft "Model of a passenger aircraft"
         extent={{10,-10},{-10,10}},
         rotation=270,
         origin={70,-64})));
-  ThermalManagement.Components.MassTransfer.PressureDrop dadoPanelCabin(option=
-        ThermalManagement.Choices.PDropOpt.linear, R=R_dado) annotation (
+  DynTherM.Components.MassTransfer.PressureDrop dadoPanelCabin(option=
+        DynTherM.Choices.PDropOpt.linear, R=R_dado) annotation (
       Placement(transformation(
         extent={{12,10},{-12,-10}},
         rotation=90,
         origin={-6,10})));
-  ThermalManagement.Components.MassTransfer.Mixer mixingManifoldOutlet(
+  DynTherM.Components.MassTransfer.Mixer mixingManifoldOutlet(
     V=V_mixingManifold/10,
     P_start=Pstart_mixingManifold,
     T_start=Tstart_mixingManifold) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=-90,
         origin={-20,-70})));
-  ThermalManagement.Systems.Aircraft.Subsystems.PassengerCabin cabin(
+  DynTherM.Systems.Aircraft.Subsystems.PassengerCabin cabin(
     redeclare model HTC_int = HTC_int_upper,
     redeclare model HTC_ext = HTC_ext_upper,
     N_occupants={N_pax,N_crew,0},

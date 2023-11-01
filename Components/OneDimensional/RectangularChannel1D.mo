@@ -58,6 +58,7 @@ model RectangularChannel1D "Rectangular channel implementing 1D spatial discreti
   Mass m_fluid "Mass of fluid";
   Mass m_solid "Mass of solid walls";
   Pressure dP "Pressure drop";
+  HeatFlowRate Q "Heat flow rate entering the rectangular channel";
 
   DynTherM.CustomInterfaces.FluidPort_A inlet(
     redeclare package Medium = Medium,
@@ -78,16 +79,20 @@ model RectangularChannel1D "Rectangular channel implementing 1D spatial discreti
             {106,6}},       rotation=0), iconTransformation(extent={{90,-10},{110,
             10}})));
 
-  CustomInterfaces.DistributedHeatFluxPort_B solid_surface_north(N=N) annotation (
+  CustomInterfaces.DistributedHeatFluxPort_B solid_surface_north(Nx=N, Ny=1)
+                                                                      annotation (
       Placement(transformation(extent={{-90,16},{-60,76}}), iconTransformation(
           extent={{-90,16},{-60,76}})));
-  CustomInterfaces.DistributedHeatFluxPort_B solid_surface_east(N=N) annotation (
+  CustomInterfaces.DistributedHeatFluxPort_B solid_surface_east(Nx=N, Ny=1)
+                                                                     annotation (
       Placement(transformation(extent={{-40,16},{-10,76}}),  iconTransformation(
           extent={{-40,16},{-10,76}})));
-  CustomInterfaces.DistributedHeatFluxPort_B solid_surface_south(N=N) annotation (
+  CustomInterfaces.DistributedHeatFluxPort_B solid_surface_south(Nx=N, Ny=1)
+                                                                      annotation (
       Placement(transformation(extent={{10,16},{40,76}}),    iconTransformation(
           extent={{10,16},{40,76}})));
-  CustomInterfaces.DistributedHeatFluxPort_B solid_surface_west(N=N) annotation (
+  CustomInterfaces.DistributedHeatFluxPort_B solid_surface_west(Nx=N, Ny=1)
+                                                                     annotation (
       Placement(transformation(extent={{60,16},{90,76}}),    iconTransformation(
           extent={{60,16},{90,76}})));
 equation
@@ -95,20 +100,21 @@ equation
   m_fluid = sum(cv.m_fluid);
   m_solid = sum(cv.m_solid);
   dP = sum(cv.fluid.dP);
+  Q = sum(cv.Q);
 
   // thermal connections
   for i in 1:N loop
     // north
-    connect(solid_surface_north.ports[i], cv[i].solid_surface_north);
+    connect(solid_surface_north.ports[i,1], cv[i].solid_surface_north);
 
     // east
-    connect(solid_surface_east.ports[i], cv[i].solid_surface_east);
+    connect(solid_surface_east.ports[i,1], cv[i].solid_surface_east);
 
     // south
-    connect(solid_surface_south.ports[i], cv[i].solid_surface_south);
+    connect(solid_surface_south.ports[i,1], cv[i].solid_surface_south);
 
     // west
-    connect(solid_surface_west.ports[i], cv[i].solid_surface_west);
+    connect(solid_surface_west.ports[i,1], cv[i].solid_surface_west);
 
   end for;
 
@@ -149,5 +155,7 @@ equation
           points={{60,20},{60,-20}},
           color={0,0,0},
           pattern=LinePattern.Dash)}),         Diagram(coordinateSystem(
-          preserveAspectRatio=false)));
+          preserveAspectRatio=false)),
+    Documentation(info="<html>
+</html>"));
 end RectangularChannel1D;

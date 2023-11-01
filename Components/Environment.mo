@@ -3,113 +3,72 @@ model Environment "Environmental properties (moist air)"
 
   package Medium = Modelica.Media.Air.MoistAir;
 
-  parameter Real Mach_inf=0 "Aircraft/rotorcraft Mach number";
-  parameter Modelica.Units.SI.Length Altitude=0
-    "Aircraft altitude with respect to sea level";
+  // Climatic data
+  input Real Mach_inf=0 "Free-stream Mach number" annotation (Dialog(enable=true));
+  parameter Length altitude=0 " Altitude with respect to sea level";
   parameter Real ISA_plus=0 "Temperature difference with respect to ISA standard value at given altitude";
   parameter Real phi_amb=0.5 "Ambient relative humidity";
   parameter Real phi_amb_ground=0.5 "Ambient relative humidity on ground";
-  parameter Modelica.Units.SI.Temperature T_ground=303.15
-    "Temperature of the ground";
-  parameter Modelica.Units.SI.Angle lat=0.58712876 "Latitude" annotation (
-      Dialog(tab="Geographical location (default: Atlanta, GA, USA)"));
-  parameter Modelica.Units.SI.Angle long=-1.47358149 "Longitude" annotation (
-      Dialog(tab="Geographical location (default: Atlanta, GA, USA)"));
-  parameter Modelica.Units.SI.Angle long_ref=-1.30899694
+  parameter Temperature T_ground=303.15 "Temperature of the ground";
+  parameter Pressure P_amb_di=101325 "Fixed value of ambient pressure" annotation (Dialog(enable=use_P_amb));
+  parameter Temperature T_amb_di=288.15 "Fixed value of ambient temperature" annotation (Dialog(enable=use_T_amb));
+
+  // Geographical data
+  input Angle lat=0.58712876 "Latitude" annotation (Dialog(tab="Geographical location (default: Atlanta, GA, USA)"), enable=true);
+  input Angle long=-1.47358149 "Longitude" annotation (Dialog(tab="Geographical location (default: Atlanta, GA, USA)"), enable=true);
+  parameter Angle long_ref=-1.30899694
     "Longitude of the time-zone reference meridian" annotation (Dialog(tab=
           "Geographical location (default: Atlanta, GA, USA)"));
   parameter Integer Month=7 "Month of the year (1-12)";
   parameter Integer Day=199 "Day of the year (1-365)";
   parameter Integer Hour=12 "Hour of the day (0-23)";
   parameter Integer Minute=0 "Minutes (0-59)";
-  parameter Modelica.Units.SI.Pressure P_amb_di=101325 "Fixed value of ambient pressure" annotation (Dialog(enable=use_P_amb));
-  parameter Modelica.Units.SI.Temperature T_amb_di=288.15 "Fixed value of ambient temperature" annotation (Dialog(enable=use_T_amb));
   parameter Real tau_b[12]=
     {0.334, 0.324, 0.355, 0.383, 0.379, 0.406, 0.440, 0.427, 0.388, 0.358, 0.354, 0.335} "Beam optical depth" annotation (Dialog(tab="Geographical location (default: Atlanta, GA, USA)"));
   parameter Real tau_d[12]=
     {2.614, 2.580, 2.474, 2.328, 2.324, 2.270, 2.202, 2.269, 2.428, 2.514, 2.523, 2.618} "Beam diffuse depth" annotation (Dialog(tab="Geographical location (default: Atlanta, GA, USA)"));
-  parameter Boolean use_P_amb = false "Use fixed value for the ambient pressure" annotation (Dialog(group="External inputs"), choices(checkBox=true));
-  parameter Boolean use_T_amb = false "Use fixed value for the ambient temperature" annotation (Dialog(group="External inputs"), choices(checkBox=true));
-  parameter Boolean use_in_Long = false "Use connector input for the longitude" annotation (Dialog(group="External inputs"), choices(checkBox=true));
-  parameter Boolean use_in_Lat = false "Use connector input for the latitude" annotation (Dialog(group="External inputs"), choices(checkBox=true));
-  parameter Modelica.Units.SI.Angle psi=1.0471975511965976
+
+  // Options
+  parameter Boolean use_P_amb = false "Use fixed value for the ambient pressure" annotation (Dialog(tab="Simulation options"), choices(checkBox=true));
+  parameter Boolean use_T_amb = false "Use fixed value for the ambient temperature" annotation (Dialog(tab="Simulation options"), choices(checkBox=true));
+  parameter Angle psi=1.0471975511965976
     "Azimuth angle wrt south - fuselage main axis";
   parameter Boolean use_ext_sw=false
-    "Bypass solar radiation calculations and get E_dir, E_diff, E_refl, theta from an external sw" annotation (Dialog(group="External inputs"), choices(checkBox=true));
+    "Bypass solar radiation calculations and get E_dir, E_diff, E_refl, theta from an external software" annotation (Dialog(tab="Simulation options"), choices(checkBox=true));
   parameter Boolean allowFlowReversal=true
     "= false to restrict to design flow direction (inlet -> outlet)" annotation (Dialog(tab="Simulation options"));
-  parameter DynTherM.Choices.InitOpt initOpt=DynTherM.Choices.InitOpt.steadyState
-    annotation (Dialog(tab="Simulation options"));
+  parameter DynTherM.Choices.InitOpt initOpt=DynTherM.Choices.InitOpt.steadyState "Initialization type" annotation (Dialog(tab="Simulation options"));
+
+  // Constants
   constant Real sigma( final quantity="Stefan-Boltzmann constant", final unit="W/(m2.K4)")=5.67e-8;
-  constant Modelica.Units.SI.Acceleration g=9.80665
-    "Gravitational acceleration";
+  constant Acceleration g=9.80665 "Gravitational acceleration";
   constant Real n_air=1.000293 "Air refractive index";
   constant Real pi=Modelica.Constants.pi;
-
-  final parameter Real R=287.058 "Specific gas constant";
-  final parameter Modelica.Units.SI.Pressure P0=101325
-    "Ambient pressure at sea-level [Pa]";
-  final parameter Modelica.Units.SI.Temperature T0=288.15
-    "Ambient temperature at sea-level [K]";
-  final parameter Modelica.Units.SI.Area S_hb=1.75
-    "Average human body surface area";
-  final parameter Modelica.Units.SI.DensityOfHeatFlowRate M_hb[3]={60,115,70}
+  constant Real R=287.058 "Specific gas constant";
+  constant Pressure P0=101325 "Ambient pressure at sea-level [Pa]";
+  constant Temperature T0=288.15 "Ambient temperature at sea-level [K]";
+  constant Area S_hb=1.75 "Average human body surface area";
+  constant DensityOfHeatFlowRate M_hb[3]={60,115,70}
     "Rate of metabolic heat production of: passengers, cabin crew, pilots";
 
-  Modelica.Units.SI.Pressure Pv "Water vapour pressure";
-  Modelica.Units.SI.Emissivity eps_sky "Clear sky emmisivity";
-  Modelica.Units.SI.Temperature T_sky "Sky temperature";
-  Modelica.Units.SI.Temperature T_ISA "Ambient temperature - ISA conditions";
-  Modelica.Units.SI.Temperature T_amb "Ambient temperature";
-  Modelica.Units.SI.Temperature T_ground_corr
-    "Temperature of the ground corrected for altitude";
-  Modelica.Units.SI.Pressure P_amb "Ambient pressure";
-  Modelica.Units.SI.Pressure P_cab_target
-    "Target cabin pressure - fixed by standard CFR 25.841";
-  Modelica.Units.SI.MassFraction X_water "Water content in ambient air";
-  Modelica.Units.SI.MassFraction X_air "Dry air content in ambient air";
-  Modelica.Units.SI.MassFraction X_amb[2] "Ambient air mass fractions";
+  Pressure Pv "Water vapour pressure";
+  Emissivity eps_sky "Clear sky emmisivity";
+  Temperature T_sky "Sky temperature";
+  Temperature T_ISA "Ambient temperature - ISA conditions";
+  Temperature T_amb "Ambient temperature";
+  Temperature T_ground_corr "Temperature of the ground corrected for altitude";
+  Pressure P_amb "Ambient pressure";
+  Pressure P_cab_target "Target cabin pressure - fixed by standard CFR 25.841";
+  MassFraction X_water "Water content in ambient air";
+  MassFraction X_air "Dry air content in ambient air";
+  MassFraction X_amb[2] "Ambient air mass fractions";
   Medium.ThermodynamicState state_amb "Ambient thermodynamic state";
 
-  Modelica.Blocks.Interfaces.RealInput in_Long if use_in_Long annotation (Placement(
-        transformation(
-        origin={-60,64},
-        extent={{-10,-10},{10,10}},
-        rotation=270), iconTransformation(
-        extent={{-17,-17},{17,17}},
-        rotation=0,
-        origin={-99,-21})));
-  Modelica.Blocks.Interfaces.RealInput in_Lat if use_in_Lat annotation (Placement(
-        transformation(
-        origin={0,90},
-        extent={{-10,-10},{10,10}},
-        rotation=270), iconTransformation(
-        extent={{-16,-16},{16,16}},
-        rotation=0,
-        origin={-100,-80})));
 
 protected
-  Modelica.Blocks.Interfaces.RealInput in_Long0 annotation (Placement(
-        transformation(
-        origin={-40,64},
-        extent={{-10,-10},{10,10}},
-        rotation=270), iconTransformation(
-        extent={{-10,-10},{10,10}},
-        rotation=270,
-        origin={0,60})));
-  Modelica.Blocks.Interfaces.RealInput in_Lat0 annotation (Placement(
-        transformation(
-        origin={-20,90},
-        extent={{-10,-10},{10,10}},
-        rotation=270), iconTransformation(
-        extent={{-10,-10},{10,10}},
-        rotation=0,
-        origin={-50,0})));
-
-protected
-  Modelica.Units.SI.Pressure Pv_ground "Water vapour pressure on ground";
-  Modelica.Units.SI.Emissivity eps_sky_ground "Clear sky emmisivity on ground";
-  Modelica.Units.SI.Temperature T_sky_ground "Sky temperature on ground";
+  Pressure Pv_ground "Water vapour pressure on ground";
+  Emissivity eps_sky_ground "Clear sky emmisivity on ground";
+  Temperature T_sky_ground "Sky temperature on ground";
 
 equation
   state_amb = Medium.setState_pTX(P_amb, T_amb, X_amb);
@@ -118,8 +77,8 @@ equation
   X_amb = {X_water, X_air};
 
   // Compute ambient temperature and pressure [1]
-  if (Altitude <= 11000) then
-    T_ISA = T0 - Altitude/1000*6.5;
+  if (altitude <= 11000) then
+    T_ISA = T0 - altitude/1000*6.5;
 
     if use_P_amb then
       P_amb = P_amb_di;
@@ -127,18 +86,18 @@ equation
       P_amb = P0*(T_ISA/T0)^(g*1000/(R*6.5));
     end if;
 
-  elseif (Altitude > 11000) and (Altitude <= 20000) then
+  elseif (altitude > 11000) and (altitude <= 20000) then
     T_ISA = T0 - 11*6.5;
 
     if use_P_amb then
       P_amb = P_amb_di;
     else
       P_amb = P0*(T_ISA/T0)^(g*1000/(R*6.5))*
-        Modelica.Math.exp(-g/(R*T_ISA)*(Altitude - 11000));
+        Modelica.Math.exp(-g/(R*T_ISA)*(altitude - 11000));
     end if;
 
   else
-    assert(false, "Altitude exceeding 20km is unsupported");
+    assert(false, "altitude exceeding 20km is unsupported");
   end if;
 
   if use_T_amb then
@@ -172,7 +131,7 @@ equation
   eps_sky_ground = (T_sky_ground/(T0 + ISA_plus))^4;
 
   // T_ground correction: column of air between aircraft and ground increases with altitude
-  if (Altitude > 0) then
+  if (altitude > 0) then
     T_ground_corr = T_ground - (T_sky_ground - T_sky);
   else
     T_ground_corr = T_ground;
@@ -186,12 +145,6 @@ equation
   else
     P_cab_target = P_amb + 50000;  // 50 kPa of pressurization during normal operation
   end if;
-
-  // Connect protected connectors to public conditional connectors
-  in_Long0 = long;
-  in_Lat0 = lat;
-  connect(in_Long, in_Long0);
-  connect(in_Lat, in_Lat0);
 
   annotation (
     defaultComponentName="environment",

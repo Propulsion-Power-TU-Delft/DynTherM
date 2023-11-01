@@ -75,17 +75,23 @@ model RectangularChannels2D
             38}},
         rotation=-90,
         origin={100,0})));
-  CustomInterfaces.DistributedHeatFluxPort_B solid_surface_north(N=N_cv) annotation (
+  CustomInterfaces.DistributedHeatFluxPort_B solid_surface_north(
+    Nx=N_cv,
+    Ny=N_channels) annotation (
       Placement(transformation(extent={{-60,76},{-20,136}}),iconTransformation(
           extent={{-60,76},{-20,136}})));
-  CustomInterfaces.DistributedHeatFluxPort_B solid_surface_east(N=N_cv) annotation (
+  CustomInterfaces.DistributedHeatFluxPort_B solid_surface_east(
+    Nx=N_cv, Ny=1) annotation (
       Placement(transformation(extent={{20,76},{60,136}}),   iconTransformation(
           extent={{20,76},{60,136}})));
-  CustomInterfaces.DistributedHeatFluxPort_B solid_surface_south(N=N_cv) annotation (
+  CustomInterfaces.DistributedHeatFluxPort_B solid_surface_south(
+    Nx=N_cv,
+    Ny=N_channels) annotation (
       Placement(transformation(extent={{-60,-136},{-20,-76}}),
                                                              iconTransformation(
           extent={{-60,-136},{-20,-76}})));
-  CustomInterfaces.DistributedHeatFluxPort_B solid_surface_west(N=N_cv) annotation (
+  CustomInterfaces.DistributedHeatFluxPort_B solid_surface_west(
+    Nx=N_cv, Ny=1) annotation (
       Placement(transformation(extent={{20,-136},{60,-76}}), iconTransformation(
           extent={{20,-136},{60,-76}})));
 
@@ -106,8 +112,10 @@ equation
   connect(solid_surface_east, channel[N_channels].solid_surface_east);
 
   for i in 1:N_channels loop
-    connect(solid_surface_north, channel[i].solid_surface_north);
-    connect(solid_surface_south, channel[i].solid_surface_south);
+    for j in 1:N_cv loop
+      connect(solid_surface_north.ports[j,i], channel[i].solid_surface_north.ports[j,1]);
+      connect(solid_surface_south.ports[j,i], channel[i].solid_surface_south.ports[j,1]);
+    end for;
   end for;
 
   // boundary flow connections

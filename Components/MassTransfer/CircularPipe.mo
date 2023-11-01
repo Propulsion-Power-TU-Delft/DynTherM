@@ -63,6 +63,7 @@ model CircularPipe "Model of pipe with circular cross-section"
   DPC friction;
   GEO geometry;
 
+  DynTherM.CustomUnits.MassFlux G "Mass flux";
   Modelica.Units.SI.ReynoldsNumber Re(start=Re_start) "Reynolds number";
   Modelica.Units.SI.PrandtlNumber Pr(start=Pr_start) "Prandtl number";
   Modelica.Units.SI.Velocity u(start=u_start) "Flow velocity in the pipe";
@@ -98,6 +99,7 @@ equation
 
   // Mass balance
   inlet.m_flow + outlet.m_flow = 0;
+  G = abs(inlet.m_flow)/geometry.A_cs;
 
   // Independent composition mass balances
   inlet.Xi_outflow = inStream(outlet.Xi_outflow);

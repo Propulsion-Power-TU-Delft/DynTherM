@@ -8,9 +8,9 @@ model pressure_sink "Pressure sink"
   parameter Boolean allowFlowReversal=environment.allowFlowReversal
     "= true to allow flow reversal, false restricts to design direction";
   parameter Boolean use_ambient=true "Use ambient conditions for the plenum";
-  parameter Modelica.Units.SI.Pressure P_di=101325 "Fixed value of pressure" annotation (Dialog(enable=not use_ambient));
-  parameter Modelica.Units.SI.Temperature T_di=288.15 "Fixed value of temperature" annotation (Dialog(enable=not use_ambient));
-  parameter Medium.MassFraction X_di[Medium.nX]=Medium.reference_X "Fixed value of mass fractions" annotation (Dialog(enable=not use_ambient));
+  input Modelica.Units.SI.Pressure P_di=101325 "Fixed value of pressure" annotation (Dialog(enable=not use_ambient));
+  input Modelica.Units.SI.Temperature T_di=288.15 "Fixed value of temperature" annotation (Dialog(enable=not use_ambient));
+  input Medium.MassFraction X_di[Medium.nX]=Medium.reference_X "Fixed value of mass fractions" annotation (Dialog(enable=not use_ambient));
 
   Medium.ThermodynamicState state_sink "Thermodynamic state of the sink";
 

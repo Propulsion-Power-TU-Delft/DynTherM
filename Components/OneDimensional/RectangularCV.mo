@@ -38,6 +38,7 @@ model RectangularCV
   Mass m_tot "Total mass";
   Mass m_fluid "Mass of fluid";
   Mass m_solid "Mass of solid walls";
+  HeatFlowRate Q "Heat flow rate (positive entering)";
 
   DynTherM.CustomInterfaces.FluidPort_A inlet(
     redeclare package Medium = Medium,
@@ -111,11 +112,11 @@ model RectangularCV
     annotation (Placement(transformation(extent={{60,66},{100,36}})));
   Adaptors.heatFluxToHeatFlow conversion_north(A=W*L)
     annotation (Placement(transformation(extent={{-94,90},{-66,62}})));
-  Adaptors.heatFluxToHeatFlow conversion_east(A=(H + 2*t_east)*L)
+  Adaptors.heatFluxToHeatFlow conversion_east(A=H*L)
     annotation (Placement(transformation(extent={{-44,90},{-16,62}})));
   Adaptors.heatFluxToHeatFlow conversion_south(A=W*L)
     annotation (Placement(transformation(extent={{16,90},{44,62}})));
-  Adaptors.heatFluxToHeatFlow conversion_west(A=(H + 2*t_west)*L)
+  Adaptors.heatFluxToHeatFlow conversion_west(A=H*L)
     annotation (Placement(transformation(extent={{66,90},{94,62}})));
 equation
   V_tot = L*(H + t_north + t_south)*(W + t_east + t_west);
@@ -124,6 +125,7 @@ equation
   m_tot = m_fluid + m_solid;
   m_fluid = fluid.rho*V_fluid;
   m_solid = Mat.rho*V_solid;
+  Q = fluid.thermalPort.Q_flow;
 
   connect(inlet, fluid.inlet)
     annotation (Line(points={{-100,0},{-40,0}}, color={0,0,0}));

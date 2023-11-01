@@ -67,14 +67,15 @@ model CircularChannel1D "Circular channel implementing 1D spatial discretization
             {106,6}},       rotation=0), iconTransformation(extent={{90,-10},{110,
             10}})));
 
-  CustomInterfaces.DistributedHeatPort_B solid_surface(N=N) annotation (
+  CustomInterfaces.DistributedHeatPort_B solid_surface(Nx=N, Ny=1)
+                                                            annotation (
       Placement(transformation(extent={{-40,14},{40,80}}), iconTransformation(
           extent={{-40,14},{40,80}})));
 
 equation
   // thermal connections
   for i in 1:N loop
-    connect(solid_surface.ports[i], fluid_cv[i].solid_surface);
+    connect(solid_surface.ports[i,1], fluid_cv[i].solid_surface);
   end for;
 
   // internal flow connections

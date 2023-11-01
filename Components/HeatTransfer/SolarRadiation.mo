@@ -98,7 +98,7 @@ equation
     m0 = 1/(Modelica.Math.sin(beta) + 0.50572*(6.07995 + beta*180/environment.pi)^(-1.6364)); // Eq 16
 
     // Correction for air mass at low altitude as proportional to pressure ratio G. Aglietti
-    m = m0*(((environment.T0 + environment.ISA_plus)-0.0065*environment.Altitude)/
+    m = m0*(((environment.T0 + environment.ISA_plus)-0.0065*environment.altitude)/
       (environment.T0 + environment.ISA_plus))^5.2561;
     ab = 1.454 - 0.406*environment.tau_b[environment.Month] - 0.268*environment.tau_d[environment.Month] +
       0.021*environment.tau_b[environment.Month]*environment.tau_d[environment.Month];
