@@ -35,17 +35,6 @@ model A320GroundCabin "Aircraft on ground, two temperature zones"
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={90,-90})));
-  inner Components.Environment environment(
-    Mach_inf=0,
-    Altitude=0,
-    ISA_plus=23,
-    phi_amb=0.22,
-    phi_amb_ground=0.22,
-    T_ground(displayUnit="degC") = 323.15,
-    use_ext_sw=true,
-    allowFlowReversal=false,
-    initOpt=DynTherM.Choices.InitOpt.steadyState)
-    annotation (Placement(transformation(extent={{-100,-20},{-66,14}})));
   Systems.Aircraft.AirbusA320 A320(
     redeclare model HTC_int_upper =
         Components.HeatTransfer.HTCorrelations.InternalConvection.Cylinder,
@@ -121,6 +110,19 @@ model A320GroundCabin "Aircraft on ground, two temperature zones"
         extent={{-10,-10},{10,10}},
         rotation=-90,
         origin={-28,50})));
+  inner Components.Environment environment(
+    ISA_plus=0,
+    phi_amb=0.0,
+    phi_amb_ground=0.22,
+    T_ground(displayUnit="degC") = 298.15,
+    use_ext_sw=true,
+    allowFlowReversal=false,
+    initOpt=DynTherM.Choices.InitOpt.steadyState)
+    annotation (Placement(transformation(extent={{-66,-36},{-32,-2}})));
+  Modelica.Blocks.Sources.Constant V_inf(k=0)
+    annotation (Placement(transformation(extent={{-100,-60},{-80,-40}})));
+  Modelica.Blocks.Sources.Constant altitude(k=0)
+    annotation (Placement(transformation(extent={{-100,-20},{-80,0}})));
 equation
   m_fresh_min = 0.25/60*(A320.N_pax + A320.N_crew + A320.N_pilots);
   connect(add_m_rec.y, PID_m_rec.u)
@@ -162,6 +164,10 @@ equation
           {-3.57143,-90},{-3.57143,-17.5}}, color={0,0,127}));
   connect(A320.cabinTemperature, PID_T_cab.u_m) annotation (Line(points={{
           4.71429,-17.5},{4.71429,-90},{70,-90},{70,-6}}, color={0,0,127}));
+  connect(altitude.y, environment.altitude) annotation (Line(points={{-79,-10},
+          {-74,-10},{-74,-25.8},{-66,-25.8}}, color={0,0,127}));
+  connect(V_inf.y, environment.V_inf) annotation (Line(points={{-79,-50},{-74,
+          -50},{-74,-32.6},{-66,-32.6}}, color={0,0,127}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false)),
     Diagram(coordinateSystem(preserveAspectRatio=false)),

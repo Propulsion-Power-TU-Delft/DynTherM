@@ -18,7 +18,7 @@ model EnclosedAirSpace
     use_in_T=false)
     annotation (Placement(transformation(extent={{-20,-70},{10,-50}})));
   inner Components.Environment environment(
-    Mach_inf=0.78,
+    V_inf=0.78,
     Altitude(displayUnit="km") = 11000,
     ISA_plus=0,
     phi_amb=0.2)

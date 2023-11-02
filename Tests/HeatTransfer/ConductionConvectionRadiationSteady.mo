@@ -28,7 +28,7 @@ model ConductionConvectionRadiationSteady
         (ht_fixed=20))
     annotation (Placement(transformation(extent={{20,62},{60,22}})));
   inner Components.Environment environment(
-    Mach_inf=0,
+    V_inf=0,
     Altitude(displayUnit="m") = 2440,
     ISA_plus=5)
     annotation (Placement(transformation(extent={{60,60},{100,100}})));

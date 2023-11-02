@@ -48,17 +48,6 @@ model A320GroundCockpit "Aircraft on ground, two temperature zones"
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={90,-90})));
-  inner Components.Environment environment(
-    Mach_inf=0,
-    Altitude=0,
-    ISA_plus=23,
-    phi_amb=0.22,
-    phi_amb_ground=0.22,
-    T_ground(displayUnit="degC") = 323.15,
-    use_ext_sw=true,
-    allowFlowReversal=false,
-    initOpt=DynTherM.Choices.InitOpt.steadyState)
-    annotation (Placement(transformation(extent={{-100,-20},{-66,14}})));
   Modelica.Blocks.Math.Add add_T(k1=+1, k2=-1) annotation (Placement(
         transformation(
         extent={{10,-10},{-10,10}},
@@ -101,7 +90,7 @@ model A320GroundCockpit "Aircraft on ground, two temperature zones"
     theta_7(displayUnit="rad"),
     theta_8(displayUnit="rad"),
     theta_front(displayUnit="rad"))
-    annotation (Placement(transformation(extent={{-72,-40},{44,50}})));
+    annotation (Placement(transformation(extent={{-72,-48},{44,42}})));
   Modelica.Blocks.Sources.Constant T_trim(k=373.15) annotation (Placement(
         transformation(
         extent={{-10,-10},{10,10}},
@@ -117,6 +106,19 @@ model A320GroundCockpit "Aircraft on ground, two temperature zones"
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-30,-90})));
+  inner Components.Environment environment(
+    ISA_plus=0,
+    phi_amb=0.0,
+    phi_amb_ground=0.22,
+    T_ground(displayUnit="degC") = 298.15,
+    use_ext_sw=true,
+    allowFlowReversal=false,
+    initOpt=DynTherM.Choices.InitOpt.steadyState)
+    annotation (Placement(transformation(extent={{-66,-56},{-32,-22}})));
+  Modelica.Blocks.Sources.Constant V_inf(k=0)
+    annotation (Placement(transformation(extent={{-100,-80},{-80,-60}})));
+  Modelica.Blocks.Sources.Constant altitude(k=0)
+    annotation (Placement(transformation(extent={{-100,-40},{-80,-20}})));
 equation
   m_fresh_min = 0.25/60*(A320.N_pax + A320.N_crew + A320.N_pilots);
   connect(target_P_cab.y, add_P_cab.u1)
@@ -132,29 +134,33 @@ equation
   connect(add_T.y, PID_T.u)
     annotation (Line(points={{84,-19},{84,4},{78,4}}, color={0,0,127}));
   connect(A320.cabinPressure, add_P_cab.u2) annotation (Line(points={{-34.7143,
-          31.25},{-34.7143,30},{-36,30},{-36,34},{-80,34},{-80,78},{-74,78}},
+          23.25},{-34.7143,34},{-80,34},{-80,78},{-74,78}},
                                                color={0,0,127}));
   connect(A320.recirculatedMassflow, add_m_rec.u1) annotation (Line(points={{39.8571,
-          31.25},{39.8571,30},{40,30},{40,34},{80,34},{80,78},{72,78}},
+          23.25},{39.8571,34},{80,34},{80,78},{72,78}},
                                                  color={0,0,127}));
   connect(m_ECS.y, A320.m_ECS) annotation (Line(points={{9,90},{6.71429,90},{
-          6.71429,31.25}},
+          6.71429,23.25}},
                        color={0,0,127}));
-  connect(A320.T_trim, T_trim.y) annotation (Line(points={{-1.57143,31.25},{
-          -4,31.25},{-4,90},{-9,90}},
+  connect(A320.T_trim, T_trim.y) annotation (Line(points={{-1.57143,23.25},{-4,
+          23.25},{-4,90},{-9,90}},
                         color={0,0,127}));
-  connect(A320.T_ECS, PID_T.y) annotation (Line(points={{39.8571,12.5},{39.8571,
+  connect(A320.T_ECS, PID_T.y) annotation (Line(points={{39.8571,4.5},{39.8571,
           4},{55,4}}, color={0,0,127}));
   connect(A320.cockpitTemperature, add_T.u2) annotation (Line(points={{39.8571,
-          -11.5},{39.8571,-50},{78,-50},{78,-42}},         color={0,0,127}));
+          -19.5},{39.8571,-50},{78,-50},{78,-42}},         color={0,0,127}));
   connect(PID_m_rec.y, A320.fanSpeed) annotation (Line(points={{46,45},{46,42},
-          {31.5714,42},{31.5714,31.25}},color={0,0,127}));
+          {31.5714,42},{31.5714,23.25}},color={0,0,127}));
   connect(PID_P_cab.y, A320.outflowValveOpening) annotation (Line(points={{-48,45},
-          {-48,42},{-26.4286,42},{-26.4286,31.25}},        color={0,0,127}));
-  connect(m_trim_cab.y, A320.m_trim_cabin) annotation (Line(points={{-19,-90},
-          {-1.57143,-90},{-1.57143,-11.5}}, color={0,0,127}));
+          {-48,42},{-26.4286,42},{-26.4286,23.25}},        color={0,0,127}));
+  connect(m_trim_cab.y, A320.m_trim_cabin) annotation (Line(points={{-19,-90},{
+          -1.57143,-90},{-1.57143,-19.5}},  color={0,0,127}));
   connect(m_trim_fd.y, A320.m_trim_cockpit) annotation (Line(points={{39,-90},{
-          32,-90},{32,-11.5},{31.5714,-11.5}},  color={0,0,127}));
+          32,-90},{32,-19.5},{31.5714,-19.5}},  color={0,0,127}));
+  connect(altitude.y, environment.altitude) annotation (Line(points={{-79,-30},
+          {-74,-30},{-74,-45.8},{-66,-45.8}}, color={0,0,127}));
+  connect(V_inf.y, environment.V_inf) annotation (Line(points={{-79,-70},{-74,
+          -70},{-74,-52.6},{-66,-52.6}}, color={0,0,127}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false)),
     Diagram(coordinateSystem(preserveAspectRatio=false)),

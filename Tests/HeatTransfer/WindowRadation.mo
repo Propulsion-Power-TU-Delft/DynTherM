@@ -1,7 +1,7 @@
 within DynTherM.Tests.HeatTransfer;
 model WindowRadation
   inner Components.Environment environment(
-    Mach_inf=0,
+    V_inf=0,
     Altitude(displayUnit="km") = 0,
     ISA_plus=0)
     annotation (Placement(transformation(extent={{60,60},{100,100}})));

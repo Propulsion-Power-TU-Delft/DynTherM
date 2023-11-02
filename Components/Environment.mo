@@ -4,8 +4,6 @@ model Environment "Environmental properties (moist air)"
   package Medium = Modelica.Media.Air.MoistAir;
 
   // Climatic data
-  input Real Mach_inf=0 "Free-stream Mach number" annotation (Dialog(enable=true));
-  parameter Length altitude=0 " Altitude with respect to sea level";
   parameter Real ISA_plus=0 "Temperature difference with respect to ISA standard value at given altitude";
   parameter Real phi_amb=0.5 "Ambient relative humidity";
   parameter Real phi_amb_ground=0.5 "Ambient relative humidity on ground";
@@ -51,6 +49,7 @@ model Environment "Environmental properties (moist air)"
   constant DensityOfHeatFlowRate M_hb[3]={60,115,70}
     "Rate of metabolic heat production of: passengers, cabin crew, pilots";
 
+  Real Mach_inf "Free-stream Mach number";
   Pressure Pv "Water vapour pressure";
   Emissivity eps_sky "Clear sky emmisivity";
   Temperature T_sky "Sky temperature";
@@ -65,6 +64,22 @@ model Environment "Environmental properties (moist air)"
   Medium.ThermodynamicState state_amb "Ambient thermodynamic state";
 
 
+  Modelica.Blocks.Interfaces.RealInput V_inf "Free-stream velocity" annotation (
+     Placement(transformation(
+        origin={-100,-60},
+        extent={{20,-20},{-20,20}},
+        rotation=180), iconTransformation(
+        extent={{20,-20},{-20,20}},
+        rotation=180,
+        origin={-100,-80})));
+  Modelica.Blocks.Interfaces.RealInput altitude
+    "Altitude with respect to sea level" annotation (Placement(transformation(
+        origin={-100,-40},
+        extent={{20,-20},{-20,20}},
+        rotation=180), iconTransformation(
+        extent={{20,-20},{-20,20}},
+        rotation=180,
+        origin={-100,-40})));
 protected
   Pressure Pv_ground "Water vapour pressure on ground";
   Emissivity eps_sky_ground "Clear sky emmisivity on ground";
@@ -75,6 +90,7 @@ equation
   X_water = Medium.massFraction_pTphi(P_amb, T_amb, phi_amb);
   X_air = 1 - X_water;
   X_amb = {X_water, X_air};
+  Mach_inf = V_inf/Medium.velocityOfSound(state_amb);
 
   // Compute ambient temperature and pressure [1]
   if (altitude <= 11000) then
@@ -97,6 +113,9 @@ equation
     end if;
 
   else
+
+    T_amb = T0;
+    P_amb = P0;
     assert(false, "altitude exceeding 20km is unsupported");
   end if;
 
@@ -151,101 +170,137 @@ equation
     defaultComponentPrefixes="inner",
     missingInnerMessage="The Environment object is missing, please drag it on the top layer of your model",
     Icon(graphics={
-        Rectangle(
-          extent={{-100,100},{100,-100}},
-          lineColor={0,0,0},
-          fillColor={170,213,255},
-          fillPattern=FillPattern.Solid),
         Ellipse(
-          extent={{-68,70},{-20,22}},
-          lineColor={0,0,0},
+          extent={{-10,42},{38,-6}},
+          lineColor={238,46,47},
+          fillColor={255,255,0},
+          fillPattern=FillPattern.Sphere),
+        Rectangle(
+          extent={{12,-10},{16,-30}},
+          lineColor={238,46,47},
           fillColor={255,255,0},
           fillPattern=FillPattern.Solid),
         Rectangle(
-          extent={{-46,18},{-42,-2}},
-          lineColor={0,0,0},
-          fillColor={255,255,0},
-          fillPattern=FillPattern.Solid),
-        Rectangle(
-          extent={{-46,94},{-42,74}},
-          lineColor={0,0,0},
+          extent={{12,66},{16,46}},
+          lineColor={238,46,47},
           fillColor={255,255,0},
           fillPattern=FillPattern.Solid),
         Rectangle(
           extent={{-2,10},{2,-10}},
-          lineColor={0,0,0},
+          lineColor={238,46,47},
           fillColor={255,255,0},
           fillPattern=FillPattern.Solid,
-          origin={-82,46},
+          origin={-24,18},
           rotation=-90),
         Rectangle(
           extent={{-2,10},{2,-10}},
-          lineColor={0,0,0},
+          lineColor={238,46,47},
           fillColor={255,255,0},
           fillPattern=FillPattern.Solid,
-          origin={-6,46},
-          rotation=-90),
+          rotation=-90,
+          origin={52,18}),
         Polygon(
-          points={{-82,78},{-68,64},{-64,68},{-82,78}},
-          lineColor={0,0,0},
+          points={{-24,50},{-10,36},{-6,40},{-24,50}},
+          lineColor={238,46,47},
           fillColor={255,255,0},
           fillPattern=FillPattern.Solid),
         Polygon(
           points={{-9,7},{5,-7},{9,-3},{-9,7}},
-          lineColor={0,0,0},
+          lineColor={238,46,47},
           fillColor={255,255,0},
           fillPattern=FillPattern.Solid,
-          origin={-17,71},
+          origin={41,43},
           rotation=-90),
         Polygon(
           points={{-9,-7},{5,7},{9,3},{-9,-7}},
-          lineColor={0,0,0},
+          lineColor={238,46,47},
           fillColor={255,255,0},
           fillPattern=FillPattern.Solid,
-          origin={-71,21},
+          origin={-13,-7},
           rotation=360),
         Polygon(
           points={{9,7},{-5,-7},{-9,-3},{9,7}},
-          lineColor={0,0,0},
+          lineColor={238,46,47},
           fillColor={255,255,0},
           fillPattern=FillPattern.Solid,
-          origin={-19,21},
+          origin={39,-7},
           rotation=-90),
         Ellipse(
-          extent={{-52,-34},{46,-64}},
+          extent={{-90,14},{8,-16}},
           fillColor={215,215,215},
           fillPattern=FillPattern.Solid,
           pattern=LinePattern.None),
         Ellipse(
-          extent={{-26,-42},{16,-74}},
+          extent={{-64,6},{-22,-26}},
           fillColor={215,215,215},
           fillPattern=FillPattern.Solid,
           pattern=LinePattern.None),
         Ellipse(
-          extent={{-4,-38},{38,-70}},
+          extent={{-42,10},{0,-22}},
           fillColor={215,215,215},
           fillPattern=FillPattern.Solid,
           pattern=LinePattern.None),
         Ellipse(
-          extent={{-46,-36},{-4,-68}},
+          extent={{-84,12},{-42,-20}},
           fillColor={215,215,215},
           fillPattern=FillPattern.Solid,
           pattern=LinePattern.None),
         Ellipse(
-          extent={{-28,-26},{36,-56}},
+          extent={{-66,22},{-2,-8}},
           fillColor={215,215,215},
           fillPattern=FillPattern.Solid,
           pattern=LinePattern.None),
         Ellipse(
-          extent={{-20,-16},{22,-48}},
+          extent={{-58,32},{-16,0}},
+          fillColor={215,215,215},
+          fillPattern=FillPattern.Solid,
+          pattern=LinePattern.None,
+          lineColor={0,0,0}),
+        Ellipse(
+          extent={{-74,22},{-32,-10}},
+          fillColor={215,215,215},
+          fillPattern=FillPattern.Solid,
+          pattern=LinePattern.None,
+          lineColor={0,0,0},
+          lineThickness=1),
+        Ellipse(
+          extent={{-18,-14},{80,-44}},
           fillColor={215,215,215},
           fillPattern=FillPattern.Solid,
           pattern=LinePattern.None),
         Ellipse(
-          extent={{-36,-26},{6,-58}},
+          extent={{8,-22},{50,-54}},
           fillColor={215,215,215},
           fillPattern=FillPattern.Solid,
-          pattern=LinePattern.None)}),
+          pattern=LinePattern.None),
+        Ellipse(
+          extent={{30,-18},{72,-50}},
+          fillColor={215,215,215},
+          fillPattern=FillPattern.Solid,
+          pattern=LinePattern.None),
+        Ellipse(
+          extent={{-12,-16},{30,-48}},
+          fillColor={215,215,215},
+          fillPattern=FillPattern.Solid,
+          pattern=LinePattern.None),
+        Ellipse(
+          extent={{6,-6},{70,-36}},
+          fillColor={215,215,215},
+          fillPattern=FillPattern.Solid,
+          pattern=LinePattern.None),
+        Ellipse(
+          extent={{14,4},{56,-28}},
+          fillColor={215,215,215},
+          fillPattern=FillPattern.Solid,
+          pattern=LinePattern.None,
+          lineColor={95,95,95}),
+        Ellipse(
+          extent={{-2,-6},{40,-38}},
+          fillColor={215,215,215},
+          fillPattern=FillPattern.Solid,
+          pattern=LinePattern.None,
+          lineColor={0,0,0},
+          lineThickness=1)}),
     Documentation(info="<html>
 <p>References:</p>
 <p>[1]&nbsp;ISA&nbsp;model&nbsp;to&nbsp;compute&nbsp;variation&nbsp;of&nbsp;properties&nbsp;with&nbsp;altitude</p>

@@ -172,7 +172,7 @@ model PassengerCabin
       Q_light_m2*A_floor + Q_galley;
 
   inner Components.Environment environment(
-    Mach_inf=0,
+    V_inf=0,
     Altitude=0,
     ISA_plus=23,
     phi_amb=0.22,
