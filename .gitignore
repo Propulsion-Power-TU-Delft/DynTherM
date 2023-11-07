@@ -7,7 +7,7 @@
 *.py[cod]
 
 # Python scripts
-PyScripts/*
+# PyScripts/*
 
 # JetBrains IDE
 .idea/
