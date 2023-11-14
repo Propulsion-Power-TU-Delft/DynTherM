@@ -1,7 +1,6 @@
 within DynTherM.Tests.Distributed;
 model RectangularParallel1D
-  package Refrigerant = Modelica.Media.Water.StandardWater
-    "Refrigerant";
+  package Refrigerant = DynTherM.Media.IncompressibleTableBased.MIL_PRF_23699;  //Modelica.Media.Water.StandardWater "Refrigerant";
 
   parameter Integer N(min=1) "Number of longitudinal sections in which the tube is discretized";
   parameter Integer N_channels(min=1) "Number of channels in parallel";
@@ -71,6 +70,10 @@ model RectangularParallel1D
     Ny=1,
     phi=phi*ones(N, 1))
     annotation (Placement(transformation(extent={{-40,48},{-4,70}})));
+  Modelica.Blocks.Sources.Constant const2(k=0)
+    annotation (Placement(transformation(extent={{20,80},{40,100}})));
+  Modelica.Blocks.Sources.Constant const1(k=0)
+    annotation (Placement(transformation(extent={{20,40},{40,60}})));
 equation
 
   connect(m_fromMix,ECSFlow. in_massFlow)
@@ -86,6 +89,10 @@ equation
   connect(thermal_distributed.thermal_flux, channel1D.solid_surface_north)
     annotation (Line(points={{-22,59},{-22,13.8},{-22.5,13.8}}, color={255,
           127,0}));
+  connect(const2.y, environment.altitude) annotation (Line(points={{41,90},{48,90},
+          {48,72},{60,72}}, color={0,0,127}));
+  connect(const1.y, environment.V_inf) annotation (Line(points={{41,50},{48,50},
+          {48,64},{60,64}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)));
 end RectangularParallel1D;

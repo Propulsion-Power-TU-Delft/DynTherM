@@ -1,17 +1,40 @@
 import os
 import numpy as np
+import matplotlib as mpl
 import CoolProp.CoolProp as CP
 import matplotlib.pyplot as plt
 
 
 # user-defined data
-X = np.arange(10, 60, 10)       # set to -1 for pure fluid
+X = np.array([-1])       # set to np.array([-1]) for pure fluid
 fluid1 = "Water"
 fluid2 = "Eglycol"
-name = "MEG"
+name = "MIL-PRF-23699"
 degree = 8
 P = 101325
-T_raw = np.arange(223.15, 393.15)
+T_raw = np.arange(223.15, 423.15)
+
+# setup matplotlib to use latex for output
+config = {
+    "pgf.texsystem": "pdflatex",
+    "text.usetex": True,
+    "font.family": "DejaVu Sans",
+    "axes.titlesize": 24,
+    "axes.labelsize": 24,
+    "font.size": 24,
+    "legend.fontsize": 18,
+    "legend.frameon": True,
+    "xtick.labelsize": 18,
+    "ytick.labelsize": 18,
+    "xtick.major.pad": 8,
+    "ytick.major.pad": 8,
+    "figure.autolayout": True,
+    "figure.figsize": (9.6, 7.2)
+}
+
+mpl.rcParams.update(config)
+blues = [plt.get_cmap('Blues_r')(1. * i / (len(X) + 1)) for i in range((len(X) + 1))]
+reds = [plt.get_cmap('Reds_r')(1. * i / (len(X) + 1)) for i in range((len(X) + 1))]
 
 
 def write_table(X, T, rho, c, kt, mu, name):
@@ -123,34 +146,84 @@ fig3, ax3 = plt.subplots()
 fig4, ax4 = plt.subplots()
 
 for ii, x in enumerate(X):
-    rho_raw[ii, :] = CP.PropsSI('D','T', T_raw, 'P', P, f'REFPROP::{fluid1}[{(100 - x) / 100}]&{fluid2}[{x / 100}]')
-    c_raw[ii, :] = CP.PropsSI('C','T', T_raw, 'P', P, f'REFPROP::{fluid1}[{(100 - x) / 100}]&{fluid2}[{x / 100}]')
-    kt_raw[ii, :] = CP.PropsSI('CONDUCTIVITY', 'T', T_raw, 'P', P, f'INCOMP::{name}-{x}%')
-    mu_raw[ii, :] = CP.PropsSI('VISCOSITY', 'T', T_raw, 'P', P, f'INCOMP::{name}-{x}%')
+    if x == -1:
+        rho_raw[ii, :] = CP.PropsSI('D', 'T', T_raw, 'P', P, f'REFPROP::{name}')
+        c_raw[ii, :] = CP.PropsSI('C', 'T', T_raw, 'P', P, f'REFPROP::{name}')
+        kt_raw[ii, :] = CP.PropsSI('CONDUCTIVITY', 'T', T_raw, 'P', P, f'REFPROP::{name}')
+        mu_raw[ii, :] = CP.PropsSI('VISCOSITY', 'T', T_raw, 'P', P, f'REFPROP::{name}')
+    else:
+        rho_raw[ii, :] = CP.PropsSI('D','T', T_raw, 'P', P, f'REFPROP::{fluid1}[{(100 - x) / 100}]&{fluid2}[{x / 100}]')
+        c_raw[ii, :] = CP.PropsSI('C','T', T_raw, 'P', P, f'REFPROP::{fluid1}[{(100 - x) / 100}]&{fluid2}[{x / 100}]')
+        kt_raw[ii, :] = CP.PropsSI('CONDUCTIVITY', 'T', T_raw, 'P', P, f'INCOMP::{name}-{x}%')
+        mu_raw[ii, :] = CP.PropsSI('VISCOSITY', 'T', T_raw, 'P', P, f'INCOMP::{name}-{x}%')
 
     mask = np.logical_or(np.logical_not(np.isfinite(c_raw[ii, :])), c_raw[ii, :] < 0)
     T[f'{x}%'] = np.delete(T_raw, mask)
     rho[f'{x}%'] = np.delete(rho_raw[ii, :], mask)
     c[f'{x}%'] = np.delete(c_raw[ii, :], mask)
-    kt_filtered = np.delete(kt_raw[ii, :], mask)
-    mu_filtered = np.delete(mu_raw[ii, :], mask)
 
-    mask = np.isfinite(kt_filtered)
-    kt_coeff = np.polyfit(T[f'{x}%'][mask], kt_filtered[mask], degree)
-    kt_fit = np.poly1d(kt_coeff)
-    kt[f'{x}%'] = kt_fit(T[f'{x}%'])
+    if x == -1:
+        kt[f'{x}%'] = np.delete(kt_raw[ii, :], mask)
+        mu[f'{x}%'] = np.delete(mu_raw[ii, :], mask)
+    else:
+        kt_filtered = np.delete(kt_raw[ii, :], mask)
+        mu_filtered = np.delete(mu_raw[ii, :], mask)
 
-    mask = np.isfinite(mu_filtered)
-    mu_coeff = np.polyfit(T[f'{x}%'][mask], mu_filtered[mask], degree)
-    mu_fit = np.poly1d(mu_coeff)
-    mu[f'{x}%'] = mu_fit(T[f'{x}%'])
+        mask = np.isfinite(kt_filtered)
+        kt_coeff = np.polyfit(T[f'{x}%'][mask], kt_filtered[mask], degree)
+        kt_fit = np.poly1d(kt_coeff)
+        kt[f'{x}%'] = kt_fit(T[f'{x}%'])
 
-    ax1.plot(T[f'{x}%'], rho[f'{x}%'])
-    ax2.plot(T[f'{x}%'], c[f'{x}%'])
-    ax3.plot(T[f'{x}%'], kt[f'{x}%'])
-    ax3.plot(T[f'{x}%'], kt_filtered, 'o')
-    ax4.plot(T[f'{x}%'], mu[f'{x}%'])
-    ax4.plot(T[f'{x}%'], mu_filtered, 'o')
+        mask = np.isfinite(mu_filtered)
+        mu_coeff = np.polyfit(T[f'{x}%'][mask], mu_filtered[mask], degree)
+        mu_fit = np.poly1d(mu_coeff)
+        mu[f'{x}%'] = mu_fit(T[f'{x}%'])
+
+    ax1.plot(T[f'{x}%'] - 273.15, rho[f'{x}%'], color=blues[ii], label=f"{name}-{x}\%")
+    ax2.plot(T[f'{x}%'] - 273.15, c[f'{x}%'], color=blues[ii], label=f"{name}-{x}\%")
+    ax3.plot(T[f'{x}%'] - 273.15, kt[f'{x}%'], color=blues[ii], label=f"{name}-{x}\%")
+    ax4.plot(T[f'{x}%'] - 273.15, mu[f'{x}%'], color=blues[ii], label=f"{name}-{x}\%")
+
+    # if x != -1:
+    #     ax3.plot(T[f'{x}%'], kt_filtered, 'o')
+    #     ax4.plot(T[f'{x}%'], mu_filtered, 'o')
+
+ax1.set_xlabel(r"$T \; [^{\circ}C]$")
+ax2.set_xlabel(r"$T \; [^{\circ}C]$")
+ax3.set_xlabel(r"$T \; [^{\circ}C]$")
+ax4.set_xlabel(r"$T \; [^{\circ}C]$")
+
+ax1.set_ylabel(r"$\rho \; [kg/m^3]$")
+ax2.set_ylabel(r"$c_p \; [J/(kg.K)]$")
+ax3.set_ylabel(r"$k_t \; [W/(m.K)]$")
+ax4.set_ylabel(r"$\mu \; [Pa.s]$")
+
+ax1.grid(True)
+ax2.grid(True)
+ax3.grid(True)
+ax4.grid(True)
+
+# name = "MIL-PRF-23699"
+# T_raw = np.arange(223.15, 423.15)
+# rho_raw = CP.PropsSI('D', 'T', T_raw, 'P', P, f'REFPROP::{name}')
+# c_raw = CP.PropsSI('C', 'T', T_raw, 'P', P, f'REFPROP::{name}')
+# kt_raw = CP.PropsSI('CONDUCTIVITY', 'T', T_raw, 'P', P, f'REFPROP::{name}')
+# mu_raw = CP.PropsSI('VISCOSITY', 'T', T_raw, 'P', P, f'REFPROP::{name}')
+# mask = np.logical_or(np.logical_not(np.isfinite(c_raw)), c_raw < 0)
+# T = np.delete(T_raw, mask)
+# rho = np.delete(rho_raw, mask)
+# c = np.delete(c_raw, mask)
+# kt = np.delete(kt_raw, mask)
+# mu = np.delete(mu_raw, mask)
+# ax1.plot(T - 273.15, rho, color=reds[1], label=f"{name}")
+# ax2.plot(T - 273.15, c, color=reds[1], label=f"{name}")
+# ax3.plot(T - 273.15, kt, color=reds[1], label=f"{name}")
+# ax4.plot(T - 273.15, mu, color=reds[1], label=f"{name}")
+#
+# ax1.legend()
+# ax2.legend()
+# ax3.legend()
+# ax4.legend()
 
 write_table(X, T, rho, c, kt, mu, name)
 fig1.savefig(os.path.join("FluidTableProps", f"{name}_rho.png"), dpi=400)
