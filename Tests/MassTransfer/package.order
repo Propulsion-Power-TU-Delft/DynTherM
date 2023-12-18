@@ -6,3 +6,4 @@ test_sys
 test_fan_sys
 test_circular_pipe_sys
 test_rectangular_pipe_sys
+test_actuator_disk
