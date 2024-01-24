@@ -654,8 +654,8 @@ equation
     annotation (Line(points={{20,88},{40,88},{40,70}}, color={0,0,0}));
   connect(altitude.y, environment.altitude) annotation (Line(points={{91,104},{
           98,104},{98,92.2},{108,92.2}}, color={0,0,127}));
-  connect(V_inf.y, environment.V_inf) annotation (Line(points={{91,70},{98,70},
-          {98,85.4},{108,85.4}}, color={0,0,127}));
+  connect(V_inf.y, environment.V_inf_di) annotation (Line(points={{91,70},{98,
+          70},{98,85.4},{108,85.4}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-180,
             -140},{140,120}}),                                  graphics={
           Bitmap(

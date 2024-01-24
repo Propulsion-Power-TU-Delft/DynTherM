@@ -27,6 +27,7 @@ model Environment "Environmental properties (moist air)"
     {2.614, 2.580, 2.474, 2.328, 2.324, 2.270, 2.202, 2.269, 2.428, 2.514, 2.523, 2.618} "Beam diffuse depth" annotation (Dialog(tab="Geographical location (default: Atlanta, GA, USA)"));
 
   // Options
+  parameter Boolean use_Mach_inf = false "Set the free-stream Mach number instead of the free-stream" annotation (Dialog(tab="Simulation options"), choices(checkBox=true));
   parameter Boolean use_P_amb = false "Use fixed value for the ambient pressure" annotation (Dialog(tab="Simulation options"), choices(checkBox=true));
   parameter Boolean use_T_amb = false "Use fixed value for the ambient temperature" annotation (Dialog(tab="Simulation options"), choices(checkBox=true));
   parameter Angle psi=1.0471975511965976
@@ -49,6 +50,7 @@ model Environment "Environmental properties (moist air)"
   constant DensityOfHeatFlowRate M_hb[3]={60,115,70}
     "Rate of metabolic heat production of: passengers, cabin crew, pilots";
 
+  Velocity V_inf "Free-stream velocity";
   Real Mach_inf "Free-stream Mach number";
   Pressure Pv "Water vapour pressure";
   Emissivity eps_sky "Clear sky emmisivity";
@@ -63,9 +65,8 @@ model Environment "Environmental properties (moist air)"
   MassFraction X_amb[2] "Ambient air mass fractions";
   Medium.ThermodynamicState state_amb "Ambient thermodynamic state";
 
-
-  Modelica.Blocks.Interfaces.RealInput V_inf "Free-stream velocity" annotation (
-     Placement(transformation(
+  Modelica.Blocks.Interfaces.RealInput V_inf_di if not use_Mach_inf
+    "Free-stream velocity - direct input" annotation (Placement(transformation(
         origin={-100,-60},
         extent={{20,-20},{-20,20}},
         rotation=180), iconTransformation(
@@ -80,10 +81,20 @@ model Environment "Environmental properties (moist air)"
         extent={{20,-20},{-20,20}},
         rotation=180,
         origin={-100,-40})));
+  Modelica.Blocks.Interfaces.RealInput Mach_inf_di if use_Mach_inf
+    "Free-stream Mach number - direct input" annotation (Placement(transformation(
+        origin={-100,-20},
+        extent={{20,-20},{-20,20}},
+        rotation=180), iconTransformation(
+        extent={{20,-20},{-20,20}},
+        rotation=180,
+        origin={-100,0})));
 protected
   Pressure Pv_ground "Water vapour pressure on ground";
   Emissivity eps_sky_ground "Clear sky emmisivity on ground";
   Temperature T_sky_ground "Sky temperature on ground";
+  Modelica.Blocks.Interfaces.RealInput V_inf_internal;
+  Modelica.Blocks.Interfaces.RealInput Mach_inf_internal;
 
 equation
   state_amb = Medium.setState_pTX(P_amb, T_amb, X_amb);
@@ -91,6 +102,12 @@ equation
   X_air = 1 - X_water;
   X_amb = {X_water, X_air};
   Mach_inf = V_inf/Medium.velocityOfSound(state_amb);
+
+  if use_Mach_inf then
+    Mach_inf = Mach_inf_internal;
+  else
+    V_inf = V_inf_internal;
+  end if;
 
   // Compute ambient temperature and pressure [1]
   if (altitude <= 11000) then
@@ -164,6 +181,10 @@ equation
   else
     P_cab_target = P_amb + 50000;  // 50 kPa of pressurization during normal operation
   end if;
+
+  // Connect protected connectors to public conditional connectors
+  connect(Mach_inf_di, Mach_inf_internal);
+  connect(V_inf_di, V_inf_internal);
 
   annotation (
     defaultComponentName="environment",

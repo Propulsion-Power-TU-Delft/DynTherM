@@ -48,15 +48,6 @@ model A320FlyingCockpit "Aircraft is flying, two temperature zones"
         extent={{10,10},{-10,-10}},
         rotation=-90,
         origin={90,-90})));
-  inner Components.Environment environment(
-    ISA_plus=0,
-    phi_amb=0.0,
-    phi_amb_ground=0.22,
-    T_ground(displayUnit="degC") = 298.15,
-    use_ext_sw=true,
-    allowFlowReversal=false,
-    initOpt=DynTherM.Choices.InitOpt.steadyState)
-    annotation (Placement(transformation(extent={{-66,-56},{-32,-22}})));
   Modelica.Blocks.Math.Add add_T(k1=+1, k2=-1) annotation (Placement(
         transformation(
         extent={{10,-10},{-10,10}},
@@ -121,10 +112,20 @@ model A320FlyingCockpit "Aircraft is flying, two temperature zones"
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-30,-90})));
-  Modelica.Blocks.Sources.Constant V_inf(k=230)
-    annotation (Placement(transformation(extent={{-100,-80},{-80,-60}})));
-  Modelica.Blocks.Sources.Constant altitude(k=11887)
+  inner Components.Environment environment(
+    ISA_plus=0,
+    phi_amb=0.0,
+    phi_amb_ground=0.22,
+    T_ground(displayUnit="degC") = 298.15,
+    use_Mach_inf=true,
+    use_ext_sw=true,
+    allowFlowReversal=false,
+    initOpt=DynTherM.Choices.InitOpt.steadyState)
+    annotation (Placement(transformation(extent={{-66,-64},{-32,-30}})));
+  Modelica.Blocks.Sources.Constant Mach_inf(k=0.78)
     annotation (Placement(transformation(extent={{-100,-40},{-80,-20}})));
+  Modelica.Blocks.Sources.Constant altitude(k=11887)
+    annotation (Placement(transformation(extent={{-100,-80},{-80,-60}})));
 equation
   m_fresh_min = 0.25/60*(A320.N_pax + A320.N_crew + A320.N_pilots);
   connect(target_P_cab.y, add_P_cab.u1)
@@ -163,10 +164,10 @@ equation
           {-48,42},{-26.4286,42},{-26.4286,23.25}},        color={0,0,127}));
   connect(A320.cockpitTemperature, add_T.u2) annotation (Line(points={{39.8571,
           -19.5},{39.8571,-50},{78,-50},{78,-42}},         color={0,0,127}));
-  connect(altitude.y, environment.altitude) annotation (Line(points={{-79,-30},
-          {-74,-30},{-74,-45.8},{-66,-45.8}}, color={0,0,127}));
-  connect(V_inf.y, environment.V_inf) annotation (Line(points={{-79,-70},{-74,
-          -70},{-74,-52.6},{-66,-52.6}}, color={0,0,127}));
+  connect(altitude.y,environment. altitude) annotation (Line(points={{-79,-70},
+          {-74,-70},{-74,-53.8},{-66,-53.8}}, color={0,0,127}));
+  connect(Mach_inf.y, environment.Mach_inf_di) annotation (Line(points={{-79,
+          -30},{-74,-30},{-74,-47},{-66,-47}}, color={0,0,127}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false)),
     Diagram(coordinateSystem(preserveAspectRatio=false)),

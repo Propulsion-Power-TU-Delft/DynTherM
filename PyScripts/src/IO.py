@@ -2,9 +2,9 @@
 
 ########################################################################################################################
 # DynTherM: Dynamic modeling and simulation of Thermal Management systems
-# Author: ir. A. Giuffre'
+# Author: Dr. ir. A. Giuffre'
 # Content: input/output
-# 2022 - TU Delft - All rights reserved
+# 2024 - Delft University of Technology - All rights reserved
 ########################################################################################################################
 
 import os

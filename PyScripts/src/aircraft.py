@@ -2,13 +2,14 @@
 
 ########################################################################################################################
 # DynTherM: Dynamic modeling and simulation of Thermal Management systems
-# Author: ir. A. Giuffre'
+# Author: Dr. ir. A. Giuffre'
 # Content: run aircraft thermal model in Dymola
-# 2022 - TU Delft - All rights reserved
+# 2024 - Delft University of Technology - All rights reserved
 ########################################################################################################################
 
 import numpy as np
 from dymola.dymola_interface import DymolaInterface
+from dymola.dymola_exception import DymolaException
 
 
 class Aircraft:
@@ -44,7 +45,7 @@ class Aircraft:
                   ["A320.E_tr_%s" % str(x) for x in range(1, self.n_fus_secs + 1)]
         theta_input = ["A320.theta_%s" % str(x) for x in range(1, self.n_fus_secs + 1)]
         input_keys = ["m_ECS.k", "A320.rec_target", "T_target.k", "m_trim_cab.k", "m_trim_fd.k", "T_trim.k",
-                      "environment.Mach_inf", "environment.Altitude", "environment.ISA_plus",
+                      "Mach_inf.k", "altitude.k", "environment.ISA_plus",
                       "environment.phi_amb", "environment.phi_amb_ground", "environment.T_ground", "A320.N_pax",
                       "A320.N_crew", "A320.N_pilots", "A320.Q_el", "A320.Q_galley", "A320.Q_avionics",
                       "A320.cabinLights", "A320.inFlightEntertainment"] + E_input + theta_input + \
@@ -97,62 +98,69 @@ class Aircraft:
         output_keys = T_fuselage_int + T_panel_core + T_skin_core + T_fuselage_ext + \
             Q_output + T_output + P_output + phi_output + mass_output
 
-        # Instantiate the Dymola interface and start Dymola
-        dymola = DymolaInterface()
-        dymola.openModel(path=self.package_dir)
+        dymola = None
 
-        # translate the prescribed model to avoid issues with non-evaluated parameters
-        dymola.translateModel("DynTherM.Examples.Aircraft." + data['Model_dir'][case_idx] + "." +
-                              data['Case_name'][case_idx] + "(environment.Altitude=%10.4f,environment.ISA_plus=%d)"
-                              % (data['Height'][case_idx], data['Delta_ISA'][case_idx]))
+        try:
+            model_name = f"DynTherM.Examples.Aircraft.{data['Model_dir'][case_idx]}.{data['Case_name'][case_idx]}"
+            print(f"\nRun name: {data['Run_name'][case_idx]}")
+            print(f"Simulating model: {model_name}\n")
 
-        # run the prescribed model in Dymola
-        result = dymola.simulateExtendedModel("", 0.0, 10.0, 0, 0.0, "Dassl", 0.0001, 0.0,
-                                              'Simulations/' + data['Run_name'][case_idx],
-                                              input_keys, input_values, output_keys, True)
-        # get output values
-        if result[0]:
-            idx = 0
+            # Instantiate the Dymola interface and start Dymola
+            dymola = DymolaInterface()
+            dymola.openModel(path=self.package_dir)
 
-            # fuselage temperature
-            for j in range(4):
-                self.T_fuselage_fd[0:8, j] = np.array([result[1][idx + i] for i in range(8)])
-                idx += 8
-                self.T_fuselage_cab[0:8, j] = np.array([result[1][idx + i] for i in range(8)])
-                idx += 8
+            # translate the prescribed model to avoid issues with non-evaluated parameters
+            dymola.translateModel(model_name + "(environment.ISA_plus=%d)" % data['Delta_ISA'][case_idx])
 
-            # heat flow rates
-            for i in range(len(Q_output)):
-                self.Q = np.append(self.Q, result[1][idx])
-                idx += 1
+            # run the prescribed model in Dymola
+            result = dymola.simulateExtendedModel("", 0.0, 10.0, 0, 0.0, "Dassl", 0.0001, 0.0,
+                                                  'Simulations/' + data['Run_name'][case_idx],
+                                                  input_keys, input_values, output_keys, True)
+            # get output values
+            if result[0]:
+                idx = 0
 
-            # temperature along the air distribution system
-            for i in range(len(T_output)):
-                self.T = np.append(self.T, result[1][idx])
-                idx += 1
+                # fuselage temperature
+                for j in range(4):
+                    self.T_fuselage_fd[0:8, j] = np.array([result[1][idx + i] for i in range(8)])
+                    idx += 8
+                    self.T_fuselage_cab[0:8, j] = np.array([result[1][idx + i] for i in range(8)])
+                    idx += 8
 
-            # pressure along the air distribution system
-            for i in range(len(P_output)):
-                self.P = np.append(self.P, result[1][idx])
-                idx += 1
+                # heat flow rates
+                for i in range(len(Q_output)):
+                    self.Q = np.append(self.Q, result[1][idx])
+                    idx += 1
 
-            # relative humidity along the air distribution system
-            for i in range(len(phi_output)):
-                self.phi = np.append(self.phi, result[1][idx])
-                idx += 1
+                # temperature along the air distribution system
+                for i in range(len(T_output)):
+                    self.T = np.append(self.T, result[1][idx])
+                    idx += 1
 
-            # mass flow rate along the air distribution system
-            for i in range(len(mass_output)):
-                self.mass = np.append(self.mass, result[1][idx])
-                idx += 1
+                # pressure along the air distribution system
+                for i in range(len(P_output)):
+                    self.P = np.append(self.P, result[1][idx])
+                    idx += 1
 
-        else:
-            print("\nDymola simulation did not converge")
-            log = dymola.getLastErrorLog()
-            print(log)
+                # relative humidity along the air distribution system
+                for i in range(len(phi_output)):
+                    self.phi = np.append(self.phi, result[1][idx])
+                    idx += 1
+
+                # mass flow rate along the air distribution system
+                for i in range(len(mass_output)):
+                    self.mass = np.append(self.mass, result[1][idx])
+                    idx += 1
+
+            else:
+                print("\nDymola simulation did not converge")
+                log = dymola.getLastErrorLog()
+                print(log)
 
         # close Dymola
-        if dymola is not None:
-            dymola.close()
+        except DymolaException as ex:
+            print("Error: " + str(ex))
 
-        return
+        finally:
+            if dymola is not None:
+                dymola.close()

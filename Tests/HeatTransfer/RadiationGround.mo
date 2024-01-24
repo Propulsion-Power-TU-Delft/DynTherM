@@ -9,7 +9,7 @@ model RadiationGround
     use_in_T=false)
     annotation (Placement(transformation(extent={{-16,32},{8,48}})));
   inner Components.Environment environment(
-    V_inf=0,
+    V_inf_di=0,
     Altitude(displayUnit="km") = 11000,
     ISA_plus=0,
     psi=0,

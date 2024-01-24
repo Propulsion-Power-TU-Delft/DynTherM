@@ -91,8 +91,8 @@ equation
           127,0}));
   connect(const2.y, environment.altitude) annotation (Line(points={{41,90},{48,90},
           {48,72},{60,72}}, color={0,0,127}));
-  connect(const1.y, environment.V_inf) annotation (Line(points={{41,50},{48,50},
-          {48,64},{60,64}}, color={0,0,127}));
+  connect(const1.y, environment.V_inf_di) annotation (Line(points={{41,50},{48,
+          50},{48,64},{60,64}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)));
 end RectangularParallel1D;

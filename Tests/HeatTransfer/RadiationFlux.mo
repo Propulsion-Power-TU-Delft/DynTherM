@@ -3,7 +3,7 @@ model RadiationFlux
   Components.HeatTransfer.SolarRadiation thermalRadiation(csi=0)
     annotation (Placement(transformation(extent={{-36,98},{36,26}})));
   inner Components.Environment environment(
-    V_inf=0,
+    V_inf_di=0,
     Altitude(displayUnit="km") = 11000,
     ISA_plus=0,
     psi=0,

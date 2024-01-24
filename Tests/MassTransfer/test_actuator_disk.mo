@@ -18,8 +18,8 @@ equation
     annotation (Line(points={{40,0},{68,0}}, color={0,0,0}));
   connect(altitude.y, environment.altitude) annotation (Line(points={{41,80},{46,
           80},{46,68.6},{56,68.6}}, color={0,0,127}));
-  connect(V_inf.y, environment.V_inf) annotation (Line(points={{41,50},{46,50},{
-          46,60.2},{56,60.2}}, color={0,0,127}));
+  connect(V_inf.y, environment.V_inf_di) annotation (Line(points={{41,50},{46,
+          50},{46,60.2},{56,60.2}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)));
 end test_actuator_disk;
