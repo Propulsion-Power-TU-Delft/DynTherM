@@ -3,7 +3,7 @@ model WindowRadiation
   "Model of transmitted, absorbed and reflected irradiance through transparent surfaces"
 
   replaceable model Mat=DynTherM.Materials.Opticor constrainedby
-    DynTherM.Materials.Properties          "Material choice" annotation (choicesAllMatching=true);
+    DynTherM.Materials.Properties "Material choice" annotation (choicesAllMatching=true);
   outer DynTherM.Components.Environment environment "Environmental properties";
 
   parameter Modelica.Units.SI.Area A "Heat transfer surface";

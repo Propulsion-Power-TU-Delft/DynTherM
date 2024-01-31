@@ -45,7 +45,7 @@ class Aircraft:
                   ["A320.E_tr_%s" % str(x) for x in range(1, self.n_fus_secs + 1)]
         theta_input = ["A320.theta_%s" % str(x) for x in range(1, self.n_fus_secs + 1)]
         input_keys = ["m_ECS.k", "A320.rec_target", "T_target.k", "m_trim_cab.k", "m_trim_fd.k", "T_trim.k",
-                      "Mach_inf.k", "altitude.k", "environment.ISA_plus",
+                      "environment.Mach_inf_di", "environment.altitude_di", "environment.ISA_plus",
                       "environment.phi_amb", "environment.phi_amb_ground", "environment.T_ground", "A320.N_pax",
                       "A320.N_crew", "A320.N_pilots", "A320.Q_el", "A320.Q_galley", "A320.Q_avionics",
                       "A320.cabinLights", "A320.inFlightEntertainment"] + E_input + theta_input + \

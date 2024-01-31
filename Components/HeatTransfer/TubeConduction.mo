@@ -2,6 +2,7 @@ within DynTherM.Components.HeatTransfer;
 model TubeConduction "Dynamic model of conduction in a hollow cylinder"
   replaceable model Mat=DynTherM.Materials.Aluminium constrainedby
     DynTherM.Materials.Properties "Material choice" annotation (choicesAllMatching=true);
+
   parameter Real coeff "Fraction of cylinder with active heat transfer";
   parameter Modelica.Units.SI.Length L "Tube length";
   parameter Modelica.Units.SI.Length L_window=0 "Window length";
@@ -9,25 +10,30 @@ model TubeConduction "Dynamic model of conduction in a hollow cylinder"
   parameter Integer Nw_side=0 "Number of windows per fuselage side";
   parameter Modelica.Units.SI.Length R_ext "Tube external radius";
   parameter Modelica.Units.SI.Length R_int "Tube internal radius";
+
   parameter Modelica.Units.SI.Temperature Tstart=300
     "Temperature start value" annotation (Dialog(tab="Initialization"));
-  parameter DynTherM.Choices.InitOpt initOpt "Initialization option"
-    annotation (Dialog(tab="Initialization"));
+  parameter DynTherM.Choices.InitOpt initOpt "Initialization option" annotation (Dialog(tab="Initialization"));
+
   constant Real pi=Modelica.Constants.pi;
   final parameter Modelica.Units.SI.Mass
     m=coeff*Mat.rho*L*pi*(R_ext^2 - R_int^2) "Mass of the tube";
   final parameter Modelica.Units.SI.HeatCapacity Cm=m*Mat.cm
     "Heat capacity of the tube";
+
   Modelica.Units.SI.Temperature T_vol(start=Tstart)
     "Average temperature of the tube";
   Modelica.Units.SI.Length A_window_int "Equivalent internal window area";
   Modelica.Units.SI.Length A_window_ext "Equivalent external window area";
+
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a inlet
     annotation (Placement(transformation(extent={{-14,20},{14,48}})));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b outlet
     annotation (Placement(transformation(extent={{-14,-48},{14,-20}})));
+
 equation
   assert(R_ext > R_int, "External radius must be greater than internal radius");
+
   A_window_int = H_window/R_int*L_window*Nw_side;
   A_window_ext = H_window/R_ext*L_window*Nw_side;
   Cm*der(T_vol) = inlet.Q_flow + outlet.Q_flow "Energy balance";
@@ -37,6 +43,7 @@ equation
   outlet.Q_flow = (Mat.lambda*(coeff*2*pi*L - A_window_ext)*(outlet.T - T_vol))/
     Modelica.Math.log((2*R_ext)/(R_int + R_ext))
     "Heat conduction through the external half-thickness";
+
 initial equation
   if initOpt == DynTherM.Choices.InitOpt.steadyState then
     der(T_vol) = 0;
@@ -58,25 +65,11 @@ initial equation
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid,
           textString="TUBE")}),
-    Documentation(info="<HTML>
-<p>This is the model of a cylindrical tube of solid material.
-<p>The heat capacity (which is lumped at the center of the tube thickness) is accounted for, as well as the thermal resistance due to the finite heat conduction coefficient. Longitudinal heat conduction is neglected.
-<p><b>Modelling options</b></p>
-<p>The following options are available:
-<ul>
-<li><tt>WallRes = false</tt>: the thermal resistance of the tube wall is neglected.
-<li><tt>WallRes = true</tt>: the thermal resistance of the tube wall is accounted for.
-</ul>
-</HTML>",
+    Documentation(info="<html>
+<p>Model of a cylindrical tube of solid material.</p>
+<p>The heat capacity (which is lumped at the center of the tube thickness) is accounted for, as well as the thermal resistance due to the finite heat conduction coefficient. Longitudinal heat conduction is neglected.</p>
+<p>The tube element can be used to model the fuselage of an aircraft. In that case, the heat transfer through the cabin windows is neglected and treated separately. </p>
+</html>",
         revisions="<html>
-<ul>
-<li><i>30 May 2005</i>
-    by <a href=\"mailto:francesco.casella@polimi.it\">Francesco Casella</a>:<br>
-       Initialisation support added.</li>
-<li><i>1 Oct 2003</i>
-    by <a href=\"mailto:francesco.casella@polimi.it\">Francesco Casella</a>:<br>
-       First release.</li>
-</ul>
-</html>
-"));
+</html>"));
 end TubeConduction;

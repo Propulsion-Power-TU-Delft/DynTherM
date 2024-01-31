@@ -3,6 +3,7 @@ model ConductionWallSteady
   "Validation test case of steady-state conduction (wall). Reference: es.8, pag.92 fisica tecnica"
   BoundaryConditions.thermal cold_side(
     T=273.15,
+    use_Q=false,
     use_T=true,
     use_in_T=false)
     annotation (Placement(transformation(extent={{-20,-98},{10,-80}})));
@@ -20,6 +21,7 @@ model ConductionWallSteady
     annotation (Placement(transformation(extent={{-20,-6},{20,-44}})));
   BoundaryConditions.thermal hot_side(
     T=373.15,
+    use_Q=false,
     use_T=true,
     use_in_T=false)
     annotation (Placement(transformation(extent={{-20,80},{10,98}})));

@@ -8,8 +8,12 @@ model Environment "Environmental properties (moist air)"
   parameter Real phi_amb=0.5 "Ambient relative humidity";
   parameter Real phi_amb_ground=0.5 "Ambient relative humidity on ground";
   parameter Temperature T_ground=303.15 "Temperature of the ground";
+  parameter Length altitude_di=0 "Fixed value of altitude with respect to sea level" annotation (Dialog(enable=use_di_altitude));
   parameter Pressure P_amb_di=101325 "Fixed value of ambient pressure" annotation (Dialog(enable=use_P_amb));
   parameter Temperature T_amb_di=288.15 "Fixed value of ambient temperature" annotation (Dialog(enable=use_T_amb));
+  parameter Real Mach_inf_di=0 "Fixed value of free-stream Mach number" annotation (Dialog(enable=use_di_Mach_inf));
+  parameter Velocity V_inf_di=0 "Fixed value of free-stream velocity" annotation (Dialog(enable=use_di_V_inf));
+
 
   // Geographical data
   input Angle lat=0.58712876 "Latitude" annotation (Dialog(tab="Geographical location (default: Atlanta, GA, USA)"), enable=true);
@@ -27,7 +31,13 @@ model Environment "Environmental properties (moist air)"
     {2.614, 2.580, 2.474, 2.328, 2.324, 2.270, 2.202, 2.269, 2.428, 2.514, 2.523, 2.618} "Beam diffuse depth" annotation (Dialog(tab="Geographical location (default: Atlanta, GA, USA)"));
 
   // Options
-  parameter Boolean use_Mach_inf = false "Set the free-stream Mach number instead of the free-stream" annotation (Dialog(tab="Simulation options"), choices(checkBox=true));
+  parameter Boolean use_di_altitude = true "True if altitude is given as parameter" annotation (Dialog(tab="Simulation options"), choices(checkBox=true));
+  parameter Boolean use_di_Mach_inf = true "True if free-stream Mach number is given as parameter" annotation (Dialog(tab="Simulation options"), choices(checkBox=true));
+  parameter Boolean use_di_V_inf = false "True if free-stream velocity is given as parameter" annotation (Dialog(tab="Simulation options"), choices(checkBox=true));
+  parameter Boolean use_in_altitude = false "True if altitude is given as input" annotation (Dialog(tab="Simulation options"), choices(checkBox=true));
+  parameter Boolean use_in_Mach_inf = false "True if free-stream Mach number is given as input" annotation (Dialog(tab="Simulation options"), choices(checkBox=true));
+  parameter Boolean use_in_V_inf = false "True if free-stream velocity is given as input" annotation (Dialog(tab="Simulation options"), choices(checkBox=true));
+
   parameter Boolean use_P_amb = false "Use fixed value for the ambient pressure" annotation (Dialog(tab="Simulation options"), choices(checkBox=true));
   parameter Boolean use_T_amb = false "Use fixed value for the ambient temperature" annotation (Dialog(tab="Simulation options"), choices(checkBox=true));
   parameter Angle psi=1.0471975511965976
@@ -50,6 +60,7 @@ model Environment "Environmental properties (moist air)"
   constant DensityOfHeatFlowRate M_hb[3]={60,115,70}
     "Rate of metabolic heat production of: passengers, cabin crew, pilots";
 
+  Length altitude "Altitude with respect to sea level";
   Velocity V_inf "Free-stream velocity";
   Real Mach_inf "Free-stream Mach number";
   Pressure Pv "Water vapour pressure";
@@ -65,36 +76,38 @@ model Environment "Environmental properties (moist air)"
   MassFraction X_amb[2] "Ambient air mass fractions";
   Medium.ThermodynamicState state_amb "Ambient thermodynamic state";
 
-  Modelica.Blocks.Interfaces.RealInput V_inf_di if not use_Mach_inf
-    "Free-stream velocity - direct input" annotation (Placement(transformation(
+  Modelica.Blocks.Interfaces.RealInput in_V_inf if use_in_V_inf
+    "Free-stream velocity - input connector" annotation (Placement(transformation(
         origin={-100,-60},
         extent={{20,-20},{-20,20}},
         rotation=180), iconTransformation(
         extent={{20,-20},{-20,20}},
         rotation=180,
         origin={-100,-80})));
-  Modelica.Blocks.Interfaces.RealInput altitude
-    "Altitude with respect to sea level" annotation (Placement(transformation(
+  Modelica.Blocks.Interfaces.RealInput in_altitude if use_in_altitude
+    "Altitude with respect to sea level - input connector" annotation (Placement(transformation(
         origin={-100,-40},
         extent={{20,-20},{-20,20}},
         rotation=180), iconTransformation(
         extent={{20,-20},{-20,20}},
         rotation=180,
         origin={-100,-40})));
-  Modelica.Blocks.Interfaces.RealInput Mach_inf_di if use_Mach_inf
-    "Free-stream Mach number - direct input" annotation (Placement(transformation(
+  Modelica.Blocks.Interfaces.RealInput in_Mach_inf if use_in_Mach_inf
+    "Free-stream Mach number - input connector" annotation (Placement(transformation(
         origin={-100,-20},
         extent={{20,-20},{-20,20}},
         rotation=180), iconTransformation(
         extent={{20,-20},{-20,20}},
         rotation=180,
         origin={-100,0})));
+
 protected
   Pressure Pv_ground "Water vapour pressure on ground";
   Emissivity eps_sky_ground "Clear sky emmisivity on ground";
   Temperature T_sky_ground "Sky temperature on ground";
   Modelica.Blocks.Interfaces.RealInput V_inf_internal;
   Modelica.Blocks.Interfaces.RealInput Mach_inf_internal;
+  Modelica.Blocks.Interfaces.RealInput altitude_internal;
 
 equation
   state_amb = Medium.setState_pTX(P_amb, T_amb, X_amb);
@@ -103,10 +116,23 @@ equation
   X_amb = {X_water, X_air};
   Mach_inf = V_inf/Medium.velocityOfSound(state_amb);
 
-  if use_Mach_inf then
-    Mach_inf = Mach_inf_internal;
-  else
-    V_inf = V_inf_internal;
+  //Boundary equations
+  if use_di_altitude then
+    altitude_di = altitude;
+  elseif use_in_altitude then
+    altitude_internal = altitude;
+  end if;
+
+  if use_di_Mach_inf then
+    Mach_inf_di = Mach_inf;
+  elseif use_in_Mach_inf then
+    Mach_inf_internal = Mach_inf;
+  end if;
+
+  if use_di_V_inf then
+    V_inf_di = V_inf;
+  elseif use_in_V_inf then
+    V_inf_internal = V_inf;
   end if;
 
   // Compute ambient temperature and pressure [1]
@@ -183,8 +209,9 @@ equation
   end if;
 
   // Connect protected connectors to public conditional connectors
-  connect(Mach_inf_di, Mach_inf_internal);
-  connect(V_inf_di, V_inf_internal);
+  connect(in_altitude, altitude_internal);
+  connect(in_Mach_inf, Mach_inf_internal);
+  connect(in_V_inf, V_inf_internal);
 
   annotation (
     defaultComponentName="environment",

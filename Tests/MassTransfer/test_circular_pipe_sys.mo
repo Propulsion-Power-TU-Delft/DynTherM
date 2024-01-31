@@ -3,9 +3,6 @@ model test_circular_pipe_sys "Simple test of component pipe"
   package Refrigerant = DynTherM.Media.IncompressibleTableBased.MEG(X=0.1)
     "Refrigerant";
 
-  Modelica.Blocks.Interfaces.RealInput T_fromMix annotation (Placement(
-        transformation(extent={{-130,0},{-90,40}}),  iconTransformation(
-          extent={{-106,-30},{-86,-10}})));
   inner Components.Environment environment(
     allowFlowReversal=false,
     initOpt=DynTherM.Choices.InitOpt.fixedState)
@@ -16,10 +13,7 @@ model test_circular_pipe_sys "Simple test of component pipe"
     use_in_T=true) annotation (Placement(transformation(
         extent={{14,14},{-14,-14}},
         rotation=180,
-        origin={-80,-30})));
-  Modelica.Blocks.Interfaces.RealInput m_fromMix annotation (Placement(
-        transformation(extent={{-130,-30},{-90,10}}),iconTransformation(
-          extent={{-106,-70},{-86,-50}})));
+        origin={-60,-30})));
   BoundaryConditions.pressure_sink pressureSink(redeclare package Medium =
         Refrigerant)
     annotation (Placement(transformation(extent={{76,-42},{100,-18}})));
@@ -30,19 +24,21 @@ model test_circular_pipe_sys "Simple test of component pipe"
     L(displayUnit="mm") = 0.4826,
     D(displayUnit="mm") = 0.005,
     Roughness=0.001e-3)
-    annotation (Placement(transformation(extent={{-24,-54},{24,-6}})));
+    annotation (Placement(transformation(extent={{-8,-54},{40,-6}})));
 
+  Modelica.Blocks.Sources.Constant m_input(k=0.3)
+    annotation (Placement(transformation(extent={{-100,-10},{-80,10}})));
+  Modelica.Blocks.Sources.Constant T_input(k=273.15 + 50)
+    annotation (Placement(transformation(extent={{-100,30},{-80,50}})));
 equation
-  connect(m_fromMix, ECSFlow.in_massFlow)
-    annotation (Line(points={{-110,-10},{-91.2,-10},{-91.2,-20.2}},
-                                                           color={0,0,127}));
-  connect(T_fromMix, ECSFlow.in_T)
-    annotation (Line(points={{-110,20},{-82.8,20},{-82.8,-20.2}},
-                                                           color={0,0,127}));
   connect(ECSFlow.outlet, pipe.inlet)
-    annotation (Line(points={{-66,-30},{-24,-30}}, color={0,0,0}));
+    annotation (Line(points={{-46,-30},{-8,-30}},  color={0,0,0}));
   connect(pipe.outlet, pressureSink.inlet)
-    annotation (Line(points={{24,-30},{76,-30}}, color={0,0,0}));
+    annotation (Line(points={{40,-30},{76,-30}}, color={0,0,0}));
+  connect(m_input.y, ECSFlow.in_massFlow) annotation (Line(points={{-79,0},{
+          -71.2,0},{-71.2,-20.2}}, color={0,0,127}));
+  connect(T_input.y, ECSFlow.in_T) annotation (Line(points={{-79,40},{-62.8,40},
+          {-62.8,-20.2}}, color={0,0,127}));
   annotation (Documentation(info="<html>
 
 </html>"), experiment(StopTime=5000, Interval=0.1));

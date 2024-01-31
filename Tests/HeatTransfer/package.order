@@ -1,5 +1,4 @@
 RadiationGround
-WindowRadation
 ConductionWallSteady
 ConductionSphereUnsteady
 ConductionConvectionSteady
@@ -7,6 +6,5 @@ ConductionConvectionUnsteady
 ConductionConvectionRadiationSteady
 CabinWindow
 EnclosedAirSpace
-HeatCapacity
 WallConduction
 RadiationFlux

@@ -5,8 +5,6 @@ model CabinWall "Simplified model of cabin wall separating cabin and cockpit"
   parameter Modelica.Units.SI.Temperature Tstart=300 "Temperature start value"
     annotation (Dialog(tab="Initialization"));
   parameter Modelica.Units.SI.Area A "Surface of the cabin wall";
-  parameter Modelica.Units.SI.Area A_window=0 "Window area";
-  parameter Integer Nw_side=0 "Number of windows per fuselage side";
 
   final parameter Modelica.Units.SI.Length t_tot=0.0254 "Floor thcikness";
   final parameter Modelica.Units.SI.Length t_fl_f=0.000762
@@ -24,8 +22,6 @@ model CabinWall "Simplified model of cabin wall separating cabin and cockpit"
     redeclare model Mat = Materials.CarbonPhenolic,
     t=t_fl_f,
     A=A,
-    A_window=A_window,
-    Nw_side=Nw_side,
     Tstart=Tstart,
     initOpt=environment.initOpt) "Material: carbon phenolic"
     annotation (Placement(transformation(extent={{-28,46},{28,14}})));
@@ -33,8 +29,6 @@ model CabinWall "Simplified model of cabin wall separating cabin and cockpit"
     redeclare model Mat = Materials.FibrelamAramid6100,
     t=t_fl_c,
     A=A,
-    A_window=A_window,
-    Nw_side=Nw_side,
     Tstart=Tstart - 1,
     initOpt=environment.initOpt)
     "Material: Fibrelam® 6100 Aramid phenolic honeycomb HRH-10-1/8-9.0"
@@ -43,8 +37,6 @@ model CabinWall "Simplified model of cabin wall separating cabin and cockpit"
     redeclare model Mat = Materials.CarbonPhenolic,
     t=t_fl_f,
     A=A,
-    A_window=A_window,
-    Nw_side=Nw_side,
     Tstart=Tstart - 1.5,
     initOpt=environment.initOpt) "Material: carbon phenolic"
     annotation (Placement(transformation(extent={{-28,-14},{28,-46}})));

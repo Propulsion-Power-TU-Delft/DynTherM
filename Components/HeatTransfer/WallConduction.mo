@@ -4,8 +4,6 @@ model WallConduction "Dynamic model of conduction in a planar surface"
     DynTherM.Materials.Properties "Material choice" annotation (choicesAllMatching=true);
   parameter Modelica.Units.SI.Length t "Wall thickness";
   parameter Modelica.Units.SI.Area A "Wall surface";
-  parameter Modelica.Units.SI.Area A_window=0 "Window area";
-  parameter Integer Nw_side=0 "Number of windows per fuselage side";
   parameter Modelica.Units.SI.Temperature Tstart=300
     "Temperature start value" annotation (Dialog(tab="Initialization"));
   parameter DynTherM.Choices.InitOpt initOpt "Initialization option"
@@ -21,9 +19,9 @@ model WallConduction "Dynamic model of conduction in a planar surface"
     annotation (Placement(transformation(extent={{-14,-48},{14,-20}})));
 equation
   Cm*der(T_vol) = inlet.Q_flow + outlet.Q_flow "Energy balance";
-  inlet.Q_flow = (Mat.lambda*(A - A_window)*(inlet.T - T_vol))/(t/2)
+  inlet.Q_flow = (Mat.lambda*A*(inlet.T - T_vol))/(t/2)
     "Heat conduction through the internal half-thickness";
-  outlet.Q_flow = (Mat.lambda*(A - A_window)*(outlet.T - T_vol))/(t/2)
+  outlet.Q_flow = (Mat.lambda*A*(outlet.T - T_vol))/(t/2)
     "Heat conduction through the external half-thickness";
 initial equation
   if initOpt == DynTherM.Choices.InitOpt.steadyState then
@@ -46,25 +44,10 @@ initial equation
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid,
           textString="WALL")}),
-    Documentation(info="<HTML>
-<p>This is the model of a cylindrical tube of solid material.
-<p>The heat capacity (which is lumped at the center of the tube thickness) is accounted for, as well as the thermal resistance due to the finite heat conduction coefficient. Longitudinal heat conduction is neglected.
-<p><b>Modelling options</b></p>
-<p>The following options are available:
-<ul>
-<li><tt>WallRes = false</tt>: the thermal resistance of the tube wall is neglected.
-<li><tt>WallRes = true</tt>: the thermal resistance of the tube wall is accounted for.
-</ul>
-</HTML>",
+    Documentation(info="<html>
+<p>This is the model of a cylindrical tube of solid material. </p>
+<p>The heat capacity (which is lumped at the center of the tube thickness) is accounted for, as well as the thermal resistance due to the finite heat conduction coefficient. Longitudinal heat conduction is neglected. </p>
+</html>",
         revisions="<html>
-<ul>
-<li><i>30 May 2005</i>
-    by <a href=\"mailto:francesco.casella@polimi.it\">Francesco Casella</a>:<br>
-       Initialisation support added.</li>
-<li><i>1 Oct 2003</i>
-    by <a href=\"mailto:francesco.casella@polimi.it\">Francesco Casella</a>:<br>
-       First release.</li>
-</ul>
-</html>
-"));
+</html>"));
 end WallConduction;

@@ -115,15 +115,10 @@ model A320GroundCabin "Aircraft on ground, two temperature zones"
     phi_amb=0.0,
     phi_amb_ground=0.22,
     T_ground(displayUnit="degC") = 298.15,
-    use_Mach_inf=true,
     use_ext_sw=true,
     allowFlowReversal=false,
     initOpt=DynTherM.Choices.InitOpt.steadyState)
-    annotation (Placement(transformation(extent={{-66,-44},{-32,-10}})));
-  Modelica.Blocks.Sources.Constant Mach_inf(k=0)
-    annotation (Placement(transformation(extent={{-100,-20},{-80,0}})));
-  Modelica.Blocks.Sources.Constant altitude(k=0)
-    annotation (Placement(transformation(extent={{-100,-60},{-80,-40}})));
+    annotation (Placement(transformation(extent={{-82,-64},{-42,-24}})));
 equation
   m_fresh_min = 0.25/60*(A320.N_pax + A320.N_crew + A320.N_pilots);
   connect(add_m_rec.y, PID_m_rec.u)
@@ -165,10 +160,6 @@ equation
           {-3.57143,-90},{-3.57143,-17.5}}, color={0,0,127}));
   connect(A320.cabinTemperature, PID_T_cab.u_m) annotation (Line(points={{
           4.71429,-17.5},{4.71429,-90},{70,-90},{70,-6}}, color={0,0,127}));
-  connect(altitude.y,environment. altitude) annotation (Line(points={{-79,-50},
-          {-74,-50},{-74,-33.8},{-66,-33.8}}, color={0,0,127}));
-  connect(Mach_inf.y, environment.Mach_inf_di) annotation (Line(points={{-79,
-          -10},{-74,-10},{-74,-27},{-66,-27}}, color={0,0,127}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false)),
     Diagram(coordinateSystem(preserveAspectRatio=false)),

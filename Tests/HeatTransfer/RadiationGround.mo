@@ -5,12 +5,13 @@ model RadiationGround
     annotation (Placement(transformation(extent={{-16,98},{16,66}})));
   BoundaryConditions.thermal int1(
     T=293.15,
+    use_Q=false,
     use_T=true,
     use_in_T=false)
     annotation (Placement(transformation(extent={{-16,32},{8,48}})));
   inner Components.Environment environment(
+    altitude_di(displayUnit="km") = 11000,
     V_inf_di=0,
-    Altitude(displayUnit="km") = 11000,
     ISA_plus=0,
     psi=0,
     Day=202,
@@ -25,6 +26,7 @@ model RadiationGround
     annotation (Placement(transformation(extent={{-56,98},{-24,66}})));
   BoundaryConditions.thermal int2(
     T=293.15,
+    use_Q=false,
     use_T=true,
     use_in_T=false)
     annotation (Placement(transformation(extent={{-56,32},{-32,48}})));
@@ -36,6 +38,7 @@ model RadiationGround
              annotation (Placement(transformation(extent={{24,98},{56,66}})));
   BoundaryConditions.thermal int8(
     T=293.15,
+    use_Q=false,
     use_T=true,
     use_in_T=false)
     annotation (Placement(transformation(extent={{24,32},{48,48}})));
@@ -47,6 +50,7 @@ model RadiationGround
     annotation (Placement(transformation(extent={{-16,-98},{16,-66}})));
   BoundaryConditions.thermal int5(
     T=293.15,
+    use_Q=false,
     use_T=true,
     use_in_T=false)
     annotation (Placement(transformation(extent={{-16,-32},{8,-48}})));
@@ -58,6 +62,7 @@ model RadiationGround
     annotation (Placement(transformation(extent={{24,-98},{56,-66}})));
   BoundaryConditions.thermal int6(
     T=293.15,
+    use_Q=false,
     use_T=true,
     use_in_T=false)
     annotation (Placement(transformation(extent={{24,-32},{48,-48}})));
@@ -69,6 +74,7 @@ model RadiationGround
     annotation (Placement(transformation(extent={{-56,-98},{-24,-66}})));
   BoundaryConditions.thermal int4(
     T=293.15,
+    use_Q=false,
     use_T=true,
     use_in_T=false)
     annotation (Placement(transformation(extent={{-56,-32},{-32,-48}})));
@@ -82,6 +88,7 @@ model RadiationGround
         origin={-82,0})));
   BoundaryConditions.thermal int3(
     T=293.15,
+    use_Q=false,
     use_T=true,
     use_in_T=false)
     annotation (Placement(transformation(extent={{-24,8},{-48,-8}})));
@@ -98,6 +105,7 @@ model RadiationGround
 
   BoundaryConditions.thermal int7(
     T=293.15,
+    use_Q=false,
     use_T=true,
     use_in_T=false)
     annotation (Placement(transformation(extent={{24,8},{48,-8}})));

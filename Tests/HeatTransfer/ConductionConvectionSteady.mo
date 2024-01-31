@@ -29,11 +29,11 @@ model ConductionConvectionSteady
     annotation (Placement(transformation(extent={{-28,96},{28,42}})));
   inner Components.Environment environment(
     V_inf_di=0,
-    Altitude(displayUnit="m") = 2440,
     ISA_plus=5)
     annotation (Placement(transformation(extent={{60,60},{100,100}})));
   BoundaryConditions.thermal thermal(
     T=673.15,
+    use_Q=false,
     use_T=true,
     use_in_T=false)
     annotation (Placement(transformation(extent={{-20,-96},{10,-78}})));

@@ -3,36 +3,13 @@ model CircularCV
   package Refrigerant = DynTherM.Media.IncompressibleTableBased.MEG(X=0.1)
     "Refrigerant";
 
-  parameter Modelica.Units.SI.Length L "Length of the control volume";
-  parameter Modelica.Units.SI.Length R_ext "External radius of the control volume";
-  parameter Modelica.Units.SI.Length R_int "Internal radius of the control volume";
-  parameter Modelica.Units.SI.HeatFlowRate Q_flow;
-  parameter Modelica.Units.SI.Temperature T_start_solid
-    "Temperature of solid part - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Temperature T_start_fluid
-    "Temperature of fluid part - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Pressure P_start=101325
-    "Fluid pressure - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.MassFlowRate m_flow_start=1
-    "Mass flow rate - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.MassFraction X_start[Refrigerant.nX]=Refrigerant.reference_X
-    "Mass fractions - start value" annotation (Dialog(tab="Initialization"));
-  parameter Refrigerant.ThermodynamicState state_start = Refrigerant.setState_pTX(P_start, T_start_fluid, X_start)
-    "Starting thermodynamic state" annotation (Dialog(tab="Initialization"));
-
   BoundaryConditions.flow_source ECSFlow(
     redeclare package Medium = Refrigerant,
     use_in_massFlow=true,
     use_in_T=true) annotation (Placement(transformation(
         extent={{14,14},{-14,-14}},
         rotation=180,
-        origin={-80,0})));
-  Modelica.Blocks.Interfaces.RealInput T_fromMix annotation (Placement(
-        transformation(extent={{-130,30},{-90,70}}), iconTransformation(
-          extent={{-106,-30},{-86,-10}})));
-  Modelica.Blocks.Interfaces.RealInput m_fromMix annotation (Placement(
-        transformation(extent={{-130,0},{-90,40}}),  iconTransformation(
-          extent={{-106,-70},{-86,-50}})));
+        origin={-60,0})));
   BoundaryConditions.pressure_sink pressureSink(redeclare package Medium =
         Refrigerant)
     annotation (Placement(transformation(extent={{68,-12},{92,12}})));
@@ -41,33 +18,31 @@ model CircularCV
     initOpt=DynTherM.Choices.InitOpt.steadyState) annotation (Placement(transformation(extent={{60,60},{100,100}})));
   Components.OneDimensional.CircularCV cv(
     redeclare package Medium = Refrigerant,
-    L=L,
-    R_ext=R_ext,
-    R_int=R_int,
-    T_start_solid=T_start_solid,
-    T_start_fluid=T_start_fluid,
-    P_start=P_start,
-    X_start=X_start,
-    state_start=state_start,
-    m_flow_start=m_flow_start)
+    L(displayUnit="mm") = 0.4826,
+    R_ext(displayUnit="mm") = 0.003,
+    R_int(displayUnit="mm") = 0.0025,
+    T_start_solid=323.15,
+    T_start_fluid=323.15)
     annotation (Placement(transformation(extent={{-30,-30},{30,30}})));
 
-  BoundaryConditions.thermal thermal(Q=Q_flow)
+  BoundaryConditions.thermal thermal(Q(displayUnit="kW") = -10000)
     annotation (Placement(transformation(extent={{-16,52},{8,68}})));
+  Modelica.Blocks.Sources.Constant m(k=0.3)
+    annotation (Placement(transformation(extent={{-100,20},{-80,40}})));
+  Modelica.Blocks.Sources.Constant T(k=273.15 + 50)
+    annotation (Placement(transformation(extent={{-100,60},{-80,80}})));
 equation
 
-  connect(m_fromMix,ECSFlow. in_massFlow)
-    annotation (Line(points={{-110,20},{-91.2,20},{-91.2,9.8}},
-                                                           color={0,0,127}));
-  connect(T_fromMix,ECSFlow. in_T)
-    annotation (Line(points={{-110,50},{-82.8,50},{-82.8,9.8}},
-                                                           color={0,0,127}));
-  connect(ECSFlow.outlet, cv.inlet) annotation (Line(points={{-66,-3.44169e-15},
+  connect(ECSFlow.outlet, cv.inlet) annotation (Line(points={{-46,-3.44169e-15},
           {-45,-3.44169e-15},{-45,0},{-24,0}}, color={0,0,0}));
   connect(cv.outlet, pressureSink.inlet)
     annotation (Line(points={{24,0},{68,0}}, color={0,0,0}));
   connect(thermal.thermal, cv.solid_surface)
     annotation (Line(points={{0,60},{0,24}}, color={191,0,0}));
+  connect(m.y, ECSFlow.in_massFlow) annotation (Line(points={{-79,30},{-71.2,30},
+          {-71.2,9.8}}, color={0,0,127}));
+  connect(T.y, ECSFlow.in_T) annotation (Line(points={{-79,70},{-62.8,70},{-62.8,
+          9.8}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)));
 end CircularCV;

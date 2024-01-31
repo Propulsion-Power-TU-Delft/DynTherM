@@ -173,7 +173,6 @@ model PassengerCabin
 
   inner Components.Environment environment(
     V_inf_di=0,
-    Altitude=0,
     ISA_plus=23,
     phi_amb=0.22,
     phi_amb_ground=0.22,
@@ -184,8 +183,7 @@ model PassengerCabin
     annotation (Placement(transformation(extent={{66,66},{100,100}})));
   BoundaryConditions.flow_source cabinTrimFlow(
     use_in_massFlow=false,
-    use_in_T=false,
-    use_in_Xw=false) annotation (Placement(transformation(
+    use_in_T=false)  annotation (Placement(transformation(
         extent={{10,10},{-10,-10}},
         rotation=180,
         origin={-24,80})));
@@ -233,8 +231,8 @@ model PassengerCabin
     Tstart_fuselage=Tstart_fuselage,
     Tstart_cabin=Tstart_cabin,
     Pstart_cabin=Pstart_cabin,
-    noInitialPressure=noInitialPressure_cabin,
-    noInitialTemperature=noInitialTemperature_cabin)
+    noInitialPressure=true,
+    noInitialTemperature=false)
     annotation (Placement(transformation(extent={{-22,-20},{22,24}})));
 
 equation

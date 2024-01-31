@@ -14,12 +14,13 @@ model EnclosedAirSpace
     annotation (Placement(transformation(extent={{-20,50},{10,70}})));
   BoundaryConditions.thermal int1(
     T=293.15,
+    use_Q=false,
     use_T=true,
     use_in_T=false)
     annotation (Placement(transformation(extent={{-20,-70},{10,-50}})));
   inner Components.Environment environment(
+    altitude_di(displayUnit="km") = 11000,
     V_inf_di=0.78,
-    Altitude(displayUnit="km") = 11000,
     ISA_plus=0,
     phi_amb=0.2)
     annotation (Placement(transformation(extent={{60,60},{100,100}})));
