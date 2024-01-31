@@ -4,7 +4,7 @@
 
 ### Description
 
-A Modelica library for the Dynamic simulation of Thermal Management systems.
+A Modelica library for the Dynamic modeling and simulation of Thermal Management systems.
 
 ---
 
@@ -47,8 +47,6 @@ A. Giuffré, P. Colonna, and C. De Servi. "Dynamic Thermal Model of Passenger Ai
 ---
 
 ### Setting Python - Dymola interface
-
-Disclaimer: the Python scripts are not released open-source yet, since they still need to be cleaned and extensively tested.
 
 The following instructions are tested for Python 3.7+ and Dymola 2022, assuming the Dymola installation folder to be the standard one.
 
