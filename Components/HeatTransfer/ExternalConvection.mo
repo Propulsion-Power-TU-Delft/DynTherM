@@ -4,7 +4,7 @@ model ExternalConvection "Model of external convection"
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
   outer DynTherM.Components.Environment environment "Environmental properties";
 
-  parameter Modelica.Units.SI.Area A "Heat transfer area";
+  parameter Area A "Heat transfer area";
 
   replaceable model HTC =
     DynTherM.Components.HeatTransfer.HTCorrelations.ExternalConvection.FixedValue

@@ -9,36 +9,34 @@ model RectangularChannel1D "Rectangular channel implementing 1D spatial discreti
   model CV = RectangularCV "Control volume";
 
   // Geometry
-  parameter Modelica.Units.SI.Length L "Channel length" annotation (Dialog(tab="Geometry"));
-  parameter Modelica.Units.SI.Length W "Width of the channel" annotation (Dialog(tab="Geometry"));
-  parameter Modelica.Units.SI.Length H "Height of the channel" annotation (Dialog(tab="Geometry"));
-  parameter Modelica.Units.SI.Length t_north "Thickness of north wall" annotation (Dialog(tab="Geometry"));
-  parameter Modelica.Units.SI.Length t_east "Thickness of east wall" annotation (Dialog(tab="Geometry"));
-  parameter Modelica.Units.SI.Length t_south "Thickness of south wall" annotation (Dialog(tab="Geometry"));
-  parameter Modelica.Units.SI.Length t_west "Thickness of west wall" annotation (Dialog(tab="Geometry"));
+  parameter Length L "Channel length" annotation (Dialog(tab="Geometry"));
+  parameter Length W "Width of the channel" annotation (Dialog(tab="Geometry"));
+  parameter Length H "Height of the channel" annotation (Dialog(tab="Geometry"));
+  parameter Length t_north "Thickness of north wall" annotation (Dialog(tab="Geometry"));
+  parameter Length t_east "Thickness of east wall" annotation (Dialog(tab="Geometry"));
+  parameter Length t_south "Thickness of south wall" annotation (Dialog(tab="Geometry"));
+  parameter Length t_west "Thickness of west wall" annotation (Dialog(tab="Geometry"));
 
   // Initialization
-  parameter Modelica.Units.SI.Temperature T_start_solid=288.15
-    "Temperature of the solid part - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Temperature T_start_fluid=288.15
-    "Fluid temperature - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Pressure P_start=101325
-    "Fluid pressure - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.MassFraction X_start[Medium.nX]=Medium.reference_X
+  parameter Temperature T_start_solid=288.15 "Temperature of the solid part - start value" annotation (Dialog(tab="Initialization"));
+  parameter Temperature T_start_fluid=288.15 "Fluid temperature - start value" annotation (Dialog(tab="Initialization"));
+  parameter Pressure P_start=101325 "Fluid pressure - start value" annotation (Dialog(tab="Initialization"));
+  parameter MassFraction X_start[Medium.nX]=Medium.reference_X
     "Mass fractions - start value" annotation (Dialog(tab="Initialization"));
-  parameter Medium.ThermodynamicState state_start = Medium.setState_pTX(P_start, T_start_fluid, X_start)
+  parameter Medium.ThermodynamicState state_start=
+    Medium.setState_pTX(P_start, T_start_fluid, X_start)
     "Starting thermodynamic state" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.MassFlowRate m_flow_start=1
-    "Mass flow rate - start value" annotation (Dialog(tab="Initialization"));
-  parameter Choices.InitOpt initOpt=environment.initOpt
-    "Initialization option" annotation (Dialog(tab="Initialization"));
+  parameter MassFlowRate m_flow_start=1 "Mass flow rate - start value" annotation (Dialog(tab="Initialization"));
+  parameter Choices.InitOpt initOpt=environment.initOpt "Initialization option" annotation (Dialog(tab="Initialization"));
 
   // Discretization
   parameter Integer N(min=1) "Number of longitudinal sections in which the tube is discretized";
+  parameter Integer N_channels(min=1) "Number of channels in parallel";
 
   CV cv[N](
     redeclare model Mat = Mat,
     redeclare package Medium = Medium,
+    each N=N_channels,
     each L=L/N,
     each W=W,
     each H=H,
@@ -58,7 +56,7 @@ model RectangularChannel1D "Rectangular channel implementing 1D spatial discreti
   Mass m_fluid "Mass of fluid";
   Mass m_solid "Mass of solid walls";
   Pressure dP "Pressure drop";
-  HeatFlowRate Q "Heat flow rate entering the rectangular channel";
+  HeatFlowRate Q "Heat flow rate - positive entering";
 
   DynTherM.CustomInterfaces.FluidPort_A inlet(
     redeclare package Medium = Medium,

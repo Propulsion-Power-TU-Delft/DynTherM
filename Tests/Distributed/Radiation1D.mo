@@ -14,8 +14,8 @@ model Radiation1D
     annotation (Placement(transformation(extent={{60,60},{100,100}})));
   Components.OneDimensional.WallRadiation1D wallRadiationFlux(csi=0, N=3)
     annotation (Placement(transformation(extent={{-26,-14},{26,-80}})));
-  Components.Adaptors.irradianceMultiplier irradianceMultiplier(Nx=3, Ny=1)
-    annotation (Placement(transformation(extent={{-26,30},{26,-22}})));
+  CustomInterfaces.Adaptors.irradianceMultiplier irradianceMultiplier(Nx=3, Ny=
+        1) annotation (Placement(transformation(extent={{-26,30},{26,-22}})));
   BoundaryConditions.thermal_flux_distributed thermal_flux_distributed(
     Nx=3,
     Ny=1,

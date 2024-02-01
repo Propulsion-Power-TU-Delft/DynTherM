@@ -1,5 +1,5 @@
 within DynTherM.Tests.MassTransfer;
-model test1
+model System1
   "Simple test of components SourceMassFlow, Plenum, ValveLin, PressureSink"
 
   Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow cabinHeatFlowRate
@@ -68,4 +68,4 @@ equation
 </html>"), experiment(StopTime=5000, Interval=0.1),
     Diagram(coordinateSystem(extent={{-120,-100},{100,100}})),
     Icon(coordinateSystem(extent={{-120,-100},{100,100}})));
-end test1;
+end System1;

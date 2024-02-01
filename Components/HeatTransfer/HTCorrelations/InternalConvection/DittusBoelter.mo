@@ -1,14 +1,14 @@
 within DynTherM.Components.HeatTransfer.HTCorrelations.InternalConvection;
 model DittusBoelter "Internal convection for circular pipes according to Dittus-Boelter correlation"
   extends BaseClassInternal;
-  input Modelica.Units.SI.Length Dh "Hydraulic diameter" annotation(Dialog(enable = true));
-  input Modelica.Units.SI.Temperature T_in "Inlet fluid temperature" annotation(Dialog(enable = true));
-  input Modelica.Units.SI.Temperature T_out "Outlet fluid temperature" annotation(Dialog(enable = true));
-  input Modelica.Units.SI.ReynoldsNumber Re "Reynolds number" annotation(Dialog(enable = true));
-  input Modelica.Units.SI.PrandtlNumber Pr "Prandtl number" annotation(Dialog(enable = true));
+  input Length Dh "Hydraulic diameter" annotation(Dialog(enable = true));
+  input Temperature T_in "Inlet fluid temperature" annotation(Dialog(enable = true));
+  input Temperature T_out "Outlet fluid temperature" annotation(Dialog(enable = true));
+  input ReynoldsNumber Re "Reynolds number" annotation(Dialog(enable = true));
+  input PrandtlNumber Pr "Prandtl number" annotation(Dialog(enable = true));
   input Medium.ThermodynamicState state "Average thermodynamic state" annotation(Dialog(enable = true));
 
-  Modelica.Units.SI.NusseltNumber Nu "Nusselt number";
+  NusseltNumber Nu "Nusselt number";
 
 equation
 

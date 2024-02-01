@@ -2,7 +2,6 @@ CircularCV
 RectangularCV
 CircularChannel1D
 RectangularChannel1D
-RectangularChannels1D
 ExternalConvection1D
 InternalConvection1D
 WallRadiation1D

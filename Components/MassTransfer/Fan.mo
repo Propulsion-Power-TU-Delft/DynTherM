@@ -6,8 +6,8 @@ model Fan "Model of a fan"
 
   parameter Boolean allowFlowReversal=environment.allowFlowReversal
      "= true to allow flow reversal, false restricts to design direction";
-  parameter Real eta_is "Isentropic efficiency at design point";
-  parameter Real eta_m "Mechanical efficiency";
+  parameter Real eta_is=0.7 "Isentropic efficiency at design point";
+  parameter Real eta_m=0.99 "Mechanical efficiency";
   parameter Modelica.Units.SI.AngularVelocity omega_nom
     "Nominal rotational speed" annotation (Dialog(tab="Nominal values"));
   parameter Modelica.Units.SI.VolumeFlowRate volFlow_nom
@@ -35,46 +35,48 @@ model Fan "Model of a fan"
     omega=shaft.omega,
     volFlow_nom=volFlow_nom,
     volFlow=volFlow,
-    Head_nom=Head_nom) annotation (choicesAllMatching=true);
+    Head_nom=Head_nom)
+    annotation (choicesAllMatching=true);
 
-   CustomInterfaces.Shaft_A shaft annotation (Placement(transformation(extent={{-10,90},{10,110}}), iconTransformation(extent={{-10,90},{10,110}})));
-   CustomInterfaces.FluidPort_A inlet(
+  CustomInterfaces.Shaft_A shaft annotation (Placement(transformation(extent={{-10,90},{10,110}}), iconTransformation(extent={{-10,90},{10,110}})));
+  CustomInterfaces.FluidPort_A inlet(
     redeclare package Medium = Medium,
-     h_outflow(start=h_start),
-     m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0)) annotation (Placement(transformation(
+    h_outflow(start=h_start),
+    m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0)) annotation (Placement(transformation(
            extent={{-110,-10},{-90,10}}), iconTransformation(extent={{-110,-10},{
              -90,10}})));
-   CustomInterfaces.FluidPort_B outlet(
+  CustomInterfaces.FluidPort_B outlet(
     redeclare package Medium = Medium,
-     h_outflow(start=h_start),
-     m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0)) annotation (Placement(transformation(
+    h_outflow(start=h_start),
+    m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0)) annotation (Placement(transformation(
            extent={{90,-10},{110,10}}), iconTransformation(extent={{90,-10},{110,
              10}})));
+
 equation
-   state_in = Medium.setState_phX(inlet.P, inStream(inlet.h_outflow), inStream(inlet.Xi_outflow));
-   rho = Medium.density(state_in);
+  state_in = Medium.setState_phX(inlet.P, inStream(inlet.h_outflow), inStream(inlet.Xi_outflow));
+  rho = Medium.density(state_in);
 
-   // Boundary conditions
-   massFlow = inlet.m_flow "Fan total flow rate";
-   volFlow = massFlow/rho;
+  // Boundary conditions
+  massFlow = inlet.m_flow "Fan total flow rate";
+  volFlow = massFlow/rho;
 
-   // Mass balance
-   inlet.m_flow + outlet.m_flow = 0;
+  // Mass balance
+  inlet.m_flow + outlet.m_flow = 0;
 
-   // Independent composition mass balances
-   inlet.Xi_outflow = inStream(outlet.Xi_outflow);
-   outlet.Xi_outflow = inStream(inlet.Xi_outflow);
+  // Independent composition mass balances
+  inlet.Xi_outflow = inStream(outlet.Xi_outflow);
+  outlet.Xi_outflow = inStream(inlet.Xi_outflow);
 
-   // Energy balance
-   outlet.h_outflow = inStream(inlet.h_outflow) + W/massFlow "Energy balance for w > 0";
-   inlet.h_outflow = inStream(outlet.h_outflow) + W/massFlow "Energy balance for w < 0";
+  // Energy balance
+  outlet.h_outflow = inStream(inlet.h_outflow) + W/massFlow "Energy balance for w > 0";
+  inlet.h_outflow = inStream(outlet.h_outflow) + W/massFlow "Energy balance for w < 0";
 
-   // Flow characteristics
-   beta = outlet.P/inlet.P;
-   flowModel.Head = (outlet.P - inlet.P)/rho;
-   W = (outlet.P - inlet.P)*volFlow/eta_is;
-   Pm = W/eta_m;
-   shaft.M*shaft.omega + Pm = 0;
+  // Flow characteristics
+  beta = outlet.P/inlet.P;
+  flowModel.Head = (outlet.P - inlet.P)/rho;
+  W = (outlet.P - inlet.P)*volFlow/eta_is;
+  Pm = W/eta_m;
+  shaft.M*shaft.omega + Pm = 0;
 
  annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
      Ellipse(extent={{-60,60},{60,-60}}, lineColor={0,0,0},

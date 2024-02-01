@@ -1,5 +1,5 @@
-test1
-test2
-test_circular_pipe_sys
-test_rectangular_pipe_sys
-test_actuator_disk
+System1
+System2
+CircularPipe
+RectangularPipe
+ActuatorDisk

@@ -1,39 +1,43 @@
 within DynTherM.Components.HeatTransfer;
-model HeatCapacity
-    "Dynamic model of heat capacity element"
-    outer DynTherM.Components.Environment environment
+model HeatCapacity "Dynamic model of heat capacity element"
+  outer DynTherM.Components.Environment environment
     "Environmental properties";
-    parameter DynTherM.Choices.InitOpt initOpt=environment.initOpt
+
+  parameter DynTherM.Choices.InitOpt initOpt=environment.initOpt
     "Initialization option" annotation (Dialog(tab="Initialization"));
-    parameter Boolean noInitialTemperature=false "Remove initial equation on temperature" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
-    parameter Modelica.Units.SI.Temperature T_start=300
-      "Temperature start value" annotation (Dialog(tab="Initialization"));
-    parameter Modelica.Units.SI.HeatCapacity C
-      "Heat capacity of element (= cp*m)";
-    Modelica.Units.SI.Temperature T(start=T_start) "Temperature of element";
-    Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port annotation (Placement(transformation(
+  parameter Boolean noInitialTemperature=false
+    "Remove initial equation on temperature" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
+  parameter Temperature T_start=300 "Temperature start value" annotation (Dialog(tab="Initialization"));
+  parameter Modelica.Units.SI.HeatCapacity C "Heat capacity";
+
+  Temperature T(start=T_start) "Temperature of element";
+
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port annotation (Placement(transformation(
           origin={0,-100},
           extent={{-10,-10},{10,10}},
           rotation=90)));
+
 equation
-    T = port.T;
-    C*der(T) = port.Q_flow;
+  T = port.T;
+  C*der(T) = port.Q_flow;
+
 initial equation
-    // Initial conditions
+  // Initial conditions
   if initOpt == DynTherM.Choices.InitOpt.noInit then
-      // do nothing
+    // do nothing
   elseif initOpt == DynTherM.Choices.InitOpt.fixedState then
-      if not noInitialTemperature then
-        T = T_start;
-      end if;
-  elseif initOpt == DynTherM.Choices.InitOpt.steadyState then
-      if not noInitialTemperature then
-        der(T) = 0;
-      end if;
-    else
-      assert(false, "Unsupported initialisation option");
+    if not noInitialTemperature then
+      T = T_start;
     end if;
-    annotation (
+  elseif initOpt == DynTherM.Choices.InitOpt.steadyState then
+    if not noInitialTemperature then
+      der(T) = 0;
+    end if;
+  else
+    assert(false, "Unsupported initialisation option");
+  end if;
+
+  annotation (
       Icon(coordinateSystem(preserveAspectRatio=true, extent={{-100,-100},{
               100,100}}), graphics={
           Text(

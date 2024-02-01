@@ -3,28 +3,30 @@ model TubeConduction "Dynamic model of conduction in a hollow cylinder"
   replaceable model Mat=DynTherM.Materials.Aluminium constrainedby
     DynTherM.Materials.Properties "Material choice" annotation (choicesAllMatching=true);
 
-  parameter Real coeff "Fraction of cylinder with active heat transfer";
-  parameter Modelica.Units.SI.Length L "Tube length";
-  parameter Modelica.Units.SI.Length L_window=0 "Window length";
-  parameter Modelica.Units.SI.Length H_window=0 "Window height";
-  parameter Integer Nw_side=0 "Number of windows per fuselage side";
-  parameter Modelica.Units.SI.Length R_ext "Tube external radius";
-  parameter Modelica.Units.SI.Length R_int "Tube internal radius";
+  parameter Integer N=1 "Number of tubes in parallel";
+  parameter Real coeff "Fraction of tube with active heat transfer";
+  parameter Length L "Tube length";
+  parameter Length R_ext "Tube external radius";
+  parameter Length R_int "Tube internal radius";
 
-  parameter Modelica.Units.SI.Temperature Tstart=300
+  parameter Length L_window=0 "Window length - aircraft fuselage application" annotation (Dialog(tab="Passive surface"));
+  parameter Length H_window=0 "Window height - aircraft fuselage application" annotation (Dialog(tab="Passive surface"));
+  parameter Integer Nw_side=0 "Number of windows per fuselage side - aircraft fuselage application" annotation (Dialog(tab="Passive surface"));
+
+  parameter Temperature Tstart=300
     "Temperature start value" annotation (Dialog(tab="Initialization"));
   parameter DynTherM.Choices.InitOpt initOpt "Initialization option" annotation (Dialog(tab="Initialization"));
 
   constant Real pi=Modelica.Constants.pi;
-  final parameter Modelica.Units.SI.Mass
-    m=coeff*Mat.rho*L*pi*(R_ext^2 - R_int^2) "Mass of the tube";
+  final parameter Mass m=coeff*Mat.rho*L*pi*(R_ext^2 - R_int^2) "Mass of the tube";
   final parameter Modelica.Units.SI.HeatCapacity Cm=m*Mat.cm
     "Heat capacity of the tube";
 
-  Modelica.Units.SI.Temperature T_vol(start=Tstart)
-    "Average temperature of the tube";
-  Modelica.Units.SI.Length A_window_int "Equivalent internal window area";
-  Modelica.Units.SI.Length A_window_ext "Equivalent external window area";
+  Temperature T_vol(start=Tstart) "Average temperature of the tube";
+  Length A_window_int
+    "Equivalent internal window area - aircraft fuselage application";
+  Length A_window_ext
+    "Equivalent external window area - aircraft fuselage application";
 
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a inlet
     annotation (Placement(transformation(extent={{-14,20},{14,48}})));
@@ -36,11 +38,12 @@ equation
 
   A_window_int = H_window/R_int*L_window*Nw_side;
   A_window_ext = H_window/R_ext*L_window*Nw_side;
-  Cm*der(T_vol) = inlet.Q_flow + outlet.Q_flow "Energy balance";
-  inlet.Q_flow = (Mat.lambda*(coeff*2*pi*L - A_window_int)*(inlet.T - T_vol))/
+
+  N*Cm*der(T_vol) = inlet.Q_flow + outlet.Q_flow "Energy balance";
+  inlet.Q_flow = (Mat.lambda*N*(coeff*2*pi*L - A_window_int)*(inlet.T - T_vol))/
     Modelica.Math.log((R_int + R_ext)/(2*R_int))
     "Heat conduction through the internal half-thickness";
-  outlet.Q_flow = (Mat.lambda*(coeff*2*pi*L - A_window_ext)*(outlet.T - T_vol))/
+  outlet.Q_flow = (Mat.lambda*N*(coeff*2*pi*L - A_window_ext)*(outlet.T - T_vol))/
     Modelica.Math.log((2*R_ext)/(R_int + R_ext))
     "Heat conduction through the external half-thickness";
 
@@ -68,6 +71,7 @@ initial equation
     Documentation(info="<html>
 <p>Model of a cylindrical tube of solid material.</p>
 <p>The heat capacity (which is lumped at the center of the tube thickness) is accounted for, as well as the thermal resistance due to the finite heat conduction coefficient. Longitudinal heat conduction is neglected.</p>
+<p>The model can be used to reproduce the heat transfer through many tubes in parallel. In that case, the heat flow rate is split equally among the different tubes, assuming there is no heat transfer and temperature difference between them.</p>
 <p>The tube element can be used to model the fuselage of an aircraft. In that case, the heat transfer through the cabin windows is neglected and treated separately. </p>
 </html>",
         revisions="<html>

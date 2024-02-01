@@ -10,22 +10,15 @@ model RectangularPipe "Model of pipe with rectangular cross-section"
     "= true to allow flow reversal, false restricts to design direction";
   parameter DynTherM.Choices.PDropOpt DP_opt
     "Select the type of pressure drop to impose";
-  parameter DynTherM.CustomUnits.HydraulicResistance Rh=0
-    "Hydraulic Resistance" annotation (Dialog(enable=DP_opt == Choices.PDropOpt.linear));
-  parameter MassFlowRate m_flow_start=1
-    "Mass flow rate - start value" annotation (Dialog(tab="Initialization"));
-  parameter Pressure P_start=101325
-    "Pressure - start value" annotation (Dialog(tab="Initialization"));
-  parameter Temperature T_start=300
-    "Temperature - start value" annotation (Dialog(tab="Initialization"));
+  parameter DynTherM.CustomUnits.HydraulicResistance Rh=1 "Hydraulic Resistance" annotation (Dialog(enable=DP_opt == Choices.PDropOpt.linear));
+  parameter MassFlowRate m_flow_start=1 "Mass flow rate - start value" annotation (Dialog(tab="Initialization"));
+  parameter Pressure P_start=101325 "Pressure - start value" annotation (Dialog(tab="Initialization"));
+  parameter Temperature T_start=300 "Temperature - start value" annotation (Dialog(tab="Initialization"));
   parameter MassFraction X_start[Medium.nX]=Medium.reference_X
     "Mass fractions - start value" annotation (Dialog(tab="Initialization"));
-  parameter Velocity u_start=20
-    "Flow velocity in the pipe - start value" annotation (Dialog(tab="Initialization"));
-  parameter Density rho_start=1
-    "Average density of fluid in the pipe - start value" annotation (Dialog(tab="Initialization"));
-  parameter Pressure dP_start=100
-    "Pressure drop - start value" annotation (Dialog(tab="Initialization",
+  parameter Velocity u_start=20 "Flow velocity - start value" annotation (Dialog(tab="Initialization"));
+  parameter Density rho_start=1 "Density - start value" annotation (Dialog(tab="Initialization"));
+  parameter Pressure dP_start=100 "Pressure drop - start value" annotation (Dialog(tab="Initialization",
         enable=option <> Choices.PDropOpt.fixed));
   parameter Pressure dP_fixed=0 "Fixed pressure drop" annotation (Dialog(enable=DP_opt == Choices.PDropOpt.fixed));
   parameter Medium.ThermodynamicState state_start = Medium.setState_pTX(P_start, T_start, X_start)
@@ -34,13 +27,13 @@ model RectangularPipe "Model of pipe with rectangular cross-section"
   parameter PrandtlNumber Pr_start=1.5 "Prandtl number - start value" annotation (Dialog(tab="Initialization"));
 
   // Geometry
+  parameter Integer N=1 "Number of pipes in parallel";
   parameter Length L "Length" annotation (Dialog(tab="Geometry"));
   parameter Length W "Width of rectangular channel" annotation (Dialog(tab="Geometry"));
   parameter Length H "Height of rectangular channel" annotation (Dialog(tab="Geometry"));
 
   model GEO =
-    DynTherM.Components.MassTransfer.PipeGeometry.Rectangular (
-      L=L, W=W, H=H) annotation (choicesAllMatching=true);
+    DynTherM.Components.MassTransfer.PipeGeometry.Rectangular (L=L, W=W, H=H) annotation (choicesAllMatching=true);
 
   // Heat transfer
   model HTC =
@@ -94,14 +87,24 @@ model RectangularPipe "Model of pipe with rectangular cross-section"
             110,10}})));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b thermalPort
     annotation (Placement(transformation(extent={{-10,28},{10,48}})));
+
 equation
-  state_inlet = Medium.setState_phX(inlet.P, actualStream(inlet.h_outflow), actualStream(inlet.Xi_outflow));
-  state_outlet = Medium.setState_phX(outlet.P, actualStream(outlet.h_outflow), actualStream(outlet.Xi_outflow));
-  state = Medium.setState_phX((inlet.P + outlet.P)/2, (actualStream(inlet.h_outflow) + actualStream(outlet.h_outflow))/2, inlet.Xi_outflow);
+  state_inlet =
+    Medium.setState_phX(inlet.P,
+    actualStream(inlet.h_outflow),
+    actualStream(inlet.Xi_outflow));
+  state_outlet =
+    Medium.setState_phX(outlet.P,
+    actualStream(outlet.h_outflow),
+    actualStream(outlet.Xi_outflow));
+  state =
+    Medium.setState_phX((inlet.P + outlet.P)/2,
+    (actualStream(inlet.h_outflow) + actualStream(outlet.h_outflow))/2,
+    inlet.Xi_outflow);
 
   // Mass balance
   inlet.m_flow + outlet.m_flow = 0;
-  G = abs(inlet.m_flow)/geometry.A_cs;
+  G = abs(inlet.m_flow)/(N*geometry.A_cs);
 
   // Independent composition mass balances
   inlet.Xi_outflow = inStream(outlet.Xi_outflow);
@@ -110,11 +113,11 @@ equation
   // Energy balance
   outlet.h_outflow = inStream(inlet.h_outflow) + thermalPort.Q_flow/inlet.m_flow;
   inlet.h_outflow = inStream(outlet.h_outflow) + thermalPort.Q_flow/inlet.m_flow;
-  thermalPort.Q_flow = convection.ht*geometry.A_ht*(thermalPort.T - Medium.temperature(state));
+  thermalPort.Q_flow = convection.ht*N*geometry.A_ht*(thermalPort.T - Medium.temperature(state));
 
   // Non-dimensional numbers
   rho = Medium.density(state);
-  u = inlet.m_flow/(rho*geometry.A_cs);
+  u = inlet.m_flow/(rho*N*geometry.A_cs);
   Re = rho*u*geometry.Dh/Medium.dynamicViscosity(state);
   Pr = Medium.specificHeatCapacityCp(state)*Medium.dynamicViscosity(state)/
     Medium.thermalConductivity(state);
@@ -144,5 +147,11 @@ equation
           fillColor={175,175,175},
           fillPattern=FillPattern.Backward),
         Rectangle(extent={{-100,20},{100,-20}}, lineColor={0,0,0})}), Diagram(
-        coordinateSystem(preserveAspectRatio=false)));
+        coordinateSystem(preserveAspectRatio=false)),
+    Documentation(info="<html>
+<p>Model of the flow through a circular pipe.</p>
+<p>The convective heat transfer coefficient and the friction factor can be fixed by the user or computed with semi-empirical correlations.</p>
+<p>The conductive heat transfer through the solid walls is not included in this model and must be treated separately.</p>
+<p>The model can be used to reproduce the flow through many tubes in parallel. In that case, the mass flow rate is split equally among the different tubes.</p>
+</html>"));
 end RectangularPipe;

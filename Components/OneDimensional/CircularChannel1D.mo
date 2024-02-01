@@ -9,33 +9,30 @@ model CircularChannel1D "Circular channel implementing 1D spatial discretization
   model CV = CircularCV "Control volume";
 
   // Geometry
-  parameter Modelica.Units.SI.Length L "Channel length" annotation (Dialog(tab="Geometry"));
-  parameter Modelica.Units.SI.Length R_ext "Channel external radius" annotation (Dialog(tab="Geometry"));
-  parameter Modelica.Units.SI.Length R_int "Channel internal radius" annotation (Dialog(tab="Geometry"));
-  parameter Modelica.Units.SI.Length Roughness=0.015*10^(-3) "Channel roughness" annotation (Dialog(tab="Geometry"));
+  parameter Length L "Channel length" annotation (Dialog(tab="Geometry"));
+  parameter Length R_ext "Channel external radius" annotation (Dialog(tab="Geometry"));
+  parameter Length R_int "Channel internal radius" annotation (Dialog(tab="Geometry"));
+  parameter Length Roughness=0.015*10^(-3) "Channel roughness" annotation (Dialog(tab="Geometry"));
 
   // Initialization
-  parameter Modelica.Units.SI.Temperature T_start_solid=288.15
-    "Temperature of the solid part - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Temperature T_start_fluid=288.15
-    "Fluid temperature - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Pressure P_start=101325
-    "Fluid pressure - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.MassFraction X_start[Medium.nX]=Medium.reference_X
+  parameter Temperature T_start_solid=288.15 "Temperature of the solid part - start value" annotation (Dialog(tab="Initialization"));
+  parameter Temperature T_start_fluid=288.15 "Fluid temperature - start value" annotation (Dialog(tab="Initialization"));
+  parameter Pressure P_start=101325 "Fluid pressure - start value" annotation (Dialog(tab="Initialization"));
+  parameter MassFraction X_start[Medium.nX]=Medium.reference_X
     "Mass fractions - start value" annotation (Dialog(tab="Initialization"));
   parameter Medium.ThermodynamicState state_start = Medium.setState_pTX(P_start, T_start_fluid, X_start)
     "Starting thermodynamic state" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.MassFlowRate m_flow_start=1
-    "Mass flow rate - start value" annotation (Dialog(tab="Initialization"));
-  parameter Choices.InitOpt initOpt=environment.initOpt
-    "Initialization option" annotation (Dialog(tab="Initialization"));
+  parameter MassFlowRate m_flow_start=1 "Mass flow rate - start value" annotation (Dialog(tab="Initialization"));
+  parameter Choices.InitOpt initOpt=environment.initOpt "Initialization option" annotation (Dialog(tab="Initialization"));
 
   // Discretization
   parameter Integer N(min=1) "Number of longitudinal sections in which the tube is discretized";
+  parameter Integer N_channels(min=1) "Number of channels in parallel";
 
   CV fluid_cv[N](
     redeclare model Mat = Mat,
     redeclare package Medium = Medium,
+    each N=N_channels,
     each L=L/N,
     each R_ext=R_ext,
     each R_int=R_int,

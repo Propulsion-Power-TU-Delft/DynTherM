@@ -1,5 +1,5 @@
 within DynTherM.Tests.MassTransfer;
-model test_rectangular_pipe_sys "Simple test of component pipe"
+model RectangularPipe "Simple test of component pipe"
   package Refrigerant = DynTherM.Media.IncompressibleTableBased.MEG(X=0.1)
     "Refrigerant";
 
@@ -42,4 +42,4 @@ equation
   annotation (Documentation(info="<html>
 
 </html>"), experiment(StopTime=5000, Interval=0.1));
-end test_rectangular_pipe_sys;
+end RectangularPipe;

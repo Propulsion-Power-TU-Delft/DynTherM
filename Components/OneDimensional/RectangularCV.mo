@@ -1,6 +1,6 @@
 within DynTherM.Components.OneDimensional;
-model RectangularCV
-  "Control volume modeling a portion of a rectangular channel"
+model RectangularCV "Control volume modeling a portion of a rectangular channel"
+
   outer Components.Environment environment "Environmental properties";
   replaceable model Mat = Materials.Aluminium constrainedby
     Materials.Properties "Material choice" annotation (choicesAllMatching=true);
@@ -8,6 +8,7 @@ model RectangularCV
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
 
   // Geometry
+  parameter Integer N=1 "Number of control volumes in parallel";
   parameter Length L "Length of the control volume" annotation (Dialog(tab="Geometry"));
   parameter Length W "Width of the control volume" annotation (Dialog(tab="Geometry"));
   parameter Length H "Height of the control volume" annotation (Dialog(tab="Geometry"));
@@ -25,7 +26,8 @@ model RectangularCV
     "Fluid pressure - start value" annotation (Dialog(tab="Initialization"));
   parameter MassFraction X_start[Medium.nX]=Medium.reference_X
     "Mass fractions - start value" annotation (Dialog(tab="Initialization"));
-  parameter Medium.ThermodynamicState state_start = Medium.setState_pTX(P_start, T_start_fluid, X_start)
+  parameter Medium.ThermodynamicState state_start=
+    Medium.setState_pTX(P_start, T_start_fluid, X_start)
     "Starting thermodynamic state" annotation (Dialog(tab="Initialization"));
   parameter MassFlowRate m_flow_start=1
     "Mass flow rate - start value" annotation (Dialog(tab="Initialization"));
@@ -38,7 +40,7 @@ model RectangularCV
   Mass m_tot "Total mass";
   Mass m_fluid "Mass of fluid";
   Mass m_solid "Mass of solid walls";
-  HeatFlowRate Q "Heat flow rate (positive entering)";
+  HeatFlowRate Q "Heat flow rate - positive entering";
 
   DynTherM.CustomInterfaces.FluidPort_A inlet(
     redeclare package Medium = Medium,
@@ -66,6 +68,7 @@ model RectangularCV
     T_start=T_start_fluid,
     X_start=X_start,
     state_start=state_start,
+    N=N,
     L=L,
     W=W,
     H=H)
@@ -84,6 +87,7 @@ model RectangularCV
         iconTransformation(extent={{-30,60},{-10,80}})));
   HeatTransfer.WallConduction solid_north(
     redeclare model Mat = Mat,
+    N=N,
     t=t_north,
     A=W*L,
     Tstart=T_start_solid,
@@ -91,6 +95,7 @@ model RectangularCV
     annotation (Placement(transformation(extent={{-100,66},{-60,36}})));
   HeatTransfer.WallConduction solid_east(
     redeclare model Mat = Mat,
+    N=N,
     t=t_east,
     A=(H + 2*t_east)*L,
     Tstart=T_start_solid,
@@ -98,6 +103,7 @@ model RectangularCV
     annotation (Placement(transformation(extent={{-50,66},{-10,36}})));
   HeatTransfer.WallConduction solid_south(
     redeclare model Mat = Mat,
+    N=N,
     t=t_south,
     A=W*L,
     Tstart=T_start_solid,
@@ -105,22 +111,24 @@ model RectangularCV
     annotation (Placement(transformation(extent={{10,66},{50,36}})));
   HeatTransfer.WallConduction solid_west(
     redeclare model Mat = Mat,
+    N=N,
     t=t_west,
     A=(H + 2*t_west)*L,
     Tstart=T_start_solid,
     initOpt=environment.initOpt)
     annotation (Placement(transformation(extent={{60,66},{100,36}})));
-  Adaptors.heatFluxToHeatFlow conversion_north(A=W*L)
+  CustomInterfaces.Adaptors.heatFluxToHeatFlow conversion_north(A=N*W*L)
     annotation (Placement(transformation(extent={{-94,90},{-66,62}})));
-  Adaptors.heatFluxToHeatFlow conversion_east(A=H*L)
+  CustomInterfaces.Adaptors.heatFluxToHeatFlow conversion_east(A=N*H*L)
     annotation (Placement(transformation(extent={{-44,90},{-16,62}})));
-  Adaptors.heatFluxToHeatFlow conversion_south(A=W*L)
+  CustomInterfaces.Adaptors.heatFluxToHeatFlow conversion_south(A=N*W*L)
     annotation (Placement(transformation(extent={{16,90},{44,62}})));
-  Adaptors.heatFluxToHeatFlow conversion_west(A=H*L)
+  CustomInterfaces.Adaptors.heatFluxToHeatFlow conversion_west(A=N*H*L)
     annotation (Placement(transformation(extent={{66,90},{94,62}})));
+
 equation
-  V_tot = L*(H + t_north + t_south)*(W + t_east + t_west);
-  V_fluid = L*H*W;
+  V_tot = N*L*(H + t_north + t_south)*(W + t_east + t_west);
+  V_fluid = N*L*H*W;
   V_tot = V_fluid + V_solid;
   m_tot = m_fluid + m_solid;
   m_fluid = fluid.rho*V_fluid;

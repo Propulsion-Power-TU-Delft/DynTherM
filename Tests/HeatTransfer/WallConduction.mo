@@ -5,11 +5,11 @@ model WallConduction
     A=1,
     initOpt=DynTherM.Choices.InitOpt.fixedState)
     annotation (Placement(transformation(extent={{-34,-24},{34,24}})));
-  Components.Adaptors.heatFluxToHeatFlow heatFluxToHeatFlow(A=1)
+  CustomInterfaces.Adaptors.heatFluxToHeatFlow heatFluxToHeatFlow(A=1)
     annotation (Placement(transformation(extent={{-28,76},{28,20}})));
   BoundaryConditions.thermal_flux thermal_flux(phi=-13800)
     annotation (Placement(transformation(extent={{-24,78},{12,102}})));
-  Components.Adaptors.heatFluxToHeatFlow heatFluxToHeatFlow1(A=1)
+  CustomInterfaces.Adaptors.heatFluxToHeatFlow heatFluxToHeatFlow1(A=1)
     annotation (Placement(transformation(extent={{-28,-76},{28,-20}})));
   BoundaryConditions.thermal_flux thermal_flux1(
     T=323.15,

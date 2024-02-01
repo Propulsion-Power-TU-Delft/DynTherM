@@ -1,5 +1,5 @@
 within DynTherM.Tests.MassTransfer;
-model test_actuator_disk "Test of actuator disk model"
+model ActuatorDisk "Test of actuator disk model"
   Components.MassTransfer.ActuatorDisk actuatorDisk(
     set_W=true,
     W_fixed(displayUnit="kW") = 1000*(13004/8),
@@ -17,4 +17,4 @@ equation
     annotation (Line(points={{40,0},{68,0}}, color={0,0,0}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)));
-end test_actuator_disk;
+end ActuatorDisk;

@@ -2,27 +2,32 @@ within DynTherM.Components.HeatTransfer;
 model WallConduction "Dynamic model of conduction in a planar surface"
   replaceable model Mat=DynTherM.Materials.Aluminium constrainedby
     DynTherM.Materials.Properties "Material choice" annotation (choicesAllMatching=true);
-  parameter Modelica.Units.SI.Length t "Wall thickness";
-  parameter Modelica.Units.SI.Area A "Wall surface";
-  parameter Modelica.Units.SI.Temperature Tstart=300
+
+  parameter Integer N=1 "Number of walls in parallel";
+  parameter Length t "Wall thickness";
+  parameter Area A "Wall surface";
+  parameter Temperature Tstart=300
     "Temperature start value" annotation (Dialog(tab="Initialization"));
   parameter DynTherM.Choices.InitOpt initOpt "Initialization option"
     annotation (Dialog(tab="Initialization"));
-  final parameter Modelica.Units.SI.Mass m=Mat.rho*A*t "Mass of the wall";
+  final parameter Mass m=Mat.rho*A*t "Mass of the wall";
   final parameter Modelica.Units.SI.HeatCapacity Cm=m*Mat.cm
     "Heat capacity of the wall";
-  Modelica.Units.SI.Temperature T_vol(start=Tstart)
-    "Average temperature of the wall";
+
+  Temperature T_vol(start=Tstart) "Average temperature of the wall";
+
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a inlet
     annotation (Placement(transformation(extent={{-14,20},{14,48}})));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b outlet
     annotation (Placement(transformation(extent={{-14,-48},{14,-20}})));
+
 equation
-  Cm*der(T_vol) = inlet.Q_flow + outlet.Q_flow "Energy balance";
-  inlet.Q_flow = (Mat.lambda*A*(inlet.T - T_vol))/(t/2)
+  N*Cm*der(T_vol) = inlet.Q_flow + outlet.Q_flow "Energy balance";
+  inlet.Q_flow = (Mat.lambda*N*A*(inlet.T - T_vol))/(t/2)
     "Heat conduction through the internal half-thickness";
-  outlet.Q_flow = (Mat.lambda*A*(outlet.T - T_vol))/(t/2)
+  outlet.Q_flow = (Mat.lambda*N*A*(outlet.T - T_vol))/(t/2)
     "Heat conduction through the external half-thickness";
+
 initial equation
   if initOpt == DynTherM.Choices.InitOpt.steadyState then
     der(T_vol) = 0;
@@ -45,8 +50,9 @@ initial equation
           fillPattern=FillPattern.Solid,
           textString="WALL")}),
     Documentation(info="<html>
-<p>This is the model of a cylindrical tube of solid material. </p>
-<p>The heat capacity (which is lumped at the center of the tube thickness) is accounted for, as well as the thermal resistance due to the finite heat conduction coefficient. Longitudinal heat conduction is neglected. </p>
+<p>This is the model of a planar wall. </p>
+<p>The heat capacity (which is lumped at the center of the wall thickness) is accounted for, as well as the thermal resistance due to the finite heat conduction coefficient. Longitudinal heat conduction is neglected. </p>
+<p>The model can be used to reproduce the heat transfer through many walls in parallel. In that case, the heat flow rate is split equally among the different elements, assuming there is no heat transfer and temperature difference between them.</p>
 </html>",
         revisions="<html>
 </html>"));

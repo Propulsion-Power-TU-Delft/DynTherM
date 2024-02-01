@@ -1,6 +1,6 @@
 within DynTherM.Components.OneDimensional;
-model CircularCV
-  "Control volume modeling a portion of a circular channel"
+model CircularCV "Control volume modeling a portion of a circular channel"
+
   outer Components.Environment environment "Environmental properties";
   replaceable model Mat = Materials.Aluminium constrainedby
     Materials.Properties "Material choice" annotation (choicesAllMatching=true);
@@ -8,31 +8,35 @@ model CircularCV
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
 
   // Geometry
-  parameter Modelica.Units.SI.Length L "Length of the control volume" annotation (Dialog(tab="Geometry"));
-  parameter Modelica.Units.SI.Length R_ext "External radius of the control volume" annotation (Dialog(tab="Geometry"));
-  parameter Modelica.Units.SI.Length R_int "Internal radius of the control volume" annotation (Dialog(tab="Geometry"));
-  parameter Modelica.Units.SI.Length Roughness=0.015*10^(-3) "Pipe roughness" annotation (Dialog(tab="Geometry"));
+  parameter Integer N=1 "Number of control volumes in parallel";
+  parameter Length L "Length of the control volume" annotation (Dialog(tab="Geometry"));
+  parameter Length R_ext "External radius of the control volume" annotation (Dialog(tab="Geometry"));
+  parameter Length R_int "Internal radius of the control volume" annotation (Dialog(tab="Geometry"));
+  parameter Length Roughness=0.015*10^(-3) "Pipe roughness" annotation (Dialog(tab="Geometry"));
 
   // Initialization
-  parameter Modelica.Units.SI.Temperature T_start_solid=288.15
+  parameter Temperature T_start_solid=288.15
     "Temperature of the solid part - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Temperature T_start_fluid=288.15
+  parameter Temperature T_start_fluid=288.15
     "Fluid temperature - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Pressure P_start=101325
+  parameter Pressure P_start=101325
     "Fluid pressure - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.MassFraction X_start[Medium.nX]=Medium.reference_X
+  parameter MassFraction X_start[Medium.nX]=Medium.reference_X
     "Mass fractions - start value" annotation (Dialog(tab="Initialization"));
-  parameter Medium.ThermodynamicState state_start = Medium.setState_pTX(P_start, T_start_fluid, X_start)
+  parameter Medium.ThermodynamicState state_start=
+    Medium.setState_pTX(P_start, T_start_fluid, X_start)
     "Starting thermodynamic state" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.MassFlowRate m_flow_start=1
+  parameter MassFlowRate m_flow_start=1
     "Mass flow rate - start value" annotation (Dialog(tab="Initialization"));
+  parameter Velocity u_start=20 "Flow velocity - start value" annotation (Dialog(tab="Initialization"));
+  parameter Pressure dP_start=100 "Pressure drop - start value" annotation (Dialog(tab="Initialization"));
   parameter Choices.InitOpt initOpt=environment.initOpt
     "Initialization option" annotation (Dialog(tab="Initialization"));
 
   DynTherM.CustomInterfaces.FluidPort_A inlet(
     redeclare package Medium = Medium,
-    m_flow(min=if environment.allowFlowReversal then -Modelica.Constants.inf else 0, start=
-          m_flow_start),
+    m_flow(min=if environment.allowFlowReversal then
+      -Modelica.Constants.inf else 0, start=m_flow_start),
     P(start=P_start),
     h_outflow(start=Medium.specificEnthalpy(state_start)),
     Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{-106,-6},
@@ -40,8 +44,8 @@ model CircularCV
             10}})));
   DynTherM.CustomInterfaces.FluidPort_B outlet(
     redeclare package Medium = Medium,
-    m_flow(max=if environment.allowFlowReversal then +Modelica.Constants.inf else 0, start=
-          -m_flow_start),
+    m_flow(max=if environment.allowFlowReversal then
+      +Modelica.Constants.inf else 0, start=-m_flow_start),
     P(start=P_start),
     h_outflow(start=Medium.specificEnthalpy(state_start)),
     Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{94,-6},
@@ -54,13 +58,17 @@ model CircularCV
     P_start=P_start,
     T_start=T_start_fluid,
     X_start=X_start,
+    u_start=u_start,
+    dP_start=dP_start,
     state_start=state_start,
+    N=N,
     L=L,
     D=R_int*2,
     Roughness=Roughness)
     annotation (Placement(transformation(extent={{-40,-40},{40,40}})));
   HeatTransfer.TubeConduction solid(
     redeclare model Mat = Mat,
+    N=N,
     coeff=1,
     L=L,
     R_ext=R_ext,
