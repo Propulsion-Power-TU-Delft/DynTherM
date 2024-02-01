@@ -41,7 +41,8 @@ model FlightDeckWindshield
         transformation(extent={{-36,126},{-26,136}}),
                                                     iconTransformation(extent={{
             -30,40},{-10,60}})));
-  Components.Adaptors.irradianceToHeatFlow irradianceToHeatFlow(A=A_windshield)
+  CustomInterfaces.Adaptors.irradianceToHeatFlow irradianceToHeatFlow(A=
+        A_windshield)
     annotation (Placement(transformation(extent={{-92,-30},{-28,-94}})));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a heatTransmitted
     annotation (Placement(transformation(extent={{-70,-122},{-50,-102}}),
