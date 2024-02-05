@@ -37,21 +37,27 @@ model A320FlyingCabin "Aircraft is flying, two temperature zones"
         origin={90,-90})));
   Systems.Aircraft.AirbusA320 A320(
     redeclare model HTC_int_upper =
-        Components.HeatTransfer.HTCorrelations.InternalConvection.Cylinder,
+        Components.HeatTransfer.HTCorrelations.InternalConvection.Cylinder (Nx=
+            1, Ny=1),
     redeclare model HTC_int_lower =
-        Components.HeatTransfer.HTCorrelations.InternalConvection.Cylinder,
+        Components.HeatTransfer.HTCorrelations.InternalConvection.Cylinder (Nx=
+            1, Ny=1),
     redeclare model HTC_ext_upper =
         DynTherM.Components.HeatTransfer.HTCorrelations.ExternalConvection.AircraftFlying
         (
+        Nx=1,
+        Ny=1,
         L=A320.L_fuselage,
         R_ext=A320.R_fuselage,
-        L_nose=A320.R_fuselage/2),
+        L_nose=A320.R_fuselage/2*ones(1, 1)),
     redeclare model HTC_ext_lower =
         DynTherM.Components.HeatTransfer.HTCorrelations.ExternalConvection.AircraftFlying
         (
+        Nx=1,
+        Ny=1,
         L=A320.L_fuselage,
         R_ext=A320.R_fuselage,
-        L_nose=A320.R_fuselage/2),
+        L_nose=A320.R_fuselage/2*ones(1, 1)),
     N_pax=196,
     N_crew=6,
     N_pilots=3,

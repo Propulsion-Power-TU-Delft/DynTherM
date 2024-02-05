@@ -6,21 +6,30 @@ model AircraftOnGroundForced
   parameter Modelica.Units.SI.Length R_ext "Fuselage external radius";
   parameter Modelica.Units.SI.Velocity V_wind=6.7 "Wind speed on ground";
 
-  Modelica.Units.SI.PrandtlNumber Pr "Prandtl number";
-  Modelica.Units.SI.ReynoldsNumber Re "Reynolds number";
+  Modelica.Units.SI.PrandtlNumber Pr[Nx,Ny] "Prandtl number";
+  Modelica.Units.SI.ReynoldsNumber Re[Nx,Ny] "Reynolds number";
 
 protected
-  Medium.ThermodynamicState state_f;
-  Modelica.Units.SI.Temperature Tf;
+  Medium.ThermodynamicState state_f[Nx,Ny];
+  Modelica.Units.SI.Temperature Tf[Nx,Ny];
 
 equation
-  state_f = Medium.setState_pTX(environment.P_amb, Tf, environment.X_amb);
-  Tf = (T_skin + environment.T_amb)/2;
-  Pr = Medium.specificHeatCapacityCp(state_f)*Medium.dynamicViscosity(state_f)/
-    Medium.thermalConductivity(state_f);
-  Re = Medium.density(state_f)*V_wind*(2*R_ext)/Medium.dynamicViscosity(state_f);
-  ht = 0.0266*Medium.thermalConductivity(state_f)*(Re)^0.805*Pr^(1/3)/(2*R_ext);
-  T_out = environment.T_amb;
+  T_out = environment.T_amb*ones(Nx,Ny);
+
+  for i in 1:Nx loop
+    for j in 1:Ny loop
+      state_f[i,j] = Medium.setState_pTX(environment.P_amb, Tf[i,j], environment.X_amb);
+      Tf[i,j] = (T_skin[i,j] + environment.T_amb)/2;
+      Pr[i,j] = Medium.specificHeatCapacityCp(state_f[i,j])*
+        Medium.dynamicViscosity(state_f[i,j])/
+        Medium.thermalConductivity(state_f[i,j]);
+      Re[i,j] = Medium.density(state_f[i,j])*V_wind*(2*R_ext)/
+        Medium.dynamicViscosity(state_f[i,j]);
+      ht[i,j] = 0.0266*Medium.thermalConductivity(state_f[i,j])*
+        Re[i,j]^0.805*Pr[i,j]^(1/3)/(2*R_ext);
+    end for;
+  end for;
+
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>

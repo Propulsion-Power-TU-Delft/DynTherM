@@ -205,7 +205,11 @@ model PassengerCabin "Upper section of the fuselage: cabin section"
   Components.HeatTransfer.InternalConvection internalConvection(
     redeclare model HTC=HTC_int,
     A=A_cabin)
-    annotation (Placement(transformation(extent={{-30,-6},{-10,-26}})));
+    annotation (Placement(transformation(extent={{-30,-2},{-10,-22}})));
+  CustomInterfaces.Adaptors.heatFlowMultiplier heatFlowMultiplier3(Nx=1, Ny=1)
+    annotation (Placement(transformation(extent={{-28,8},{-12,-6}})));
+  CustomInterfaces.Adaptors.heatFlowMultiplier heatFlowMultiplier1(Nx=1, Ny=1)
+    annotation (Placement(transformation(extent={{-28,-32},{-12,-18}})));
 equation
   section_5.P_air_gap = cabinInflow.P;
   section_5.X_air_gap = cabinInflow.Xi_outflow;
@@ -236,15 +240,18 @@ equation
     annotation (Line(points={{0,-42},{0,-30},{66,-30}}, color={191,0,0}));
   connect(temperatureSensor.T, cabinTemperature)
     annotation (Line(points={{87,-30},{106,-30}}, color={0,0,127}));
-  connect(internalConvection.inlet, cabin.thermalPort)
-    annotation (Line(points={{-20,-19.4},{-20,-42},{0,-42}},
-                                                           color={191,0,0}));
-  connect(cabinInterior.port, internalConvection.outlet)
-    annotation (Line(points={{-20,20},{-20,-12.6}}, color={191,0,0}));
   connect(section_5.heatTransmitted, cabinInterior.port)
     annotation (Line(points={{-70,20},{-20,20}}, color={191,0,0}));
   connect(section_1.heatTransmitted, cabinInterior.port)
     annotation (Line(points={{70,20},{-20,20}}, color={191,0,0}));
+  connect(cabinInterior.port, heatFlowMultiplier3.single)
+    annotation (Line(points={{-20,20},{-20,5.2}}, color={191,0,0}));
+  connect(heatFlowMultiplier3.distributed, internalConvection.outlet)
+    annotation (Line(points={{-20,-3.2},{-20,-10}}, color={191,0,0}));
+  connect(internalConvection.inlet, heatFlowMultiplier1.distributed)
+    annotation (Line(points={{-20,-14},{-20,-20.8}}, color={191,0,0}));
+  connect(heatFlowMultiplier1.single, cabin.thermalPort)
+    annotation (Line(points={{-20,-29.2},{-20,-42},{0,-42}}, color={191,0,0}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Ellipse(
           extent={{-100,100},{100,-100}},

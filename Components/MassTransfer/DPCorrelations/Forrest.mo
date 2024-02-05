@@ -4,19 +4,24 @@ model Forrest
   extends BaseClass;
   input Modelica.Units.SI.Length Dh "Hydraulic diameter" annotation(Dialog(enable = true));
   input Real phi_star "Geometrical correction" annotation(Dialog(enable = true));
-  input Modelica.Units.SI.ReynoldsNumber Re "Reynolds number" annotation(Dialog(enable = true));
+  input Modelica.Units.SI.ReynoldsNumber Re[Nx,Ny] "Reynolds number" annotation(Dialog(enable = true));
 
 equation
-  if Re < 2000 then                    // Laminar
-    f = 64/(phi_star*Re);
-  else                                 // Turbulent
-    // Corrected Blasius equation --> smooth tube
-    f = 0.3164*(phi_star*Re)^(-1/4);
-  end if;
+  for i in 1:Nx loop
+    for j in 1:Ny loop
+      if Re[i,j] < 2000 then               // Laminar
+        f[i,j] = 64/(phi_star*Re[i,j]);
+      else                                 // Turbulent
+        // Corrected Blasius equation --> smooth tube
+        f[i,j] = 0.3164*(phi_star*Re[i,j])^(-1/4);
+      end if;
 
-  // Sanity check
-  assert(not
-            ((Re > 2e3) and (Re < 4e3)), "The Forrest correlation is not strictly valid in the transition region", AssertionLevel.warning);
+      // Sanity check
+      assert(not
+                ((Re[i,j] > 2e3) and (Re[i,j] < 4e3)),
+        "The Forrest correlation is not strictly valid in the transition region", AssertionLevel.warning);
+    end for;
+  end for;
 
   annotation (Documentation(info="<html>
 <p>Reference</p>

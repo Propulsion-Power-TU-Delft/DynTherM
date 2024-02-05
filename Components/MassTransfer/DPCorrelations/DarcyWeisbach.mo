@@ -3,15 +3,19 @@ model DarcyWeisbach "Friction factor for circular pipes according to Darcy-Weisb
   extends BaseClass;
   parameter Length Roughness "Pipe roughness";
   input Length Dh "Hydraulic diameter" annotation(Dialog(enable = true));
-  input ReynoldsNumber Re "Reynolds number" annotation(Dialog(enable = true));
+  input ReynoldsNumber Re[Nx,Ny] "Reynolds number" annotation(Dialog(enable = true));
 
 equation
-  if Re < 2000 then                    // Laminar
-    f = 64/Re;
-  elseif Re > 4000 and Re < 10^4 then  // Transition
-    f = 0.316/(Re^0.25);
-  else                                 // Turbulent
-    1/sqrt(f) = -2*log10(Roughness/(3.7*Dh) + 2.51/(Re*sqrt(f)));
-  end if;
+  for i in 1:Nx loop
+    for j in 1:Ny loop
+      if Re[i,j] < 2000 then                         // Laminar
+        f[i,j] = 64/Re[i,j];
+      elseif Re[i,j] > 4000 and Re[i,j] < 10^4 then  // Transition
+        f[i,j] = 0.316/(Re[i,j]^0.25);
+      else                                           // Turbulent
+        1/sqrt(f[i,j]) = -2*log10(Roughness/(3.7*Dh) + 2.51/(Re[i,j]*sqrt(f[i,j])));
+      end if;
+    end for;
+  end for;
 
 end DarcyWeisbach;

@@ -4,22 +4,28 @@ model ExternalConvection "Model of external convection"
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
   outer DynTherM.Components.Environment environment "Environmental properties";
 
+  parameter Integer Nx=1 "Number of control volumes in x-direction";
   parameter Area A "Heat transfer area";
 
   replaceable model HTC =
     DynTherM.Components.HeatTransfer.HTCorrelations.ExternalConvection.FixedValue
     constrainedby
     DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal(
-      T_skin=inlet.T,
-      ht_fixed=1) annotation (choicesAllMatching=true);
+      Nx=Nx,
+      Ny=1,
+      T_skin=inlet.ports.T,
+      ht_fixed=ones(Nx,1)) annotation (choicesAllMatching=true);
 
   HTC ht_correlation;
 
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a inlet
-    annotation (Placement(transformation(extent={{-14,20},{14,48}})));
+  DynTherM.CustomInterfaces.DistributedHeatPort_A inlet(Nx=Nx, Ny=1)
+    annotation (Placement(transformation(extent={{-38,-10},{38,66}}),
+        iconTransformation(extent={{-38,-10},{38,66}})));
 
 equation
-  inlet.Q_flow = ht_correlation.ht*A*(inlet.T - ht_correlation.T_out);
+  for i in 1:Nx loop
+    inlet.ports[i,1].Q_flow = ht_correlation.ht[i,1]*A/Nx*(inlet.ports[i,1].T - ht_correlation.T_out[i,1]);
+  end for;
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Rectangle(
