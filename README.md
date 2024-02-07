@@ -16,6 +16,8 @@ Applications:
 
 4. Battery pack (coming soon)
 
+![aircraft_model](./Figures/aircraft_model.pdf)
+
 ---
 
 ### Author
