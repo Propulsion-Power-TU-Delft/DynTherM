@@ -6,15 +6,28 @@
 
 A Modelica library for the Dynamic modeling and simulation of Thermal Management systems.
 
+Applications:
+
+1. Aircraft fuselage
+
+2. Helicopter fuselage (to be adapted and ported to the new version of DynTherM)
+
+3. Hydrogen tank (coming soon)
+
+4. Battery pack (coming soon)
+
 ---
 
 ### Author
 * **A. Giuffré**, Post Doctoral Researcher, Propulsion & Power, TU Delft
 
+[![Link MailTo](https://img.shields.io/badge/MailTo-developers-blue.svg)](mailto:a.giuffre@tudelft.nl;c.deservi@tudelft.nl?subject=DynTherM:Query)
+
 ### Acknowledgements
 * **C. De Servi**, Senior Researcher, Propulsion & Power, TU Delft - Main Technical Advisor
-* **M. Swart**, MSc student, TU Delft - Hydrogen Tank model
-* **K. Guimaraes**, MSc student, TU Delft - Helicopter model
+* **I. Gul**, PhD Researcher, Propulsion & Power, TU Delft - Battery Pack
+* **M. Swart**, MSc Student, TU Delft - Hydrogen Tank
+* **K. Guimaraes**, MSc Student, TU Delft - Helicopter Fuselage
 
 ---
 
@@ -43,7 +56,7 @@ sudo pip install tqdm
 ---
 
 ### Citations
-A. Giuffré, P. Colonna, and C. De Servi. "Dynamic Thermal Model of Passenger Aircraft for the Estimation of the Cabin Cooling and Heating Requirements", Applied Thermal Engineering, 2023 (article under review).
+A. Giuffré, P. Colonna, and C. De Servi. "Dynamic Thermal Model of Passenger Aircraft for the Estimation of the Cabin Cooling and Heating Requirements", Applied Thermal Engineering, 2024.
 
 ---
 
