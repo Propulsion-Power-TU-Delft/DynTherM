@@ -27,6 +27,7 @@ SMARTS_2.9.5/
 Thumbs.db
 
 # Results stored in root folder
+dymosim.exe
 results*
 build*
 mult*
