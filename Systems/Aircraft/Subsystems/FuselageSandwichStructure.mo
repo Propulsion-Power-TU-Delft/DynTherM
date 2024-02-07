@@ -34,9 +34,9 @@ model FuselageSandwichStructure
     L_window=L_window,
     H_window=H_window,
     Nw_side=Nw_side,
-    Tstart=Tstart,
+    Tstart=Tstart*ones(1, 1),
     initOpt=environment.initOpt)
-    annotation (Placement(transformation(extent={{-26,74},{26,44}})));
+    annotation (Placement(transformation(extent={{-26,70},{26,40}})));
   Components.HeatTransfer.TubeConduction skin_core(
     redeclare model Mat = Materials.Hexcel,
     coeff=coeff,
@@ -46,9 +46,9 @@ model FuselageSandwichStructure
     L_window=L_window,
     H_window=H_window,
     Nw_side=Nw_side,
-    Tstart=Tstart - 0.5,
+    Tstart=(Tstart - 0.5)*ones(1, 1),
     initOpt=environment.initOpt)
-    annotation (Placement(transformation(extent={{-26,56},{26,26}})));
+    annotation (Placement(transformation(extent={{-26,52},{26,22}})));
   Components.HeatTransfer.TubeConduction skin_int(
     redeclare model Mat = Materials.CarbonPhenolic,
     coeff=coeff,
@@ -58,9 +58,9 @@ model FuselageSandwichStructure
     L_window=L_window,
     H_window=H_window,
     Nw_side=Nw_side,
-    Tstart=Tstart - 1,
+    Tstart=(Tstart - 1)*ones(1, 1),
     initOpt=environment.initOpt)
-    annotation (Placement(transformation(extent={{-26,38},{26,8}})));
+    annotation (Placement(transformation(extent={{-26,34},{26,4}})));
   Components.HeatTransfer.TubeConduction insulationBlankets(
     redeclare model Mat = Materials.GlassFibre,
     coeff=coeff,
@@ -70,7 +70,7 @@ model FuselageSandwichStructure
     L_window=L_window,
     H_window=H_window,
     Nw_side=Nw_side,
-    Tstart=Tstart - 1.5,
+    Tstart=(Tstart - 1.5)*ones(1, 1),
     initOpt=environment.initOpt)
     annotation (Placement(transformation(extent={{-26,16},{26,-14}})));
   Components.HeatTransfer.TubeConduction interiorPanel_ext(
@@ -82,9 +82,9 @@ model FuselageSandwichStructure
     L_window=L_window,
     H_window=H_window,
     Nw_side=Nw_side,
-    Tstart=Tstart - 2,
+    Tstart=(Tstart - 2)*ones(1, 1),
     initOpt=environment.initOpt)
-    annotation (Placement(transformation(extent={{-26,-8},{26,-38}})));
+    annotation (Placement(transformation(extent={{-26,-4},{26,-34}})));
   Components.HeatTransfer.TubeConduction interiorPanel_core(
     redeclare model Mat = Materials.FibrelamAramid1100,
     coeff=coeff,
@@ -94,9 +94,9 @@ model FuselageSandwichStructure
     L_window=L_window,
     H_window=H_window,
     Nw_side=Nw_side,
-    Tstart=Tstart - 2.5,
+    Tstart=(Tstart - 2.5)*ones(1, 1),
     initOpt=environment.initOpt)
-    annotation (Placement(transformation(extent={{-26,-26},{26,-56}})));
+    annotation (Placement(transformation(extent={{-26,-22},{26,-52}})));
   Components.HeatTransfer.TubeConduction interiorPanel_int(
     redeclare model Mat = Materials.GlassPhenolic,
     coeff=coeff,
@@ -106,37 +106,45 @@ model FuselageSandwichStructure
     L_window=L_window,
     H_window=H_window,
     Nw_side=Nw_side,
-    Tstart=Tstart - 3,
+    Tstart=(Tstart - 3)*ones(1, 1),
     initOpt=environment.initOpt)
-    annotation (Placement(transformation(extent={{-26,-44},{26,-74}})));
+    annotation (Placement(transformation(extent={{-26,-40},{26,-70}})));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b ext
-    annotation (Placement(transformation(extent={{-10,70},{10,90}}),
+    annotation (Placement(transformation(extent={{-10,80},{10,100}}),
         iconTransformation(extent={{-10,60},{10,80}})));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a int
-    annotation (Placement(transformation(extent={{-10,-90},{10,-70}}),
+    annotation (Placement(transformation(extent={{-10,-100},{10,-80}}),
         iconTransformation(extent={{-10,-80},{10,-60}})));
+  CustomInterfaces.Adaptors.heatFlowMultiplier heatFlowMultiplier(Nx=1, Ny=1)
+    annotation (Placement(transformation(extent={{-10,-82},{10,-62}})));
+  CustomInterfaces.Adaptors.heatFlowMultiplier heatFlowMultiplier1(Nx=1, Ny=1)
+    annotation (Placement(transformation(extent={{-10,82},{10,62}})));
 equation
   connect(skin_ext.inlet,skin_core. outlet)
-    annotation (Line(points={{4.44089e-16,53.9},{4.44089e-16,46.1}},
+    annotation (Line(points={{4.44089e-16,50.8},{4.44089e-16,41.2}},
                                                    color={191,0,0}));
   connect(skin_core.inlet,skin_int. outlet)
-    annotation (Line(points={{4.44089e-16,35.9},{4.44089e-16,28.1}},
+    annotation (Line(points={{4.44089e-16,32.8},{4.44089e-16,23.2}},
                                                    color={191,0,0}));
   connect(skin_int.inlet,insulationBlankets. outlet)
-    annotation (Line(points={{4.44089e-16,17.9},{4.44089e-16,6.1}},
+    annotation (Line(points={{4.44089e-16,14.8},{4.44089e-16,5.2}},
                                                    color={191,0,0}));
   connect(interiorPanel_ext.inlet,interiorPanel_core. outlet)
-    annotation (Line(points={{4.44089e-16,-28.1},{4.44089e-16,-35.9}},
+    annotation (Line(points={{4.44089e-16,-23.2},{4.44089e-16,-32.8}},
                                                    color={191,0,0}));
   connect(interiorPanel_core.inlet,interiorPanel_int. outlet)
-    annotation (Line(points={{4.44089e-16,-46.1},{4.44089e-16,-53.9}},
+    annotation (Line(points={{4.44089e-16,-41.2},{4.44089e-16,-50.8}},
                                                      color={191,0,0}));
-  connect(ext, skin_ext.outlet)
-    annotation (Line(points={{0,80},{0,64.1}}, color={191,0,0}));
-  connect(int, interiorPanel_int.inlet)
-    annotation (Line(points={{0,-80},{0,-64.1}}, color={191,0,0}));
   connect(insulationBlankets.inlet, interiorPanel_ext.outlet)
-    annotation (Line(points={{0,-4.1},{0,-17.9}}, color={191,0,0}));
+    annotation (Line(points={{0,-3.2},{0,-14.8}}, color={191,0,0}));
+  connect(interiorPanel_int.inlet, heatFlowMultiplier.distributed)
+    annotation (Line(points={{0,-59.2},{0,-66}}, color={191,0,0}));
+  connect(heatFlowMultiplier.single, int)
+    annotation (Line(points={{0,-78},{0,-90}}, color={191,0,0}));
+  connect(heatFlowMultiplier1.distributed, skin_ext.outlet)
+    annotation (Line(points={{0,66},{0,59.2}}, color={191,0,0}));
+  connect(ext, heatFlowMultiplier1.single)
+    annotation (Line(points={{0,90},{0,78}}, color={191,0,0}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
                       Rectangle(
           extent={{-100,60},{100,20}},

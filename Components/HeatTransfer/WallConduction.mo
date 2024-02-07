@@ -3,39 +3,51 @@ model WallConduction "Dynamic model of conduction in a planar surface"
   replaceable model Mat=DynTherM.Materials.Aluminium constrainedby
     DynTherM.Materials.Properties "Material choice" annotation (choicesAllMatching=true);
 
-  parameter Integer N=1 "Number of walls in parallel";
+  // Geometry
+  parameter Integer N_cv=1 "Number of control volumes";
   parameter Length t "Wall thickness";
   parameter Area A "Wall surface";
-  parameter Temperature Tstart=300
+
+  // Initialization
+  parameter Temperature Tstart[N_cv,1]=288.15*ones(N_cv,1)
     "Temperature start value" annotation (Dialog(tab="Initialization"));
-  parameter DynTherM.Choices.InitOpt initOpt "Initialization option"
-    annotation (Dialog(tab="Initialization"));
+  parameter DynTherM.Choices.InitOpt initOpt "Initialization option" annotation (Dialog(tab="Initialization"));
+
   final parameter Mass m=Mat.rho*A*t "Mass of the wall";
   final parameter Modelica.Units.SI.HeatCapacity Cm=m*Mat.cm
     "Heat capacity of the wall";
 
-  Temperature T_vol(start=Tstart) "Average temperature of the wall";
+  Temperature T_vol[N_cv,1](start=Tstart) "Average temperature of the wall";
 
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a inlet
-    annotation (Placement(transformation(extent={{-14,20},{14,48}})));
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b outlet
-    annotation (Placement(transformation(extent={{-14,-48},{14,-20}})));
+  DynTherM.CustomInterfaces.DistributedHeatPort_A inlet(Nx=N_cv, Ny=1)
+    annotation (Placement(transformation(extent={{-40,-12},{40,68}}), iconTransformation(extent={{-40,-12},{40,68}})));
+  DynTherM.CustomInterfaces.DistributedHeatPort_B outlet(Nx=N_cv, Ny=1)
+    annotation (Placement(transformation(extent={{-40,-68},{40,12}}), iconTransformation(extent={{-40,-68},{40,12}})));
 
 equation
-  N*Cm*der(T_vol) = inlet.Q_flow + outlet.Q_flow "Energy balance";
-  inlet.Q_flow = (Mat.lambda*N*A*(inlet.T - T_vol))/(t/2)
-    "Heat conduction through the internal half-thickness";
-  outlet.Q_flow = (Mat.lambda*N*A*(outlet.T - T_vol))/(t/2)
-    "Heat conduction through the external half-thickness";
+  for i in 1:N_cv loop
+    // Energy balance
+    Cm/N_cv*der(T_vol[i,1]) = inlet.ports[i,1].Q_flow + outlet.ports[i,1].Q_flow;
+
+    // Heat conduction through the internal half-thickness
+    inlet.ports[i,1].Q_flow = (Mat.lambda/N_cv*A*
+      (inlet.ports[i,1].T - T_vol[i,1]))/(t/2);
+
+    // Heat conduction through the external half-thickness
+    outlet.ports[i,1].Q_flow = (Mat.lambda/N_cv*A*
+      (outlet.ports[i,1].T - T_vol[i,1]))/(t/2);
+  end for;
 
 initial equation
-  if initOpt == DynTherM.Choices.InitOpt.steadyState then
-    der(T_vol) = 0;
-  elseif initOpt == DynTherM.Choices.InitOpt.fixedState then
-    T_vol = Tstart;
-  else
-    // do nothing
-  end if;
+  for i in 1:N_cv loop
+    if initOpt == DynTherM.Choices.InitOpt.steadyState then
+      der(T_vol[i,1]) = 0;
+    elseif initOpt == DynTherM.Choices.InitOpt.fixedState then
+      T_vol[i,1] = Tstart[i,1];
+    else
+      // do nothing
+    end if;
+  end for;
   annotation (
     Icon(graphics={   Rectangle(
           extent={{-100,20},{100,-20}},

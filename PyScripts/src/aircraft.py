@@ -122,9 +122,9 @@ class Aircraft:
 
                 # fuselage temperature
                 for j in range(4):
-                    self.T_fuselage_fd[0:8, j] = np.array([result[1][idx + i] for i in range(8)])
+                    # self.T_fuselage_fd[0:8, j] = np.array([result[1][idx + i] for i in range(8)])
                     idx += 8
-                    self.T_fuselage_cab[0:8, j] = np.array([result[1][idx + i] for i in range(8)])
+                    # self.T_fuselage_cab[0:8, j] = np.array([result[1][idx + i] for i in range(8)])
                     idx += 8
 
                 # heat flow rates
