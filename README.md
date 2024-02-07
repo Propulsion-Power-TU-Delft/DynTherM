@@ -12,8 +12,9 @@ A Modelica library for the Dynamic modeling and simulation of Thermal Management
 * **A. Giuffré**, Post Doctoral Researcher, Propulsion & Power, TU Delft
 
 ### Acknowledgements
-* **C. De Servi**, Assistant Professor, Propulsion & Power, TU Delft
-* **K. Guimaraes**, MSc student, TU Delft
+* **C. De Servi**, Senior Researcher, Propulsion & Power, TU Delft - Main Technical Advisor
+* **M. Swart**, MSc student, TU Delft - Hydrogen Tank model
+* **K. Guimaraes**, MSc student, TU Delft - Helicopter model
 
 ---
 
