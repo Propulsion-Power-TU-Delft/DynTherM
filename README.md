@@ -21,7 +21,7 @@ Applications:
 ### Author
 * **A. Giuffré**, Post Doctoral Researcher, Propulsion & Power, TU Delft
 
-[![Link MailTo](https://img.shields.io/badge/MailTo-developers-blue.svg)](mailto:a.giuffre@tudelft.nl;c.deservi@tudelft.nl?subject=DynTherM:Query)
+[![Link MailTo](https://img.shields.io/badge/MailTo-developers-blue.svg)](mailto:a.giuffre@tudelft.nl;c.m.deservi@tudelft.nl?subject=DynTherM:Query)
 
 ### Acknowledgements
 * **C. De Servi**, Senior Researcher, Propulsion & Power, TU Delft - Main Technical Advisor
