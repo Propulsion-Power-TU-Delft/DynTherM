@@ -4,27 +4,20 @@ model ExternalConvectionFlux "Model of external convection per unit area"
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
   outer DynTherM.Components.Environment environment "Environmental properties";
 
-  parameter Integer Nx=1 "Number of control volumes in x-direction";
-
   replaceable model HTC =
     DynTherM.Components.HeatTransfer.HTCorrelations.ExternalConvection.FixedValue
     constrainedby
     DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal(
-      Nx=Nx,
-      Ny=1,
-      T_skin=inlet.ports.T,
-      ht_fixed=ones(Nx,1)) annotation (choicesAllMatching=true);
+      T_skin=inlet.T,
+      ht_fixed=1) annotation (choicesAllMatching=true);
 
   HTC ht_correlation;
 
-  DynTherM.CustomInterfaces.DistributedHeatFluxPort_A inlet
-    annotation (Placement(transformation(extent={{-38,-10},{38,66}}),
-        iconTransformation(extent={{-38,-10},{38,66}})));
+  DynTherM.CustomInterfaces.HeatFluxPort_A inlet
+    annotation (Placement(transformation(extent={{-14,20},{14,48}})));
 
 equation
-  for i in 1:Nx loop
-    inlet.ports[i,1].phi = ht_correlation.ht[i,1]*(inlet.ports[i,1].T - ht_correlation.T_out[i,1]);
-  end for;
+  inlet.phi = ht_correlation.ht*(inlet.T - ht_correlation.T_out);
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Rectangle(

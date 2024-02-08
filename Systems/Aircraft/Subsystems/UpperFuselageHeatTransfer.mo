@@ -36,10 +36,9 @@ model UpperFuselageHeatTransfer
   final parameter Modelica.Units.SI.Area A_ext=coeff*2*environment.pi*
       L_fuselage*R_ext "External fuselage area";
 
-  Components.HeatTransfer.ExternalConvection extConvection(
-    A=A_ext,
-    redeclare model HTC = HTC_ext (Nx=1))
-    annotation (Placement(transformation(extent={{6,76},{34,48}})));
+  Components.HeatTransfer.ExternalConvection extConvection(A=A_ext,
+    redeclare model HTC = HTC_ext)
+    annotation (Placement(transformation(extent={{6,56},{34,28}})));
   Components.HeatTransfer.WallRadiation wallRadiation(
     A=A_ext,
     csi=csi)
@@ -54,9 +53,9 @@ model UpperFuselageHeatTransfer
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a heatToInner annotation (
       Placement(transformation(extent={{-10,-110},{10,-90}}),
         iconTransformation(extent={{-10,-70},{10,-50}})));
-  Components.HeatTransfer.InternalConvection intConvection(A=A_int, redeclare
-      model HTC = HTC_int (Nx=1))
-    annotation (Placement(transformation(extent={{-16,-34},{16,-66}})));
+  Components.HeatTransfer.InternalConvection intConvection(A=A_int,
+   redeclare model HTC = HTC_int)
+    annotation (Placement(transformation(extent={{-16,-24},{16,-56}})));
 
   FuselageSandwichStructure composite(
     coeff=coeff,
@@ -68,29 +67,17 @@ model UpperFuselageHeatTransfer
     Nw_side=0,
     Tstart=Tstart_fuselage)
     annotation (Placement(transformation(extent={{-26,-18},{26,20}})));
-  CustomInterfaces.Adaptors.heatFlowMultiplier heatFlowMultiplier(Nx=1, Ny=1)
-    annotation (Placement(transformation(extent={{10,28},{30,44}})));
-  CustomInterfaces.Adaptors.heatFlowMultiplier heatFlowMultiplier2(Nx=1, Ny=1)
-    annotation (Placement(transformation(extent={{-10,-26},{10,-42}})));
-  CustomInterfaces.Adaptors.heatFlowMultiplier heatFlowMultiplier4(Nx=1, Ny=1)
-    annotation (Placement(transformation(extent={{-10,-74},{10,-58}})));
 equation
   connect(solarRadiation.inlet, wallRadiation.outlet)
     annotation (Line(points={{-20,59.6},{-20,43.96}},  color={191,0,0}));
+  connect(heatToInner, intConvection.inlet)
+    annotation (Line(points={{0,-100},{0,-45.44}},     color={191,0,0}));
   connect(wallRadiation.inlet, composite.ext) annotation (Line(points={{-20,37.24},
           {-20,14.3},{0,14.3}}, color={191,0,0}));
-  connect(extConvection.inlet, heatFlowMultiplier.distributed)
-    annotation (Line(points={{20,58.08},{20,40.8}}, color={191,0,0}));
-  connect(composite.ext, heatFlowMultiplier.single)
-    annotation (Line(points={{0,14.3},{20,14.3},{20,31.2}}, color={191,0,0}));
-  connect(composite.int, heatFlowMultiplier2.single)
-    annotation (Line(points={{0,-12.3},{0,-29.2}}, color={191,0,0}));
-  connect(heatFlowMultiplier2.distributed, intConvection.outlet)
-    annotation (Line(points={{0,-38.8},{0,-46.8}}, color={191,0,0}));
-  connect(intConvection.inlet, heatFlowMultiplier4.distributed)
-    annotation (Line(points={{0,-53.2},{0,-61.2}}, color={191,0,0}));
-  connect(heatFlowMultiplier4.single, heatToInner)
-    annotation (Line(points={{0,-70.8},{0,-100}}, color={191,0,0}));
+  connect(extConvection.inlet, composite.ext)
+    annotation (Line(points={{20,37.24},{20,14.3},{0,14.3}}, color={191,0,0}));
+  connect(composite.int, intConvection.outlet)
+    annotation (Line(points={{0,-12.3},{0,-34.56}}, color={191,0,0}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Ellipse(
           extent={{-100,-180},{100,20}},

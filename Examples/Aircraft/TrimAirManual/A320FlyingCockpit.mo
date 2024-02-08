@@ -69,19 +69,15 @@ model A320FlyingCockpit "Aircraft is flying, two temperature zones"
     redeclare model HTC_ext_upper =
         DynTherM.Components.HeatTransfer.HTCorrelations.ExternalConvection.AircraftFlying
         (
-        Nx=1,
-        Ny=1,
         L=A320.L_fuselage,
         R_ext=A320.R_fuselage,
-        L_nose=A320.R_fuselage/2*ones(1, 1)),
+        L_nose=A320.R_fuselage/2),
     redeclare model HTC_ext_lower =
         DynTherM.Components.HeatTransfer.HTCorrelations.ExternalConvection.AircraftFlying
         (
-        Nx=1,
-        Ny=1,
         L=A320.L_fuselage,
         R_ext=A320.R_fuselage,
-        L_nose=A320.R_fuselage/2*ones(1, 1)),
+        L_nose=A320.R_fuselage/2),
     N_pax=180,
     N_crew=6,
     N_pilots=3,

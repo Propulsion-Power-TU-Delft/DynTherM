@@ -173,13 +173,13 @@ model Cockpit "Upper section of the fuselage: cockpit section"
   Modelica.Thermal.HeatTransfer.Sensors.TemperatureSensor temperatureSensor
     annotation (Placement(transformation(extent={{66,-40},{86,-20}})));
   Components.HeatTransfer.HeatCapacity cockpitInterior(
-    initOpt=environment.initOpt,
-    T_start=Tstart_flightDeck,
+    initOpt=environment.initOpt,                       T_start=
+        Tstart_flightDeck,
     C=m_cockpit*c_cockpit)
-    annotation (Placement(transformation(extent={{-28,20},{0,48}})));
-  Components.HeatTransfer.InternalConvection internalConvection(redeclare model
-      HTC = HTC_int (Nx=1),      A=A_cockpit)
-    annotation (Placement(transformation(extent={{-24,2},{-4,-18}})));
+    annotation (Placement(transformation(extent={{-26,20},{-2,44}})));
+  Components.HeatTransfer.InternalConvection internalConvection(
+    redeclare model HTC=HTC_int, A=A_cockpit)
+    annotation (Placement(transformation(extent={{-24,-2},{-4,-22}})));
   Components.HeatTransfer.SolarRadiation solarRadiation_front(
     E_tb_fixed=E_tb_front,
     E_td_fixed=E_td_front,
@@ -189,13 +189,13 @@ model Cockpit "Upper section of the fuselage: cockpit section"
     psi_plus=1.5707963267949)
     annotation (Placement(transformation(extent={{-2,98},{30,66}})));
   Components.HeatTransfer.ExternalConvection extConvectionWindow_front(A=
-        L_windshield_front*H_windshield_front, redeclare model HTC = HTC_ext (
-          Nx=1))
-    annotation (Placement(transformation(extent={{26,92},{46,72}})));
+        L_windshield_front*H_windshield_front,
+      redeclare model HTC = HTC_ext)
+    annotation (Placement(transformation(extent={{26,84},{46,64}})));
   Components.HeatTransfer.InternalConvection internalConvection_front(A=
-        L_windshield_front*H_windshield_front, redeclare model HTC = HTC_int (
-          Nx=1))
-    annotation (Placement(transformation(extent={{10,2},{30,-18}})));
+        L_windshield_front*H_windshield_front,
+      redeclare model HTC = HTC_int)
+    annotation (Placement(transformation(extent={{10,-2},{30,-22}})));
   FuselageHeatTransferWindow
     section_5(
     redeclare model HTC_int = HTC_int,
@@ -240,16 +240,6 @@ model Cockpit "Upper section of the fuselage: cockpit section"
     A_windshield=L_windshield_front*H_windshield_front,
     Tstart=Tstart_fuselage)
     annotation (Placement(transformation(extent={{2,34},{32,66}})));
-  CustomInterfaces.Adaptors.heatFlowMultiplier heatFlowMultiplier(Nx=1, Ny=1)
-    annotation (Placement(transformation(extent={{28,60},{44,74}})));
-  CustomInterfaces.Adaptors.heatFlowMultiplier heatFlowMultiplier2(Nx=1, Ny=1)
-    annotation (Placement(transformation(extent={{12,-28},{28,-14}})));
-  CustomInterfaces.Adaptors.heatFlowMultiplier heatFlowMultiplier4(Nx=1, Ny=1)
-    annotation (Placement(transformation(extent={{12,14},{28,0}})));
-  CustomInterfaces.Adaptors.heatFlowMultiplier heatFlowMultiplier1(Nx=1, Ny=1)
-    annotation (Placement(transformation(extent={{-22,14},{-6,0}})));
-  CustomInterfaces.Adaptors.heatFlowMultiplier heatFlowMultiplier3(Nx=1, Ny=1)
-    annotation (Placement(transformation(extent={{-22,-28},{-6,-14}})));
 equation
   section_5.P_air_gap = cockpitInflow.P;
   section_5.X_air_gap = cockpitInflow.Xi_outflow;
@@ -276,38 +266,30 @@ equation
     annotation (Line(points={{0,-42},{0,-30},{66,-30}}, color={191,0,0}));
   connect(temperatureSensor.T, cockpitTemperature)
     annotation (Line(points={{87,-30},{106,-30}}, color={0,0,127}));
+  connect(internalConvection.inlet, flightDeck.thermalPort)
+    annotation (Line(points={{-14,-15.4},{-14,-30},{0,-30},{0,-42}},
+                                                           color={191,0,0}));
+  connect(internalConvection_front.inlet, flightDeck.thermalPort)
+    annotation (Line(points={{20,-15.4},{20,-30},{0,-30},{0,-42}},
+                                                         color={191,0,0}));
   connect(section_5.heatAbsorbed, flightDeck.thermalPort) annotation (Line(
         points={{-70,8},{-60,8},{-60,-42},{0,-42}}, color={191,0,0}));
   connect(section_1.heatAbsorbed, flightDeck.thermalPort) annotation (Line(
         points={{70,8},{60,8},{60,-42},{0,-42}}, color={191,0,0}));
   connect(windshieldFront.irradianceExt, solarRadiation_front.inlet)
     annotation (Line(points={{14,54.9231},{14,72.08}}, color={191,0,0}));
-  connect(heatFlowMultiplier.distributed, extConvectionWindow_front.inlet)
-    annotation (Line(points={{36,71.2},{36,79.2}}, color={191,0,0}));
-  connect(windshieldFront.heatExt, heatFlowMultiplier.single) annotation (Line(
-        points={{20,54.9231},{20,62.8},{36,62.8}}, color={191,0,0}));
-  connect(internalConvection_front.inlet, heatFlowMultiplier2.distributed)
-    annotation (Line(points={{20,-10},{20,-16.8}}, color={191,0,0}));
-  connect(heatFlowMultiplier4.distributed, internalConvection_front.outlet)
-    annotation (Line(points={{20,2.8},{20,-6}}, color={191,0,0}));
-  connect(windshieldFront.heatAbsorbed, heatFlowMultiplier4.single)
-    annotation (Line(points={{20,45.0769},{20,11.2}}, color={191,0,0}));
-  connect(heatFlowMultiplier2.single, flightDeck.thermalPort)
-    annotation (Line(points={{20,-25.2},{20,-42},{0,-42}}, color={191,0,0}));
+  connect(windshieldFront.heatExt, extConvectionWindow_front.inlet) annotation (
+     Line(points={{20,54.9231},{20,64},{36,64},{36,70.6}}, color={191,0,0}));
+  connect(windshieldFront.heatAbsorbed, internalConvection_front.outlet)
+    annotation (Line(points={{20,45.0769},{20,-8.6}}, color={191,0,0}));
+  connect(cockpitInterior.port, internalConvection.outlet) annotation (Line(
+        points={{-14,20},{-14,-8.6}},             color={191,0,0}));
   connect(section_5.heatTransmitted, cockpitInterior.port)
     annotation (Line(points={{-70,20},{-14,20}}, color={191,0,0}));
-  connect(cockpitInterior.port, section_1.heatTransmitted)
-    annotation (Line(points={{-14,20},{70,20}}, color={191,0,0}));
+  connect(section_1.heatTransmitted, cockpitInterior.port)
+    annotation (Line(points={{70,20},{-14,20}}, color={191,0,0}));
   connect(windshieldFront.heatTransmitted, cockpitInterior.port)
     annotation (Line(points={{14,45.0769},{14,20},{-14,20}}, color={191,0,0}));
-  connect(cockpitInterior.port, heatFlowMultiplier1.single)
-    annotation (Line(points={{-14,20},{-14,11.2}}, color={191,0,0}));
-  connect(heatFlowMultiplier1.distributed, internalConvection.outlet)
-    annotation (Line(points={{-14,2.8},{-14,-6}}, color={191,0,0}));
-  connect(internalConvection.inlet, heatFlowMultiplier3.distributed)
-    annotation (Line(points={{-14,-10},{-14,-16.8}}, color={191,0,0}));
-  connect(heatFlowMultiplier3.single, flightDeck.thermalPort)
-    annotation (Line(points={{-14,-25.2},{-14,-42},{0,-42}}, color={191,0,0}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Ellipse(
           extent={{-100,-60},{100,26}},

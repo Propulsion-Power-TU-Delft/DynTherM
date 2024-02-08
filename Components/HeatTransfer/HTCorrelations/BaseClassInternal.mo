@@ -2,13 +2,10 @@ within DynTherM.Components.HeatTransfer.HTCorrelations;
 partial model BaseClassInternal
   replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
-
-  parameter Integer Nx(min=1) "Number of control volumes in x-direction";
-  parameter Integer Ny(min=1) "Number of control volumes in y-direction";
-  parameter Modelica.Units.SI.CoefficientOfHeatTransfer ht_start[Nx,Ny]=10*ones(Nx,Ny)
+  parameter Modelica.Units.SI.CoefficientOfHeatTransfer ht_start=10
     "Heat transfer coefficient - starting value";
 
-  Modelica.Units.SI.CoefficientOfHeatTransfer ht[Nx,Ny](start=ht_start)
+  Modelica.Units.SI.CoefficientOfHeatTransfer ht(start=ht_start)
     "Heat transfer coefficient";
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(

@@ -158,25 +158,25 @@ model A320PullDown "Aircraft on ground, pull down test case"
 
   parameter Modelica.Units.SI.Temperature Tstart_fuselage=323.15
     "Fuselage temperature - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Temperature Tstart_floor=315.15
+  parameter Modelica.Units.SI.Temperature Tstart_floor=313.15
     "Floor temperature - start value" annotation (Dialog(tab="Initialization"));
   parameter Modelica.Units.SI.Temperature Tstart_wall=313.15
     "Cabin wall temperature - start value" annotation (Dialog(tab="Initialization"));
   parameter Modelica.Units.SI.Temperature Tstart_cabin=313.15
     "Cabin temperature - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Temperature Tstart_cargo=318.15
+  parameter Modelica.Units.SI.Temperature Tstart_cargo=313.15
     "Cargo bay temperature start value" annotation (Dialog(tab="Initialization"));
   parameter Modelica.Units.SI.Temperature Tstart_flightDeck=313.15
     "Flight deck temperature start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Temperature Tstart_mixingManifold=283.15
+  parameter Modelica.Units.SI.Temperature Tstart_mixingManifold=313.15
     "Mixing manifold temperature - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Pressure Pstart_cabin=103e3
+  parameter Modelica.Units.SI.Pressure Pstart_cabin=101325
     "Cabin pressure - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Pressure Pstart_cargo=102e3
+  parameter Modelica.Units.SI.Pressure Pstart_cargo=101325
     "Cargo bay pressure start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Pressure Pstart_flightDeck=103e3
+  parameter Modelica.Units.SI.Pressure Pstart_flightDeck=101325
     "Flight deck pressure start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Pressure Pstart_mixingManifold=105e3
+  parameter Modelica.Units.SI.Pressure Pstart_mixingManifold=101325
     "Mixing manifold pressure - start value" annotation (Dialog(tab="Initialization"));
   parameter Modelica.Units.SI.Density rho_start_fan=1.1 "Density - start value"
     annotation (Dialog(tab="Initialization"));
@@ -233,9 +233,7 @@ model A320PullDown "Aircraft on ground, pull down test case"
   Components.MassTransfer.Mixer mixingManifold(
     V=V_mixingManifold,
     P_start=Pstart_mixingManifold,
-    T_start=Tstart_mixingManifold,
-    noInitialPressure=true,
-    noInitialTemperature=false)
+    T_start=Tstart_mixingManifold)
     annotation (Placement(transformation(extent={{10,-10},{-10,10}},
         rotation=-90,
         origin={-132,-22})));
@@ -303,8 +301,8 @@ model A320PullDown "Aircraft on ground, pull down test case"
     Tstart_fuselage=Tstart_fuselage,
     Tstart_cargo=Tstart_cargo,
     Pstart_cargo=Pstart_cargo,
-    noInitialPressure=false,
-    noInitialTemperature=false)
+    noInitialPressure=noInitialPressure_cargo,
+    noInitialTemperature=noInitialTemperature_cargo)
     annotation (Placement(transformation(extent={{62,-42},{18,2}})));
 
   DynTherM.Sensors.MassflowSensor recirculatedMassflowSensor
@@ -324,17 +322,13 @@ model A320PullDown "Aircraft on ground, pull down test case"
   DynTherM.Components.MassTransfer.Mixer mixingManifoldOutlet(
     V=V_mixingManifold/10,
     P_start=Pstart_mixingManifold,
-    T_start=Tstart_mixingManifold,
-    noInitialPressure=true)        annotation (Placement(transformation(
+    T_start=Tstart_mixingManifold) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=-90,
         origin={0,-58})));
   DynTherM.Components.MassTransfer.CircularPipe distributionPipeCabin(
     DP_opt=DynTherM.Choices.PDropOpt.correlation,
     Rh=1,
-    m_flow_start=0.5,
-    P_start={Pstart_mixingManifold,Pstart_flightDeck},
-    T_start={Tstart_mixingManifold,Tstart_flightDeck},
     Roughness(displayUnit="mm") = 4.5e-05,
     L=L_pipe_cab,
     D=D_pipe_cab) annotation (Placement(transformation(
@@ -387,8 +381,8 @@ model A320PullDown "Aircraft on ground, pull down test case"
     Tstart_fuselage=Tstart_fuselage,
     Tstart_flightDeck=Tstart_flightDeck,
     Pstart_flightDeck=Pstart_flightDeck,
-    noInitialPressure=false,
-    noInitialTemperature=false)
+    noInitialPressure=noInitialPressure_cockpit,
+    noInitialTemperature=noInitialTemperature_cockpit)
     annotation (Placement(transformation(extent={{-106,34},{-56,82}})));
 
   DynTherM.Systems.Aircraft.Subsystems.CabinWall cabinWall(Tstart=
@@ -431,16 +425,13 @@ model A320PullDown "Aircraft on ground, pull down test case"
     Tstart_fuselage=Tstart_fuselage,
     Tstart_cargo=Tstart_cargo,
     Pstart_cargo=Pstart_cargo,
-    noInitialPressure=false,
-    noInitialTemperature=false)
+    noInitialPressure=noInitialPressure_cargo,
+    noInitialTemperature=noInitialTemperature_cargo)
     annotation (Placement(transformation(extent={{-88,-42},{-44,2}})));
 
   DynTherM.Components.MassTransfer.CircularPipe distributionPipeCockpit(
     DP_opt=DynTherM.Choices.PDropOpt.correlation,
     Rh=1,
-    m_flow_start=0.5,
-    P_start={Pstart_mixingManifold,Pstart_cabin},
-    T_start={Tstart_mixingManifold,Tstart_cabin},
     Roughness(displayUnit="mm") = 4.5e-05,
     L=L_pipe_fd,
     D=D_pipe_fd) annotation (Placement(transformation(
@@ -542,8 +533,8 @@ model A320PullDown "Aircraft on ground, pull down test case"
     Tstart_fuselage=Tstart_fuselage,
     Tstart_cabin=Tstart_cabin,
     Pstart_cabin=Pstart_cabin,
-    noInitialPressure=false,
-    noInitialTemperature=false)
+    noInitialPressure=noInitialPressure_cabin,
+    noInitialTemperature=noInitialTemperature_cabin)
     annotation (Placement(transformation(extent={{38,38},{82,82}})));
 
   inner DynTherM.Components.Environment

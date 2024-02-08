@@ -7,12 +7,15 @@ model CircularChannel1D "Circular channel implementing 1D spatial discretization
   replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
   model CV = CircularCV "Control volume";
+  model I = DynTherM.Components.MassTransfer.PlenumSimple
+    "Inertia between two adjacent control volumes";
 
   // Geometry
   parameter Length L "Channel length" annotation (Dialog(tab="Geometry"));
   parameter Length R_ext "Channel external radius" annotation (Dialog(tab="Geometry"));
   parameter Length R_int "Channel internal radius" annotation (Dialog(tab="Geometry"));
   parameter Length Roughness=0.015*10^(-3) "Channel roughness" annotation (Dialog(tab="Geometry"));
+  parameter Volume V_inertia=1e-6 "Volume of the plenum placed between two consecutive control volumes" annotation (Dialog(tab="Geometry"));
 
   // Initialization
   parameter Temperature T_start_solid=288.15 "Temperature of the solid part - start value" annotation (Dialog(tab="Initialization"));
@@ -26,14 +29,14 @@ model CircularChannel1D "Circular channel implementing 1D spatial discretization
   parameter Choices.InitOpt initOpt=environment.initOpt "Initialization option" annotation (Dialog(tab="Initialization"));
 
   // Discretization
-  parameter Integer N(min=1) "Number of longitudinal sections in which the tube is discretized";
+  parameter Integer N_cv=1 "Number of control volumes in which the cooling channels are discretized";
   parameter Integer N_channels(min=1) "Number of channels in parallel";
 
-  CV fluid_cv[N](
+  CV fluid_cv[N_cv](
     redeclare model Mat = Mat,
     redeclare package Medium = Medium,
     each N=N_channels,
-    each L=L/N,
+    each L=L/N_cv,
     each R_ext=R_ext,
     each R_int=R_int,
     each Roughness=Roughness,
@@ -43,6 +46,18 @@ model CircularChannel1D "Circular channel implementing 1D spatial discretization
     each X_start=X_start,
     each state_start=state_start,
     each m_flow_start=m_flow_start,
+    each initOpt=initOpt);
+
+  I inertia[N_cv-1](
+    redeclare package Medium = Medium,
+    each V=V_inertia,
+    each P_start=P_start,
+    each T_start=T_start_fluid,
+    each X_start=X_start,
+    each state_start=state_start,
+    each m_flow_start=m_flow_start,
+    each noInitialPressure=true,
+    each noInitialTemperature=false,
     each initOpt=initOpt);
 
   DynTherM.CustomInterfaces.FluidPort_A inlet(
@@ -64,25 +79,25 @@ model CircularChannel1D "Circular channel implementing 1D spatial discretization
             {106,6}},       rotation=0), iconTransformation(extent={{90,-10},{110,
             10}})));
 
-  CustomInterfaces.DistributedHeatPort_B solid_surface(Nx=N, Ny=1)
-                                                            annotation (
+  CustomInterfaces.DistributedHeatPort_B solid_surface(Nx=N_cv, Ny=1) annotation (
       Placement(transformation(extent={{-40,14},{40,80}}), iconTransformation(
           extent={{-40,14},{40,80}})));
 
 equation
   // thermal connections
-  for i in 1:N loop
+  for i in 1:N_cv loop
     connect(solid_surface.ports[i,1], fluid_cv[i].solid_surface);
   end for;
 
   // internal flow connections
-  for i in 1:(N-1) loop
-    connect(fluid_cv[i].outlet, fluid_cv[i+1].inlet);
+  for i in 1:(N_cv-1) loop
+    connect(fluid_cv[i].outlet, inertia[i].inlet);
+    connect(inertia[i].outlet, fluid_cv[i+1].inlet);
   end for;
 
   // boundary flow connections
   connect(inlet, fluid_cv[1].inlet);
-  connect(outlet, fluid_cv[N].outlet);
+  connect(outlet, fluid_cv[N_cv].outlet);
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
                       Rectangle(

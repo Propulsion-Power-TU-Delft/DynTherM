@@ -4,31 +4,26 @@ model DittusBoelter "Internal convection for circular pipes according to Dittus-
   input Length Dh "Hydraulic diameter" annotation(Dialog(enable = true));
   input Temperature T_in "Inlet fluid temperature" annotation(Dialog(enable = true));
   input Temperature T_out "Outlet fluid temperature" annotation(Dialog(enable = true));
-  input ReynoldsNumber Re[Nx,Ny] "Reynolds number" annotation(Dialog(enable = true));
-  input PrandtlNumber Pr[Nx,Ny] "Prandtl number" annotation(Dialog(enable = true));
-  input Medium.ThermodynamicState state[Nx,Ny] "Average thermodynamic state" annotation(Dialog(enable = true));
+  input ReynoldsNumber Re "Reynolds number" annotation(Dialog(enable = true));
+  input PrandtlNumber Pr "Prandtl number" annotation(Dialog(enable = true));
+  input Medium.ThermodynamicState state "Average thermodynamic state" annotation(Dialog(enable = true));
 
-  NusseltNumber Nu[Nx,Ny] "Nusselt number";
+  NusseltNumber Nu "Nusselt number";
 
 equation
 
-  for i in 1:Nx loop
-    for j in 1:Ny loop
-      // Cooled pipe
-      if T_in >= T_out then
-        Nu[i,j] = 0.023*Re[i,j]^(4/5)*Pr[i,j]^0.3;
-      else
-      // Heated pipe
-        Nu[i,j] = 0.023*Re[i,j]^(4/5)*Pr[i,j]^0.4;
-      end if;
+  // Cooled pipe
+  if T_in >= T_out then
+    Nu = 0.023*Re^(4/5)*Pr^0.3;
+  else
+  // Heated pipe
+    Nu = 0.023*Re^(4/5)*Pr^0.4;
+  end if;
 
-      Nu[i,j] = ht[i,j]*Dh/Medium.thermalConductivity(state[i,j]);
+  Nu = ht*Dh/Medium.thermalConductivity(state);
 
-      // Sanity check
-      assert(Re[i,j] >= 10e3, "The Dittus-Boelter correlation is valid only
-        for Reynolds numbers greater than 10e3", AssertionLevel.warning);
-    end for;
-  end for;
+  // Sanity check
+  assert(Re >= 10e3, "The Dittus-Boelter correlation is valid only for Reynolds numbers greater than 10e3", AssertionLevel.warning);
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)),

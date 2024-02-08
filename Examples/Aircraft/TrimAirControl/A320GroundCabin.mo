@@ -37,23 +37,15 @@ model A320GroundCabin "Aircraft on ground, two temperature zones"
         origin={90,-90})));
   Systems.Aircraft.AirbusA320 A320(
     redeclare model HTC_int_upper =
-        Components.HeatTransfer.HTCorrelations.InternalConvection.Cylinder (Nx=
-            1, Ny=1),
+        Components.HeatTransfer.HTCorrelations.InternalConvection.Cylinder,
     redeclare model HTC_int_lower =
-        Components.HeatTransfer.HTCorrelations.InternalConvection.Cylinder (Nx=
-            1, Ny=1),
+        Components.HeatTransfer.HTCorrelations.InternalConvection.Cylinder,
     redeclare model HTC_ext_upper =
         Components.HeatTransfer.HTCorrelations.ExternalConvection.AircraftOnGroundFree
-        (
-        Nx=1,
-        Ny=1,
-        R_ext=A320.R_fuselage),
+        (R_ext=A320.R_fuselage),
     redeclare model HTC_ext_lower =
         Components.HeatTransfer.HTCorrelations.ExternalConvection.AircraftOnGroundFree
-        (
-        Nx=1,
-        Ny=1,
-        R_ext=A320.R_fuselage),
+        (R_ext=A320.R_fuselage),
     N_pax=196,
     N_crew=6,
     N_pilots=3,

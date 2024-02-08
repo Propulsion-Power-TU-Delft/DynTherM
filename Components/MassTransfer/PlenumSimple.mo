@@ -22,9 +22,9 @@ model PlenumSimple "Plenum with heat and mass transfer"
 
   Modelica.Units.SI.Mass M "Total mass";
   Modelica.Units.SI.InternalEnergy E "Total internal energy";
-  Medium.AbsolutePressure P(start=P_start) "Pressure";
-  Medium.Temperature T(start=T_start) "Temperature";
-  Medium.MassFraction X[Medium.nX](start=X_start) "Mass fractions";
+  Medium.AbsolutePressure P "Pressure";
+  Medium.Temperature T "Temperature";
+  Medium.MassFraction X[Medium.nX] "Mass fractions";
   Medium.ThermodynamicState state "Thermodynamic state";
   Modelica.Units.SI.Time Tr "Residence Time";
 

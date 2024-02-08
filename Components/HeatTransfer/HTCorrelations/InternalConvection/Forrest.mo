@@ -4,28 +4,21 @@ model Forrest
   extends BaseClassInternal;
   input Length Dh "Hydraulic diameter" annotation(Dialog(enable = true));
   input Real phi_star "Geometrical correction" annotation(Dialog(enable = true));
-  input ReynoldsNumber Re[Nx,Ny] "Reynolds number" annotation(Dialog(enable = true));
-  input PrandtlNumber Pr[Nx,Ny] "Prandtl number" annotation(Dialog(enable = true));
-  input Medium.ThermodynamicState state[Nx,Ny] "Average thermodynamic state" annotation(Dialog(enable = true));
+  input ReynoldsNumber Re "Reynolds number" annotation(Dialog(enable = true));
+  input PrandtlNumber Pr "Prandtl number" annotation(Dialog(enable = true));
+  input Medium.ThermodynamicState state "Average thermodynamic state" annotation(Dialog(enable = true));
 
-  NusseltNumber Nu[Nx,Ny] "Nusselt number";
+  NusseltNumber Nu "Nusselt number";
 
 equation
 
-  for i in 1:Nx loop
-    for j in 1:Ny loop
-      // Nusselt number
-      Nu[i,j] = 0.199*(Re[i,j] - 600)^(7/8)*Pr[i,j]/(5*(Pr[i,j] - 2)*phi_star^(1/8) +
-        10.05*(Re[i,j] - 600)^(1/8)*phi_star^(1/4));
-      Nu[i,j] = ht[i,j]*Dh/Medium.thermalConductivity(state[i,j]);
+  // Nusselt number
+  Nu = 0.199*(Re - 600)^(7/8)*Pr/(5*(Pr - 2)*phi_star^(1/8) + 10.05*(Re - 600)^(1/8)*phi_star^(1/4));
+  Nu = ht*Dh/Medium.thermalConductivity(state);
 
-      // Sanity check
-      assert(Re[i,j] >= 4e3, "The Forrest correlation is valid only for
-        Reynolds numbers greater than 4e3", AssertionLevel.warning);
-      assert(Re[i,j] <= 70e3, "The Forrest correlation is valid only for
-        Reynolds numbers lower than 70e3", AssertionLevel.warning);
-    end for;
-  end for;
+  // Sanity check
+  assert(Re >= 4e3, "The Forrest correlation is valid only for Reynolds numbers greater than 4e3", AssertionLevel.warning);
+  assert(Re <= 70e3, "The Forrest correlation is valid only for Reynolds numbers lower than 70e3", AssertionLevel.warning);
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)),

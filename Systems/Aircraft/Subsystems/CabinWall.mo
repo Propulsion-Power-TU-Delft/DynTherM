@@ -13,23 +13,23 @@ model CabinWall "Simplified model of cabin wall separating cabin and cockpit"
     "Floor core thickness";
 
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b ext annotation (Placement(
-        transformation(extent={{-10,60},{10,80}}), iconTransformation(extent={{-10,60},
-            {10,80}})));
+        transformation(extent={{-10,60},{10,80}}), iconTransformation(extent={{-10,
+            60},{10,80}})));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a int annotation (Placement(
-        transformation(extent={{-10,-80},{10,-60}}), iconTransformation(extent={{-10,-80},
-            {10,-60}})));
+        transformation(extent={{-10,-80},{10,-60}}), iconTransformation(extent={
+            {-10,-80},{10,-60}})));
   Components.HeatTransfer.WallConduction floor_ext(
     redeclare model Mat = Materials.CarbonPhenolic,
     t=t_fl_f,
     A=A,
-    Tstart=Tstart*ones(1, 1),
+    Tstart=Tstart,
     initOpt=environment.initOpt) "Material: carbon phenolic"
     annotation (Placement(transformation(extent={{-28,46},{28,14}})));
   Components.HeatTransfer.WallConduction floor_core(
     redeclare model Mat = Materials.FibrelamAramid6100,
     t=t_fl_c,
     A=A,
-    Tstart=(Tstart - 1)*ones(1, 1),
+    Tstart=Tstart - 1,
     initOpt=environment.initOpt)
     "Material: Fibrelam® 6100 Aramid phenolic honeycomb HRH-10-1/8-9.0"
     annotation (Placement(transformation(extent={{-28,16},{28,-16}})));
@@ -37,28 +37,18 @@ model CabinWall "Simplified model of cabin wall separating cabin and cockpit"
     redeclare model Mat = Materials.CarbonPhenolic,
     t=t_fl_f,
     A=A,
-    Tstart=(Tstart - 1.5)*ones(1, 1),
+    Tstart=Tstart - 1.5,
     initOpt=environment.initOpt) "Material: carbon phenolic"
     annotation (Placement(transformation(extent={{-28,-14},{28,-46}})));
-  CustomInterfaces.Adaptors.heatFlowMultiplier heatFlowMultiplier1(Nx=1, Ny=1)
-    annotation (Placement(transformation(extent={{-10,64},{10,44}})));
-  CustomInterfaces.Adaptors.heatFlowMultiplier heatFlowMultiplier(Nx=1, Ny=1)
-    annotation (Placement(transformation(extent={{-10,-64},{10,-44}})));
 equation
+  connect(int, floor_int.inlet) annotation (Line(points={{0,-70},{3.9968e-15,-70},
+          {3.9968e-15,-35.44}}, color={191,0,0}));
+  connect(floor_ext.outlet, ext)
+    annotation (Line(points={{0,35.44},{0,70}}, color={191,0,0}));
   connect(floor_int.outlet, floor_core.inlet)
-    annotation (Line(points={{0,-25.52},{0,-4.48}},  color={191,0,0}));
+    annotation (Line(points={{0,-24.56},{0,-5.44}},  color={191,0,0}));
   connect(floor_core.outlet, floor_ext.inlet)
-    annotation (Line(points={{0,4.48},{0,25.52}}, color={191,0,0}));
-  connect(ext, heatFlowMultiplier1.single)
-    annotation (Line(points={{0,70},{0,60}}, color={191,0,0}));
-  connect(heatFlowMultiplier1.distributed, floor_ext.outlet) annotation (Line(
-        points={{0,48},{0,41.24},{3.55271e-15,41.24},{3.55271e-15,34.48}},
-        color={191,0,0}));
-  connect(floor_int.inlet, heatFlowMultiplier.distributed) annotation (Line(
-        points={{3.55271e-15,-34.48},{3.55271e-15,-41.24},{0,-41.24},{0,-48}},
-        color={191,0,0}));
-  connect(heatFlowMultiplier.single, int)
-    annotation (Line(points={{0,-60},{0,-70}}, color={191,0,0}));
+    annotation (Line(points={{0,5.44},{0,24.56}}, color={191,0,0}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
                       Rectangle(
           extent={{-100,60},{100,20}},

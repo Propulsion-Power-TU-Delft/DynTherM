@@ -3,17 +3,13 @@ partial model BaseClassExternal
   replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
   outer DynTherM.Components.Environment environment "Environmental properties";
-
-  parameter Integer Nx(min=1) "Number of control volumes in x-direction";
-  parameter Integer Ny(min=1) "Number of control volumes in y-direction";
-  input Modelica.Units.SI.Temperature T_skin[Nx,Ny]
+  input Modelica.Units.SI.Temperature T_skin
     "Fuselage outer skin temperature";
-  parameter Modelica.Units.SI.CoefficientOfHeatTransfer ht_start[Nx,Ny]=10*ones(Nx,Ny)
+  parameter Modelica.Units.SI.CoefficientOfHeatTransfer ht_start=10
     "Heat transfer coefficient - starting value";
-
-  Modelica.Units.SI.CoefficientOfHeatTransfer ht[Nx,Ny](start=ht_start)
+  Modelica.Units.SI.CoefficientOfHeatTransfer ht(start=ht_start)
     "Heat transfer coefficient";
-  Modelica.Units.SI.Temperature T_out[Nx,Ny]
+  Modelica.Units.SI.Temperature T_out
     "Temperature used to compute heat flow rate";
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)));
