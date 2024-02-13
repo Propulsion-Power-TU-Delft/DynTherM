@@ -1,5 +1,5 @@
 within DynTherM.CustomInterfaces;
-package Adaptors
+package Adaptors "Models used to couple two connectors of different type"
   model irradianceToHeatFlow
     "Model used to convert from irradiance port to heat port"
 

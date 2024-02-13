@@ -118,12 +118,12 @@ equation
         Line(points={{100,-20},{90,-12}}, color={0,0,0})}),      Diagram(
         coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>
-<p>Assumptions:</p>
+<p><b>Assumptions:</b></p>
 <p>1. No flow rotation</p>
 <p>2. Incompressible flow</p>
 <p>3. Thrust uniformly distributed over the actuator disk</p>
 <p>4. Static pressure upstream and downstream the control volume matches the ambient value</p>
-<p><br>Reference:</p>
+<p><br><b>Reference:</b></p>
 <p>[1] P. M. Sforza. &quot;Theory of Aerospace Propulsion, Chapter 10: Propellers&quot;, 2017</p>
 </html>"));
 end ActuatorDisk;

@@ -1,6 +1,5 @@
 within DynTherM.Components.MassTransfer;
-package FanCharacteristics
-
+package FanCharacteristics "Package collecting different laws describing the characteristic curves of fans"
 
   annotation (Icon(graphics={
         Line(

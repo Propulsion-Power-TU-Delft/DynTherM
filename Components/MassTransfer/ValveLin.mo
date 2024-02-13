@@ -8,14 +8,17 @@ model ValveLin "Valve with linear pressure drop"
     "= true to allow flow reversal, false restricts to design direction";
   outer DynTherM.Components.Environment environment "Environmental properties";
   Medium.MassFlowRate massFlow "Mass flowrate";
-  DynTherM.CustomInterfaces.FluidPort_A inlet(redeclare package Medium = Medium,
-                                              m_flow(min=if allowFlowReversal
-           then -Modelica.Constants.inf else 0)) annotation (Placement(
+
+  DynTherM.CustomInterfaces.FluidPort_A inlet(
+    redeclare package Medium = Medium,
+    m_flow(min=if allowFlowReversal then -Modelica.Constants.inf
+      else 0)) annotation (Placement(
         transformation(extent={{-120,-20},{-80,20}}, rotation=0),
         iconTransformation(extent={{-110,-10},{-90,10}})));
-  DynTherM.CustomInterfaces.FluidPort_B outlet(redeclare package Medium =
-        Medium,                                m_flow(max=if allowFlowReversal
-           then +Modelica.Constants.inf else 0)) annotation (Placement(
+  DynTherM.CustomInterfaces.FluidPort_B outlet(
+    redeclare package Medium =Medium,
+    m_flow(max=if allowFlowReversal then +Modelica.Constants.inf
+      else 0)) annotation (Placement(
         transformation(extent={{80,-20},{120,20}}, rotation=0),
         iconTransformation(extent={{90,-10},{110,10}})));
   Modelica.Blocks.Interfaces.RealInput opening annotation (Placement(
@@ -26,6 +29,7 @@ model ValveLin "Valve with linear pressure drop"
         extent={{-16,-16},{16,16}},
         rotation=270,
         origin={0,54})));
+
 equation
   inlet.m_flow + outlet.m_flow = 0 "Mass balance";
   inlet.m_flow = massFlow;
@@ -72,16 +76,9 @@ equation
           color={0,0,0},
           thickness=0.5)}),
     Documentation(info="<html>
-<p>This very simple model provides a pressure drop which is proportional to the flowrate and to the <tt>cmd</tt> signal, without computing any fluid property.</p>
+<p>The valve opening is provided by an external input wired to the model.</p>
+<p>Model adapted from ThermoPower library by Francesco Casella.</p>
 </html>",
         revisions="<html>
-<ul>
-<li><i>20 Dec 2004</i>
-    by <a href=\"mailto:francesco.casella@polimi.it\">Francesco Casella</a>:<br>
-       Adapted to Modelica.Media.</li>
-<li><i>5 Mar 2004</i>
-    by <a href=\"mailto:francesco.casella@polimi.it\">Francesco Casella</a>:<br>
-       First release.</li>
-</ul>
 </html>"));
 end ValveLin;

@@ -74,7 +74,7 @@ equation
           textString="FLOOR")}),                                 Diagram(
         coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>
-<p>References:</p>
+<p><b>References:</b></p>
 <p>[1]&nbsp;L.&nbsp;Krakers.&nbsp;Parametric&nbsp;fuselage&nbsp;design:&nbsp;integration&nbsp;of&nbsp;mechanics,&nbsp;acoustic&nbsp;and&nbsp;thermal&nbsp;insulation,&nbsp;2009.</p>
 <p>[2]&nbsp;SAE&nbsp;AIR&nbsp;1168/3,&nbsp;section&nbsp;7.2</p>
 <p>[3]&nbsp;Gillfab&nbsp;4117&nbsp;product&nbsp;data&nbsp;sheet</p>

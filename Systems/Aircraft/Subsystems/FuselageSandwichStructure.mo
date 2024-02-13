@@ -161,8 +161,8 @@ equation
           textString="FUSELAGE")}),                              Diagram(
         coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>
-<p>Hp:&nbsp;fin&nbsp;effect&nbsp;of&nbsp;structural&nbsp;members&nbsp;attached&nbsp;to&nbsp;the&nbsp;skin&nbsp;and&nbsp;protruding&nbsp;into&nbsp;the&nbsp;cabin&nbsp;is&nbsp;neglected&nbsp;in&nbsp;first&nbsp;approximation.</p>
-<p>References:</p>
+<p><b>Assumption:</b>&nbsp;fin&nbsp;effect&nbsp;of&nbsp;structural&nbsp;members&nbsp;attached&nbsp;to&nbsp;the&nbsp;skin&nbsp;and&nbsp;protruding&nbsp;into&nbsp;the&nbsp;cabin&nbsp;is&nbsp;neglected.</p>
+<p><br><b>References:</b></p>
 <p>[1]&nbsp;L.&nbsp;Krakers.&nbsp;Parametric&nbsp;fuselage&nbsp;design:&nbsp;integration&nbsp;of&nbsp;mechanics,&nbsp;acoustic&nbsp;and&nbsp;thermal&nbsp;insulation,&nbsp;2009.</p>
 <p>[2]&nbsp;SAE&nbsp;AIR&nbsp;1168/3,&nbsp;section&nbsp;7.2</p>
 </html>"));

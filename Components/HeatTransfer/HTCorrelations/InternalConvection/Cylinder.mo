@@ -9,6 +9,7 @@ equation
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>
-<p>Reference: SAE Aerospace. &quot;AIR 1168/3 - Aerothermodynamic Systems Engineering and Design&quot;, 2011.</p>
+<p><b>Reference:</b></p>
+<p>[1] SAE Aerospace. &quot;AIR 1168/3 - Aerothermodynamic Systems Engineering and Design&quot;, 2011.</p>
 </html>"));
 end Cylinder;

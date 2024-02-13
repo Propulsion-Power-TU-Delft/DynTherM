@@ -49,9 +49,9 @@ initial equation
           fillPattern=FillPattern.Solid,
           textString="WALL")}),
     Documentation(info="<html>
-<p>This is the model of a planar wall. </p>
 <p>The heat capacity (which is lumped at the center of the wall thickness) is accounted for, as well as the thermal resistance due to the finite heat conduction coefficient. Longitudinal heat conduction is neglected. </p>
 <p>The model can be used to reproduce the heat transfer through many walls in parallel. In that case, the heat flow rate is split equally among the different elements, assuming there is no heat transfer and temperature difference between them.</p>
+<p>Model adapted from ThermoPower library by Francesco Casella.</p>
 </html>",
         revisions="<html>
 </html>"));

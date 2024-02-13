@@ -7,13 +7,13 @@ model Cockpit "Upper section of the fuselage: cockpit section"
     DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
     constrainedby
     DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
-    annotation (choicesAllMatching=true);
+    "Internal convection correlation" annotation (choicesAllMatching=true);
 
   replaceable model HTC_ext =
     DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal
     constrainedby
     DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal
-    annotation (choicesAllMatching=true);
+    "External convection correlation" annotation (choicesAllMatching=true);
 
   parameter Real N_occupants[3] "Number of: passengers, cabin crew, pilots inside the cockpit";
   parameter Modelica.Units.SI.HeatFlowRate Q_int "Internal heat load";

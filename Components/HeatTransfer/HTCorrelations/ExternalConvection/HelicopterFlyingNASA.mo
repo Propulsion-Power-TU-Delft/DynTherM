@@ -1,6 +1,6 @@
 within DynTherM.Components.HeatTransfer.HTCorrelations.ExternalConvection;
 model HelicopterFlyingNASA
-  "FlyingNASA: Convection during low forward speed (helicopter) for rotor-induced surfaces using wake-based induced velocity"
+  "Convection during low forward speed (helicopter) for rotor-induced surfaces using wake-based induced velocity"
   // Reference: ASHRAE Handbook - HVAC Applications, chapter 13, NACA - Evaluation of Induced Field
   extends BaseClassExternal;
   parameter Modelica.Units.SI.Length R_rotor "Main rotor radius";
@@ -90,5 +90,8 @@ equation
   T_out = T_aw;
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
-        coordinateSystem(preserveAspectRatio=false)));
+        coordinateSystem(preserveAspectRatio=false)),
+    Documentation(info="<html>
+<p>Legacy code: to be double-checked before usage</p>
+</html>"));
 end HelicopterFlyingNASA;

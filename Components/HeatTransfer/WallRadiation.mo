@@ -1,5 +1,5 @@
 within DynTherM.Components.HeatTransfer;
-model WallRadiation "Model of incident and emitted thermal radiation"
+model WallRadiation "Model of incident and emitted thermal radiation for a planar surface"
 
   outer DynTherM.Components.Environment environment "Environmental properties";
   replaceable model Material =
@@ -63,7 +63,7 @@ equation
         Line(points={{36,-66},{30,-76}}, color={238,46,47})}),   Diagram(
         coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>
-<p>Reference:</p>
+<p><b>Reference:</b></p>
 <p>[1]&nbsp;F.&nbsp;Goia,&nbsp;et&nbsp;al.&nbsp;-&nbsp;A&nbsp;Numerical&nbsp;Model&nbsp;to&nbsp;Evaluate&nbsp;the&nbsp;thermal&nbsp;Behaviour&nbsp;of&nbsp;PCM&nbsp;Glazing&nbsp;System&nbsp;Configurations,&nbsp;2012.</p>
 </html>"));
 end WallRadiation;

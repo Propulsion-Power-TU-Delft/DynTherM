@@ -203,7 +203,7 @@ equation
     Documentation(info="<html>
 <p>The following models are strictly valid only for clear-sky at ground level.</p>
 <p>Corrections for cloudy-sky and altitude effects should be implemented.</p>
-<p>Reference</p>
+<p><br><b>Reference:</b></p>
 <p>[1] ASHRAE&nbsp;Handbook&nbsp;&ndash;&nbsp;Fundamentals,&nbsp;chapter&nbsp;14,&nbsp;2013.</p>
 <p><img src=\"modelica://DynTherM/Figures/ThermalRadiationASHRAE.PNG\"/></p>
 </html>"));

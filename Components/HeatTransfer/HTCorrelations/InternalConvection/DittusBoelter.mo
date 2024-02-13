@@ -1,5 +1,5 @@
 within DynTherM.Components.HeatTransfer.HTCorrelations.InternalConvection;
-model DittusBoelter "Internal convection for circular pipes according to Dittus-Boelter correlation"
+model DittusBoelter "Internal convection for circular pipes"
   extends BaseClassInternal;
   input Length Dh "Hydraulic diameter" annotation(Dialog(enable = true));
   input Temperature T_in "Inlet fluid temperature" annotation(Dialog(enable = true));
@@ -28,6 +28,7 @@ equation
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>
-<p>Reference: &quot;ASHRAE Handbook - Fundamentals&quot;, 2013.</p>
+<p><b>Reference:</b></p>
+<p>[1] &quot;ASHRAE Handbook - Fundamentals&quot;, 2013.</p>
 </html>"));
 end DittusBoelter;

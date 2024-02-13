@@ -1,5 +1,5 @@
 within DynTherM;
-package CustomInterfaces "Additional (wrt standard Modelica library) tailor made connectors"
+package CustomInterfaces "Tailor-made connectors in addition to the standard Modelica library"
 
   annotation (Icon(graphics={
         Rectangle(

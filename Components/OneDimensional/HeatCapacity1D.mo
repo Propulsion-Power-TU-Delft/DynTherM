@@ -1,5 +1,6 @@
-within DynTherM.Components.HeatTransfer;
-model HeatCapacity "Dynamic model of heat capacity element"
+within DynTherM.Components.OneDimensional;
+model HeatCapacity1D
+  "Heat capacity model implementing 1D spatial discretization"
   outer DynTherM.Components.Environment environment
     "Environmental properties";
 
@@ -9,33 +10,24 @@ model HeatCapacity "Dynamic model of heat capacity element"
     "Remove initial equation on temperature" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
   parameter Temperature T_start=288.15 "Temperature start value" annotation (Dialog(tab="Initialization"));
   parameter Modelica.Units.SI.HeatCapacity C "Heat capacity";
+  parameter Integer N_cv=1 "Number of control volumes";
 
-  Temperature T "Temperature of element";
+  model CV = DynTherM.Components.HeatTransfer.HeatCapacity "Control volume";
 
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port annotation (Placement(transformation(
-          origin={0,-100},
-          extent={{-10,-10},{10,10}},
-          rotation=90)));
+  CV cv[N_cv](
+    each C=C/N_cv,
+    each T_start=T_start,
+    each initOpt=initOpt,
+    each noInitialTemperature=noInitialTemperature);
+
+  CustomInterfaces.DistributedHeatPort_A thermal(Nx=N_cv, Ny=1) annotation (
+      Placement(transformation(extent={{-40,-132},{40,-52}}),
+        iconTransformation(extent={{-40,-132},{40,-52}})));
 
 equation
-  T = port.T;
-  C*der(T) = port.Q_flow;
-
-initial equation
-  // Initial conditions
-  if initOpt == DynTherM.Choices.InitOpt.noInit then
-    // do nothing
-  elseif initOpt == DynTherM.Choices.InitOpt.fixedState then
-    if not noInitialTemperature then
-      T = T_start;
-    end if;
-  elseif initOpt == DynTherM.Choices.InitOpt.steadyState then
-    if not noInitialTemperature then
-      der(T) = 0;
-    end if;
-  else
-    assert(false, "Unsupported initialisation option");
-  end if;
+  for i in 1:N_cv loop
+    connect(thermal.ports[i,1], cv[i].port);
+  end for;
 
   annotation (
       Icon(coordinateSystem(preserveAspectRatio=true, extent={{-100,-100},{
@@ -99,6 +91,5 @@ initial equation
             textString="T"),
           Line(points={{0,-12},{0,-96}}, color={255,0,0})}),
       Documentation(info="<html>
-<p>Model adapted from ThermoPower library by Francesco Casella.</p>
 </html>"));
-end HeatCapacity;
+end HeatCapacity1D;

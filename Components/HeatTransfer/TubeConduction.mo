@@ -69,10 +69,10 @@ initial equation
           fillPattern=FillPattern.Solid,
           textString="TUBE")}),
     Documentation(info="<html>
-<p>Model of a cylindrical tube of solid material.</p>
 <p>The heat capacity (which is lumped at the center of the tube thickness) is accounted for, as well as the thermal resistance due to the finite heat conduction coefficient. Longitudinal heat conduction is neglected.</p>
 <p>The model can be used to reproduce the heat transfer through many tubes in parallel. In that case, the heat flow rate is split equally among the different tubes, assuming there is no heat transfer and temperature difference between them.</p>
-<p>The tube element can be used to model the fuselage of an aircraft. In that case, the heat transfer through the cabin windows is neglected and treated separately. </p>
+<p>The tube element can be used to model the fuselage of an aircraft. In that case, the heat transfer through the cabin windows is neglected and treated separately.</p>
+<p>Model adapted from ThermoPower library by Francesco Casella.</p>
 </html>",
         revisions="<html>
 </html>"));

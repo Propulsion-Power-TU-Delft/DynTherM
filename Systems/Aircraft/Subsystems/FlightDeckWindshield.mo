@@ -125,8 +125,8 @@ equation
           rotation=-90)}),                                       Diagram(
         coordinateSystem(preserveAspectRatio=false, extent={{-100,-120},{100,140}})),
     Documentation(info="<html>
-<p>Hp: air leakage from pressurized cabin to environment is neglected.</p>
-<p>Reference:</p>
-<p>[1] F.&nbsp;Zanghirella,&nbsp;et&nbsp;al.&nbsp;&quot;A&nbsp;Numerical&nbsp;Model&nbsp;to&nbsp;Evaluate&nbsp;the&nbsp;thermal&nbsp;Behaviour&nbsp;of&nbsp;Active&nbsp;Transparent&nbsp;Facades&quot;,&nbsp;2011.</p>
+<p><b>Assumption:</b> air leakage from pressurized flight deck to environment is neglected.</p>
+<p><br><b>Reference:</b></p>
+<p>[1] F. Zanghirella, et al. &quot;A Numerical Model to Evaluate the thermal Behaviour of Active Transparent Facades&quot;, 2011.</p>
 </html>"));
 end FlightDeckWindshield;

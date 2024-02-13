@@ -1,5 +1,5 @@
 within DynTherM.BoundaryConditions;
-model radiation "Model to impose irradiance"
+model radiation "Model to impose irradiance and incidence angle"
   extends DynTherM.Base.rin1;
   input Modelica.Units.SI.Irradiance E "Incident irradiance" annotation (Dialog(tab="Boundary conditions", enable=use_E));
   input Modelica.Units.SI.Angle theta "Incidence angle" annotation (Dialog(tab="Boundary conditions", enable=use_theta));

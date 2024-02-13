@@ -7,13 +7,13 @@ model CargoBay "Lower section of the fuselage: cargo bay"
     DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
     constrainedby
     DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
-    annotation (choicesAllMatching=true);
+    "Internal convection correlation" annotation (choicesAllMatching=true);
 
   replaceable model HTC_ext =
     DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal
     constrainedby
     DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal
-    annotation (choicesAllMatching=true);
+    "External convection correlation" annotation (choicesAllMatching=true);
 
   parameter Modelica.Units.SI.HeatFlowRate Q_int "Internal heat load";
   parameter Modelica.Units.SI.Length R_ext "External radius of the fuselage";

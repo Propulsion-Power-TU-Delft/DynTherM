@@ -1,6 +1,6 @@
 within DynTherM.Components.HeatTransfer;
 model WindowRadiation
-  "Model of transmitted, absorbed and reflected irradiance through transparent surfaces"
+  "Model of transmitted, absorbed and reflected irradiance through a planar transparent surface"
 
   replaceable model Mat=DynTherM.Materials.Opticor constrainedby
     DynTherM.Materials.Properties "Material choice" annotation (choicesAllMatching=true);

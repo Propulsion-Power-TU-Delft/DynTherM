@@ -101,24 +101,10 @@ initial equation
   end if;
   annotation (
     Documentation(info="<html>
-<p>Reference&nbsp;(for&nbsp;metabolic&nbsp;heat&nbsp;load&nbsp;calculations):</p>
-<p>[1] C.&nbsp;Giaconia,&nbsp;et&nbsp;al.&nbsp;Air&nbsp;Quality&nbsp;and&nbsp;Relative&nbsp;Humidity&nbsp;in&nbsp;Commercial&nbsp;Aircraft:</p>
-<p>[2] An&nbsp;Experimental&nbsp;Investigation&nbsp;on&nbsp;Short-Haul&nbsp;Domestic&nbsp;Flights,&nbsp;2013.</p>
-<p>[3] ASHRAE&nbsp;Handbook&nbsp;-&nbsp;Fundamentals,&nbsp;chapter&nbsp;9.</p>
-<p>Hp:&nbsp;the&nbsp;occupants&nbsp;are&nbsp;always&nbsp;in&nbsp;thermal&nbsp;equilibrium,&nbsp;i.e.&nbsp;all&nbsp;the&nbsp;heat&nbsp;they generate&nbsp;is&nbsp;transferred&nbsp;to&nbsp;the&nbsp;environemnt&nbsp;as&nbsp;latent&nbsp;and&nbsp;sensible&nbsp;heat.</p>
+<p>Accumulation of mass, energy, and mass fractions of different species is modeled within the plenum.</p>
+<p>Model adapted from ThermoPower library by Francesco Casella.</p>
 </html>",
         revisions="<html>
-<ul>
-<li><i>30 May 2005</i>
-    by <a href=\"mailto:francesco.casella@polimi.it\">Francesco Casella</a>:<br>
-       Initialisation support added.</li>
-<li><i>19 Nov 2004</i>
-    by <a href=\"mailto:francesco.casella@polimi.it\">Francesco Casella</a>:<br>
-       Adapted to Modelica.Media
-<li><i>5 Mar 2004</i>
-    by <a href=\"mailto:francesco.casella@polimi.it\">Francesco Casella</a>:<br>
-       First release.</li>
-</ul>
 </html>"),
     Icon(graphics={          Ellipse(
           extent={{-90,-90},{90,90}},

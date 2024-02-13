@@ -73,6 +73,6 @@ equation
           textString="WALL")}),                                  Diagram(
         coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>
-<p>Hp:&nbsp;same&nbsp;structure&nbsp;and&nbsp;materials&nbsp;as&nbsp;cabin&nbsp;floor.</p>
+<p><b>Assumption:</b>&nbsp;same&nbsp;structure&nbsp;and&nbsp;materials&nbsp;as&nbsp;cabin&nbsp;floor.</p>
 </html>"));
 end CabinWall;

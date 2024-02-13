@@ -98,9 +98,12 @@ equation
           fillPattern=FillPattern.Solid,
           textString="AIR GAP")}),
     Documentation(info="<html>
-<p>Hp:&nbsp;accumulation&nbsp;of&nbsp;energy,&nbsp;but&nbsp;negligible&nbsp;accumulation&nbsp;of&nbsp;mass&nbsp;and&nbsp;species</p>
-<p>Hp:&nbsp;leakage&nbsp;flow&nbsp;is&nbsp;allowed&nbsp;only&nbsp;from&nbsp;inlet&nbsp;to&nbsp;outlet</p>
-<p>References:</p>
+<p><b>Assumptions:</b></p>
+<ul>
+<li> Accumulation&nbsp;of&nbsp;energy,&nbsp;but&nbsp;negligible&nbsp;accumulation&nbsp;of&nbsp;mass&nbsp;and&nbsp;species</li>
+<li> Leakage&nbsp;flow&nbsp;is&nbsp;allowed&nbsp;only&nbsp;from&nbsp;inlet&nbsp;to&nbsp;outlet</li>
+</ul>
+<p><br><b>References:</b></p>
 <p>[1] F.&nbsp;Zanghirella&nbsp;et&nbsp;al.&nbsp;&quot;A&nbsp;numerical&nbsp;model&nbsp;to&nbsp;evaluate&nbsp;the&nbsp;thermal&nbsp;behaviour&nbsp;of&nbsp;active&nbsp;transparent&nbsp;facades&quot;,&nbsp;2011.</p>
 </html>",
         revisions="<html>

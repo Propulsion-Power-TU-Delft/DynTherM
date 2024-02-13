@@ -4,6 +4,9 @@ FluidPort_A
 FluidPort_B
 DistributedFluidPort_A
 DistributedFluidPort_B
+ExtFluidPort
+ExtFluidPort_A
+ExtFluidPort_B
 MechanicalPort
 Shaft_A
 Shaft_B

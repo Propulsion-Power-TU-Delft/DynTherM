@@ -1,6 +1,5 @@
 within DynTherM.Components.HeatTransfer;
-model WallRadiationFlux
-  "Model of incident and emitted thermal radiation per unit area"
+model WallRadiationFlux "Model of incident and emitted thermal radiation per unit area for a planar surface"
 
   outer DynTherM.Components.Environment environment "Environmental properties";
   replaceable model Material =

@@ -40,7 +40,8 @@ equation
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>
-<p>Reference:</p>
+<p>Correlation derived from empirical fitting of CFD simulations.</p>
+<p><br><b>Reference:</b></p>
 <p>[1] A. L. Habermann, et al. &quot;Aerodynamic Effects of a Wing Surface Heat Exchanger&quot;, MDPI Aerospace, 2023.</p>
 </html>"));
 end Wing;

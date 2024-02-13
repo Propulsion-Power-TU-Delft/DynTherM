@@ -1,6 +1,6 @@
 within DynTherM.Components.HeatTransfer.HTCorrelations.ExternalConvection;
 model HelicopterFlying
-  "Flying: Convection during hover and low forward speed (helicopter) for rotor-induced surfaces"
+  "Convection during hover and low forward speed (helicopter) for rotor-induced surfaces"
   // Reference: ASHRAE Handbook - HVAC Applications, chapter 13
   extends BaseClassExternal;
   parameter Modelica.Units.SI.Length R_rotor "Main rotor radius";
@@ -69,5 +69,8 @@ equation
   T_out = T_aw;
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
-        coordinateSystem(preserveAspectRatio=false)));
+        coordinateSystem(preserveAspectRatio=false)),
+    Documentation(info="<html>
+<p>Legacy code: to be double-checked before usage</p>
+</html>"));
 end HelicopterFlying;

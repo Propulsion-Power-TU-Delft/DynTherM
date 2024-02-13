@@ -1,5 +1,5 @@
 within DynTherM.Components.MassTransfer.DPCorrelations;
-model DarcyWeisbach "Friction factor for circular pipes according to Darcy-Weisbach correlation"
+model DarcyWeisbach "Friction factor for circular pipes"
   extends BaseClass;
   parameter Length Roughness "Pipe roughness";
   input Length Dh "Hydraulic diameter" annotation(Dialog(enable = true));
@@ -14,4 +14,8 @@ equation
     1/sqrt(f) = -2*log10(Roughness/(3.7*Dh) + 2.51/(Re*sqrt(f)));
   end if;
 
+  annotation (Documentation(info="<html>
+<p><b>Reference:</b></p>
+<p>[1] C. F. Colebrook. &quot;Turbulent Flow in Pipes, with Particular Reference to the Transition Region between the Smooth and Rough Pipe Laws&quot;. J. Inst. Civil Eng., Vol. 11, 133, 1938.</p>
+</html>"));
 end DarcyWeisbach;

@@ -1,6 +1,6 @@
 within DynTherM.Components.HeatTransfer.HTCorrelations.ExternalConvection;
 model HelicopterFlyingComplex
-  "FlyingComplex: Convection during low forward speed (helicopter) for rotor-induced surfaces using rotor based pressure distribution"
+  "Convection during low forward speed (helicopter) for rotor-induced surfaces using rotor based pressure distribution"
   // Reference: ASHRAE Handbook - HVAC Applications, chapter 13, A. Kusyomov - Simulation Flow around Helicopter Fuselage
   extends BaseClassExternal;
   parameter Modelica.Units.SI.Length R_rotor "Main rotor radius";
@@ -107,5 +107,8 @@ equation
   T_out = T_aw;
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
-        coordinateSystem(preserveAspectRatio=false)));
+        coordinateSystem(preserveAspectRatio=false)),
+    Documentation(info="<html>
+<p>Legacy code: to be double-checked before usage</p>
+</html>"));
 end HelicopterFlyingComplex;

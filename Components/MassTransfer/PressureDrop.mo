@@ -67,17 +67,9 @@ equation
 
   annotation (
     Documentation(info="<html>
-<p>This very simple model provides a pressure drop which is proportional to the flowrate and to the <tt>cmd</tt> signal, without computing any fluid property.</p>
+<p>Model adapted from ThermoPower library by Francesco Casella.</p>
 </html>",
         revisions="<html>
-<ul>
-<li><i>20 Dec 2004</i>
-    by <a href=\"mailto:francesco.casella@polimi.it\">Francesco Casella</a>:<br>
-       Adapted to Modelica.Media.</li>
-<li><i>5 Mar 2004</i>
-    by <a href=\"mailto:francesco.casella@polimi.it\">Francesco Casella</a>:<br>
-       First release.</li>
-</ul>
 </html>"), Icon(graphics={Rectangle(
           extent={{-90,40},{90,-40}},
           lineColor={0,0,0},

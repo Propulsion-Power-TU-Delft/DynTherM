@@ -350,7 +350,9 @@ equation
           lineColor={0,0,0},
           lineThickness=1)}),
     Documentation(info="<html>
-<p>References:</p>
+<p>Model to impose environmental properties as a function of time, altitude, geopraghical location, and methereological conditions.</p>
+<p>The model is also used to set some common simulation options.</p>
+<p><br><b>References:</b></p>
 <p>[1]&nbsp;ISA&nbsp;model&nbsp;to&nbsp;compute&nbsp;variation&nbsp;of&nbsp;properties&nbsp;with&nbsp;altitude</p>
 <p>[2]&nbsp;X.&nbsp;Fang.&nbsp;Study&nbsp;on&nbsp;saturated&nbsp;water&nbsp;vapor&nbsp;pressure&nbsp;equations&nbsp;for&nbsp;calculation&nbsp;of&nbsp;aircraft&nbsp;air-conditioning&nbsp;systems,&nbsp;1995.</p>
 <p>[3]&nbsp;Q.&nbsp;Dai,&nbsp;X.&nbsp;Fang.&nbsp;A&nbsp;new&nbsp;model&nbsp;for&nbsp;atmospheric&nbsp;radiation&nbsp;under&nbsp;clear&nbsp;sky&nbsp;condition&nbsp;at&nbsp;various&nbsp;altitudes,&nbsp;2014.</p>

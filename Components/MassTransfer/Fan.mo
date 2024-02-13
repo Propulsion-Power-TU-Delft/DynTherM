@@ -97,5 +97,8 @@ equation
        Line(points={{-100,0},{-60,0}}, color={0,0,0}),
        Line(points={{60,0},{92,0}}, color={0,0,0}),
        Rectangle(extent={{-4,90},{4,60}}, lineColor={0,0,0})}), Diagram(
-       coordinateSystem(preserveAspectRatio=false)));
+       coordinateSystem(preserveAspectRatio=false)),
+    Documentation(info="<html>
+<p>The model assumes incompressible flow.</p>
+</html>"));
 end Fan;

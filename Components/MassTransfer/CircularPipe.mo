@@ -150,7 +150,6 @@ equation
         Rectangle(extent={{-100,20},{100,-20}}, lineColor={0,0,0})}), Diagram(
         coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>
-<p>Model of the flow through a circular pipe.</p>
 <p>The convective heat transfer coefficient and the friction factor can be fixed by the user or computed with semi-empirical correlations.</p>
 <p>The conductive heat transfer through the solid walls is not included in this model and must be treated separately.</p>
 <p>The model can be used to reproduce the flow through many tubes in parallel. In that case, the mass flow rate is split equally among the different tubes.</p>

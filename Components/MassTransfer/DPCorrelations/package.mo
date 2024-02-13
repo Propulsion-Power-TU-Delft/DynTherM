@@ -1,8 +1,6 @@
 within DynTherM.Components.MassTransfer;
 package DPCorrelations "Package collecting correlations for the estimation of the pressure drop"
 
-
-
   annotation (Icon(graphics={
       Rectangle(
         extent={{60,88},{80,-88}},

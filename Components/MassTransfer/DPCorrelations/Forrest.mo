@@ -1,6 +1,5 @@
 within DynTherM.Components.MassTransfer.DPCorrelations;
-model Forrest
-  "Friction factor for rectangular mini-channels according to correlation of Forrest et al."
+model Forrest "Friction factor for rectangular mini-channels"
   extends BaseClass;
   input Modelica.Units.SI.Length Dh "Hydraulic diameter" annotation(Dialog(enable = true));
   input Real phi_star "Geometrical correction" annotation(Dialog(enable = true));
@@ -19,7 +18,7 @@ equation
             ((Re > 2e3) and (Re < 4e3)), "The Forrest correlation is not strictly valid in the transition region", AssertionLevel.warning);
 
   annotation (Documentation(info="<html>
-<p>Reference</p>
+<p><b>Reference:</b></p>
 <p>[1] E. C. Forrest, et al. &ldquo;Convective Heat Transfer in a High Aspect Ratio Minichannel Heated on One Side&rdquo;, Journal of Heat Transfer, 2016.</p>
 </html>"));
 end Forrest;
