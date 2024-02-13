@@ -36,6 +36,7 @@ Applications:
 ### Pre-requisites
 ##### [Modelica 4.0](https://www.modelica.org/)
 ##### [Dymola 2022](https://www.3ds.com/products-services/catia/products/dymola/) (not tested with OpenModelica)
+##### [ExternalMedia](https://github.com/modelica-3rdparty/ExternalMedia)
 ##### [Python 3.9](https://python.org) (optional, only for Python - Dymola interface)
 ##### [NumPy](https://numpy.org) (optional, only for Python - Dymola interface)
 ```
