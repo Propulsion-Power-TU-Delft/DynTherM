@@ -1,8 +1,9 @@
 within DynTherM.Sensors;
-model MassflowSensor "Mass flow rate sensor"
+model MassflowSensorExt
+  "Mass flow rate sensor for ExternalMedia fluid"
   extends Modelica.Icons.RoundSensor;
-  replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
-    Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
+  replaceable package Medium = Media.ExtMedia.CoolProp.Hydrogen constrainedby
+    ExternalMedia.Media.BaseClasses.ExternalTwoPhaseMedium "Medium model" annotation(choicesAllMatching = true);
   outer DynTherM.Components.Environment environment "Environmental properties";
   parameter Boolean allowFlowReversal=environment.allowFlowReversal
     "= true to allow flow reversal, false restricts to design direction";
@@ -11,11 +12,13 @@ model MassflowSensor "Mass flow rate sensor"
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={0,110})));
-  CustomInterfaces.FluidPort_A inlet(redeclare package Medium = Medium,
-                                     m_flow(min=if allowFlowReversal then
+  CustomInterfaces.ExtFluidPort_A inlet(
+    redeclare package Medium = Medium,
+    m_flow(min=if allowFlowReversal then
     -Modelica.Constants.inf else 0)) annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
-  CustomInterfaces.FluidPort_B outlet(redeclare package Medium = Medium,
-                                      m_flow(max=if allowFlowReversal then
+  CustomInterfaces.ExtFluidPort_B outlet(
+    redeclare package Medium = Medium,
+    m_flow(max=if allowFlowReversal then
     +Modelica.Constants.inf else 0)) annotation (Placement(transformation(
           extent={{90,-10},{110,10}}), iconTransformation(extent={{90,-10},{110,10}})));
 equation
@@ -29,6 +32,10 @@ equation
   // Independent composition mass balances
   inlet.Xi_outflow = inStream(outlet.Xi_outflow);
   outlet.Xi_outflow = inStream(inlet.Xi_outflow);
+
+  // Properties c_i/m balance
+  inlet.C_outflow = inStream(outlet.C_outflow);
+  outlet.C_outflow = inStream(inlet.C_outflow);
 
   y = inlet.m_flow "Sensor output";
   annotation (
@@ -44,4 +51,4 @@ equation
                            Line(points={{-100,0},{-70,0}}, color={0,0,0}),
                            Line(points={{0,70},{0,100}},   color={0,0,0}),
                            Line(points={{70,0},{100,0}},   color={0,0,0})}));
-end MassflowSensor;
+end MassflowSensorExt;

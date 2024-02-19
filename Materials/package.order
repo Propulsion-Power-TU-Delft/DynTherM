@@ -2,6 +2,7 @@ Properties
 CellProperties
 Aluminium
 AluminiumFoil
+Aluminium7075T6
 CarbonPhenolic
 CarbonEpoxyLamina
 Corkboard
@@ -15,6 +16,7 @@ Glass
 TemperedGlass
 Polycarbonate
 Polyimide
+NFRSB31
 Opticor
 NCA18650
 Paints

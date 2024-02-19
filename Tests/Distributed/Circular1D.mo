@@ -91,8 +91,8 @@ model Circular1D
         extent={{14,14},{-14,-14}},
         rotation=180,
         origin={-60,0})));
-  BoundaryConditions.pressure_sink pressureSink_single(redeclare package Medium
-      = Refrigerant)
+  BoundaryConditions.pressure_sink pressureSink_single(redeclare package Medium =
+        Refrigerant)
     annotation (Placement(transformation(extent={{68,-12},{92,12}})));
   BoundaryConditions.thermal thermal(Q(displayUnit="kW") = 1000*(-3*3))
     annotation (Placement(transformation(extent={{-12,34},{6,46}})));
