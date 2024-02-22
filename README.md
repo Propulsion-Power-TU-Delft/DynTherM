@@ -12,11 +12,9 @@ Applications:
 
 2. Helicopter fuselage (to be adapted and ported to the new version of DynTherM)
 
-3. Hydrogen tank (coming soon)
+3. Hydrogen tank (under development)
 
-4. Battery pack (coming soon)
-
-![aircraft_model](./Figures/aircraft_model.pdf)
+4. Battery pack (under development)
 
 ---
 
