@@ -16,7 +16,7 @@ model Rectangular1D
     allowFlowReversal=false, initOpt=DynTherM.Choices.InitOpt.steadyState)
                                                   annotation (Placement(transformation(extent={{38,20},
             {78,60}})));
-  Components.OneDimensional.RectangularChannel1D channel1D(
+  Components.OneDimensional.RectangularChannelFlux1D channel1D(
     redeclare package Medium = Refrigerant,
     L(displayUnit="mm") = 0.4826,
     W(displayUnit="mm") = 0.0559,
@@ -27,7 +27,7 @@ model Rectangular1D
     t_west(displayUnit="mm") = 0.001,
     T_start_solid=323.15,
     T_start_fluid=323.15,
-    N=3,
+    N_cv=3,
     N_channels=1)
     annotation (Placement(transformation(extent={{-28,52},{28,108}})));
 
@@ -36,7 +36,7 @@ model Rectangular1D
     Ny=1,
     phi=-1e6*ones(3, 1))
     annotation (Placement(transformation(extent={{-40,100},{-2,122}})));
-  Components.OneDimensional.RectangularCV cv_1(
+  Components.OneDimensional.RectangularFluxCV cv_1(
     redeclare package Medium = Refrigerant,
     L(displayUnit="mm") = 0.001*(482.6/3),
     W(displayUnit="mm") = 0.0559,
@@ -48,7 +48,7 @@ model Rectangular1D
     T_start_solid=323.15,
     T_start_fluid=323.15)
     annotation (Placement(transformation(extent={{-60,-120},{-20,-80}})));
-  Components.OneDimensional.RectangularCV cv_2(
+  Components.OneDimensional.RectangularFluxCV cv_2(
     redeclare package Medium = Refrigerant,
     L(displayUnit="mm") = 0.001*(482.6/3),
     W(displayUnit="mm") = 0.0559,
@@ -60,7 +60,7 @@ model Rectangular1D
     T_start_solid=323.15,
     T_start_fluid=323.15)
     annotation (Placement(transformation(extent={{-20,-120},{20,-80}})));
-  Components.OneDimensional.RectangularCV cv_3(
+  Components.OneDimensional.RectangularFluxCV cv_3(
     redeclare package Medium = Refrigerant,
     L(displayUnit="mm") = 0.001*(482.6/3),
     W(displayUnit="mm") = 0.0559,
@@ -92,7 +92,7 @@ model Rectangular1D
     annotation (Placement(transformation(extent={{16,-76},{34,-64}})));
   BoundaryConditions.thermal_flux thermal_2(phi=-1e6)
     annotation (Placement(transformation(extent={{-24,-76},{-6,-64}})));
-  Components.OneDimensional.RectangularCV cv(
+  Components.OneDimensional.RectangularFluxCV cv(
     redeclare package Medium = Refrigerant,
     L(displayUnit="mm") = 0.4826,
     W(displayUnit="mm") = 0.0559,

@@ -7,7 +7,8 @@ model RectangularChannels2D
     Materials.Properties "Material choice" annotation (choicesAllMatching=true);
   replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
-  model Channel = OneDimensional.RectangularChannel1D "Model of one channel";
+  model Channel = OneDimensional.RectangularChannelFlux1D
+                                                      "Model of one channel";
 
   // Geometry
   parameter Modelica.Units.SI.Length L "Channel length" annotation (Dialog(tab="Geometry"));

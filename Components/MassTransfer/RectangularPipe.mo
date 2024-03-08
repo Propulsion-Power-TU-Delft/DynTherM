@@ -27,10 +27,10 @@ model RectangularPipe "Model of pipe with rectangular cross-section"
   parameter PrandtlNumber Pr_start=1.5 "Prandtl number - start value" annotation (Dialog(tab="Initialization"));
 
   // Geometry
-  parameter Integer N=1 "Number of pipes in parallel";
+  input Real N=1 "Number of pipes in parallel" annotation (Dialog(enable=true));
   parameter Length L "Length" annotation (Dialog(tab="Geometry"));
-  parameter Length W "Width of rectangular channel" annotation (Dialog(tab="Geometry"));
-  parameter Length H "Height of rectangular channel" annotation (Dialog(tab="Geometry"));
+  input Length W "Width of rectangular channel" annotation (Dialog(tab="Geometry", enable=true));
+  input Length H "Height of rectangular channel" annotation (Dialog(tab="Geometry", enable=true));
 
   model GEO =
     DynTherM.Components.MassTransfer.PipeGeometry.Rectangular (L=L, W=W, H=H) annotation (choicesAllMatching=true);

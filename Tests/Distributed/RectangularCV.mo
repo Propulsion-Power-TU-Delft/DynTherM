@@ -40,7 +40,7 @@ model RectangularCV
   inner Components.Environment environment(
     allowFlowReversal=false,
     initOpt=DynTherM.Choices.InitOpt.steadyState) annotation (Placement(transformation(extent={{60,60},{100,100}})));
-  Components.OneDimensional.RectangularCV cv(
+  Components.OneDimensional.RectangularFluxCV cv(
     redeclare package Medium = Refrigerant,
     L=L,
     W=W,

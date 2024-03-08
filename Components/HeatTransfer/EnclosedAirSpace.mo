@@ -42,7 +42,7 @@ equation
   state = Medium.setState_pTX(P, T, X);
 
   // Heat transfer
-  A =l*h;
+  A = l*h;
   inlet.Q_flow = ht*A*(inlet.T - outlet.T);
   inlet.Q_flow = - outlet.Q_flow;
 

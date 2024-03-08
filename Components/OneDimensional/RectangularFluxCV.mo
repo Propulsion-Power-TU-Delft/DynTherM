@@ -1,5 +1,5 @@
 within DynTherM.Components.OneDimensional;
-model RectangularCV
+model RectangularFluxCV
   "Control volume modeling a portion of a rectangular channel"
 
   outer Components.Environment environment "Environmental properties";
@@ -9,14 +9,14 @@ model RectangularCV
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
 
   // Geometry
-  input Real N=1 "Number of control volumes in parallel" annotation (Dialog(enable=true));
+  parameter Integer N=1 "Number of control volumes in parallel";
   parameter Length L "Length of the control volume" annotation (Dialog(tab="Geometry"));
-  input Length W "Width of the control volume" annotation (Dialog(tab="Geometry", enable=true));
-  input Length H "Height of the control volume" annotation (Dialog(tab="Geometry", enable=true));
-  input Length t_north "Thickness of north wall" annotation (Dialog(tab="Geometry", enable=true));
-  input Length t_east "Thickness of east wall" annotation (Dialog(tab="Geometry", enable=true));
-  input Length t_south "Thickness of south wall" annotation (Dialog(tab="Geometry", enable=true));
-  input Length t_west "Thickness of west wall" annotation (Dialog(tab="Geometry", enable=true));
+  parameter Length W "Width of the control volume" annotation (Dialog(tab="Geometry"));
+  parameter Length H "Height of the control volume" annotation (Dialog(tab="Geometry"));
+  parameter Length t_north "Thickness of north wall" annotation (Dialog(tab="Geometry"));
+  parameter Length t_east "Thickness of east wall" annotation (Dialog(tab="Geometry"));
+  parameter Length t_south "Thickness of south wall" annotation (Dialog(tab="Geometry"));
+  parameter Length t_west "Thickness of west wall" annotation (Dialog(tab="Geometry"));
 
   // Initialization
   parameter Temperature T_start_solid=288.15
@@ -30,7 +30,8 @@ model RectangularCV
   parameter Medium.ThermodynamicState state_start=
     Medium.setState_pTX(P_start, T_start_fluid, X_start)
     "Starting thermodynamic state" annotation (Dialog(tab="Initialization"));
-  parameter MassFlowRate m_flow_start=1 "Mass flow rate - start value" annotation (Dialog(tab="Initialization"));
+  parameter MassFlowRate m_flow_start=1
+    "Mass flow rate - start value" annotation (Dialog(tab="Initialization"));
   parameter Velocity u_start=20 "Flow velocity - start value" annotation (Dialog(tab="Initialization"));
   parameter Pressure dP_start=100 "Pressure drop - start value" annotation (Dialog(tab="Initialization"));
   parameter Choices.InitOpt initOpt=environment.initOpt
@@ -78,17 +79,17 @@ model RectangularCV
     W=W,
     H=H)
     annotation (Placement(transformation(extent={{-40,-40},{40,40}})));
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a solid_surface_north
-    annotation (Placement(transformation(extent={{-88,80},{-72,96}}),
+  CustomInterfaces.HeatFluxPort_A solid_surface_north
+    annotation (Placement(transformation(extent={{-84,92},{-76,100}}),
         iconTransformation(extent={{-70,60},{-50,80}})));
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a solid_surface_south
-    annotation (Placement(transformation(extent={{22,80},{38,96}}),
+  CustomInterfaces.HeatFluxPort_A solid_surface_south
+    annotation (Placement(transformation(extent={{26,92},{34,100}}),
         iconTransformation(extent={{10,60},{30,80}})));
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a solid_surface_west
-    annotation (Placement(transformation(extent={{72,80},{88,96}}),
+  CustomInterfaces.HeatFluxPort_A solid_surface_west
+    annotation (Placement(transformation(extent={{76,92},{84,100}}),
         iconTransformation(extent={{48,60},{68,80}})));
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a solid_surface_east
-    annotation (Placement(transformation(extent={{-38,80},{-22,96}}),
+  CustomInterfaces.HeatFluxPort_A solid_surface_east
+    annotation (Placement(transformation(extent={{-34,92},{-26,100}}),
         iconTransformation(extent={{-30,60},{-10,80}})));
   HeatTransfer.WallConduction solid_north(
     redeclare model Mat = Mat,
@@ -122,6 +123,14 @@ model RectangularCV
     Tstart=T_start_solid,
     initOpt=environment.initOpt)
     annotation (Placement(transformation(extent={{60,66},{100,36}})));
+  CustomInterfaces.Adaptors.heatFluxToHeatFlow conversion_north(A=N*W*L)
+    annotation (Placement(transformation(extent={{-94,90},{-66,62}})));
+  CustomInterfaces.Adaptors.heatFluxToHeatFlow conversion_east(A=H*L)
+    annotation (Placement(transformation(extent={{-44,90},{-16,62}})));
+  CustomInterfaces.Adaptors.heatFluxToHeatFlow conversion_south(A=N*W*L)
+    annotation (Placement(transformation(extent={{16,90},{44,62}})));
+  CustomInterfaces.Adaptors.heatFluxToHeatFlow conversion_west(A=H*L)
+    annotation (Placement(transformation(extent={{66,90},{94,62}})));
 
 equation
   V_tot = N*L*(H + t_north + t_south)*(W + t_east + t_west);
@@ -144,14 +153,22 @@ equation
           {80,30},{0,30},{0,15.2}}, color={191,0,0}));
   connect(solid_south.inlet, fluid.thermalPort) annotation (Line(points={{30,45.9},
           {30,30},{0,30},{0,15.2}}, color={191,0,0}));
-  connect(solid_surface_north, solid_north.outlet)
-    annotation (Line(points={{-80,88},{-80,56.1}}, color={191,0,0}));
-  connect(solid_surface_east, solid_east.outlet)
-    annotation (Line(points={{-30,88},{-30,56.1}}, color={191,0,0}));
-  connect(solid_surface_south, solid_south.outlet)
-    annotation (Line(points={{30,88},{30,56.1}}, color={191,0,0}));
-  connect(solid_surface_west, solid_west.outlet)
-    annotation (Line(points={{80,88},{80,56.1}}, color={191,0,0}));
+  connect(solid_surface_north, conversion_north.outlet)
+    annotation (Line(points={{-80,96},{-80,84.4}}, color={255,127,0}));
+  connect(solid_surface_east, conversion_east.outlet)
+    annotation (Line(points={{-30,96},{-30,84.4}}, color={255,127,0}));
+  connect(solid_surface_south, conversion_south.outlet)
+    annotation (Line(points={{30,96},{30,84.4}}, color={255,127,0}));
+  connect(solid_surface_west, conversion_west.outlet)
+    annotation (Line(points={{80,96},{80,84.4}}, color={255,127,0}));
+  connect(conversion_west.inlet, solid_west.outlet)
+    annotation (Line(points={{80,67.6},{80,56.1}}, color={191,0,0}));
+  connect(conversion_south.inlet, solid_south.outlet)
+    annotation (Line(points={{30,67.6},{30,56.1}}, color={191,0,0}));
+  connect(conversion_east.inlet, solid_east.outlet)
+    annotation (Line(points={{-30,67.6},{-30,56.1}}, color={191,0,0}));
+  connect(conversion_north.inlet, solid_north.outlet)
+    annotation (Line(points={{-80,67.6},{-80,56.1}}, color={191,0,0}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
                       Rectangle(
           extent={{-80,40},{80,20}},
@@ -167,4 +184,4 @@ equation
         Rectangle(extent={{-100,60},{100,-60}}, lineColor={0,0,0},
           pattern=LinePattern.Dash)}), Diagram(coordinateSystem(
           preserveAspectRatio=false)));
-end RectangularCV;
+end RectangularFluxCV;

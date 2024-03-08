@@ -3,16 +3,15 @@ model WallConduction "Dynamic model of conduction in a planar surface"
   replaceable model Mat=DynTherM.Materials.Aluminium constrainedby
     DynTherM.Materials.Properties "Material choice" annotation (choicesAllMatching=true);
 
-  parameter Length t "Wall thickness";
-  parameter Area A "Wall surface";
+  input Real N=1 "Number of walls in parallel" annotation (Dialog(enable=true));
+  input Length t "Wall thickness" annotation (Dialog(enable=true));
+  input Area A "Wall surface" annotation (Dialog(enable=true));
   parameter Temperature Tstart=300
     "Temperature start value" annotation (Dialog(tab="Initialization"));
-  parameter DynTherM.Choices.InitOpt initOpt "Initialization option"
-    annotation (Dialog(tab="Initialization"));
-  final parameter Mass m=Mat.rho*A*t "Mass of the wall";
-  final parameter Modelica.Units.SI.HeatCapacity Cm=m*Mat.cm
-    "Heat capacity of the wall";
+  parameter DynTherM.Choices.InitOpt initOpt "Initialization option" annotation (Dialog(tab="Initialization"));
 
+  Mass m "Mass of the wall";
+  Modelica.Units.SI.HeatCapacity Cm "Heat capacity of the wall";
   Temperature T_vol "Average temperature of the wall";
 
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a inlet
@@ -21,10 +20,13 @@ model WallConduction "Dynamic model of conduction in a planar surface"
     annotation (Placement(transformation(extent={{-14,-48},{14,-20}})));
 
 equation
-  Cm*der(T_vol) = inlet.Q_flow + outlet.Q_flow "Energy balance";
-  inlet.Q_flow = (Mat.lambda*A*(inlet.T - T_vol))/(t/2)
+  m=Mat.rho*A*t;
+  Cm=m*Mat.cm;
+
+  N*Cm*der(T_vol) = inlet.Q_flow + outlet.Q_flow "Energy balance";
+  inlet.Q_flow = (Mat.lambda*N*A*(inlet.T - T_vol))/(t/2)
     "Heat conduction through the internal half-thickness";
-  outlet.Q_flow = (Mat.lambda*A*(outlet.T - T_vol))/(t/2)
+  outlet.Q_flow = (Mat.lambda*N*A*(outlet.T - T_vol))/(t/2)
     "Heat conduction through the external half-thickness";
 
 initial equation

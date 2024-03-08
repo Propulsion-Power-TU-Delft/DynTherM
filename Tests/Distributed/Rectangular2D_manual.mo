@@ -43,7 +43,7 @@ model Rectangular2D_manual
   inner Components.Environment environment(
     allowFlowReversal=false,
     initOpt=DynTherM.Choices.InitOpt.steadyState) annotation (Placement(transformation(extent={{60,60},{100,100}})));
-  Components.OneDimensional.RectangularChannel1D west(
+  Components.OneDimensional.RectangularChannelFlux1D west(
     redeclare package Medium = Refrigerant,
     L=L,
     H=H,
@@ -64,7 +64,7 @@ model Rectangular2D_manual
     N=N,
     phi=phi*ones(N))
     annotation (Placement(transformation(extent={{-78,78},{-42,100}})));
-  Components.OneDimensional.RectangularChannel1D internal(
+  Components.OneDimensional.RectangularChannelFlux1D internal(
     redeclare package Medium = Refrigerant,
     L=L,
     H=H,
@@ -80,7 +80,7 @@ model Rectangular2D_manual
     state_start=state_start,
     m_flow_start=m_flow_start,
     N=N) annotation (Placement(transformation(extent={{-30,-30},{30,30}})));
-  Components.OneDimensional.RectangularChannel1D east(
+  Components.OneDimensional.RectangularChannelFlux1D east(
     redeclare package Medium = Refrigerant,
     L=L,
     H=H,
