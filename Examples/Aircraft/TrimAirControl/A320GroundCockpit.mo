@@ -30,11 +30,6 @@ model A320GroundCockpit "Aircraft on ground, two temperature zones"
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-90,76})));
-  Modelica.Blocks.Sources.Constant T_target(k=300.15) annotation (Placement(
-        transformation(
-        extent={{-10,-10},{10,10}},
-        rotation=90,
-        origin={90,-90})));
   Systems.Aircraft.AirbusA320 A320(
     redeclare model HTC_int_upper =
         Components.HeatTransfer.HTCorrelations.InternalConvection.Cylinder,
@@ -55,16 +50,14 @@ model A320GroundCockpit "Aircraft on ground, two temperature zones"
     cabinLights=100,
     inFlightEntertainment=100,
     rec_target=0.45,
-    theta_1(displayUnit="rad"),
-    theta_2(displayUnit="rad"),
-    theta_3(displayUnit="rad"),
-    theta_4(displayUnit="rad"),
-    theta_5(displayUnit="rad"),
-    theta_6(displayUnit="rad"),
-    theta_7(displayUnit="rad"),
-    theta_8(displayUnit="rad"),
-    theta_front(displayUnit="rad"))
+    allowFlowReversal=environment.allowFlowReversal,
+    initOpt=environment.initOpt)
     annotation (Placement(transformation(extent={{-74,-46},{42,44}})));
+  Modelica.Blocks.Sources.Constant T_target(k=300.15) annotation (Placement(
+        transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=90,
+        origin={90,-90})));
   Modelica.Blocks.Sources.Constant T_trim(k=373.15) annotation (Placement(
         transformation(
         extent={{-10,-10},{10,10}},

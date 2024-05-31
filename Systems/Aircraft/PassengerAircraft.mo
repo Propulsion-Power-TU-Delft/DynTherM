@@ -1,263 +1,168 @@
 within DynTherM.Systems.Aircraft;
 model PassengerAircraft "Model of a passenger aircraft"
 
+  outer Components.Environment environment "Environmental properties";
+
   replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
-  outer DynTherM.Components.Environment environment
-    "Environmental properties";
+
+  replaceable model Paint =
+    Materials.Paints.WhiteCoatings.CatalacWhitePaint
+    constrainedby Materials.Paints.BasePaint "Surface paint material" annotation (choicesAllMatching=true);
 
   replaceable model HTC_int_upper =
-    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    Components.HeatTransfer.HTCorrelations.BaseClassInternal
     constrainedby
-    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
-    annotation (choicesAllMatching=true);
+    Components.HeatTransfer.HTCorrelations.BaseClassInternal annotation (choicesAllMatching=true);
 
   replaceable model HTC_int_lower =
-    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    Components.HeatTransfer.HTCorrelations.BaseClassInternal
     constrainedby
-    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
-    annotation (choicesAllMatching=true);
+    Components.HeatTransfer.HTCorrelations.BaseClassInternal annotation (choicesAllMatching=true);
 
   replaceable model HTC_ext_upper =
-    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal
+    Components.HeatTransfer.HTCorrelations.BaseClassExternal
     constrainedby
-    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal
-    annotation (choicesAllMatching=true);
+    Components.HeatTransfer.HTCorrelations.BaseClassExternal annotation (choicesAllMatching=true);
 
   replaceable model HTC_ext_lower =
-    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal
+    Components.HeatTransfer.HTCorrelations.BaseClassExternal
     constrainedby
-    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal
-    annotation (choicesAllMatching=true);
+    Components.HeatTransfer.HTCorrelations.BaseClassExternal annotation (choicesAllMatching=true);
+
+  // Options
+  parameter Boolean allowFlowReversal=true
+    "= true to allow flow reversal, false restricts to design direction";
+  parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
+    "Initialization option" annotation (Dialog(tab="Initialization"));
 
   parameter Medium.MassFraction X_ECS[Medium.nX]=Medium.reference_X "Mass fractions";
   parameter Real N_pax=0 "Number of passengers inside the aircraft" annotation (Dialog(tab="Flight conditions"));
   parameter Real N_crew=0 "Number of cabin crew members inside the aircraft" annotation (Dialog(tab="Flight conditions"));
   parameter Real N_pilots=0 "Number of pilots inside the aircraft" annotation (Dialog(tab="Flight conditions"));
-  parameter Modelica.Units.SI.HeatFlowRate Q_el=0
+  parameter HeatFlowRate Q_el=0
     "Internal heat load due to flight deck electronics" annotation (Dialog(tab="Flight conditions"));
-  parameter Modelica.Units.SI.HeatFlowRate Q_galley=0
+  parameter HeatFlowRate Q_galley=0
     "Internal heat load due to galleys" annotation (Dialog(tab="Flight conditions"));
-  parameter Modelica.Units.SI.HeatFlowRate Q_avionics=0
+  parameter HeatFlowRate Q_avionics=0
     "Internal heat load due to avionics" annotation (Dialog(tab="Flight conditions"));
   parameter Real cabinLights=0 "Percentage of usage [0-100] of cabin lights" annotation (Dialog(tab="Flight conditions"));
   parameter Real inFlightEntertainment=0 "Percentage of usage [0-100] of in-flight entertainment" annotation (Dialog(tab="Flight conditions"));
   parameter Real rec_target=0.5
     "Target ratio among the recirculated airflow and the total airflow";
-  parameter Modelica.Units.SI.Length R_fuselage
-    "External radius of the fuselage";
-  parameter Modelica.Units.SI.Length R_cockpit "External radius of the cockpit";
-  parameter Modelica.Units.SI.Length L_fuselage "Length of the fuselage";
-  parameter Modelica.Units.SI.Length L_cockpit "Length of the cockpit";
-  parameter Modelica.Units.SI.Length L_cargo "Length of cargo bay: fwd + aft";
-  parameter Modelica.Units.SI.Length L_EEbay "Length of electronics bay";
-  parameter Modelica.Units.SI.Volume V_cabin "Passenger cabin internal volume";
-  parameter Modelica.Units.SI.Volume V_cargo
-    "Cargo bay internal volume: fwd + aft";
-  parameter Modelica.Units.SI.Volume V_cockpit "Cockpit internal volume";
-  parameter Modelica.Units.SI.Volume V_EEbay "Electronics bay internal volume";
-  parameter Modelica.Units.SI.Length L_window "Cabin window length";
-  parameter Modelica.Units.SI.Length H_window "Cabin window height";
-  parameter Modelica.Units.SI.Length L_windshield_front
-    "Windshield length - frontal section";
-  parameter Modelica.Units.SI.Length H_windshield_front
-    "Windshield height - frontal section";
-  parameter Modelica.Units.SI.Length L_windshield_lat
-    "Windshield length - lateral section";
-  parameter Modelica.Units.SI.Length H_windshield_lat
-    "Windshield height - lateral section";
-  parameter Integer Nw_side "Number of windows per fuselage side";
-  parameter Modelica.Units.SI.Length H_fl "Floor height";
-  parameter Modelica.Units.SI.SpecificHeatCapacity c_cabin
-    "Specific heat capacity of cabin interior";
-  parameter Modelica.Units.SI.SpecificHeatCapacity c_cockpit
-    "Specific heat capacity of cockpit interior";
-  parameter Modelica.Units.SI.Mass m_cabin "Mass of cabin interior";
-  parameter Modelica.Units.SI.Mass m_cockpit "Mass of cockpit interior";
-  parameter Modelica.Units.SI.Area A_cabin
-    "Heat transfer surface of cabin interior";
-  parameter Modelica.Units.SI.Area A_cockpit
-    "Heat transfer surface of cockpit interior";
-  parameter Modelica.Units.SI.Length t_upper
-    "Overall fuselage thickness - upper part";
-  parameter Modelica.Units.SI.Length t_lower
-    "Overall fuselage thickness - lower part";
-  parameter Modelica.Units.SI.Length Roughness "Roughness of ditribution pipes";
 
-  parameter Modelica.Units.SI.Irradiance E_tb_1=0
-    "Beam component of the clear-sky solar irradiance - section 1" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_td_1=0
-    "Diffuse component of the clear-sky solar irradiance - section 1" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tr_1=0
-    "Ground reflected component of the clear-sky solar irradiance - section 1" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Angle theta_1=0
-    "Incidence angle - section 1" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tb_2=0
-    "Beam component of the clear-sky solar irradiance - section 2" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_td_2=0
-    "Diffuse component of the clear-sky solar irradiance - section 2" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tr_2=0
-    "Ground reflected component of the clear-sky solar irradiance - section 2" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Angle theta_2=0
-    "Incidence angle - section 2" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tb_3=0
-    "Beam component of the clear-sky solar irradiance - section 3" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_td_3=0
-    "Diffuse component of the clear-sky solar irradiance - section 3" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tr_3=0
-    "Ground reflected component of the clear-sky solar irradiance - section 3" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Angle theta_3=0
-    "Incidence angle - section 3" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tb_4=0
-    "Beam component of the clear-sky solar irradiance - section 4" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_td_4=0
-    "Diffuse component of the clear-sky solar irradiance - section 4" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tr_4=0
-    "Ground reflected component of the clear-sky solar irradiance - section 4" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Angle theta_4=0
-    "Incidence angle - section 4" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tb_5=0
-    "Beam component of the clear-sky solar irradiance - section 5" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_td_5=0
-    "Diffuse component of the clear-sky solar irradiance - section 5" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tr_5=0
-    "Ground reflected component of the clear-sky solar irradiance - section 5" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Angle theta_5=0
-    "Incidence angle - section 5" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tb_6=0
-    "Beam component of the clear-sky solar irradiance - section 6" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_td_6=0
-    "Diffuse component of the clear-sky solar irradiance - section 6" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tr_6=0
-    "Ground reflected component of the clear-sky solar irradiance - section 6" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Angle theta_6=0
-    "Incidence angle - section 6" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tb_7=0
-    "Beam component of the clear-sky solar irradiance - section 7" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_td_7=0
-    "Diffuse component of the clear-sky solar irradiance - section 7" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tr_7=0
-    "Ground reflected component of the clear-sky solar irradiance - section 7" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Angle theta_7=0
-    "Incidence angle - section 7" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tb_8=0
-    "Beam component of the clear-sky solar irradiance - section 8" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_td_8=0
-    "Diffuse component of the clear-sky solar irradiance - section 8" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tr_8=0
-    "Ground reflected component of the clear-sky solar irradiance - section 8" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Angle theta_8=0
-    "Incidence angle - section 8" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tb_front=0
-    "Beam component of the clear-sky solar irradiance - frontal section" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_td_front=0
-    "Diffuse component of the clear-sky solar irradiance - frontal section" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tr_front=0
-    "Ground reflected component of the clear-sky solar irradiance - frontal section" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Angle theta_front=0
-    "Incidence angle - frontal section" annotation (Dialog(tab="Solar radiation"));
+  // Geometry
+  parameter Length R_fuselage "External radius of the fuselage" annotation (Dialog(tab="Geometry"));
+  parameter Length R_cockpit "External radius of the cockpit" annotation (Dialog(tab="Geometry"));
+  parameter Length L_fuselage "Length of the fuselage" annotation (Dialog(tab="Geometry"));
+  parameter Length L_cockpit "Length of the cockpit" annotation (Dialog(tab="Geometry"));
+  parameter Length L_cargo "Length of cargo bay: fwd + aft" annotation (Dialog(tab="Geometry"));
+  parameter Length L_EEbay "Length of electronics bay" annotation (Dialog(tab="Geometry"));
+  parameter Volume V_cabin "Passenger cabin internal volume" annotation (Dialog(tab="Geometry"));
+  parameter Volume V_cargo "Cargo bay internal volume: fwd + aft" annotation (Dialog(tab="Geometry"));
+  parameter Volume V_cockpit "Cockpit internal volume" annotation (Dialog(tab="Geometry"));
+  parameter Volume V_EEbay "Electronics bay internal volume" annotation (Dialog(tab="Geometry"));
+  parameter Length L_window "Cabin window length" annotation (Dialog(tab="Geometry"));
+  parameter Length H_window "Cabin window height" annotation (Dialog(tab="Geometry"));
+  parameter Length L_windshield_front "Windshield length - frontal section" annotation (Dialog(tab="Geometry"));
+  parameter Length H_windshield_front "Windshield height - frontal section" annotation (Dialog(tab="Geometry"));
+  parameter Length L_windshield_lat "Windshield length - lateral section" annotation (Dialog(tab="Geometry"));
+  parameter Length H_windshield_lat "Windshield height - lateral section" annotation (Dialog(tab="Geometry"));
+  parameter Integer Nw_side "Number of windows per fuselage side" annotation (Dialog(tab="Geometry"));
+  parameter Length H_fl "Floor height" annotation (Dialog(tab="Geometry"));
+  parameter SpecificHeatCapacity c_cabin "Specific heat capacity of cabin interior" annotation (Dialog(tab="Geometry"));
+  parameter SpecificHeatCapacity c_cockpit "Specific heat capacity of cockpit interior" annotation (Dialog(tab="Geometry"));
+  parameter Mass m_cabin "Mass of cabin interior" annotation (Dialog(tab="Geometry"));
+  parameter Mass m_cockpit "Mass of cockpit interior" annotation (Dialog(tab="Geometry"));
+  parameter Area A_cabin "Heat transfer surface of cabin interior" annotation (Dialog(tab="Geometry"));
+  parameter Area A_cockpit "Heat transfer surface of cockpit interior" annotation (Dialog(tab="Geometry"));
+  parameter Length t_upper "Overall fuselage thickness - upper part" annotation (Dialog(tab="Geometry"));
+  parameter Length t_lower "Overall fuselage thickness - lower part" annotation (Dialog(tab="Geometry"));
 
-  parameter Modelica.Units.SI.Length L_pipe_cab
-    "Length of air distribution pipe - cabin" annotation (Dialog(tab="Air distribution"));
-  parameter Modelica.Units.SI.Length D_pipe_cab
-    "Diameter of air distribution pipe - cabin" annotation (Dialog(tab="Air distribution"));
-  parameter Modelica.Units.SI.Length L_pipe_fd
-    "Length of air distribution pipe - cockpit" annotation (Dialog(tab="Air distribution"));
-  parameter Modelica.Units.SI.Length D_pipe_fd
-    "Diameter of air distribution pipe - cockpit" annotation (Dialog(tab="Air distribution"));
-  parameter Modelica.Units.SI.Volume V_mixingManifold
-    "Mixing manifold internal volume" annotation (Dialog(tab="Air distribution"));
-  parameter Real eta_is "Fan: isentropic efficiency at design point" annotation (Dialog(tab="Air distribution"));
-  parameter Real eta_m "Fan: mechanical efficiency" annotation (Dialog(tab="Air distribution"));
-  parameter Modelica.Units.SI.AngularVelocity omega_nom
-    "Fan: nominal rotational speed" annotation (Dialog(tab="Air distribution"));
-  parameter Modelica.Units.SI.VolumeFlowRate volFlow_nom
-    "Fan: nominal volumetric flow rate" annotation (Dialog(tab="Air distribution"));
-  parameter Modelica.Units.SI.SpecificEnergy Head_nom "Fan: nominal head" annotation (Dialog(tab="Air distribution"));
-  parameter DynTherM.CustomUnits.HydraulicConductance Kv
-    "Outflow valve: hydraulic conductance" annotation (Dialog(tab="Air distribution"));
-  parameter DynTherM.CustomUnits.HydraulicResistance R_HEPA
-    "Filter: hydraulic Resistance" annotation (Dialog(tab="Air distribution"));
-  parameter DynTherM.CustomUnits.HydraulicResistance R_dado
-    "Dado panel: hydraulic Resistance" annotation (Dialog(tab="Air distribution"));
+  // Radiation
+  parameter Real rho_g=0.2 "Ground reflectance" annotation (Dialog(tab="Radiation"));
+  parameter Angle psi_plus=0 "Modifier of azimuth angle" annotation (Dialog(tab="Radiation"));
+  parameter Irradiance E_tb[8]=zeros(8)
+    "Beam component of the clear-sky solar irradiance - sections 1-8" annotation (Dialog(tab="Radiation"));
+  parameter Irradiance E_td[8]=zeros(8)
+    "Diffuse component of the clear-sky solar irradiance - sections 1-8" annotation (Dialog(tab="Radiation"));
+  parameter Irradiance E_tr[8]=zeros(8)
+    "Ground reflected component of the clear-sky solar irradiance - sections 1-8" annotation (Dialog(tab="Radiation"));
+  parameter Angle theta[8]=zeros(8) "Incidence angle - sections 1-8" annotation (Dialog(tab="Radiation"));
+  parameter Irradiance E_tb_front=0
+    "Beam component of the clear-sky solar irradiance - frontal section" annotation (Dialog(tab="Radiation"));
+  parameter Irradiance E_td_front=0
+    "Diffuse component of the clear-sky solar irradiance - frontal section" annotation (Dialog(tab="Radiation"));
+  parameter Irradiance E_tr_front=0
+    "Ground reflected component of the clear-sky solar irradiance - frontal section" annotation (Dialog(tab="Radiation"));
+  parameter Angle theta_front=0 "Incidence angle - frontal section" annotation (Dialog(tab="Radiation"));
 
-  parameter Modelica.Units.SI.Temperature Tstart_fuselage=313.15
-    "Fuselage temperature - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Temperature Tstart_floor=300.15
-    "Floor temperature - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Temperature Tstart_wall=295.15
-    "Cabin wall temperature - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Temperature Tstart_cabin=298.15
-    "Cabin temperature - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Temperature Tstart_cargo=303.15
-    "Cargo bay temperature start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Temperature Tstart_flightDeck=293.15
-    "Flight deck temperature start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Temperature Tstart_mixingManifold=278.15
-    "Mixing manifold temperature - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Pressure Pstart_cabin=101325
-    "Cabin pressure - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Pressure Pstart_cargo=101325
-    "Cargo bay pressure start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Pressure Pstart_flightDeck=101325
-    "Flight deck pressure start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Pressure Pstart_mixingManifold=101325
-    "Mixing manifold pressure - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Density rho_start_fan=1.1
-    "Density - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.SpecificEnthalpy h_start_fan=1e5
-    "Specific enthalpy - start value" annotation (Dialog(tab="Initialization"));
-  parameter Boolean noInitialPressure_cabin=false
-    "Remove initial equation on pressure - cabin" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
-  parameter Boolean noInitialTemperature_cabin=false
-    "Remove initial equation on temperature - cabin" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
-  parameter Boolean noInitialPressure_cargo=false
-    "Remove initial equation on pressure - cargo" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
-  parameter Boolean noInitialTemperature_cargo=false
-    "Remove initial equation on temperature - cargo" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
-  parameter Boolean noInitialPressure_cockpit=false
-    "Remove initial equation on pressure - cockpit" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
-  parameter Boolean noInitialTemperature_cockpit=false
-    "Remove initial equation on temperature - cockpit" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
+  // Air distribution system
+  parameter Length L_pipe_cab "Length of air distribution pipe - cabin" annotation (Dialog(tab="Air distribution system"));
+  parameter Length D_pipe_cab "Diameter of air distribution pipe - cabin" annotation (Dialog(tab="Air distribution system"));
+  parameter Length L_pipe_fd "Length of air distribution pipe - cockpit" annotation (Dialog(tab="Air distribution system"));
+  parameter Length D_pipe_fd "Diameter of air distribution pipe - cockpit" annotation (Dialog(tab="Air distribution system"));
+  parameter Length Roughness "Roughness of ditribution pipes" annotation (Dialog(tab="Air distribution system"));
+  parameter Volume V_mixingManifold "Mixing manifold internal volume" annotation (Dialog(tab="Air distribution system"));
+  parameter Real eta_is "Fan: isentropic efficiency at design point" annotation (Dialog(tab="Air distribution system"));
+  parameter Real eta_m "Fan: mechanical efficiency" annotation (Dialog(tab="Air distribution system"));
+  parameter AngularVelocity omega_nom "Fan: nominal rotational speed" annotation (Dialog(tab="Air distribution system"));
+  parameter VolumeFlowRate volFlow_nom "Fan: nominal volumetric flow rate" annotation (Dialog(tab="Air distribution system"));
+  parameter SpecificEnergy Head_nom "Fan: nominal head" annotation (Dialog(tab="Air distribution system"));
+  parameter CustomUnits.HydraulicConductance Kv "Outflow valve: hydraulic conductance" annotation (Dialog(tab="Air distribution system"));
+  parameter CustomUnits.HydraulicResistance R_HEPA "Filter: hydraulic Resistance" annotation (Dialog(tab="Air distribution system"));
+  parameter CustomUnits.HydraulicResistance R_dado "Dado panel: hydraulic Resistance" annotation (Dialog(tab="Air distribution system"));
 
-  final parameter Modelica.Units.SI.HeatFlux Q_light_m2=11.2
+  // Initialization
+  parameter Temperature Tstart_fuselage=313.15 "Fuselage temperature - start value" annotation (Dialog(tab="Initialization"));
+  parameter Temperature Tstart_floor=300.15 "Floor temperature - start value" annotation (Dialog(tab="Initialization"));
+  parameter Temperature Tstart_wall=295.15 "Cabin wall temperature - start value" annotation (Dialog(tab="Initialization"));
+  parameter Temperature Tstart_cabin=298.15 "Cabin temperature - start value" annotation (Dialog(tab="Initialization"));
+  parameter Temperature Tstart_cargo=303.15 "Cargo bay temperature start value" annotation (Dialog(tab="Initialization"));
+  parameter Temperature Tstart_flightDeck=293.15 "Flight deck temperature start value" annotation (Dialog(tab="Initialization"));
+  parameter Temperature Tstart_mixingManifold=278.15 "Mixing manifold temperature - start value" annotation (Dialog(tab="Initialization"));
+  parameter Pressure Pstart_cabin=101325 "Cabin pressure - start value" annotation (Dialog(tab="Initialization"));
+  parameter Pressure Pstart_cargo=101325 "Cargo bay pressure start value" annotation (Dialog(tab="Initialization"));
+  parameter Pressure Pstart_flightDeck=101325 "Flight deck pressure start value" annotation (Dialog(tab="Initialization"));
+  parameter Pressure Pstart_mixingManifold=101325 "Mixing manifold pressure - start value" annotation (Dialog(tab="Initialization"));
+  parameter Density rho_start_fan=1.1 "Density - start value" annotation (Dialog(tab="Initialization"));
+  parameter SpecificEnthalpy h_start_fan=1e5 "Specific enthalpy - start value" annotation (Dialog(tab="Initialization"));
+  parameter Boolean noInitialPressure_cabin=false "Remove initial equation on pressure - cabin" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
+  parameter Boolean noInitialTemperature_cabin=false "Remove initial equation on temperature - cabin" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
+  parameter Boolean noInitialPressure_cargo=false "Remove initial equation on pressure - cargo" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
+  parameter Boolean noInitialTemperature_cargo=false "Remove initial equation on temperature - cargo" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
+  parameter Boolean noInitialPressure_cockpit=false "Remove initial equation on pressure - cockpit" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
+  parameter Boolean noInitialTemperature_cockpit=false "Remove initial equation on temperature - cockpit" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
+
+  final parameter HeatFlux Q_light_m2=11.2
     "Internal heat load due to cabin lights / cabin floor m2";
-  final parameter Modelica.Units.SI.HeatFlowRate Q_ife_pax=30
+  final parameter HeatFlowRate Q_ife_pax=30
     "Internal heat load due to in-flight entertainment / pax";
-  final parameter Modelica.Units.SI.Area A_floor=cabin.W_fl*L_fuselage
+  final parameter Area A_floor=cabin.W_fl*L_fuselage
     "Approximated surface area of cabin floor";
-  final parameter Modelica.Units.SI.Area A_floor_cargo=cabin.W_fl*L_cargo
+  final parameter Area A_floor_cargo=cabin.W_fl*L_cargo
     "Approximated surface area of cargo floor";
-  final parameter Modelica.Units.SI.Area A_floor_cockpit=cockpit.W_fl*L_EEbay
+  final parameter Area A_floor_cockpit=cockpit.W_fl*L_EEbay
     "Approximated surface area of cockpit floor";
-  final parameter Modelica.Units.SI.Area A_wall=theta/2*R_fuselage^2 + cabin.W_fl
+  final parameter Area A_wall=alpha/2*R_fuselage^2 + cabin.W_fl
       *(R_fuselage - H_fl)/2 "Approximated surface area of cabin wall";
-  final parameter Modelica.Units.SI.Angle theta=atan((R_fuselage - H_fl)/
+  final parameter Angle alpha=atan((R_fuselage - H_fl)/
       R_fuselage);
-  final parameter Modelica.Units.SI.HeatFlowRate Q_utilities=
+  final parameter HeatFlowRate Q_utilities=
       inFlightEntertainment/100*N_pax*Q_ife_pax + cabinLights/100*
       Q_light_m2*A_floor + Q_galley;
 
   Real rec "Ratio among the recirculated airflow and the total airflow";
   Real flowSplit "Ratio among the cockpit and the cabin airflow";
-  Modelica.Units.SI.HeatFlowRate Q_tot
-    "Total net heat flow rate removed by ECS";
-  Modelica.Units.SI.HeatFlowRate Q_tot_cab
-    "Total net heat flow rate removed by ECS - cabin";
-  Modelica.Units.SI.HeatFlowRate Q_tot_fd
-    "Total net heat flow rate removed by ECS - flight deck";
-  Modelica.Units.SI.HeatFlowRate Q_int_cab
-    "Total internal heat generation - cabin";
-  Modelica.Units.SI.HeatFlowRate Q_int_fd
-    "Total internal heat generation - flight deck";
-  Modelica.Units.SI.HeatFlowRate Q_ext_cab
-    "Total net heat flow rate across boundaries - cabin";
-  Modelica.Units.SI.HeatFlowRate Q_ext_fd
-    "Total net heat flow rate across boundaries - flight deck";
-  Medium.ThermodynamicState state_rec
-    "Thermodynamic state at the outlet of recirculation fan";
-  Medium.ThermodynamicState state_pack
-    "Thermodynamic state at the pack discharge";
+  HeatFlowRate Q_tot "Total net heat flow rate removed by ECS";
+  HeatFlowRate Q_tot_cab "Total net heat flow rate removed by ECS - cabin";
+  HeatFlowRate Q_tot_fd "Total net heat flow rate removed by ECS - flight deck";
+  HeatFlowRate Q_int_cab "Total internal heat generation - cabin";
+  HeatFlowRate Q_int_fd "Total internal heat generation - flight deck";
+  HeatFlowRate Q_ext_cab "Total net heat flow rate across boundaries - cabin";
+  HeatFlowRate Q_ext_fd "Total net heat flow rate across boundaries - flight deck";
+  Medium.ThermodynamicState state_rec "Thermodynamic state at the outlet of recirculation fan";
+  Medium.ThermodynamicState state_pack "Thermodynamic state at the pack discharge";
   Medium.Temperature T_rec "Temperature at the outlet of recirculation fan";
   Real phi_pack "Relative humidity at pack discharge";
   Real phi_cockpit "Relative humidity in the cockpit";
@@ -267,13 +172,16 @@ model PassengerAircraft "Model of a passenger aircraft"
   Real phi_mix "Relative humidity in the mixing manifold";
 
   Components.MassTransfer.Mixer mixingManifold(
+    allowFlowReversal=allowFlowReversal,
+    initOpt=initOpt,
     V=V_mixingManifold,
     P_start=Pstart_mixingManifold,
     T_start=Tstart_mixingManifold)
     annotation (Placement(transformation(extent={{10,-10},{-10,10}},
         rotation=-90,
         origin={-152,-34})));
-  DynTherM.Components.MassTransfer.Fan recirculationFan(
+  Components.MassTransfer.Fan recirculationFan(
+    allowFlowReversal=allowFlowReversal,
     eta_is=eta_is,
     eta_m=eta_m,
     omega_nom(displayUnit="rpm") = omega_nom,
@@ -292,9 +200,11 @@ model PassengerAircraft "Model of a passenger aircraft"
     annotation (Placement(transformation(extent={{-9,-6},{9,6}},
         rotation=180,
         origin={-103,-120})));
-  Components.MassTransfer.ValveLin outflowValve(Kv=Kv)
+  Components.MassTransfer.ValveLin outflowValve(Kv=Kv, allowFlowReversal=
+        allowFlowReversal)
     annotation (Placement(transformation(extent={{50,-70},{70,-90}})));
-  BoundaryConditions.pressure_sink pressureSink
+  BoundaryConditions.pressure_sink pressureSink(allowFlowReversal=
+        allowFlowReversal)
     annotation (Placement(transformation(extent={{82,-90},{102,-70}})));
   Modelica.Blocks.Interfaces.RealInput outflowValveOpening annotation (
       Placement(transformation(
@@ -312,13 +222,15 @@ model PassengerAircraft "Model of a passenger aircraft"
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={70,50})));
-  Components.MassTransfer.PressureDrop HEPAFilter(option=DynTherM.Choices.PDropOpt.linear, R=R_HEPA)
+  Components.MassTransfer.PressureDrop HEPAFilter(
+    allowFlowReversal=allowFlowReversal,          option=Choices.PDropOpt.linear, R=R_HEPA)
              annotation (Placement(transformation(
         extent={{12,10},{-12,-10}},
         rotation=0,
         origin={-70,-98})));
   BoundaryConditions.flow_source packFlow(
     X_nom=X_ECS,
+    allowFlowReversal=allowFlowReversal,
     use_in_massFlow=true,
     use_in_T=true) annotation (Placement(transformation(
         extent={{10,10},{-10,-10}},
@@ -340,7 +252,8 @@ model PassengerAircraft "Model of a passenger aircraft"
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={90,0})));
-  DynTherM.Systems.Aircraft.Subsystems.CargoBay cargo(
+  Systems.Aircraft.Subsystems.CargoBay cargo(
+    redeclare model Paint = Paint,
     redeclare model HTC_int=HTC_int_lower,
     redeclare model HTC_ext=HTC_ext_lower,
     Q_int=0,
@@ -348,25 +261,21 @@ model PassengerAircraft "Model of a passenger aircraft"
     L_cargo=L_cargo,
     V_cargo=V_cargo,
     t_cargo=t_lower,
-    E_tb_6=E_tb_6,
-    E_td_6=E_td_6,
-    E_tr_6=E_tr_6,
-    E_tb_7=E_tb_7,
-    E_td_7=E_td_7,
-    E_tr_7=E_tr_7,
-    E_tb_8=E_tb_8,
-    E_td_8=E_td_8,
-    E_tr_8=E_tr_8,
-    theta_6=theta_6,
-    theta_7=theta_7,
-    theta_8=theta_8,
+    rho_g=rho_g,
+    psi_plus=psi_plus,
+    E_tb=E_tb[6:8],
+    E_td=E_td[6:8],
+    E_tr=E_tr[6:8],
+    theta=theta[6:8],
+    initOpt=initOpt,
     Tstart_fuselage=Tstart_fuselage,
     Tstart_cargo=Tstart_cargo,
     Pstart_cargo=Pstart_cargo,
     noInitialPressure=noInitialPressure_cargo,
     noInitialTemperature=noInitialTemperature_cargo)
     annotation (Placement(transformation(extent={{42,-54},{-2,-10}})));
-  DynTherM.Systems.Aircraft.Subsystems.Cockpit cockpit(
+  Systems.Aircraft.Subsystems.Cockpit cockpit(
+    redeclare model Paint = Paint,
     redeclare model HTC_int=HTC_int_upper,
     redeclare model HTC_ext=HTC_ext_upper,
     N_occupants={0,0,N_pilots},
@@ -382,30 +291,17 @@ model PassengerAircraft "Model of a passenger aircraft"
     L_windshield_lat=L_windshield_lat,
     H_windshield_lat=H_windshield_lat,
     t_cockpit=t_upper,
-    E_tb_1=E_tb_1,
-    E_td_1=E_td_1,
-    E_tr_1=E_tr_1,
-    E_tb_2=E_tb_2,
-    E_td_2=E_td_2,
-    E_tr_2=E_tr_2,
-    E_tb_3=E_tb_3,
-    E_td_3=E_td_3,
-    E_tr_3=E_tr_3,
-    E_tb_4=E_tb_4,
-    E_td_4=E_td_4,
-    E_tr_4=E_tr_4,
-    E_tb_5=E_tb_5,
-    E_td_5=E_td_5,
-    E_tr_5=E_tr_5,
+    rho_g=rho_g,
+    psi_plus=psi_plus,
+    E_tb=E_tb[1:5],
+    E_td=E_td[1:5],
+    E_tr=E_tr[1:5],
+    theta=theta[1:5],
     E_tb_front=E_tb_front,
     E_td_front=E_td_front,
     E_tr_front=E_tr_front,
-    theta_1=theta_1,
-    theta_2=theta_2,
-    theta_3=theta_3,
-    theta_4=theta_4,
-    theta_5=theta_5,
     theta_front=theta_front,
+    initOpt=initOpt,
     Tstart_fuselage=Tstart_fuselage,
     Tstart_flightDeck=Tstart_flightDeck,
     Pstart_flightDeck=Pstart_flightDeck,
@@ -429,27 +325,31 @@ model PassengerAircraft "Model of a passenger aircraft"
         iconTransformation(extent={{10,-10},{-10,10}},
         rotation=-90,
         origin={90,50})));
-  DynTherM.Sensors.MassflowSensor recirculatedMassflowSensor
+  Sensors.MassflowSensor recirculatedMassflowSensor
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={-40,-98})));
-  DynTherM.Systems.Aircraft.Subsystems.CabinWall cabinWall(Tstart=
+  Systems.Aircraft.Subsystems.CabinWall cabinWall(
+    initOpt=initOpt,                              Tstart=
         Tstart_wall, A=A_wall) annotation (Placement(transformation(
         extent={{-16,-12},{16,12}},
         rotation=-90,
         origin={-30,46})));
-  DynTherM.Systems.Aircraft.Subsystems.CabinFloor cabinFloor(Tstart=
+  Systems.Aircraft.Subsystems.CabinFloor cabinFloor(
+    initOpt=initOpt,                                Tstart=
         Tstart_floor, A=A_floor_cargo)
     annotation (Placement(transformation(extent={{16,-4},{50,18}})));
-  DynTherM.Components.MassTransfer.PressureDrop dadoPanelCockpit(option=
-        DynTherM.Choices.PDropOpt.linear, R=R_dado) annotation (
+  Components.MassTransfer.PressureDrop dadoPanelCockpit(
+    allowFlowReversal=allowFlowReversal,                option=
+        Choices.PDropOpt.linear, R=R_dado) annotation (
       Placement(transformation(
         extent={{12,10},{-12,-10}},
         rotation=90,
         origin={-60,8})));
-  DynTherM.Components.MassTransfer.CircularPipe distributionPipeCabin(
-    DP_opt=DynTherM.Choices.PDropOpt.correlation,
+  Components.MassTransfer.CircularPipe distributionPipeCabin(
+    allowFlowReversal=allowFlowReversal,
+    DP_opt=Choices.PDropOpt.correlation,
     L=L_pipe_cab,
     D=D_pipe_cab,
     Roughness=Roughness)
@@ -462,8 +362,9 @@ model PassengerAircraft "Model of a passenger aircraft"
         extent={{10,-10},{-10,10}},
         rotation=90,
         origin={90,-64})));
-  DynTherM.BoundaryConditions.flow_source cockpitTrimFlow(
+  BoundaryConditions.flow_source cockpitTrimFlow(
     X_nom=X_ECS,
+    allowFlowReversal=allowFlowReversal,
     use_in_massFlow=true,
     use_in_T=true) annotation (Placement(transformation(
         extent={{10,10},{-10,-10}},
@@ -477,9 +378,10 @@ model PassengerAircraft "Model of a passenger aircraft"
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={-10,50})));
-  DynTherM.Components.MassTransfer.CircularPipe
+  Components.MassTransfer.CircularPipe
     distributionPipeCockpit(
-    DP_opt=DynTherM.Choices.PDropOpt.correlation,
+    allowFlowReversal=allowFlowReversal,
+    DP_opt=Choices.PDropOpt.correlation,
     L=L_pipe_fd,
     D=D_pipe_fd,
     Roughness=Roughness)
@@ -487,7 +389,8 @@ model PassengerAircraft "Model of a passenger aircraft"
         extent={{14,14},{-14,-14}},
         rotation=-90,
         origin={-140,14})));
-  DynTherM.Systems.Aircraft.Subsystems.CargoBay EEbay(
+  Systems.Aircraft.Subsystems.CargoBay EEbay(
+    redeclare model Paint = Paint,
     redeclare model HTC_int = HTC_int_lower,
     redeclare model HTC_ext = HTC_ext_lower,
     Q_int=Q_avionics,
@@ -495,29 +398,26 @@ model PassengerAircraft "Model of a passenger aircraft"
     L_cargo=L_EEbay,
     V_cargo=V_EEbay,
     t_cargo=t_lower,
-    E_tb_6=E_tb_6,
-    E_td_6=E_td_6,
-    E_tr_6=E_tr_6,
-    E_tb_7=E_tb_7,
-    E_td_7=E_td_7,
-    E_tr_7=E_tr_7,
-    E_tb_8=E_tb_8,
-    E_td_8=E_td_8,
-    E_tr_8=E_tr_8,
-    theta_6=theta_6,
-    theta_7=theta_7,
-    theta_8=theta_8,
+    rho_g=rho_g,
+    psi_plus=psi_plus,
+    E_tb=E_tb[6:8],
+    E_td=E_td[6:8],
+    E_tr=E_tr[6:8],
+    theta=theta[6:8],
+    initOpt=initOpt,
     Tstart_fuselage=Tstart_fuselage,
     Tstart_cargo=Tstart_cargo,
     Pstart_cargo=Pstart_cargo,
     noInitialPressure=noInitialPressure_cargo,
     noInitialTemperature=noInitialTemperature_cargo)
     annotation (Placement(transformation(extent={{-108,-54},{-64,-10}})));
-  DynTherM.Systems.Aircraft.Subsystems.CabinFloor cockpitFloor(Tstart=
+  Systems.Aircraft.Subsystems.CabinFloor cockpitFloor(
+    initOpt=initOpt,                                  Tstart=
         Tstart_floor, A=A_floor_cockpit)
     annotation (Placement(transformation(extent={{-116,-4},{-82,18}})));
-  DynTherM.BoundaryConditions.flow_source cabinTrimFlow(
+  BoundaryConditions.flow_source cabinTrimFlow(
     X_nom=X_ECS,
+    allowFlowReversal=allowFlowReversal,
     use_in_massFlow=true,
     use_in_T=true) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
@@ -539,20 +439,24 @@ model PassengerAircraft "Model of a passenger aircraft"
         extent={{10,-10},{-10,10}},
         rotation=270,
         origin={70,-64})));
-  DynTherM.Components.MassTransfer.PressureDrop dadoPanelCabin(option=
-        DynTherM.Choices.PDropOpt.linear, R=R_dado) annotation (
+  Components.MassTransfer.PressureDrop dadoPanelCabin(
+    allowFlowReversal=allowFlowReversal,              option=
+        Choices.PDropOpt.linear, R=R_dado) annotation (
       Placement(transformation(
         extent={{12,10},{-12,-10}},
         rotation=90,
         origin={-6,10})));
-  DynTherM.Components.MassTransfer.Mixer mixingManifoldOutlet(
+  Components.MassTransfer.Mixer mixingManifoldOutlet(
+    allowFlowReversal=allowFlowReversal,
+    initOpt=initOpt,
     V=V_mixingManifold/10,
     P_start=Pstart_mixingManifold,
     T_start=Tstart_mixingManifold) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=-90,
         origin={-20,-70})));
-  DynTherM.Systems.Aircraft.Subsystems.PassengerCabin cabin(
+  Systems.Aircraft.Subsystems.PassengerCabin cabin(
+    redeclare model Paint = Paint,
     redeclare model HTC_int = HTC_int_upper,
     redeclare model HTC_ext = HTC_ext_upper,
     N_occupants={N_pax,N_crew,0},
@@ -568,26 +472,13 @@ model PassengerAircraft "Model of a passenger aircraft"
     H_window=H_window,
     Nw_side=Nw_side,
     t_cabin=t_upper,
-    E_tb_1=E_tb_1,
-    E_td_1=E_td_1,
-    E_tr_1=E_tr_1,
-    theta_1=theta_1,
-    E_tb_2=E_tb_2,
-    E_td_2=E_td_2,
-    E_tr_2=E_tr_2,
-    theta_2=theta_2,
-    E_tb_3=E_tb_3,
-    E_td_3=E_td_3,
-    E_tr_3=E_tr_3,
-    theta_3=theta_3,
-    E_tb_4=E_tb_4,
-    E_td_4=E_td_4,
-    E_tr_4=E_tr_4,
-    theta_4=theta_4,
-    E_tb_5=E_tb_5,
-    E_td_5=E_td_5,
-    E_tr_5=E_tr_5,
-    theta_5=theta_5,
+    rho_g=rho_g,
+    psi_plus=psi_plus,
+    E_tb=E_tb[1:5],
+    E_td=E_td[1:5],
+    E_tr=E_tr[1:5],
+    theta=theta[1:5],
+    initOpt=initOpt,
     Tstart_fuselage=Tstart_fuselage,
     Tstart_cabin=Tstart_cabin,
     Pstart_cabin=Pstart_cabin,

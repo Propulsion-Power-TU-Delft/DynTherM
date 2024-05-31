@@ -5,26 +5,26 @@ model AircraftFlying
 
   parameter Real Cp=0 "Pressure coefficient: approximately zero for passenger section around the fuselage";
   parameter Real coeff=1 "Fraction of cylinder with active heat transfer";
-  parameter Modelica.Units.SI.Length L "Fuselage element length";
-  parameter Modelica.Units.SI.Length R_ext "Fuselage radius";
-  parameter Modelica.Units.SI.Length L_nose
+  parameter Length L "Fuselage element length";
+  parameter Length R_ext "Fuselage radius";
+  parameter Length L_nose
     "Average distance among current fuselage section and fuselage nose";
 
-  Modelica.Units.SI.Velocity V_inf "Aircraft velocity";
-  Modelica.Units.SI.Pressure P_f "Pressure surrounding the fuselage";
-  Modelica.Units.SI.Temperature T_aw "Recovery temperature";
+  Velocity V_inf "Aircraft velocity";
+  Pressure P_f "Pressure surrounding the fuselage";
+  Temperature T_aw "Recovery temperature";
   Real r "Recovery factor for turbulent boundary layer";
-  Modelica.Units.SI.ReynoldsNumber Re_star(start=1e8)
+  ReynoldsNumber Re_star(start=1e8)
     "Reynolds number used in the heat transfer correlation";
-  Modelica.Units.SI.PrandtlNumber Pr_star
+  PrandtlNumber Pr_star
     "Prandtl number used in the heat transfer correlation";
 
 protected
   Medium.ThermodynamicState state_aw;
   Medium.ThermodynamicState state_star;
   Real gamma_amb;
-  Modelica.Units.SI.PrandtlNumber Pr_aw(start=0.75);
-  Modelica.Units.SI.Temperature T_star;
+  PrandtlNumber Pr_aw(start=0.75);
+  Temperature T_star;
 
 equation
   state_aw = Medium.setState_pTX(P_f, T_aw, environment.X_amb);

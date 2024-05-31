@@ -2,29 +2,31 @@ within DynTherM.Systems.Aircraft.Subsystems;
 model FuselageSandwichStructure
   "Model of sandwich shell fuselage (cabin and cockpit sections)"
 
-  outer DynTherM.Components.Environment environment "Environmental properties";
-  parameter Real coeff "Fraction of fuselage with active heat transfer";
-  parameter Modelica.Units.SI.Length L_fuselage
-    "Length of the fuselage cylindrical section";
-  parameter Modelica.Units.SI.Length R_ext "External radius of the fuselage";
-  parameter Modelica.Units.SI.Length t_tot=0.1
-    "Overall fuselage thickness (half for lower section)";
-  parameter Modelica.Units.SI.Length L_window=0 "Window length";
-  parameter Modelica.Units.SI.Length H_window=0 "Window height";
-  parameter Integer Nw_side=0 "Number of windows per fuselage side";
-  parameter Modelica.Units.SI.Temperature Tstart
-    "Temperature start value - external skin"
-    annotation (Dialog(tab="Initialization"));
+  // Initialization
+  parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
+    "Initialization option" annotation (Dialog(tab="Initialization"));
+  parameter Temperature Tstart "Temperature start value - external skin" annotation (Dialog(tab="Initialization"));
 
-  final parameter Modelica.Units.SI.Length t_f=0.00136 "Skin facing thickness";
-  final parameter Modelica.Units.SI.Length t_c=0.012 "Skin core thickness";
-  final parameter Modelica.Units.SI.Length t_in_f=0.0005
+  // Geometry
+  parameter Real coeff "Fraction of fuselage with active heat transfer";
+  parameter Length L_fuselage
+    "Length of the fuselage cylindrical section";
+  parameter Length R_ext "External radius of the fuselage";
+  parameter Length t_tot=0.1
+    "Overall fuselage thickness (half for lower section)";
+  parameter Length L_window=0 "Window length";
+  parameter Length H_window=0 "Window height";
+  parameter Integer Nw_side=0 "Number of windows per fuselage side";
+
+  final parameter Length t_f=0.00136 "Skin facing thickness";
+  final parameter Length t_c=0.012 "Skin core thickness";
+  final parameter Length t_in_f=0.0005
     "Interior panel facing thickness";
-  final parameter Modelica.Units.SI.Length t_in_c=0.004
+  final parameter Length t_in_c=0.004
     "Interior panel core thickness";
-  final parameter Modelica.Units.SI.Length t_ins=t_tot - (2*t_f + t_c) - (2*
+  final parameter Length t_ins=t_tot - (2*t_f + t_c) - (2*
       t_in_f + t_in_c) "Insulation blankets thickness";
-  constant Real pi=Modelica.Constants.pi;
+
   Components.HeatTransfer.TubeConduction skin_ext(
     redeclare model Mat = Materials.CarbonPhenolic,
     coeff=coeff,
@@ -35,7 +37,7 @@ model FuselageSandwichStructure
     H_window=H_window,
     Nw_side=Nw_side,
     Tstart=Tstart,
-    initOpt=environment.initOpt)
+    initOpt=initOpt)
     annotation (Placement(transformation(extent={{-26,74},{26,44}})));
   Components.HeatTransfer.TubeConduction skin_core(
     redeclare model Mat = Materials.Hexcel,
@@ -47,7 +49,7 @@ model FuselageSandwichStructure
     H_window=H_window,
     Nw_side=Nw_side,
     Tstart=Tstart - 0.5,
-    initOpt=environment.initOpt)
+    initOpt=initOpt)
     annotation (Placement(transformation(extent={{-26,56},{26,26}})));
   Components.HeatTransfer.TubeConduction skin_int(
     redeclare model Mat = Materials.CarbonPhenolic,
@@ -59,7 +61,7 @@ model FuselageSandwichStructure
     H_window=H_window,
     Nw_side=Nw_side,
     Tstart=Tstart - 1,
-    initOpt=environment.initOpt)
+    initOpt=initOpt)
     annotation (Placement(transformation(extent={{-26,38},{26,8}})));
   Components.HeatTransfer.TubeConduction insulationBlankets(
     redeclare model Mat = Materials.GlassFibre,
@@ -71,7 +73,7 @@ model FuselageSandwichStructure
     H_window=H_window,
     Nw_side=Nw_side,
     Tstart=Tstart - 1.5,
-    initOpt=environment.initOpt)
+    initOpt=initOpt)
     annotation (Placement(transformation(extent={{-26,16},{26,-14}})));
   Components.HeatTransfer.TubeConduction interiorPanel_ext(
     redeclare model Mat = Materials.GlassPhenolic,
@@ -83,7 +85,7 @@ model FuselageSandwichStructure
     H_window=H_window,
     Nw_side=Nw_side,
     Tstart=Tstart - 2,
-    initOpt=environment.initOpt)
+    initOpt=initOpt)
     annotation (Placement(transformation(extent={{-26,-8},{26,-38}})));
   Components.HeatTransfer.TubeConduction interiorPanel_core(
     redeclare model Mat = Materials.FibrelamAramid1100,
@@ -95,7 +97,7 @@ model FuselageSandwichStructure
     H_window=H_window,
     Nw_side=Nw_side,
     Tstart=Tstart - 2.5,
-    initOpt=environment.initOpt)
+    initOpt=initOpt)
     annotation (Placement(transformation(extent={{-26,-26},{26,-56}})));
   Components.HeatTransfer.TubeConduction interiorPanel_int(
     redeclare model Mat = Materials.GlassPhenolic,
@@ -107,7 +109,7 @@ model FuselageSandwichStructure
     H_window=H_window,
     Nw_side=Nw_side,
     Tstart=Tstart - 3,
-    initOpt=environment.initOpt)
+    initOpt=initOpt)
     annotation (Placement(transformation(extent={{-26,-44},{26,-74}})));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b ext
     annotation (Placement(transformation(extent={{-10,70},{10,90}}),

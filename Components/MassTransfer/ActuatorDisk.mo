@@ -3,7 +3,7 @@ model ActuatorDisk "Simple actuator disk model"
 
   replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
-  outer DynTherM.Components.Environment environment "Environmental properties";
+  outer Components.Environment environment "Environmental properties";
 
   // Options
   parameter Boolean set_m_flow=false "If true, mass flow rate through the actuator disk is prescribed by the user";

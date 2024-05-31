@@ -31,8 +31,6 @@ def read_config_file(config_file):
         'M_pack': [float(config['ECS']['M_pack'].split()[i]) for i in range(n_cases)],
         'Rec_ratio': [float(config['ECS']['Rec_ratio'].split()[i]) for i in range(n_cases)],
         'T_target': [float(config['ECS']['T_target'].split()[i]) + 273.15 for i in range(n_cases)],
-        'M_trim_cab': [float(config['ECS']['M_trim_cab'].split()[i]) for i in range(n_cases)],
-        'M_trim_fd': [float(config['ECS']['M_trim_fd'].split()[i]) for i in range(n_cases)],
         'T_trim': [float(config['ECS']['T_trim'].split()[i]) + 273.15 for i in range(n_cases)],
         'Mach_inf': [float(config['Environment']['Mach_inf'].split()[i]) for i in range(n_cases)],
         'Height': [float(config['Location']['Height'].split()[i]) * 1e3 for i in range(n_cases)],

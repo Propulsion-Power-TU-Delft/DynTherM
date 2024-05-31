@@ -1,7 +1,7 @@
 within DynTherM.CustomInterfaces;
 connector MechanicalPort "Connector for exchange of mechanical power"
-  Modelica.Units.SI.Torque M "Torque";
-  Modelica.Units.SI.AngularVelocity omega "Angular velocity";
+  Torque M "Torque";
+  AngularVelocity omega "Angular velocity";
   annotation (Icon(graphics), Documentation(info="<HTML>
 </HTML>",
         revisions="<html>

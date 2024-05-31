@@ -50,9 +50,6 @@ model Environment "Environmental properties (moist air)"
 
   // Constants
   constant Real sigma( final quantity="Stefan-Boltzmann constant", final unit="W/(m2.K4)")=5.67e-8;
-  constant Acceleration g=9.80665 "Gravitational acceleration";
-  constant Real n_air=1.000293 "Air refractive index";
-  constant Real pi=Modelica.Constants.pi;
   constant Real R=287.058 "Specific gas constant";
   constant Pressure P0=101325 "Ambient pressure at sea-level [Pa]";
   constant Temperature T0=288.15 "Ambient temperature at sea-level [K]";
@@ -142,7 +139,7 @@ equation
     if use_P_amb then
       P_amb = P_amb_di;
     else
-      P_amb = P0*(T_ISA/T0)^(g*1000/(R*6.5));
+      P_amb = P0*(T_ISA/T0)^(g_n*1000/(R*6.5));
     end if;
 
   elseif (altitude > 11000) and (altitude <= 20000) then
@@ -151,8 +148,8 @@ equation
     if use_P_amb then
       P_amb = P_amb_di;
     else
-      P_amb = P0*(T_ISA/T0)^(g*1000/(R*6.5))*
-        Modelica.Math.exp(-g/(R*T_ISA)*(altitude - 11000));
+      P_amb = P0*(T_ISA/T0)^(g_n*1000/(R*6.5))*
+        Modelica.Math.exp(-g_n/(R*T_ISA)*(altitude - 11000));
     end if;
 
   else

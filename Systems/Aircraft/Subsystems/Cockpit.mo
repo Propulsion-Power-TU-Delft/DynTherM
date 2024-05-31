@@ -1,104 +1,91 @@
 within DynTherM.Systems.Aircraft.Subsystems;
 model Cockpit "Upper section of the fuselage: cockpit section"
 
-  outer DynTherM.Components.Environment environment "Environmental properties";
+  outer Components.Environment environment "Environmental properties";
+
+  replaceable model Paint =
+    Materials.Paints.WhiteCoatings.CatalacWhitePaint
+    constrainedby Materials.Paints.BasePaint "Surface paint material" annotation (choicesAllMatching=true);
 
   replaceable model HTC_int =
-    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    Components.HeatTransfer.HTCorrelations.BaseClassInternal
     constrainedby
-    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    Components.HeatTransfer.HTCorrelations.BaseClassInternal
     "Internal convection correlation" annotation (choicesAllMatching=true);
 
   replaceable model HTC_ext =
-    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal
+    Components.HeatTransfer.HTCorrelations.BaseClassExternal
     constrainedby
-    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal
+    Components.HeatTransfer.HTCorrelations.BaseClassExternal
     "External convection correlation" annotation (choicesAllMatching=true);
 
   parameter Real N_occupants[3] "Number of: passengers, cabin crew, pilots inside the cockpit";
-  parameter Modelica.Units.SI.HeatFlowRate Q_int "Internal heat load";
-  parameter Modelica.Units.SI.Length L_cockpit
+  parameter HeatFlowRate Q_int "Internal heat load";
+  parameter Length L_cockpit
     "Length of the cockpit cylindrical section";
-  parameter Modelica.Units.SI.Length R_ext "External radius of the fuselage";
-  parameter Modelica.Units.SI.Volume V_cockpit "Cockpit internal volume";
-  parameter Modelica.Units.SI.SpecificHeatCapacity c_cockpit
+  parameter Length R_ext "External radius of the fuselage";
+  parameter Volume V_cockpit "Cockpit internal volume";
+  parameter SpecificHeatCapacity c_cockpit
     "Specific heat capacity of cockpit interior";
-  parameter Modelica.Units.SI.Mass m_cockpit "Mass of cockpit interior";
-  parameter Modelica.Units.SI.Area A_cockpit
+  parameter Mass m_cockpit "Mass of cockpit interior";
+  parameter Area A_cockpit
     "Heat transfer surface of cockpit interior";
-  parameter Modelica.Units.SI.Length L_windshield_front
+  parameter Length L_windshield_front
     "Windshield length - frontal section";
-  parameter Modelica.Units.SI.Length H_windshield_front
+  parameter Length H_windshield_front
     "Windshield height - frontal section";
-  parameter Modelica.Units.SI.Length L_windshield_lat
+  parameter Length L_windshield_lat
     "Windshield length - lateral section";
-  parameter Modelica.Units.SI.Length H_windshield_lat
+  parameter Length H_windshield_lat
     "Windshield height - lateral section";
-  parameter Modelica.Units.SI.Length t_cockpit
+  parameter Length t_cockpit
     "Overall fuselage thickness (cockpit section)";
-  parameter Modelica.Units.SI.Irradiance E_tb_1
-    "Beam component of the clear-sky solar irradiance - section 1" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_td_1
-    "Diffuse component of the clear-sky solar irradiance - section 1" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tr_1
-    "Ground reflected component of the clear-sky solar irradiance - section 1" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Angle theta_1
-    "Incidence angle - section 1" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tb_2
-    "Beam component of the clear-sky solar irradiance - section 2" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_td_2
-    "Diffuse component of the clear-sky solar irradiance - section 2" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tr_2
-    "Ground reflected component of the clear-sky solar irradiance - section 2" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Angle theta_2
-    "Incidence angle - section 2" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tb_3
-    "Beam component of the clear-sky solar irradiance - section 3" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_td_3
-    "Diffuse component of the clear-sky solar irradiance - section 3" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tr_3
-    "Ground reflected component of the clear-sky solar irradiance - section 3" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Angle theta_3
-    "Incidence angle - section 3" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tb_4
-    "Beam component of the clear-sky solar irradiance - section 4" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_td_4
-    "Diffuse component of the clear-sky solar irradiance - section 4" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tr_4
-    "Ground reflected component of the clear-sky solar irradiance - section 4" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Angle theta_4
-    "Incidence angle - section 4" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tb_5
-    "Beam component of the clear-sky solar irradiance - section 5" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_td_5
-    "Diffuse component of the clear-sky solar irradiance - section 5" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tr_5
-    "Ground reflected component of the clear-sky solar irradiance - section 5" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Angle theta_5
-    "Incidence angle - section 5" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tb_front
-    "Beam component of the clear-sky solar irradiance - frontal section" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_td_front
-    "Diffuse component of the clear-sky solar irradiance - frontal section" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tr_front
-    "Ground reflected component of the clear-sky solar irradiance - frontal section" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Angle theta_front
-    "Incidence angle - frontal section" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Temperature Tstart_fuselage
+
+  // Radiation
+  parameter Real rho_g=0.2 "Ground reflectance" annotation (Dialog(tab="Radiation"));
+  parameter Angle csi[6]={
+    Modelica.Units.Conversions.from_deg(270),
+    Modelica.Units.Conversions.from_deg(315),
+    Modelica.Units.Conversions.from_deg(0),
+    Modelica.Units.Conversions.from_deg(45),
+    Modelica.Units.Conversions.from_deg(90),
+    Modelica.Units.Conversions.from_deg(45)}
+    "Tilt angle of the surface wrt horizontal - sections 1-5 + front" annotation (Dialog(tab="Radiation"));
+  parameter Angle psi_plus=0 "Modifier of azimuth angle" annotation (Dialog(tab="Radiation"));
+  parameter Irradiance E_tb[5]
+    "Beam component of the clear-sky solar irradiance - sections 1-5" annotation (Dialog(tab="Radiation"));
+  parameter Irradiance E_td[5]
+    "Diffuse component of the clear-sky solar irradiance - sections 1-5" annotation (Dialog(tab="Radiation"));
+  parameter Irradiance E_tr[5]
+    "Ground reflected component of the clear-sky solar irradiance - sections 1-5" annotation (Dialog(tab="Radiation"));
+  parameter Angle theta[5] "Incidence angle - sections 1-5" annotation (Dialog(tab="Radiation"));
+  parameter Irradiance E_tb_front=0
+    "Beam component of the clear-sky solar irradiance - frontal section" annotation (Dialog(tab="Radiation"));
+  parameter Irradiance E_td_front=0
+    "Diffuse component of the clear-sky solar irradiance - frontal section" annotation (Dialog(tab="Radiation"));
+  parameter Irradiance E_tr_front=0
+    "Ground reflected component of the clear-sky solar irradiance - frontal section" annotation (Dialog(tab="Radiation"));
+  parameter Angle theta_front=0 "Incidence angle - frontal section" annotation (Dialog(tab="Radiation"));
+
+  // Initialization
+  parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
+    "Initialization option" annotation (Dialog(tab="Initialization"));
+  parameter Temperature Tstart_fuselage
     "Fuselage temperature start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Temperature Tstart_flightDeck
+  parameter Temperature Tstart_flightDeck
     "Cabin temperature start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Pressure Pstart_flightDeck
+  parameter Pressure Pstart_flightDeck
     "Cabin pressure start value" annotation (Dialog(tab="Initialization"));
   parameter Boolean noInitialPressure=false "Remove initial equation on pressure" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
   parameter Boolean noInitialTemperature=false "Remove initial equation on temperature" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
 
-  final parameter Modelica.Units.SI.Length L_oct=section_1.R_ext*sqrt(2 - sqrt(
+  final parameter Length L_oct=section_1.R_ext*sqrt(2 - sqrt(
       2)) "Approximated length of one fuselage section (octagon)";
-  final parameter Modelica.Units.SI.Length W_fl=L_oct*(1 + sqrt(2))
+  final parameter Length W_fl=L_oct*(1 + sqrt(2))
     "Floor Width";
 
   Components.MassTransfer.Plenum flightDeck(
+    initOpt=initOpt,
     V=V_cockpit,
     N_occupants=N_occupants,
     Q_int=Q_int,
@@ -123,47 +110,59 @@ model Cockpit "Upper section of the fuselage: cockpit section"
         transformation(extent={{94,-72},{118,-48}}), iconTransformation(extent={{-92,-42},
             {-116,-18}})));
 
-  DynTherM.Systems.Aircraft.Subsystems.UpperFuselageHeatTransfer section_3(
+  Systems.Aircraft.Subsystems.UpperFuselageHeatTransfer section_3(
+    redeclare model Paint = Paint,
     redeclare model HTC_int = HTC_int,
     redeclare model HTC_ext = HTC_ext,
+    initOpt=initOpt,
     coeff=1/8,
     L_fuselage=L_cockpit,
     R_ext=R_ext,
     t_fuselage=t_cockpit,
-    csi=0,
-    E_tb=E_tb_3,
-    E_td=E_td_3,
-    E_tr=E_tr_3,
-    theta=theta_3,
+    rho_g=rho_g,
+    csi=csi[3],
+    psi_plus=psi_plus,
+    E_tb=E_tb[3],
+    E_td=E_td[3],
+    E_tr=E_tr[3],
+    theta=theta[3],
     Tstart_fuselage=Tstart_fuselage)
     annotation (Placement(transformation(extent={{-50,62},{-10,102}})));
 
-  DynTherM.Systems.Aircraft.Subsystems.UpperFuselageHeatTransfer section_2(
+  Systems.Aircraft.Subsystems.UpperFuselageHeatTransfer section_2(
+    redeclare model Paint = Paint,
     redeclare model HTC_int = HTC_int,
     redeclare model HTC_ext = HTC_ext,
+    initOpt=initOpt,
     coeff=1/8,
     L_fuselage=L_cockpit,
     R_ext=R_ext,
     t_fuselage=t_cockpit,
-    csi=5.4977871437821,
-    E_tb=E_tb_2,
-    E_td=E_td_2,
-    E_tr=E_tr_2,
-    theta=theta_2,
+    rho_g=rho_g,
+    csi=csi[2],
+    psi_plus=psi_plus,
+    E_tb=E_tb[2],
+    E_td=E_td[2],
+    E_tr=E_tr[2],
+    theta=theta[2],
     Tstart_fuselage=Tstart_fuselage)
     annotation (Placement(transformation(extent={{94,62},{54,102}})));
-  DynTherM.Systems.Aircraft.Subsystems.UpperFuselageHeatTransfer section_4(
+  Systems.Aircraft.Subsystems.UpperFuselageHeatTransfer section_4(
+    redeclare model Paint = Paint,
     redeclare model HTC_int = HTC_int,
     redeclare model HTC_ext = HTC_ext,
+    initOpt=initOpt,
     coeff=1/8,
     L_fuselage=L_cockpit,
     R_ext=R_ext,
     t_fuselage=t_cockpit,
-    csi=0.78539816339745,
-    E_tb=E_tb_4,
-    E_td=E_td_4,
-    E_tr=E_tr_4,
-    theta=theta_4,
+    rho_g=rho_g,
+    csi=csi[4],
+    psi_plus=psi_plus,
+    E_tb=E_tb[4],
+    E_td=E_td[4],
+    E_tr=E_tr[4],
+    theta=theta[4],
     Tstart_fuselage=Tstart_fuselage)
     annotation (Placement(transformation(extent={{-94,62},{-54,102}})));
 
@@ -173,8 +172,8 @@ model Cockpit "Upper section of the fuselage: cockpit section"
   Modelica.Thermal.HeatTransfer.Sensors.TemperatureSensor temperatureSensor
     annotation (Placement(transformation(extent={{66,-40},{86,-20}})));
   Components.HeatTransfer.HeatCapacity cockpitInterior(
-    initOpt=environment.initOpt,                       T_start=
-        Tstart_flightDeck,
+    initOpt=initOpt,
+    T_start=Tstart_flightDeck,
     C=m_cockpit*c_cockpit)
     annotation (Placement(transformation(extent={{-26,20},{-2,44}})));
   Components.HeatTransfer.InternalConvection internalConvection(
@@ -185,30 +184,35 @@ model Cockpit "Upper section of the fuselage: cockpit section"
     E_td_fixed=E_td_front,
     E_tr_fixed=E_tr_front,
     theta_fixed=theta_front,
-    csi=0.78539816339745,
+    rho_g=rho_g,
+    csi=csi[6],
     psi_plus=1.5707963267949)
     annotation (Placement(transformation(extent={{-2,98},{30,66}})));
-  Components.HeatTransfer.ExternalConvection extConvectionWindow_front(A=
-        L_windshield_front*H_windshield_front,
-      redeclare model HTC = HTC_ext)
+  Components.HeatTransfer.ExternalConvection extConvectionWindow_front(
+    redeclare model HTC = HTC_ext,
+    A=L_windshield_front*H_windshield_front)
     annotation (Placement(transformation(extent={{26,84},{46,64}})));
-  Components.HeatTransfer.InternalConvection internalConvection_front(A=
-        L_windshield_front*H_windshield_front,
-      redeclare model HTC = HTC_int)
+  Components.HeatTransfer.InternalConvection internalConvection_front(
+    redeclare model HTC = HTC_int,
+    A=L_windshield_front*H_windshield_front)
     annotation (Placement(transformation(extent={{10,-2},{30,-22}})));
   FuselageHeatTransferWindow
     section_5(
+    redeclare model Paint = Paint,
     redeclare model HTC_int = HTC_int,
     redeclare model HTC_ext = HTC_ext,
+    initOpt=initOpt,
     coeff=1/8,
     L_fuselage=L_cockpit,
     R_ext=R_ext,
     t_fuselage=t_cockpit,
-    csi=1.5707963267949,
-    E_tb=E_tb_5,
-    E_td=E_td_5,
-    E_tr=E_tr_5,
-    theta=theta_5,
+    rho_g=rho_g,
+    csi=csi[5],
+    psi_plus=psi_plus,
+    E_tb=E_tb[5],
+    E_td=E_td[5],
+    E_tr=E_tr[5],
+    theta=theta[5],
     L_window=L_windshield_lat,
     H_window=H_windshield_lat,
     Nw_side=1,
@@ -218,17 +222,21 @@ model Cockpit "Upper section of the fuselage: cockpit section"
         origin={-82,14})));
   FuselageHeatTransferWindow
     section_1(
+    redeclare model Paint = Paint,
     redeclare model HTC_int = HTC_int,
     redeclare model HTC_ext = HTC_ext,
+    initOpt=initOpt,
     coeff=1/8,
     L_fuselage=L_cockpit,
     R_ext=R_ext,
     t_fuselage=t_cockpit,
-    csi=4.7123889803847,
-    E_tb=E_tb_1,
-    E_td=E_td_1,
-    E_tr=E_tr_1,
-    theta=theta_1,
+    rho_g=rho_g,
+    csi=csi[1],
+    psi_plus=psi_plus,
+    E_tb=E_tb[1],
+    E_td=E_td[1],
+    E_tr=E_tr[1],
+    theta=theta[1],
     L_window=L_windshield_lat,
     H_window=H_windshield_lat,
     Nw_side=1,
@@ -237,9 +245,11 @@ model Cockpit "Upper section of the fuselage: cockpit section"
         rotation=90,
         origin={82,14})));
   FlightDeckWindshield windshieldFront(
+    initOpt=initOpt,
     A_windshield=L_windshield_front*H_windshield_front,
     Tstart=Tstart_fuselage)
     annotation (Placement(transformation(extent={{2,34},{32,66}})));
+
 equation
   section_5.P_air_gap = cockpitInflow.P;
   section_5.X_air_gap = cockpitInflow.Xi_outflow;

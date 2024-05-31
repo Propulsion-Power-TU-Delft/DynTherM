@@ -2,40 +2,42 @@ within DynTherM.Components.HeatTransfer;
 model SolarRadiation
   "Model of direct, diffuse and reflected solar irradiance on a planar, arbitrary oriented surface"
 
-  outer DynTherM.Components.Environment environment;
-  constant Modelica.Units.SI.Irradiance E_sc=1367 "Solar constant";
-  parameter Modelica.Units.SI.Irradiance E_tb_fixed=0.0
+  outer Components.Environment environment;
+
+  constant Irradiance E_sc=1367 "Solar constant";
+  parameter Irradiance E_tb_fixed=0.0
     "Fixed value of the beam component of the clear-sky solar irradiance" annotation (Dialog(tab="Coupling with external sw"));
-  parameter Modelica.Units.SI.Irradiance E_td_fixed=0.0
+  parameter Irradiance E_td_fixed=0.0
     "Fixed value of the diffuse component of the clear-sky solar irradiance" annotation (Dialog(tab="Coupling with external sw"));
-  parameter Modelica.Units.SI.Irradiance E_tr_fixed=0.0
+  parameter Irradiance E_tr_fixed=0.0
     "Fixed value of the ground reflected component of the clear-sky solar irradiance" annotation (Dialog(tab="Coupling with external sw"));
-  parameter Modelica.Units.SI.Angle theta_fixed=0.0
+  parameter Angle theta_fixed=0.0
     "Fixed value of incidence angle" annotation (Dialog(tab="Coupling with external sw"));
   parameter Real rho_g=0.2 "Ground reflectance";
-  parameter Modelica.Units.SI.Angle csi
+  parameter Angle csi
     "Tilt angle of the surface wrt horizontal";
-  parameter Modelica.Units.SI.Angle psi_plus=0
+  parameter Angle psi_plus=0
     "Modifier of azimuth angle for this specific section";
 
   Real ET "Equation of time";
   Real AST "Apparent solar time";
-  Modelica.Units.SI.Angle delta "Solar declination";
-  Modelica.Units.SI.Angle H "Hour angle";
-  Modelica.Units.SI.Angle beta "Solar altitude";
-  Modelica.Units.SI.Angle phi "Azimuth angle";
-  Modelica.Units.SI.Angle gamma "Surface solar azimuth angle";
-  Modelica.Units.SI.Angle theta
+  Angle delta "Solar declination";
+  Angle H "Hour angle";
+  Angle beta "Solar altitude";
+  Angle phi "Azimuth angle";
+  Angle gamma "Surface solar azimuth angle";
+  Angle theta
     "Incidence angle (difference between sun-earth line and normal to the surface)";
   Real m0 "Relative air mass at ground";
   Real m "Relative air mass corrected for altitude";
-  Modelica.Units.SI.Irradiance E0 "Extraterrestrial radiant flux";
-  Modelica.Units.SI.Irradiance E_b "Beam normal irradiance";
-  Modelica.Units.SI.Irradiance E_d "Diffuse horizontal irradiance";
-  Modelica.Units.SI.Irradiance E_tb "Beam component of the clear-sky solar irradiance";
-  Modelica.Units.SI.Irradiance E_td "Diffuse component of the clear-sky solar irradiance";
-  Modelica.Units.SI.Irradiance E_tr "Ground reflected component of the clear-sky solar irradiance";
-  Modelica.Units.SI.Irradiance E "Total clear-sky irradiance";
+  Irradiance E0 "Extraterrestrial radiant flux";
+  Irradiance E_b "Beam normal irradiance";
+  Irradiance E_d "Diffuse horizontal irradiance";
+  Irradiance E_tb "Beam component of the clear-sky solar irradiance";
+  Irradiance E_td "Diffuse component of the clear-sky solar irradiance";
+  Irradiance E_tr "Ground reflected component of the clear-sky solar irradiance";
+  Irradiance E "Total clear-sky irradiance";
+
   CustomInterfaces.IrradiancePort inlet annotation (Placement(transformation(extent={{-10,52},{10,72}})));
 
 protected
@@ -45,7 +47,7 @@ protected
   Real ab;
   Real ad;
   Real Y;
-  Modelica.Units.SI.Angle theta_vertical;
+  Angle theta_vertical;
 
 equation
   if environment.use_ext_sw then
@@ -74,13 +76,13 @@ equation
     E_tr = E_tr_fixed;
 
   else
-    delta = 0.40928*Modelica.Math.sin(2*environment.pi*(284 + environment.Day)/365);
-    Gamma = 2*environment.pi*(environment.Day - 1)/365;
+    delta = 0.40928*Modelica.Math.sin(2*pi*(284 + environment.Day)/365);
+    Gamma = 2*pi*(environment.Day - 1)/365;
     ET = 2.2918*(0.0075 + 0.1868*Modelica.Math.cos(Gamma) - 3.2077*
       Modelica.Math.sin(Gamma) - 1.4615*Modelica.Math.cos(2*Gamma) - 4.089*
       Modelica.Math.sin(2*Gamma));
-    AST = environment.Hour + (environment.Minute + ET)/60 + 180*(environment.long - environment.long_ref)/(15*environment.pi);
-    H = 15*(AST - 12)*environment.pi/180;
+    AST = environment.Hour + (environment.Minute + ET)/60 + 180*(environment.long - environment.long_ref)/(15*pi);
+    H = 15*(AST - 12)*pi/180;
     beta = Modelica.Math.asin(Modelica.Math.sin(delta)*Modelica.Math.sin(environment.lat) +
       Modelica.Math.cos(delta)*Modelica.Math.cos(H)*Modelica.Math.cos(environment.lat));
     cos_phi = (Modelica.Math.cos(delta)*Modelica.Math.cos(H)*
@@ -94,8 +96,8 @@ equation
       Modelica.Math.cos(gamma));
     theta = Modelica.Math.acos(Modelica.Math.cos(beta)*Modelica.Math.cos(gamma)*
       Modelica.Math.sin(csi) + Modelica.Math.sin(beta)*Modelica.Math.cos(csi));
-    E0 = E_sc*(1 + 0.033*Modelica.Math.cos(2*environment.pi*(environment.Day - 3)/365));
-    m0 = 1/(Modelica.Math.sin(beta) + 0.50572*(6.07995 + beta*180/environment.pi)^(-1.6364)); // Eq 16
+    E0 = E_sc*(1 + 0.033*Modelica.Math.cos(2*pi*(environment.Day - 3)/365));
+    m0 = 1/(Modelica.Math.sin(beta) + 0.50572*(6.07995 + beta*180/pi)^(-1.6364)); // Eq 16
 
     // Correction for air mass at low altitude as proportional to pressure ratio G. Aglietti
     m = m0*(((environment.T0 + environment.ISA_plus)-0.0065*environment.altitude)/
@@ -115,7 +117,7 @@ equation
       E_tb = 0.0;
     end if;
 
-    if (csi*180/environment.pi <= 90) then
+    if (csi*180/pi <= 90) then
       E_td = E_d*(Y*Modelica.Math.sin(csi) + Modelica.Math.cos(csi));
     else
       E_td = E_d*Y*Modelica.Math.sin(csi);

@@ -1,26 +1,25 @@
 within DynTherM.Components.HeatTransfer;
 model WallRadiationFlux "Model of incident and emitted thermal radiation per unit area for a planar surface"
 
-  outer DynTherM.Components.Environment environment "Environmental properties";
-  replaceable model Material =
-    DynTherM.Materials.Paints.WhiteCoatings.CatalacWhitePaint
-    constrainedby DynTherM.Materials.Paints.BasePaint "Material choice" annotation (choicesAllMatching=true);
-  Material Mat;
+  outer Components.Environment environment "Environmental properties";
+  replaceable model Mat =
+    Materials.Paints.WhiteCoatings.CatalacWhitePaint
+    constrainedby Materials.Paints.BasePaint "Material choice" annotation (choicesAllMatching=true);
 
-  parameter Modelica.Units.SI.Angle csi "Tilt angle of the surface wrt horizontal";
+  parameter Angle csi "Tilt angle of the surface wrt horizontal";
 
   Real F_sky "View factor between the wall and the sky dome";
   Real F_ground "View factor between the object and the ground";
   Real beta "Coefficient splitting the heat exchange with the sky dome between sky and air radiation";
-  Modelica.Units.SI.HeatFlux phi_absorbed
+  HeatFlux phi_absorbed
     "Heat flux absorbed by the object from the solar radiation";
-  Modelica.Units.SI.HeatFlux phi_em_sky
+  HeatFlux phi_em_sky
     "Heat flux emitted by the object to the surrounding environment";
-  Modelica.Units.SI.HeatFlux phi_em_air
+  HeatFlux phi_em_air
     "Heat flux emitted by the object to the surrounding environment";
-  Modelica.Units.SI.HeatFlux phi_em_ground
+  HeatFlux phi_em_ground
     "Heat flux emitted by the object to the surrounding environment";
-  Modelica.Units.SI.HeatFlux phi_emitted
+  HeatFlux phi_emitted
     "Heat flux emitted by the object to the surrounding environment";
 
   CustomInterfaces.IrradiancePort outlet annotation (Placement(transformation(extent={{-14,-28},{14,0}})));

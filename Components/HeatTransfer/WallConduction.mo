@@ -1,14 +1,17 @@
 within DynTherM.Components.HeatTransfer;
 model WallConduction "Dynamic model of conduction in a planar surface"
-  replaceable model Mat=DynTherM.Materials.Aluminium constrainedby
-    DynTherM.Materials.Properties "Material choice" annotation (choicesAllMatching=true);
+  replaceable model Mat=Materials.Aluminium constrainedby
+    Materials.Properties "Material choice" annotation (choicesAllMatching=true);
 
   input Real N=1 "Number of walls in parallel" annotation (Dialog(enable=true));
   input Length t "Wall thickness" annotation (Dialog(enable=true));
   input Area A "Wall surface" annotation (Dialog(enable=true));
+
+  // Initialization
   parameter Temperature Tstart=300
     "Temperature start value" annotation (Dialog(tab="Initialization"));
-  parameter DynTherM.Choices.InitOpt initOpt "Initialization option" annotation (Dialog(tab="Initialization"));
+  parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
+    "Initialization option" annotation (Dialog(tab="Initialization"));
 
   Mass m "Mass of the wall";
   Modelica.Units.SI.HeatCapacity Cm "Heat capacity of the wall";
@@ -30,9 +33,9 @@ equation
     "Heat conduction through the external half-thickness";
 
 initial equation
-  if initOpt == DynTherM.Choices.InitOpt.steadyState then
+  if initOpt == Choices.InitOpt.steadyState then
     der(T_vol) = 0;
-  elseif initOpt == DynTherM.Choices.InitOpt.fixedState then
+  elseif initOpt == Choices.InitOpt.fixedState then
     T_vol = Tstart;
   else
     // do nothing

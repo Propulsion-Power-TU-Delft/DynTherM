@@ -1,10 +1,9 @@
 within DynTherM.Components.MassTransfer.FanCharacteristics.FlowCharacteristics;
 class linearFlow "Linear flow characteristic"
   extends BaseClass;
-  Modelica.Units.SI.SpecificEnergy Head "Head provided by the fan";
+  SpecificEnergy Head "Head provided by the fan";
+  VolumeFlowRate volFlow_max "Maximum volumetric flow rate processed by the fan";
 protected
-  Modelica.Units.SI.VolumeFlowRate volFlow_max
-    "Maximum volumetric flow rate processed by the fan";
   Real c1;
   Real c2;
 equation

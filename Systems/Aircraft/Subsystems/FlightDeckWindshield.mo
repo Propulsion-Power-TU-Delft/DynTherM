@@ -2,36 +2,39 @@ within DynTherM.Systems.Aircraft.Subsystems;
 model FlightDeckWindshield
   "Model of flight deck windshield, made of glass-faced acrylic"
 
-  outer DynTherM.Components.Environment environment "Environmental properties";
+  parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
+    "Initialization option" annotation (Dialog(tab="Initialization"));
 
-  parameter Modelica.Units.SI.Length t_glass=0.005 "Thickness of the tempered glass layer";
-  parameter Modelica.Units.SI.Length t_outer_acrylic=0.02 "Thickness of the external stretched acrylic layer";
-  parameter Modelica.Units.SI.Length t_inner_acrylic=0.025 "Thickness of the internal stretched acrylic layer";
-  parameter Modelica.Units.SI.Area A_windshield "Surface area of the windshield";
-  parameter Modelica.Units.SI.Temperature Tstart "Tmperature of the window - starting value" annotation (Dialog(tab="Initialization"));
+  parameter Length t_glass=0.005 "Thickness of the tempered glass layer";
+  parameter Length t_outer_acrylic=0.02 "Thickness of the external stretched acrylic layer";
+  parameter Length t_inner_acrylic=0.025 "Thickness of the internal stretched acrylic layer";
+  parameter Area A_windshield "Surface area of the windshield";
+  parameter Temperature Tstart "Tmperature of the window - starting value" annotation (Dialog(tab="Initialization"));
 
-  Components.HeatTransfer.WindowRadiation glassRadiation(redeclare model Mat =
-        DynTherM.Materials.TemperedGlass,          A=A_windshield)
+  Components.HeatTransfer.WindowRadiation glassRadiation(
+    redeclare model Mat = DynTherM.Materials.TemperedGlass,
+    A=A_windshield)
     annotation (Placement(transformation(extent={{-62,132},{2,68}})));
   Components.HeatTransfer.WallConduction glassConduction(
     redeclare model Mat = DynTherM.Materials.TemperedGlass,
     t=t_glass,
     A=A_windshield,
     Tstart=Tstart,
-    initOpt=environment.initOpt)
+    initOpt=initOpt)
     annotation (Placement(transformation(extent={{16,30},{64,70}})));
   Components.HeatTransfer.WallConduction outerAcrylicConduction(
     redeclare model Mat = Materials.Opticor,
     t=t_outer_acrylic,
     A=A_windshield,
     Tstart=Tstart,
-    initOpt=environment.initOpt)
+    initOpt=initOpt)
     annotation (Placement(transformation(extent={{16,-18},{64,22}})));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a heatAbsorbed annotation (
       Placement(transformation(extent={{30,-122},{50,-102}}),iconTransformation(
           extent={{10,-40},{30,-20}})));
-  Components.HeatTransfer.WindowRadiation outerAcrylicRadiation(redeclare model
-      Mat = Materials.Opticor, A=A_windshield)
+  Components.HeatTransfer.WindowRadiation outerAcrylicRadiation(
+    redeclare model Mat = Materials.Opticor,
+    A=A_windshield)
     annotation (Placement(transformation(extent={{-72,82},{-8,18}})));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b heatExt annotation (
       Placement(transformation(extent={{30,120},{50,140}}),
@@ -41,21 +44,22 @@ model FlightDeckWindshield
         transformation(extent={{-36,126},{-26,136}}),
                                                     iconTransformation(extent={{
             -30,40},{-10,60}})));
-  CustomInterfaces.Adaptors.irradianceToHeatFlow irradianceToHeatFlow(A=
-        A_windshield)
+  CustomInterfaces.Adaptors.irradianceToHeatFlow irradianceToHeatFlow(
+    A=A_windshield)
     annotation (Placement(transformation(extent={{-92,-30},{-28,-94}})));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a heatTransmitted
     annotation (Placement(transformation(extent={{-70,-122},{-50,-102}}),
         iconTransformation(extent={{-30,-40},{-10,-20}})));
-  Components.HeatTransfer.WindowRadiation innerAcrylicRadiation(redeclare model
-      Mat = Materials.Opticor, A=A_windshield)
+  Components.HeatTransfer.WindowRadiation innerAcrylicRadiation(
+    redeclare model Mat = Materials.Opticor,
+    A=A_windshield)
     annotation (Placement(transformation(extent={{-82,30},{-18,-34}})));
   Components.HeatTransfer.WallConduction innerAcrylicConduction(
     redeclare model Mat = Materials.Opticor,
     t=t_inner_acrylic,
     A=A_windshield,
     Tstart=Tstart,
-    initOpt=environment.initOpt)
+    initOpt=initOpt)
     annotation (Placement(transformation(extent={{16,-70},{64,-30}})));
 equation
 

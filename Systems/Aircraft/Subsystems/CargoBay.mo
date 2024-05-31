@@ -1,61 +1,62 @@
 within DynTherM.Systems.Aircraft.Subsystems;
 model CargoBay "Lower section of the fuselage: cargo bay"
 
-  outer DynTherM.Components.Environment environment "Environmental properties";
+  outer Components.Environment environment "Environmental properties";
+
+  replaceable model Paint =
+    Materials.Paints.WhiteCoatings.CatalacWhitePaint
+    constrainedby Materials.Paints.BasePaint "Surface paint material" annotation (choicesAllMatching=true);
 
   replaceable model HTC_int =
-    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    Components.HeatTransfer.HTCorrelations.BaseClassInternal
     constrainedby
-    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    Components.HeatTransfer.HTCorrelations.BaseClassInternal
     "Internal convection correlation" annotation (choicesAllMatching=true);
 
   replaceable model HTC_ext =
-    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal
+    Components.HeatTransfer.HTCorrelations.BaseClassExternal
     constrainedby
-    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal
+    Components.HeatTransfer.HTCorrelations.BaseClassExternal
     "External convection correlation" annotation (choicesAllMatching=true);
 
-  parameter Modelica.Units.SI.HeatFlowRate Q_int "Internal heat load";
-  parameter Modelica.Units.SI.Length R_ext "External radius of the fuselage";
-  parameter Modelica.Units.SI.Length L_cargo "Length of the cargo bay";
-  parameter Modelica.Units.SI.Volume V_cargo "Cargo internal volume";
-  parameter Modelica.Units.SI.Length t_cargo
+  parameter HeatFlowRate Q_int "Internal heat load";
+  parameter Length R_ext "External radius of the fuselage";
+  parameter Length L_cargo "Length of the cargo bay";
+  parameter Volume V_cargo "Cargo internal volume";
+  parameter Length t_cargo
     "Overall fuselage thickness (cargo section)";
-  parameter Modelica.Units.SI.Irradiance E_tb_6
-    "Beam component of the clear-sky solar irradiance - section 6" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_td_6
-    "Diffuse component of the clear-sky solar irradiance - section 6" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tr_6
-    "Ground reflected component of the clear-sky solar irradiance - section 6" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Angle theta_6
-    "Incidence angle - section 6" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tb_7
-    "Beam component of the clear-sky solar irradiance - section 7" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_td_7
-    "Diffuse component of the clear-sky solar irradiance - section 7" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tr_7
-    "Ground reflected component of the clear-sky solar irradiance - section 7" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Angle theta_7
-    "Incidence angle - section 7" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tb_8
-    "Beam component of the clear-sky solar irradiance - section 8" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_td_8
-    "Diffuse component of the clear-sky solar irradiance - section 8" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tr_8
-    "Ground reflected component of the clear-sky solar irradiance - section 8" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Angle theta_8
-    "Incidence angle - section 8" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Temperature Tstart_fuselage
+
+  // Radiation
+  parameter Real rho_g=0.2 "Ground reflectance" annotation (Dialog(tab="Radiation"));
+  parameter Angle csi[3]={
+    Modelica.Units.Conversions.from_deg(135),
+    Modelica.Units.Conversions.from_deg(180),
+    Modelica.Units.Conversions.from_deg(225)}
+    "Tilt angle of the surface wrt horizontal - sections 6-8" annotation (Dialog(tab="Radiation"));
+  parameter Angle psi_plus=0 "Modifier of azimuth angle" annotation (Dialog(tab="Radiation"));
+  parameter Irradiance E_tb[3]
+    "Beam component of the clear-sky solar irradiance - sections 6-8" annotation (Dialog(tab="Radiation"));
+  parameter Irradiance E_td[3]
+    "Diffuse component of the clear-sky solar irradiance - sections 6-8" annotation (Dialog(tab="Radiation"));
+  parameter Irradiance E_tr[3]
+    "Ground reflected component of the clear-sky solar irradiance - sections 6-8" annotation (Dialog(tab="Radiation"));
+  parameter Angle theta[3] "Incidence angle - sections 6-8" annotation (Dialog(tab="Radiation"));
+
+  // Initialization
+  parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
+    "Initialization option" annotation (Dialog(tab="Initialization"));
+  parameter Temperature Tstart_fuselage
     "Fuselage temperature start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Temperature Tstart_cargo
+  parameter Temperature Tstart_cargo
     "Cargo bay temperature start value"
     annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Pressure Pstart_cargo
+  parameter Pressure Pstart_cargo
     "Cargo bay pressure start value" annotation (Dialog(tab="Initialization"));
   parameter Boolean noInitialPressure=false "Remove initial equation on pressure" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
   parameter Boolean noInitialTemperature=false "Remove initial equation on temperature" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
 
   Components.MassTransfer.Plenum cargo(
+    initOpt=initOpt,
     V=V_cargo,
     Q_int=Q_int,
     P_start=Pstart_cargo,
@@ -73,46 +74,58 @@ model CargoBay "Lower section of the fuselage: cargo bay"
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b cargoToFloor
     annotation (Placement(transformation(extent={{-10,90},{10,110}}),
         iconTransformation(extent={{-70,70},{-50,90}})));
-  DynTherM.Systems.Aircraft.Subsystems.LowerFuselageHeatTransfer section_6(
+  Systems.Aircraft.Subsystems.LowerFuselageHeatTransfer section_6(
+    redeclare model Paint = Paint,
     redeclare model HTC_int = HTC_int,
     redeclare model HTC_ext = HTC_ext,
+    initOpt=initOpt,
     coeff=1/8,
     L_fuselage=L_cargo,
     R_ext=R_ext,
     t_fuselage=t_cargo,
-    csi=2.3561944901923,
-    E_tb=E_tb_6,
-    E_td=E_td_6,
-    E_tr=E_tr_6,
-    theta=theta_6,
+    rho_g=rho_g,
+    csi=csi[1],
+    psi_plus=psi_plus,
+    E_tb=E_tb[1],
+    E_td=E_td[1],
+    E_tr=E_tr[1],
+    theta=theta[1],
     Tstart_fuselage=Tstart_fuselage)
     annotation (Placement(transformation(extent={{-80,-56},{-40,-96}})));
-  DynTherM.Systems.Aircraft.Subsystems.LowerFuselageHeatTransfer section_7(
+  Systems.Aircraft.Subsystems.LowerFuselageHeatTransfer section_7(
+    redeclare model Paint = Paint,
     redeclare model HTC_int = HTC_int,
     redeclare model HTC_ext = HTC_ext,
+    initOpt=initOpt,
     coeff=1/8,
     L_fuselage=L_cargo,
     R_ext=R_ext,
     t_fuselage=t_cargo,
-    csi=3.1415926535898,
-    E_tb=E_tb_7,
-    E_td=E_td_7,
-    E_tr=E_tr_7,
-    theta=theta_7,
+    rho_g=rho_g,
+    csi=csi[2],
+    psi_plus=psi_plus,
+    E_tb=E_tb[2],
+    E_td=E_td[2],
+    E_tr=E_tr[2],
+    theta=theta[2],
     Tstart_fuselage=Tstart_fuselage)
     annotation (Placement(transformation(extent={{-20,-56},{20,-96}})));
-  DynTherM.Systems.Aircraft.Subsystems.LowerFuselageHeatTransfer section_8(
+  Systems.Aircraft.Subsystems.LowerFuselageHeatTransfer section_8(
+    redeclare model Paint = Paint,
     redeclare model HTC_int = HTC_int,
     redeclare model HTC_ext = HTC_ext,
+    initOpt=initOpt,
     coeff=1/8,
     L_fuselage=L_cargo,
     R_ext=R_ext,
     t_fuselage=t_cargo,
-    csi=3.9269908169872,
-    E_tb=E_tb_8,
-    E_td=E_td_8,
-    E_tr=E_tr_8,
-    theta=theta_8,
+    rho_g=rho_g,
+    csi=csi[3],
+    psi_plus=psi_plus,
+    E_tb=E_tb[3],
+    E_td=E_td[3],
+    E_tr=E_tr[3],
+    theta=theta[3],
     Tstart_fuselage=Tstart_fuselage)
     annotation (Placement(transformation(extent={{40,-56},{80,-96}})));
   Modelica.Thermal.HeatTransfer.Sensors.TemperatureSensor temperatureSensor

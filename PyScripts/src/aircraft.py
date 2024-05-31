@@ -40,11 +40,11 @@ class Aircraft:
         :param case_idx: index identifying the case study under analysis
         """
         # define input keys
-        E_input = ["A320.E_tb_%s" % str(x) for x in range(1, self.n_fus_secs + 1)] + \
-                  ["A320.E_td_%s" % str(x) for x in range(1, self.n_fus_secs + 1)] + \
-                  ["A320.E_tr_%s" % str(x) for x in range(1, self.n_fus_secs + 1)]
-        theta_input = ["A320.theta_%s" % str(x) for x in range(1, self.n_fus_secs + 1)]
-        input_keys = ["m_ECS.k", "A320.rec_target", "T_target.k", "m_trim_cab.k", "m_trim_fd.k", "T_trim.k",
+        E_input = ["A320.E_tb[%s]" % str(x) for x in range(1, self.n_fus_secs + 1)] + \
+                  ["A320.E_td[%s]" % str(x) for x in range(1, self.n_fus_secs + 1)] + \
+                  ["A320.E_tr[%s]" % str(x) for x in range(1, self.n_fus_secs + 1)]
+        theta_input = ["A320.theta[%s]" % str(x) for x in range(1, self.n_fus_secs + 1)]
+        input_keys = ["m_ECS.k", "A320.rec_target", "T_target.k", "T_trim.k",
                       "environment.Mach_inf_di", "environment.altitude_di", "environment.ISA_plus",
                       "environment.phi_amb", "environment.phi_amb_ground", "environment.T_ground", "A320.N_pax",
                       "A320.N_crew", "A320.N_pilots", "A320.Q_el", "A320.Q_galley", "A320.Q_avionics",
@@ -52,8 +52,8 @@ class Aircraft:
                      ["A320.E_tb_front", "A320.E_td_front", "A320.E_tr_front", "A320.theta_front"]
 
         # define input values
-        input_values = [data['M_pack'][case_idx], data['Rec_ratio'][case_idx], data['T_target'][case_idx],
-                        data['M_trim_cab'][case_idx], data['M_trim_fd'][case_idx], data['T_trim'][case_idx],
+        input_values = [data['M_pack'][case_idx], data['Rec_ratio'][case_idx],
+                        data['T_target'][case_idx], data['T_trim'][case_idx],
                         data['Mach_inf'][case_idx], data['Height'][case_idx], data['Delta_ISA'][case_idx],
                         data['Phi_amb'][case_idx], data['Phi_ground'][case_idx], data['T_ground'][case_idx],
                         data['N_pax'][case_idx], data['N_crew'][case_idx], data['N_pilots'][case_idx],

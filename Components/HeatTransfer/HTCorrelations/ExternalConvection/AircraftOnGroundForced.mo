@@ -3,15 +3,15 @@ model AircraftOnGroundForced
   "Forced convection along the fuselage of an aircraft on ground"
   extends BaseClassExternal;
 
-  parameter Modelica.Units.SI.Length R_ext "Fuselage external radius";
-  parameter Modelica.Units.SI.Velocity V_wind=6.7 "Wind speed on ground";
+  parameter Length R_ext "Fuselage external radius";
+  parameter Velocity V_wind=6.7 "Wind speed on ground";
 
-  Modelica.Units.SI.PrandtlNumber Pr "Prandtl number";
-  Modelica.Units.SI.ReynoldsNumber Re "Reynolds number";
+  PrandtlNumber Pr "Prandtl number";
+  ReynoldsNumber Re "Reynolds number";
 
 protected
   Medium.ThermodynamicState state_f;
-  Modelica.Units.SI.Temperature Tf;
+  Temperature Tf;
 
 equation
   state_f = Medium.setState_pTX(environment.P_amb, Tf, environment.X_amb);

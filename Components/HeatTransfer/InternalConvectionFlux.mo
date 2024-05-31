@@ -3,12 +3,11 @@ model InternalConvectionFlux "Model of internal convection per unit area"
 
   replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
-  outer DynTherM.Components.Environment environment "Environmental properties";
 
   replaceable model HTC =
-    DynTherM.Components.HeatTransfer.HTCorrelations.InternalConvection.FixedValue
+    Components.HeatTransfer.HTCorrelations.InternalConvection.FixedValue
     constrainedby
-    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    Components.HeatTransfer.HTCorrelations.BaseClassInternal
     annotation (choicesAllMatching=true);
 
   HTC ht_correlation;

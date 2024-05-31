@@ -1,92 +1,79 @@
 within DynTherM.Systems.Aircraft.Subsystems;
 model PassengerCabin "Upper section of the fuselage: cabin section"
 
-  outer DynTherM.Components.Environment environment "Environmental properties";
+  outer Components.Environment environment "Environmental properties";
+
+  replaceable model Paint =
+    Materials.Paints.WhiteCoatings.CatalacWhitePaint
+    constrainedby Materials.Paints.BasePaint "Surface paint material" annotation (choicesAllMatching=true);
 
   replaceable model HTC_int =
-    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    Components.HeatTransfer.HTCorrelations.BaseClassInternal
     constrainedby
-    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    Components.HeatTransfer.HTCorrelations.BaseClassInternal
     "Internal convection correlation" annotation (choicesAllMatching=true);
 
   replaceable model HTC_ext =
-    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal
+    Components.HeatTransfer.HTCorrelations.BaseClassExternal
     constrainedby
-    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal
+    Components.HeatTransfer.HTCorrelations.BaseClassExternal
     "External convection correlation" annotation (choicesAllMatching=true);
 
   parameter Real N_occupants[3] "Number of: passengers, cabin crew, pilots inside the cabin";
-  parameter Modelica.Units.SI.HeatFlowRate Q_int "Internal heat load";
-  parameter Modelica.Units.SI.Length L_fuselage
+  parameter HeatFlowRate Q_int "Internal heat load";
+  parameter Length L_fuselage
     "Length of the fuselage cylindrical section";
-  parameter Modelica.Units.SI.Length R_ext "External radius of the fuselage";
-  parameter Modelica.Units.SI.Volume V_cabin "Passenger cabin internal volume";
-  parameter Modelica.Units.SI.SpecificHeatCapacity c_cabin
+  parameter Length R_ext "External radius of the fuselage";
+  parameter Volume V_cabin "Passenger cabin internal volume";
+  parameter SpecificHeatCapacity c_cabin
     "Specific heat capacity of cabin interior";
-  parameter Modelica.Units.SI.Mass m_cabin "Mass of cabin interior";
-  parameter Modelica.Units.SI.Area A_cabin
+  parameter Mass m_cabin "Mass of cabin interior";
+  parameter Area A_cabin
     "Heat transfer surface of cabin interior";
-  parameter Modelica.Units.SI.Area A_floor "Surface area of cabin floor";
-  parameter Modelica.Units.SI.Length L_window "Window length";
-  parameter Modelica.Units.SI.Length H_window "Window height";
+  parameter Area A_floor "Surface area of cabin floor";
+  parameter Length L_window "Window length";
+  parameter Length H_window "Window height";
   parameter Integer Nw_side "Number of windows per fuselage side";
-  parameter Modelica.Units.SI.Length t_cabin
+  parameter Length t_cabin
     "Overall fuselage thickness (cabin section)";
-  parameter Modelica.Units.SI.Irradiance E_tb_1
-    "Beam component of the clear-sky solar irradiance - section 1" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_td_1
-    "Diffuse component of the clear-sky solar irradiance - section 1" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tr_1
-    "Ground reflected component of the clear-sky solar irradiance - section 1" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Angle theta_1
-    "Incidence angle - section 1" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tb_2
-    "Beam component of the clear-sky solar irradiance - section 2" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_td_2
-    "Diffuse component of the clear-sky solar irradiance - section 2" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tr_2
-    "Ground reflected component of the clear-sky solar irradiance - section 2" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Angle theta_2
-    "Incidence angle - section 2" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tb_3
-    "Beam component of the clear-sky solar irradiance - section 3" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_td_3
-    "Diffuse component of the clear-sky solar irradiance - section 3" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tr_3
-    "Ground reflected component of the clear-sky solar irradiance - section 3" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Angle theta_3
-    "Incidence angle - section 3" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tb_4
-    "Beam component of the clear-sky solar irradiance - section 4" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_td_4
-    "Diffuse component of the clear-sky solar irradiance - section 4" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tr_4
-    "Ground reflected component of the clear-sky solar irradiance - section 4" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Angle theta_4
-    "Incidence angle - section 4" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tb_5
-    "Beam component of the clear-sky solar irradiance - section 5" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_td_5
-    "Diffuse component of the clear-sky solar irradiance - section 5" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tr_5
-    "Ground reflected component of the clear-sky solar irradiance - section 5" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Angle theta_5
-    "Incidence angle - section 5" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Temperature Tstart_fuselage
+
+  // Radiation
+  parameter Real rho_g=0.2 "Ground reflectance" annotation (Dialog(tab="Radiation"));
+  parameter Angle csi[5]={
+    Modelica.Units.Conversions.from_deg(270),
+    Modelica.Units.Conversions.from_deg(315),
+    Modelica.Units.Conversions.from_deg(0),
+    Modelica.Units.Conversions.from_deg(45),
+    Modelica.Units.Conversions.from_deg(90)}
+    "Tilt angle of the surface wrt horizontal - sections 1-5" annotation (Dialog(tab="Radiation"));
+  parameter Angle psi_plus=0 "Modifier of azimuth angle" annotation (Dialog(tab="Radiation"));
+  parameter Irradiance E_tb[5]
+    "Beam component of the clear-sky solar irradiance - sections 1-5" annotation (Dialog(tab="Radiation"));
+  parameter Irradiance E_td[5]
+    "Diffuse component of the clear-sky solar irradiance - sections 1-5" annotation (Dialog(tab="Radiation"));
+  parameter Irradiance E_tr[5]
+    "Ground reflected component of the clear-sky solar irradiance - sections 1-5" annotation (Dialog(tab="Radiation"));
+  parameter Angle theta[5] "Incidence angle - sections 1-5" annotation (Dialog(tab="Radiation"));
+
+  // Initialization
+  parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
+    "Initialization option" annotation (Dialog(tab="Initialization"));
+  parameter Temperature Tstart_fuselage
     "Fuselage temperature start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Temperature Tstart_cabin
+  parameter Temperature Tstart_cabin
     "Cabin temperature start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Pressure Pstart_cabin
+  parameter Pressure Pstart_cabin
     "Cabin pressure start value" annotation (Dialog(tab="Initialization"));
   parameter Boolean noInitialPressure=false "Remove initial equation on pressure" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
   parameter Boolean noInitialTemperature=false "Remove initial equation on temperature" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
 
-  final parameter Modelica.Units.SI.Length L_oct=section_1.R_ext*sqrt(2 - sqrt(
+  final parameter Length L_oct=section_1.R_ext*sqrt(2 - sqrt(
       2)) "Approximated length of one fuselage section (octagon)";
-  final parameter Modelica.Units.SI.Length W_fl=L_oct*(1 + sqrt(2))
+  final parameter Length W_fl=L_oct*(1 + sqrt(2))
     "Floor Width";
 
   Components.MassTransfer.Plenum cabin(
+    initOpt=initOpt,
     V=V_cabin,
     N_occupants=N_occupants,
     Q_int=Q_int,
@@ -111,61 +98,77 @@ model PassengerCabin "Upper section of the fuselage: cabin section"
         transformation(extent={{94,-72},{118,-48}}), iconTransformation(
           extent={{88,-42},{112,-18}})));
 
-  DynTherM.Systems.Aircraft.Subsystems.UpperFuselageHeatTransfer section_3(
+  Systems.Aircraft.Subsystems.UpperFuselageHeatTransfer section_3(
+    redeclare model Paint = Paint,
     redeclare model HTC_int = HTC_int,
     redeclare model HTC_ext = HTC_ext,
+    initOpt=initOpt,
     coeff=1/8,
     L_fuselage=L_fuselage,
     R_ext=R_ext,
     t_fuselage=t_cabin,
-    csi=0,
-    E_tb=E_tb_3,
-    E_td=E_td_3,
-    E_tr=E_tr_3,
-    theta=theta_3,
+    rho_g=rho_g,
+    csi=csi[3],
+    psi_plus=psi_plus,
+    E_tb=E_tb[3],
+    E_td=E_td[3],
+    E_tr=E_tr[3],
+    theta=theta[3],
     Tstart_fuselage=Tstart_fuselage)
     annotation (Placement(transformation(extent={{-20,62},{20,102}})));
 
-  DynTherM.Systems.Aircraft.Subsystems.UpperFuselageHeatTransfer section_2(
+  Systems.Aircraft.Subsystems.UpperFuselageHeatTransfer section_2(
+    redeclare model Paint = Paint,
     redeclare model HTC_int = HTC_int,
     redeclare model HTC_ext = HTC_ext,
+    initOpt=initOpt,
     coeff=1/8,
     L_fuselage=L_fuselage,
     R_ext=R_ext,
     t_fuselage=t_cabin,
-    csi=5.4977871437821,
-    E_tb=E_tb_2,
-    E_td=E_td_2,
-    E_tr=E_tr_2,
-    theta=theta_2,
+    rho_g=rho_g,
+    csi=csi[2],
+    psi_plus=psi_plus,
+    E_tb=E_tb[2],
+    E_td=E_td[2],
+    E_tr=E_tr[2],
+    theta=theta[2],
     Tstart_fuselage=Tstart_fuselage)
     annotation (Placement(transformation(extent={{80,62},{40,102}})));
-  DynTherM.Systems.Aircraft.Subsystems.UpperFuselageHeatTransfer section_4(
+  Systems.Aircraft.Subsystems.UpperFuselageHeatTransfer section_4(
+    redeclare model Paint = Paint,
     redeclare model HTC_int = HTC_int,
     redeclare model HTC_ext = HTC_ext,
+    initOpt=initOpt,
     coeff=1/8,
     L_fuselage=L_fuselage,
     R_ext=R_ext,
     t_fuselage=t_cabin,
-    csi=0.78539816339745,
-    E_tb=E_tb_4,
-    E_td=E_td_4,
-    E_tr=E_tr_4,
-    theta=theta_4,
+    rho_g=rho_g,
+    csi=csi[4],
+    psi_plus=psi_plus,
+    E_tb=E_tb[4],
+    E_td=E_td[4],
+    E_tr=E_tr[4],
+    theta=theta[4],
     Tstart_fuselage=Tstart_fuselage)
     annotation (Placement(transformation(extent={{-80,62},{-40,102}})));
-  DynTherM.Systems.Aircraft.Subsystems.FuselageHeatTransferWindow section_5(
+  Systems.Aircraft.Subsystems.FuselageHeatTransferWindow section_5(
+    redeclare model Paint = Paint,
     redeclare model HTC_int = HTC_int,
     redeclare model HTC_ext = HTC_ext,
+    initOpt=initOpt,
     coeff=1/8,
     L_fuselage=L_fuselage,
     R_ext=R_ext,
     t_fuselage=t_cabin,
-    csi=1.5707963267949,
-    E_tb=E_tb_5,
-    E_td=E_td_5,
-    E_tr=E_tr_5,
-    theta=theta_5,
+    rho_g=rho_g,
+    csi=csi[5],
+    psi_plus=psi_plus,
+    E_tb=E_tb[5],
+    E_td=E_td[5],
+    E_tr=E_tr[5],
+    theta=theta[5],
     L_window=L_window,
     H_window=H_window,
     Nw_side=Nw_side,
@@ -173,18 +176,22 @@ model PassengerCabin "Upper section of the fuselage: cabin section"
         extent={{20,-20},{-20,20}},
         rotation=90,
         origin={-82,14})));
-  DynTherM.Systems.Aircraft.Subsystems.FuselageHeatTransferWindow section_1(
+  Systems.Aircraft.Subsystems.FuselageHeatTransferWindow section_1(
+    redeclare model Paint = Paint,
     redeclare model HTC_int = HTC_int,
     redeclare model HTC_ext = HTC_ext,
+    initOpt=initOpt,
     coeff=1/8,
     L_fuselage=L_fuselage,
     R_ext=R_ext,
     t_fuselage=t_cabin,
-    csi=4.7123889803847,
-    E_tb=E_tb_1,
-    E_td=E_td_1,
-    E_tr=E_tr_1,
-    theta=theta_1,
+    rho_g=rho_g,
+    csi=csi[1],
+    psi_plus=psi_plus,
+    E_tb=E_tb[1],
+    E_td=E_td[1],
+    E_tr=E_tr[1],
+    theta=theta[1],
     L_window=L_window,
     H_window=H_window,
     Nw_side=Nw_side,
@@ -199,7 +206,7 @@ model PassengerCabin "Upper section of the fuselage: cabin section"
   Modelica.Thermal.HeatTransfer.Sensors.TemperatureSensor temperatureSensor
     annotation (Placement(transformation(extent={{66,-40},{86,-20}})));
   Components.HeatTransfer.HeatCapacity cabinInterior(
-    initOpt=environment.initOpt,                     T_start=Tstart_cabin,
+    initOpt=initOpt,                                 T_start=Tstart_cabin,
     C=m_cabin*c_cabin)
     annotation (Placement(transformation(extent={{-32,20},{-8,44}})));
   Components.HeatTransfer.InternalConvection internalConvection(

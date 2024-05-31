@@ -2,13 +2,14 @@ within DynTherM.Components.HeatTransfer.HTCorrelations.InternalConvection;
 model Forrest
   "Internal convection for rectangular mini-channels"
   extends BaseClassInternal;
+
   input Length Dh "Hydraulic diameter" annotation(Dialog(enable = true));
   input Real phi_star "Geometrical correction" annotation(Dialog(enable = true));
   input ReynoldsNumber Re "Reynolds number" annotation(Dialog(enable = true));
   input PrandtlNumber Pr "Prandtl number" annotation(Dialog(enable = true));
   input Medium.ThermodynamicState state "Average thermodynamic state" annotation(Dialog(enable = true));
 
-  NusseltNumber Nu "Nusselt number";
+  NusseltNumber Nu(start=10) "Nusselt number";
 
 equation
 

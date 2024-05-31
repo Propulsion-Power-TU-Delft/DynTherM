@@ -3,13 +3,13 @@ model AircraftOnGroundFree
   "Free convection along the fuselage of an aircraft on ground"
   extends BaseClassExternal;
 
-  parameter Modelica.Units.SI.Length R_ext "Fuselage radius";
-  Modelica.Units.SI.PrandtlNumber Pr "Prandtl number";
-  Modelica.Units.SI.GrashofNumberOfMassTransfer Gr "Grashof number";
+  parameter Length R_ext "Fuselage radius";
+  PrandtlNumber Pr "Prandtl number";
+  GrashofNumberOfMassTransfer Gr "Grashof number";
   Real beta "Expansion coefficient";
 
 protected
-  Modelica.Units.SI.Temperature Tf;
+  Temperature Tf;
   Medium.ThermodynamicState state_f;
 
 equation
@@ -18,7 +18,7 @@ equation
   beta = 1/Tf;
   Pr = Medium.specificHeatCapacityCp(state_f)*Medium.dynamicViscosity(state_f)/
     Medium.thermalConductivity(state_f);
-  Gr = environment.g*beta*abs(T_skin - environment.T_amb)*((2*R_ext)^3)/
+  Gr = g_n*beta*abs(T_skin - environment.T_amb)*((2*R_ext)^3)/
     ((Medium.dynamicViscosity(state_f)/Medium.density(state_f))^2);
   ht = (0.13*Medium.thermalConductivity(state_f)*(Gr*Pr)^(1/3))/(2*R_ext);
   T_out = environment.T_amb;

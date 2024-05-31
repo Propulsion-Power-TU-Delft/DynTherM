@@ -78,15 +78,8 @@ model A320FlyingCabin "Aircraft is flying, two temperature zones"
         L=A320.L_fuselage,
         R_ext=A320.R_fuselage,
         L_nose=A320.R_fuselage/2),
-    theta_1(displayUnit="rad"),
-    theta_2(displayUnit="rad"),
-    theta_3(displayUnit="rad"),
-    theta_4(displayUnit="rad"),
-    theta_5(displayUnit="rad"),
-    theta_6(displayUnit="rad"),
-    theta_7(displayUnit="rad"),
-    theta_8(displayUnit="rad"),
-    theta_front(displayUnit="rad"))
+    allowFlowReversal=environment.allowFlowReversal,
+    initOpt=environment.initOpt)
     annotation (Placement(transformation(extent={{-72,-48},{44,42}})));
   Modelica.Blocks.Sources.Constant T_trim(k=373.15) annotation (Placement(
         transformation(

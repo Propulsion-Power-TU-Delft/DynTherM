@@ -44,8 +44,6 @@ model ConductionConvectionRadiationSteady
         (ht_fixed=10))
     annotation (Placement(transformation(extent={{-20,-80},{20,-40}})));
   Components.HeatTransfer.WallRadiation wallRadiation(
-    redeclare model Material =
-        DynTherM.Materials.Paints.WhiteCoatings.CatalacWhitePaint,
     A=A_ext,
     csi=0)
     annotation (Placement(transformation(extent={{-60,62},{-20,22}})));

@@ -9,7 +9,6 @@
 # Python scripts
 PyScripts/input/config_validation.txt
 PyScripts/src/Heli*
-PyScripts/input/*
 
 # JetBrains IDE
 .idea/
@@ -46,4 +45,7 @@ Components/Battery/*
 Systems/Battery/*
 Tests/Battery/*
 Choices/BatteryChemistry
+
+# A320 validation
+Validation/A320/*
 

@@ -1,15 +1,18 @@
 within DynTherM.Components.HeatTransfer;
 model SphereConduction "Dynamic model of conduction in a hollow sphere"
 
-  replaceable model Mat=DynTherM.Materials.Aluminium constrainedby
-    DynTherM.Materials.Properties "Material choice" annotation (choicesAllMatching=true);
+  replaceable model Mat=Materials.Aluminium constrainedby
+    Materials.Properties "Material choice" annotation (choicesAllMatching=true);
 
     parameter Real coeff=1 "Fraction of sphere with active heat transfer";
     parameter Length R_ext "External radius";
     parameter Length R_int "Internal radius";
-    parameter Real AR "Aspect ratio";
+    parameter Real AR=1 "Aspect ratio - set AR<1 to model a dome";
+
+    // Initialization
     parameter Temperature Tstart=288.15 "Temperature start value" annotation (Dialog(tab="Initialization"));
-    parameter DynTherM.Choices.InitOpt initOpt "Initialization option" annotation (Dialog(tab="Initialization"));
+    parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
+      "Initialization option" annotation (Dialog(tab="Initialization"));
 
     final parameter Real coeff_A=coeff*AR*(R_int/R_eq_int)
       "Fraction of equivalent sphere area with active heat transfer";
@@ -20,7 +23,6 @@ model SphereConduction "Dynamic model of conduction in a hollow sphere"
     final parameter Mass m=2*coeff*Mat.rho*(pi*(AR*R_ext)^2*(R_eq_ext - 1/3*(AR*R_ext)) -
       pi*(AR*R_int)^2*(R_eq_int - 1/3*(AR*R_int))) "Mass";
     final parameter Modelica.Units.SI.HeatCapacity Cm=m*Mat.cm "Heat capacity";
-    constant Real pi=Modelica.Constants.pi;
 
     Temperature T_vol "Average temperature of the sphere";
 
@@ -37,9 +39,9 @@ equation
       (R_eq_ext - (R_eq_ext + R_eq_int)/2) "Heat conduction through the external half-thickness";
 
 initial equation
-    if initOpt == DynTherM.Choices.InitOpt.steadyState then
+    if initOpt == Choices.InitOpt.steadyState then
       der(T_vol) = 0;
-    elseif initOpt == DynTherM.Choices.InitOpt.fixedState then
+    elseif initOpt == Choices.InitOpt.fixedState then
       T_vol = Tstart;
     else
       // do nothing

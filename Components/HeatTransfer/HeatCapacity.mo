@@ -1,9 +1,7 @@
 within DynTherM.Components.HeatTransfer;
 model HeatCapacity "Dynamic model of heat capacity element"
-  outer DynTherM.Components.Environment environment
-    "Environmental properties";
 
-  parameter DynTherM.Choices.InitOpt initOpt=environment.initOpt
+  parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
     "Initialization option" annotation (Dialog(tab="Initialization"));
   parameter Boolean noInitialTemperature=false
     "Remove initial equation on temperature" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
@@ -23,13 +21,13 @@ equation
 
 initial equation
   // Initial conditions
-  if initOpt == DynTherM.Choices.InitOpt.noInit then
+  if initOpt == Choices.InitOpt.noInit then
     // do nothing
-  elseif initOpt == DynTherM.Choices.InitOpt.fixedState then
+  elseif initOpt == Choices.InitOpt.fixedState then
     if not noInitialTemperature then
       T = T_start;
     end if;
-  elseif initOpt == DynTherM.Choices.InitOpt.steadyState then
+  elseif initOpt == Choices.InitOpt.steadyState then
     if not noInitialTemperature then
       der(T) = 0;
     end if;

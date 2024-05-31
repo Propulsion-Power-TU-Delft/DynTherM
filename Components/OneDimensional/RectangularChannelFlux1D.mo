@@ -2,15 +2,20 @@ within DynTherM.Components.OneDimensional;
 model RectangularChannelFlux1D
   "Rectangular channel implementing 1D spatial discretization"
 
-  outer Components.Environment environment "Environmental properties";
   replaceable model Mat = Materials.Aluminium constrainedby
     Materials.Properties "Material choice" annotation (choicesAllMatching=true);
   replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
-  model CV = RectangularFluxCV
-                           "Control volume";
+
+  model CV = RectangularFluxCV "Control volume";
   model I = DynTherM.Components.MassTransfer.PlenumSimple
     "Inertia between two adjacent control volumes";
+
+  // Options
+  parameter Boolean allowFlowReversal=true
+    "= true to allow flow reversal, false restricts to design direction";
+  parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
+    "Initialization option" annotation (Dialog(tab="Initialization"));
 
   // Geometry
   parameter Length L "Channel length" annotation (Dialog(tab="Geometry"));
@@ -32,13 +37,15 @@ model RectangularChannelFlux1D
     Medium.setState_pTX(P_start, T_start_fluid, X_start)
     "Starting thermodynamic state" annotation (Dialog(tab="Initialization"));
   parameter MassFlowRate m_flow_start=1 "Mass flow rate - start value" annotation (Dialog(tab="Initialization"));
+  parameter MassFlowRate m_flow_mc_start=0.1 "Mass flow rate in one channel - start value" annotation (Dialog(tab="Initialization"));
   parameter Velocity u_start=20 "Flow velocity - start value" annotation (Dialog(tab="Initialization"));
   parameter Pressure dP_start=100 "Pressure drop - start value" annotation (Dialog(tab="Initialization"));
-  parameter Choices.InitOpt initOpt=environment.initOpt "Initialization option" annotation (Dialog(tab="Initialization"));
+  parameter ReynoldsNumber Re_start=20e3 "Reynolds number - start value" annotation (Dialog(tab="Initialization"));
+  parameter PrandtlNumber Pr_start=1.5 "Prandtl number - start value" annotation (Dialog(tab="Initialization"));
 
   // Discretization
   parameter Integer N_cv(min=1) "Number of longitudinal sections in which the tube is discretized";
-  parameter Integer N_channels(min=1) "Number of channels in parallel";
+  input Real N_channels(min=1) "Number of channels in parallel" annotation (Dialog(enable=true));
 
   CV cv[N_cv](
     redeclare model Mat = Mat,
@@ -56,10 +63,13 @@ model RectangularChannelFlux1D
     each P_start=P_start,
     each X_start=X_start,
     each state_start=state_start,
-    each m_flow_start=m_flow_start/N_channels,
+    each m_flow_start=m_flow_mc_start,
     each u_start=u_start,
     each dP_start=dP_start,
-    each initOpt=initOpt);
+    each Re_start=Re_start,
+    each Pr_start=Pr_start,
+    each initOpt=initOpt,
+    each allowFlowReversal=allowFlowReversal);
 
   I inertia[N_cv-1](
     redeclare package Medium = Medium,
@@ -68,10 +78,11 @@ model RectangularChannelFlux1D
     each T_start=T_start_fluid,
     each X_start=X_start,
     each state_start=state_start,
-    each m_flow_start=m_flow_start/N_channels,
+    each m_flow_start=m_flow_mc_start,
     each noInitialPressure=true,
     each noInitialTemperature=false,
-    each initOpt=initOpt);
+    each initOpt=initOpt,
+    each allowFlowReversal=allowFlowReversal);
 
   Mass m_tot "Total mass";
   Mass m_fluid "Mass of fluid";
@@ -81,7 +92,7 @@ model RectangularChannelFlux1D
 
   DynTherM.CustomInterfaces.FluidPort_A inlet(
     redeclare package Medium = Medium,
-    m_flow(min=if environment.allowFlowReversal then -Modelica.Constants.inf else 0, start=
+    m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0, start=
           m_flow_start),
     P(start=P_start),
     h_outflow(start=Medium.specificEnthalpy(state_start)),
@@ -90,7 +101,7 @@ model RectangularChannelFlux1D
             -90,10}})));
   DynTherM.CustomInterfaces.FluidPort_B outlet(
     redeclare package Medium = Medium,
-    m_flow(max=if environment.allowFlowReversal then +Modelica.Constants.inf else 0, start=
+    m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0, start=
           -m_flow_start),
     P(start=P_start),
     h_outflow(start=Medium.specificEnthalpy(state_start)),
@@ -114,6 +125,7 @@ model RectangularChannelFlux1D
                                                                      annotation (
       Placement(transformation(extent={{60,16},{90,76}}),    iconTransformation(
           extent={{60,16},{90,76}})));
+
 equation
   m_tot = sum(cv.m_tot);
   m_fluid = sum(cv.m_fluid);

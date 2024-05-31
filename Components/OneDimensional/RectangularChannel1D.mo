@@ -2,14 +2,20 @@ within DynTherM.Components.OneDimensional;
 model RectangularChannel1D
   "Rectangular channel implementing 1D spatial discretization"
 
-  outer Components.Environment environment "Environmental properties";
   replaceable model Mat = Materials.Aluminium constrainedby
     Materials.Properties "Material choice" annotation (choicesAllMatching=true);
   replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
+
   model CV = RectangularCV "Control volume";
   model I = DynTherM.Components.MassTransfer.PlenumSimple
     "Inertia between two adjacent control volumes";
+
+  // Options
+  parameter Boolean allowFlowReversal=true
+    "= true to allow flow reversal, false restricts to design direction";
+  parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
+    "Initialization option" annotation (Dialog(tab="Initialization"));
 
   // Geometry
   parameter Length L "Channel length" annotation (Dialog(tab="Geometry"));
@@ -32,8 +38,8 @@ model RectangularChannel1D
     "Starting thermodynamic state" annotation (Dialog(tab="Initialization"));
   parameter MassFlowRate m_flow_start=1 "Mass flow rate - start value" annotation (Dialog(tab="Initialization"));
   parameter Velocity u_start=20 "Flow velocity within one channel - start value" annotation (Dialog(tab="Initialization"));
+  parameter Density rho_start=1 "Density - start value" annotation (Dialog(tab="Initialization"));
   parameter Pressure dP_start=100 "Pressure drop - start value" annotation (Dialog(tab="Initialization"));
-  parameter Choices.InitOpt initOpt=environment.initOpt "Initialization option" annotation (Dialog(tab="Initialization"));
 
   // Discretization
   parameter Integer N_cv(min=1) "Number of longitudinal sections in which the tube is discretized";
@@ -56,8 +62,10 @@ model RectangularChannel1D
     each X_start=X_start,
     each state_start=state_start,
     each u_start=u_start,
+    each rho_start=rho_start,
     each dP_start=dP_start,
-    each initOpt=initOpt);
+    each initOpt=initOpt,
+    each allowFlowReversal=allowFlowReversal);
 
   I inertia[N_cv-1](
     redeclare package Medium = Medium,
@@ -68,7 +76,8 @@ model RectangularChannel1D
     each state_start=state_start,
     each noInitialPressure=true,
     each noInitialTemperature=false,
-    each initOpt=initOpt);
+    each initOpt=initOpt,
+    each allowFlowReversal=allowFlowReversal);
 
   Mass m_tot "Total mass";
   Mass m_fluid "Mass of fluid";
@@ -78,7 +87,7 @@ model RectangularChannel1D
 
   DynTherM.CustomInterfaces.FluidPort_A inlet(
     redeclare package Medium = Medium,
-    m_flow(min=if environment.allowFlowReversal then -Modelica.Constants.inf else 0,
+    m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0,
       start=m_flow_start),
     P(start=P_start),
     h_outflow(start=Medium.specificEnthalpy(state_start)),
@@ -87,7 +96,7 @@ model RectangularChannel1D
             -90,10}})));
   DynTherM.CustomInterfaces.FluidPort_B outlet(
     redeclare package Medium = Medium,
-    m_flow(max=if environment.allowFlowReversal then +Modelica.Constants.inf else 0,
+    m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0,
       start=-m_flow_start),
     P(start=P_start),
     h_outflow(start=Medium.specificEnthalpy(state_start)),

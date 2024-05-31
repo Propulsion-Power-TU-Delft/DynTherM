@@ -1,55 +1,63 @@
 within DynTherM.Systems.Aircraft.Subsystems;
 model FuselageHeatTransferWindow
   "Model of heat transfer from external environment to inner section of upper fuselage (with transparencies)"
-  outer DynTherM.Components.Environment environment "Environmental properties";
+  outer Components.Environment environment "Environmental properties";
+
+  replaceable model Paint =
+    Materials.Paints.WhiteCoatings.CatalacWhitePaint
+    constrainedby Materials.Paints.BasePaint "Surface paint material" annotation (choicesAllMatching=true);
 
   replaceable model HTC_int =
-    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    Components.HeatTransfer.HTCorrelations.BaseClassInternal
     constrainedby
-    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    Components.HeatTransfer.HTCorrelations.BaseClassInternal
     "Internal convection correlation" annotation (choicesAllMatching=true);
 
   replaceable model HTC_ext =
-    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal
+    Components.HeatTransfer.HTCorrelations.BaseClassExternal
     constrainedby
-    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal
+    Components.HeatTransfer.HTCorrelations.BaseClassExternal
     "External convection correlation" annotation (choicesAllMatching=true);
 
-  parameter Real coeff "Fraction of cylinder with active heat transfer";
-  parameter Modelica.Units.SI.Length L_fuselage
-    "Length of the fuselage cylindrical section";
-  parameter Modelica.Units.SI.Length R_ext "External radius of the fuselage";
-  parameter Modelica.Units.SI.Length t_fuselage
-    "Overall fuselage thickness (half for lower section)";
-  parameter Modelica.Units.SI.Angle csi
-    "Tilt angle of the surface wrt horizontal";
-  parameter Modelica.Units.SI.Irradiance E_tb "Beam component of the clear-sky solar irradiance";
-  parameter Modelica.Units.SI.Irradiance E_td "Diffuse component of the clear-sky solar irradiance";
-  parameter Modelica.Units.SI.Irradiance E_tr "Ground reflected component of the clear-sky solar irradiance";
-  parameter Modelica.Units.SI.Angle theta "Incidence angle";
-  parameter Modelica.Units.SI.Length L_window "Window length";
-  parameter Modelica.Units.SI.Length H_window "Window height";
+  // Initialization
+  parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
+    "Initialization option" annotation (Dialog(tab="Initialization"));
+  parameter Temperature Tstart_fuselage "Fuselage temperature start value" annotation (Dialog(tab="Initialization"));
 
-  parameter Integer Nw_side=0 "Number of windows per fuselage side";
-  parameter Modelica.Units.SI.Temperature Tstart_fuselage
-    "Fuselage temperature start value" annotation (Dialog(tab="Initialization"));
-
-  final parameter Modelica.Units.SI.Length R_int=composite.interiorPanel_int.R_int
+  // Geometry
+  parameter Real coeff "Fraction of cylinder with active heat transfer" annotation (Dialog(tab="Geometry"));
+  parameter Length L_fuselage "Length of the fuselage cylindrical section" annotation (Dialog(tab="Geometry"));
+  parameter Length R_ext "External radius of the fuselage" annotation (Dialog(tab="Geometry"));
+  parameter Length t_fuselage "Overall fuselage thickness (half for lower section)" annotation (Dialog(tab="Geometry"));
+  parameter Length L_window "Window length" annotation (Dialog(tab="Geometry"));
+  parameter Length H_window "Window height" annotation (Dialog(tab="Geometry"));
+  parameter Integer Nw_side=0 "Number of windows per fuselage side" annotation (Dialog(tab="Geometry"));
+  final parameter Length R_int=composite.interiorPanel_int.R_int
     "Internal radius of the fuselage";
-  final parameter Modelica.Units.SI.Area A_tot_window=L_window*H_window*Nw_side
+  final parameter Area A_tot_window=L_window*H_window*Nw_side
     "Total window area";
-  final parameter Modelica.Units.SI.Area A_int=coeff*2*environment.pi*
+  final parameter Area A_int=coeff*2*pi*
     L_fuselage*R_int - A_tot_window "Internal fuselage area (minus windows)";
-  final parameter Modelica.Units.SI.Area A_ext=coeff*2*environment.pi*
+  final parameter Area A_ext=coeff*2*pi*
     L_fuselage*R_ext - A_tot_window "External fuselage area (minus windows)";
 
-  input Modelica.Units.SI.Pressure P_air_gap "Average pressure inside the air cavity";
-  input Modelica.Units.SI.MassFraction X_air_gap[2] "Composition of the air cavity";
+  // Radiation
+  parameter Real rho_g=0.2 "Ground reflectance" annotation (Dialog(tab="Radiation"));
+  parameter Angle csi "Tilt angle of the surface wrt horizontal" annotation (Dialog(tab="Radiation"));
+  parameter Angle psi_plus=0 "Modifier of azimuth angle for this specific section" annotation (Dialog(tab="Radiation"));
+  parameter Irradiance E_tb "Beam component of the clear-sky solar irradiance" annotation (Dialog(tab="Radiation"));
+  parameter Irradiance E_td "Diffuse component of the clear-sky solar irradiance" annotation (Dialog(tab="Radiation"));
+  parameter Irradiance E_tr "Ground reflected component of the clear-sky solar irradiance" annotation (Dialog(tab="Radiation"));
+  parameter Angle theta "Incidence angle" annotation (Dialog(tab="Radiation"));
+
+  input Pressure P_air_gap "Average pressure inside the air cavity";
+  input MassFraction X_air_gap[2] "Composition of the air cavity";
 
   Components.HeatTransfer.ExternalConvection extConvection(A=A_ext,
     redeclare model HTC = HTC_ext)
     annotation (Placement(transformation(extent={{46,56},{74,28}})));
   Components.HeatTransfer.WallRadiation wallRadiation(
+    redeclare model Paint = Paint,
     A=A_ext,
     csi=csi)
     annotation (Placement(transformation(extent={{6,56},{34,28}})));
@@ -58,7 +66,9 @@ model FuselageHeatTransferWindow
     E_td_fixed=E_td,
     E_tr_fixed=E_tr,
     theta_fixed=theta,
-    csi=csi)
+    rho_g=rho_g,
+    csi=csi,
+    psi_plus=psi_plus)
     annotation (Placement(transformation(extent={{-40,92},{0,52}})));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a heatAbsorbed annotation (
       Placement(transformation(extent={{-10,-110},{10,-90}}),
@@ -68,6 +78,7 @@ model FuselageHeatTransferWindow
     annotation (Placement(transformation(extent={{4,-24},{36,-56}})));
 
   FuselageSandwichStructure composite(
+    initOpt=initOpt,
     coeff=coeff,
     L_fuselage=L_fuselage,
     R_ext=R_ext,
@@ -84,6 +95,7 @@ model FuselageHeatTransferWindow
       redeclare model HTC = HTC_int)
     annotation (Placement(transformation(extent={{-36,-24},{-4,-56}})));
   CabinWindow cabinWindow(
+    initOpt=initOpt,
     H_window=H_window,
     L_window=L_window*Nw_side,
     Tstart=Tstart_fuselage)

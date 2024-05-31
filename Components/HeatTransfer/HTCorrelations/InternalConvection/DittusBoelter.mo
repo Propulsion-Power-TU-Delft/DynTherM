@@ -1,6 +1,7 @@
 within DynTherM.Components.HeatTransfer.HTCorrelations.InternalConvection;
 model DittusBoelter "Internal convection for circular pipes"
   extends BaseClassInternal;
+
   input Length Dh "Hydraulic diameter" annotation(Dialog(enable = true));
   input Temperature T_in "Inlet fluid temperature" annotation(Dialog(enable = true));
   input Temperature T_out "Outlet fluid temperature" annotation(Dialog(enable = true));

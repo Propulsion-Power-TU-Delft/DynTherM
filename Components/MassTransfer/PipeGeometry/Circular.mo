@@ -1,7 +1,7 @@
 within DynTherM.Components.MassTransfer.PipeGeometry;
 model Circular "Circular cross-section"
   extends BaseClass;
-  parameter Modelica.Units.SI.Length D "Pipe diameter";
+  parameter Length D "Pipe diameter";
 
 equation
   Dh = 4*A_cs/P_cs;

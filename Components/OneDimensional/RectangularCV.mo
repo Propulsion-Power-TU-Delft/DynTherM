@@ -2,11 +2,16 @@ within DynTherM.Components.OneDimensional;
 model RectangularCV
   "Control volume modeling a portion of a rectangular channel"
 
-  outer Components.Environment environment "Environmental properties";
   replaceable model Mat = Materials.Aluminium constrainedby
     Materials.Properties "Material choice" annotation (choicesAllMatching=true);
   replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
+
+  // Options
+  parameter Boolean allowFlowReversal=true
+    "= true to allow flow reversal, false restricts to design direction";
+  parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
+    "Initialization option" annotation (Dialog(tab="Initialization"));
 
   // Geometry
   input Real N=1 "Number of control volumes in parallel" annotation (Dialog(enable=true));
@@ -32,9 +37,8 @@ model RectangularCV
     "Starting thermodynamic state" annotation (Dialog(tab="Initialization"));
   parameter MassFlowRate m_flow_start=1 "Mass flow rate - start value" annotation (Dialog(tab="Initialization"));
   parameter Velocity u_start=20 "Flow velocity - start value" annotation (Dialog(tab="Initialization"));
+  parameter Density rho_start=1 "Density - start value" annotation (Dialog(tab="Initialization"));
   parameter Pressure dP_start=100 "Pressure drop - start value" annotation (Dialog(tab="Initialization"));
-  parameter Choices.InitOpt initOpt=environment.initOpt
-    "Initialization option" annotation (Dialog(tab="Initialization"));
 
   Volume V_tot "Total volume";
   Volume V_fluid "Volume of fluid";
@@ -46,7 +50,7 @@ model RectangularCV
 
   DynTherM.CustomInterfaces.FluidPort_A inlet(
     redeclare package Medium = Medium,
-    m_flow(min=if environment.allowFlowReversal then -Modelica.Constants.inf else 0, start=
+    m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0, start=
           m_flow_start),
     P(start=P_start),
     h_outflow(start=Medium.specificEnthalpy(state_start)),
@@ -55,7 +59,7 @@ model RectangularCV
             10}})));
   DynTherM.CustomInterfaces.FluidPort_B outlet(
     redeclare package Medium = Medium,
-    m_flow(max=if environment.allowFlowReversal then +Modelica.Constants.inf else 0, start=
+    m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0, start=
           -m_flow_start),
     P(start=P_start),
     h_outflow(start=Medium.specificEnthalpy(state_start)),
@@ -64,13 +68,14 @@ model RectangularCV
             10}})));
   MassTransfer.RectangularPipe fluid(
     redeclare package Medium = Medium,
+    allowFlowReversal=allowFlowReversal,
     DP_opt=DynTherM.Choices.PDropOpt.correlation,
     m_flow_start=m_flow_start,
     P_start=P_start,
     T_start=T_start_fluid,
     X_start=X_start,
     u_start=u_start,
-    rho_start(displayUnit="kg/m3"),
+    rho_start(displayUnit="kg/m3") = rho_start,
     dP_start=dP_start,
     state_start=state_start,
     N=N,
@@ -96,7 +101,7 @@ model RectangularCV
     t=t_north,
     A=W*L,
     Tstart=T_start_solid,
-    initOpt=environment.initOpt)
+    initOpt=initOpt)
     annotation (Placement(transformation(extent={{-100,66},{-60,36}})));
   HeatTransfer.WallConduction solid_east(
     redeclare model Mat = Mat,
@@ -104,7 +109,7 @@ model RectangularCV
     t=t_east,
     A=(H + 2*t_east)*L,
     Tstart=T_start_solid,
-    initOpt=environment.initOpt)
+    initOpt=initOpt)
     annotation (Placement(transformation(extent={{-50,66},{-10,36}})));
   HeatTransfer.WallConduction solid_south(
     redeclare model Mat = Mat,
@@ -112,7 +117,7 @@ model RectangularCV
     t=t_south,
     A=W*L,
     Tstart=T_start_solid,
-    initOpt=environment.initOpt)
+    initOpt=initOpt)
     annotation (Placement(transformation(extent={{10,66},{50,36}})));
   HeatTransfer.WallConduction solid_west(
     redeclare model Mat = Mat,
@@ -120,7 +125,7 @@ model RectangularCV
     t=t_west,
     A=(H + 2*t_west)*L,
     Tstart=T_start_solid,
-    initOpt=environment.initOpt)
+    initOpt=initOpt)
     annotation (Placement(transformation(extent={{60,66},{100,36}})));
 
 equation

@@ -2,18 +2,19 @@ within DynTherM.Systems.Aircraft.Subsystems;
 model CabinWindow
   "Model of cabin window, featuring double glazing and air cavity"
 
-  outer DynTherM.Components.Environment environment "Environmental properties";
+  parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
+    "Initialization option" annotation (Dialog(tab="Initialization"));
 
-  parameter Modelica.Units.SI.Length t_outer=0.01 "Thickness of the external layer";
-  parameter Modelica.Units.SI.Length t_inner=0.005 "Thickness of the internal layer";
-  parameter Modelica.Units.SI.Length t_air_gap=0.007 "Thickness of the air gap between the external and the internal layers";
-  parameter Modelica.Units.SI.Length H_window "Height of the window";
-  parameter Modelica.Units.SI.Length L_window "Length of the window";
-  parameter Modelica.Units.SI.Temperature Tstart "Tmperature of the window - starting value" annotation (Dialog(tab="Initialization"));
-  final parameter Modelica.Units.SI.Area A_window=L_window*H_window "Surface area of the window";
+  parameter Length t_outer=0.01 "Thickness of the external layer";
+  parameter Length t_inner=0.005 "Thickness of the internal layer";
+  parameter Length t_air_gap=0.007 "Thickness of the air gap between the external and the internal layers";
+  parameter Length H_window "Height of the window";
+  parameter Length L_window "Length of the window";
+  parameter Temperature Tstart "Tmperature of the window - starting value" annotation (Dialog(tab="Initialization"));
+  final parameter Area A_window=L_window*H_window "Surface area of the window";
 
-  input Modelica.Units.SI.Pressure P_air "Average pressure inside the cabin window air cavity";
-  input Modelica.Units.SI.MassFraction X_air[2] "Composition of the cabin window air cavity";
+  input Pressure P_air "Average pressure inside the cabin window air cavity";
+  input MassFraction X_air[2] "Composition of the cabin window air cavity";
 
   Components.HeatTransfer.WindowRadiation outerLayerRadiation(
     redeclare model Mat = Materials.Opticor, A=A_window)
@@ -23,20 +24,19 @@ model CabinWindow
       t=t_outer,
       A=A_window,
       Tstart=Tstart,
-      initOpt=environment.initOpt)
+      initOpt=initOpt)
       annotation (Placement(transformation(extent={{16,-16},{64,24}})));
   Components.HeatTransfer.WallConduction innerLayerConduction(
     redeclare model Mat = Materials.Opticor,
       t=t_inner,
       A=A_window,
       Tstart=Tstart,
-      initOpt=environment.initOpt)
+      initOpt=initOpt)
       annotation (Placement(transformation(extent={{16,-80},{64,-40}})));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a heatAbsorbed annotation (
       Placement(transformation(extent={{30,-102},{50,-82}}), iconTransformation(
           extent={{10,-40},{30,-20}})));
   Components.HeatTransfer.EnclosedAirSpace enclosedAirSpace(
-    initOpt=environment.initOpt,
     w=t_air_gap,
     h=H_window,
     l=L_window,
@@ -57,6 +57,7 @@ model CabinWindow
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a heatTransmitted
     annotation (Placement(transformation(extent={{-60,-102},{-40,-82}}),
         iconTransformation(extent={{-30,-40},{-10,-20}})));
+
 equation
   enclosedAirSpace.P = P_air;
   enclosedAirSpace.X = X_air;

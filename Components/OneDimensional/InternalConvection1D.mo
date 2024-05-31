@@ -2,7 +2,6 @@ within DynTherM.Components.OneDimensional;
 model InternalConvection1D
   "Internal convection model implementing 1D spatial discretization"
 
-  outer Components.Environment environment "Environmental properties";
   replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
   model CV = DynTherM.Components.HeatTransfer.InternalConvectionFlux "Control volume";

@@ -1,11 +1,10 @@
 within DynTherM.Components.OneDimensional;
 model HeatCapacity1D
   "Heat capacity model implementing 1D spatial discretization"
-  outer DynTherM.Components.Environment environment
-    "Environmental properties";
 
-  parameter DynTherM.Choices.InitOpt initOpt=environment.initOpt
+  parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
     "Initialization option" annotation (Dialog(tab="Initialization"));
+
   parameter Boolean noInitialTemperature=false
     "Remove initial equation on temperature" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
   parameter Temperature T_start=288.15 "Temperature start value" annotation (Dialog(tab="Initialization"));

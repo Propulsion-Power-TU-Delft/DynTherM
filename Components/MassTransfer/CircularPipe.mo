@@ -1,16 +1,19 @@
 within DynTherM.Components.MassTransfer;
 model CircularPipe "Model of pipe with circular cross-section"
 
-  outer DynTherM.Components.Environment environment "Environmental properties";
   replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
 
-  // Options and initialization
-  parameter Boolean allowFlowReversal=environment.allowFlowReversal
+  // Options
+  parameter Boolean allowFlowReversal=true
     "= true to allow flow reversal, false restricts to design direction";
-  parameter DynTherM.Choices.PDropOpt DP_opt
+  parameter Choices.PDropOpt DP_opt
     "Select the type of pressure drop to impose";
-  parameter DynTherM.CustomUnits.HydraulicResistance Rh=1 "Hydraulic Resistance" annotation (Dialog(enable=DP_opt == Choices.PDropOpt.linear));
+
+  parameter CustomUnits.HydraulicResistance Rh=1 "Hydraulic Resistance" annotation (Dialog(enable=DP_opt == Choices.PDropOpt.linear));
+  parameter Pressure dP_fixed=0 "Fixed pressure drop" annotation (Dialog(enable=DP_opt == Choices.PDropOpt.fixed));
+
+  // Initialization
   parameter MassFlowRate m_flow_start=1 "Mass flow rate - start value" annotation (Dialog(tab="Initialization"));
   parameter Pressure P_start=101325 "Pressure - start value" annotation (Dialog(tab="Initialization"));
   parameter Temperature T_start=300 "Temperature - start value" annotation (Dialog(tab="Initialization"));
@@ -20,7 +23,6 @@ model CircularPipe "Model of pipe with circular cross-section"
   parameter Density rho_start=1 "Density - start value" annotation (Dialog(tab="Initialization"));
   parameter Pressure dP_start=100 "Pressure drop - start value" annotation (Dialog(tab="Initialization",
         enable=option <> Choices.PDropOpt.fixed));
-  parameter Pressure dP_fixed=0 "Fixed pressure drop" annotation (Dialog(enable=DP_opt == Choices.PDropOpt.fixed));
   parameter Medium.ThermodynamicState state_start = Medium.setState_pTX(P_start, T_start, X_start)
     "Starting thermodynamic state" annotation (Dialog(tab="Initialization"));
   parameter ReynoldsNumber Re_start=20e3 "Reynolds number - start value" annotation (Dialog(tab="Initialization"));
@@ -33,12 +35,12 @@ model CircularPipe "Model of pipe with circular cross-section"
   parameter Length Roughness=0.015*10^(-3) "Roughness" annotation (Dialog(tab="Geometry"));
 
   model GEO =
-    DynTherM.Components.MassTransfer.PipeGeometry.Circular (L=L, D=D) annotation (choicesAllMatching=true);
+    Components.MassTransfer.PipeGeometry.Circular (L=L, D=D) annotation (choicesAllMatching=true);
 
   // Heat transfer
   model HTC =
-    DynTherM.Components.HeatTransfer.HTCorrelations.InternalConvection.DittusBoelter
-      (redeclare package Medium=Medium,
+    Components.HeatTransfer.HTCorrelations.InternalConvection.DittusBoelter (
+       redeclare package Medium=Medium,
       Dh=geometry.Dh,
       T_in=Medium.temperature(state_inlet),
       T_out=Medium.temperature(state_outlet),
@@ -48,7 +50,7 @@ model CircularPipe "Model of pipe with circular cross-section"
 
   // Pressure drop
   model DPC =
-    DynTherM.Components.MassTransfer.DPCorrelations.DarcyWeisbach (
+    Components.MassTransfer.DPCorrelations.DarcyWeisbach (
       redeclare package Medium=Medium,
       Dh=geometry.Dh,
       Re=Re,
@@ -58,7 +60,7 @@ model CircularPipe "Model of pipe with circular cross-section"
   DPC friction;
   GEO geometry;
 
-  DynTherM.CustomUnits.MassFlux G "Mass flux";
+  CustomUnits.MassFlux G "Mass flux";
   ReynoldsNumber Re(start=Re_start) "Reynolds number";
   PrandtlNumber Pr(start=Pr_start) "Prandtl number";
   Velocity u(start=u_start) "Flow velocity in the pipe";
@@ -68,7 +70,7 @@ model CircularPipe "Model of pipe with circular cross-section"
   Medium.ThermodynamicState state_inlet "Inlet state";
   Medium.ThermodynamicState state_outlet "Outlet state";
 
-  DynTherM.CustomInterfaces.FluidPort_A inlet(
+  CustomInterfaces.FluidPort_A inlet(
     redeclare package Medium = Medium,
     m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0, start=
           m_flow_start),
@@ -77,7 +79,7 @@ model CircularPipe "Model of pipe with circular cross-section"
     Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{-120,
             -20},{-80,20}}, rotation=0), iconTransformation(extent={{-110,-10},
             {-90,10}})));
-  DynTherM.CustomInterfaces.FluidPort_B outlet(
+  CustomInterfaces.FluidPort_B outlet(
     redeclare package Medium = Medium,
     m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0, start=
           -m_flow_start),

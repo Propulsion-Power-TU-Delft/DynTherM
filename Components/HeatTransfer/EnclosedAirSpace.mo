@@ -3,28 +3,25 @@ model EnclosedAirSpace "Dynamic model for non-ventilated closed air cavities in 
 
   replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
-  outer DynTherM.Components.Environment environment "Environmental properties";
-  parameter DynTherM.Choices.InitOpt initOpt=environment.initOpt
-    "Initialization option" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Length w "Width of the air cavity";
-  parameter Modelica.Units.SI.Length h "Height of the air cavity";
-  parameter Modelica.Units.SI.Length l "Length of the air cavity";
-  parameter Modelica.Units.SI.Angle delta "Inclination angle of the air cavity";
-  parameter Modelica.Units.SI.CoefficientOfHeatTransfer ht_start=1
+
+  parameter Length w "Width of the air cavity";
+  parameter Length h "Height of the air cavity";
+  parameter Length l "Length of the air cavity";
+  parameter Angle delta "Inclination angle of the air cavity";
+  parameter CoefficientOfHeatTransfer ht_start=1
     "Heat transfer coefficient - starting value" annotation (Dialog(tab="Initialization"));
 
-  input Modelica.Units.SI.Pressure P "Average pressure inside the air cavity";
-  input Modelica.Units.SI.MassFraction X[2] "Mass fraction of the air cavity";
+  input Pressure P "Average pressure inside the air cavity";
+  input MassFraction X[2] "Mass fraction of the air cavity";
 
-  Modelica.Units.SI.Area A "Surface of the air cavity";
-  Modelica.Units.SI.Temperature T "Average temperature inside the air cavity";
-  Modelica.Units.SI.NusseltNumber Nu "Nusselt number";
-  Modelica.Units.SI.NusseltNumber Nu_90 "Nusselt number for cavity inclined at 90 degrees";
-  Modelica.Units.SI.NusseltNumber Nu_60 "Nusselt number for cavity inclined at 60 degrees";
-  Modelica.Units.SI.RayleighNumber Ra "Rayleigh number";
+  Area A "Surface of the air cavity";
+  Temperature T "Average temperature inside the air cavity";
+  NusseltNumber Nu "Nusselt number";
+  NusseltNumber Nu_90 "Nusselt number for cavity inclined at 90 degrees";
+  NusseltNumber Nu_60 "Nusselt number for cavity inclined at 60 degrees";
+  RayleighNumber Ra "Rayleigh number";
   Medium.ThermodynamicState state "Average thermodynamic state";
-  Modelica.Units.SI.CoefficientOfHeatTransfer ht(start=ht_start)
-    "Heat transfer coefficient";
+  CoefficientOfHeatTransfer ht(start=ht_start) "Heat transfer coefficient";
 
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a inlet annotation (
       Placement(transformation(extent={{-14,20},{14,48}}), iconTransformation(
@@ -34,8 +31,8 @@ model EnclosedAirSpace "Dynamic model for non-ventilated closed air cavities in 
           extent={{-14,-48},{14,-20}})));
 protected
   Real G;
-  Modelica.Units.SI.NusseltNumber Nu_1;
-  Modelica.Units.SI.NusseltNumber Nu_2;
+  NusseltNumber Nu_1;
+  NusseltNumber Nu_2;
 
 equation
   // Thermodynamic state of the air inside the cavity
@@ -48,7 +45,7 @@ equation
 
   // Compute the heat transfer coefficient
   Nu = ht*w/Medium.thermalConductivity(state);
-  Ra = Medium.density(state)^2*w^3*environment.g*Medium.specificHeatCapacityCp(
+  Ra = Medium.density(state)^2*w^3*g_n*Medium.specificHeatCapacityCp(
     state)*abs(inlet.T - outlet.T)/(Medium.dynamicViscosity(state)*
     Medium.thermalConductivity(state)*T);
 

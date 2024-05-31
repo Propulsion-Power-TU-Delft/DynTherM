@@ -27,7 +27,7 @@ package Adaptors "Models used to couple two connectors of different type"
   model heatFluxToHeatFlow
     "Model used to convert from heat flux port to heat port"
 
-    parameter Modelica.Units.SI.Area A "Heat transfer surface";
+    input Area A "Heat transfer surface";
 
     Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a inlet
       annotation (Placement(transformation(extent={{-14,46},{14,74}}),

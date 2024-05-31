@@ -4,55 +4,59 @@ model Plenum
 
   replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
-  outer DynTherM.Components.Environment environment "Environmental properties";
+  outer Components.Environment environment "Environmental properties";
 
-  parameter Boolean allowFlowReversal=environment.allowFlowReversal
+  // Options
+  parameter Boolean allowFlowReversal=true
     "= true to allow flow reversal, false restricts to design direction";
-  parameter DynTherM.Choices.InitOpt initOpt=environment.initOpt
+  parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
     "Initialization option" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Volume V "Inner volume";
+
+  parameter Volume V "Inner volume";
   parameter Real N_occupants[3]={0,0,0}
     "Number of: passengers, cabin crew, pilots inside the plenum";
-  parameter Modelica.Units.SI.HeatFlowRate Q_int=0 "Internal heat load";
-  parameter Modelica.Units.SI.HeatFlowRate Q_sens_fixed[3]={0,0,0}
+  parameter HeatFlowRate Q_int=0 "Internal heat load";
+  parameter HeatFlowRate Q_sens_fixed[3]={0,0,0}
     "Fixed value of sensible heat from the occupants" annotation (Dialog(enable=fixed_Q));
-  parameter Modelica.Units.SI.HeatFlowRate Q_lat_fixed[3]={0,0,0}
+  parameter HeatFlowRate Q_lat_fixed[3]={0,0,0}
     "Fixed value of latent heat from the occupants" annotation (Dialog(enable=fixed_Q));
-  parameter Modelica.Units.SI.MassFlowRate m_H2O_fixed[3]={0,0,0}
+  parameter MassFlowRate m_H2O_fixed[3]={0,0,0}
     "Fixed value of water vapor emitted by the occupants" annotation (Dialog(enable=fixed_Q));
-  parameter Modelica.Units.SI.MassFlowRate m_flow_start=1
+
+  // Initialization
+  parameter MassFlowRate m_flow_start=1
     "Mass flow rate - start value" annotation (Dialog(tab="Initialization"));
-  parameter Medium.AbsolutePressure P_start=101325 "Pressure start value" annotation (Dialog(tab="Initialization"));
-  parameter Medium.Temperature T_start=300 "Temperature start value" annotation (Dialog(tab="Initialization"));
-  parameter Medium.MassFraction X_start[Medium.nX]=Medium.reference_X "Start gas composition" annotation (Dialog(tab="Initialization"));
+  parameter Pressure P_start=101325 "Pressure start value" annotation (Dialog(tab="Initialization"));
+  parameter Temperature T_start=300 "Temperature start value" annotation (Dialog(tab="Initialization"));
+  parameter MassFraction X_start[Medium.nX]=Medium.reference_X "Start gas composition" annotation (Dialog(tab="Initialization"));
   parameter Medium.ThermodynamicState state_start = Medium.setState_pTX(P_start, T_start, X_start)
     "Starting thermodynamic state" annotation (Dialog(tab="Initialization"));
   parameter Boolean noInitialPressure=false "Remove initial equation on pressure" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
   parameter Boolean noInitialTemperature=false "Remove initial equation on temperature" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
   parameter Boolean fixed_Q=false "= true to fix the value of sensible and latent heat from the occupants";
 
-  Modelica.Units.SI.Mass M "Total mass";
-  Modelica.Units.SI.InternalEnergy E "Total internal energy";
-  Medium.AbsolutePressure P(start=P_start) "Pressure";
-  Medium.Temperature T(start=T_start) "Temperature";
-  Medium.MassFraction X[Medium.nX](start=X_start) "Mass fractions";
+  Mass M "Total mass";
+  InternalEnergy E "Total internal energy";
+  Pressure P(start=P_start) "Pressure";
+  Temperature T(start=T_start) "Temperature";
+  MassFraction X[Medium.nX](start=X_start) "Mass fractions";
   Medium.ThermodynamicState state "Thermodynamic state";
-  Modelica.Units.SI.Time Tr "Residence Time";
-  Modelica.Units.SI.Pressure Pv "Pressure of water vapor";
-  Modelica.Units.SI.Temperature T_skin[3] "Skin temperature of the occupants";
-  Modelica.Units.SI.DensityOfHeatFlowRate E_dif[3]
+  Time Tr "Residence Time";
+  Pressure Pv "Pressure of water vapor";
+  Temperature T_skin[3] "Skin temperature of the occupants";
+  DensityOfHeatFlowRate E_dif[3]
     "Rate of heat loss due to water diffusion through the skin";
-  Modelica.Units.SI.DensityOfHeatFlowRate E_res[3]
+  DensityOfHeatFlowRate E_res[3]
     "Rate of heat loss due to respiration";
-  Modelica.Units.SI.DensityOfHeatFlowRate E_rsw[3]
+  DensityOfHeatFlowRate E_rsw[3]
     "Rate of heat loss due to sweating";
-  Modelica.Units.SI.DensityOfHeatFlowRate E_hb[3]
+  DensityOfHeatFlowRate E_hb[3]
     "Rate of evaporative heat loss of the human body";
-  Modelica.Units.SI.MassFlowRate m_H2O[3]
+  MassFlowRate m_H2O[3]
     "Water vapor emitted by the occupants";
-  Modelica.Units.SI.HeatFlowRate Q_sens[3]
+  HeatFlowRate Q_sens[3]
     "Sensible heat flow rate from occupants";
-  Modelica.Units.SI.HeatFlowRate Q_lat[3]
+  HeatFlowRate Q_lat[3]
     "Latent heat flow rate from occupants";
 
   DynTherM.CustomInterfaces.FluidPort_A inlet(
@@ -75,6 +79,7 @@ model Plenum
             110,10}})));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a thermalPort annotation (Placement(transformation(extent={{-18,62},{18,98}}),
         iconTransformation(extent={{-10,80},{10,100}})));
+
 equation
   state = Medium.setState_pTX(P, T, X);
 

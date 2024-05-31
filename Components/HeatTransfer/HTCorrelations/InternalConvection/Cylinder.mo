@@ -6,6 +6,7 @@ model Cylinder
 
 equation
   ht = 5.6783*(2 + 0.314*3.2808*V_int);
+
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>

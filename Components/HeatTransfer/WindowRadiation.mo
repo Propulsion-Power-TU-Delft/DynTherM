@@ -2,21 +2,22 @@ within DynTherM.Components.HeatTransfer;
 model WindowRadiation
   "Model of transmitted, absorbed and reflected irradiance through a planar transparent surface"
 
-  replaceable model Mat=DynTherM.Materials.Opticor constrainedby
-    DynTherM.Materials.Properties "Material choice" annotation (choicesAllMatching=true);
-  outer DynTherM.Components.Environment environment "Environmental properties";
+  replaceable model Mat=Materials.Opticor constrainedby
+    Materials.Properties "Material choice" annotation (choicesAllMatching=true);
 
-  parameter Modelica.Units.SI.Area A "Heat transfer surface";
-  parameter Modelica.Units.SI.Angle theta_start=0.17 "Refraction angle - starting value" annotation (Dialog(tab="Initialization"));
+  parameter Area A "Heat transfer surface";
+  parameter Angle theta_start=0.17 "Refraction angle - starting value" annotation (Dialog(tab="Initialization"));
+
+  constant Real n_air=1.000293 "Air refractive index";
 
   Real r_s "Reflection coefficient for s-polarized light";
   Real r_p "Reflection coefficient for p-polarized light";
   Real r_eff "Reflection coefficient for natural light";
 
-  Modelica.Units.SI.Angle theta_r(start=theta_start) "Refraction angle";
-  Modelica.Units.SI.Irradiance E_transmitted "Irradiance transmitted through the window";
-  Modelica.Units.SI.Irradiance E_reflected "Irradiance reflected by the window";
-  Modelica.Units.SI.Irradiance E_absorbed "Irradiance absorbed by the window";
+  Angle theta_r(start=theta_start) "Refraction angle";
+  Irradiance E_transmitted "Irradiance transmitted through the window";
+  Irradiance E_reflected "Irradiance reflected by the window";
+  Irradiance E_absorbed "Irradiance absorbed by the window";
 
   CustomInterfaces.IrradiancePort outlet
     annotation (Placement(transformation(extent={{-14,-28},{14,0}})));
@@ -28,13 +29,13 @@ model WindowRadiation
         iconTransformation(extent={{20,20},{48,48}})));
 equation
   // Snell's law
-  environment.n_air*Modelica.Math.sin(outlet.theta) = Mat.n*Modelica.Math.sin(theta_r);
+  n_air*Modelica.Math.sin(outlet.theta) = Mat.n*Modelica.Math.sin(theta_r);
 
   // Fresnel's equations
-  r_s = abs(environment.n_air*Modelica.Math.cos(outlet.theta) - Mat.n*Modelica.Math.cos(theta_r))/
-        (environment.n_air*Modelica.Math.cos(outlet.theta) + Mat.n*Modelica.Math.cos(theta_r));
-  r_p = abs(environment.n_air*Modelica.Math.cos(theta_r) - Mat.n*Modelica.Math.cos(outlet.theta))/
-        (environment.n_air*Modelica.Math.cos(theta_r) + Mat.n*Modelica.Math.cos(outlet.theta));
+  r_s = abs(n_air*Modelica.Math.cos(outlet.theta) - Mat.n*Modelica.Math.cos(theta_r))/
+        (n_air*Modelica.Math.cos(outlet.theta) + Mat.n*Modelica.Math.cos(theta_r));
+  r_p = abs(n_air*Modelica.Math.cos(theta_r) - Mat.n*Modelica.Math.cos(outlet.theta))/
+        (n_air*Modelica.Math.cos(theta_r) + Mat.n*Modelica.Math.cos(outlet.theta));
   r_eff = (r_s + r_p)/2;
 
   if (cos(outlet.theta) > 0) then

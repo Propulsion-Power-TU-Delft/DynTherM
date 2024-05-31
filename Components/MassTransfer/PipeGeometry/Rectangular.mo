@@ -1,8 +1,8 @@
 within DynTherM.Components.MassTransfer.PipeGeometry;
 model Rectangular "Rectangular cross-section"
   extends BaseClass;
-  input Modelica.Units.SI.Length W "Width of rectangular channel" annotation (Dialog(enable=true));
-  input Modelica.Units.SI.Length H "Height of rectangular channel" annotation (Dialog(enable=true));
+  input Length W "Width of rectangular channel" annotation (Dialog(enable=true));
+  input Length H "Height of rectangular channel" annotation (Dialog(enable=true));
 
   Real phi_star "Geometrical correction";
 

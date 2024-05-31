@@ -1,13 +1,14 @@
 within DynTherM.Components.HeatTransfer;
 model ExternalConvectionFlux "Model of external convection per unit area"
+
   replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
-  outer DynTherM.Components.Environment environment "Environmental properties";
+  outer Components.Environment environment "Environmental properties";
 
   replaceable model HTC =
-    DynTherM.Components.HeatTransfer.HTCorrelations.ExternalConvection.FixedValue
+    Components.HeatTransfer.HTCorrelations.ExternalConvection.FixedValue
     constrainedby
-    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal(
+    Components.HeatTransfer.HTCorrelations.BaseClassExternal(
       T_skin=inlet.T,
       ht_fixed=1) annotation (choicesAllMatching=true);
 

@@ -1,12 +1,10 @@
 [ECS]
-Model_dir      =   TrimAirManual       TrimAirManual       TrimAirManual       TrimAirManual       TrimAirManual       TrimAirManual       TrimAirManual       TrimAirManual       TrimAirManual       TrimAirManual
+Model_dir      =   TrimAirControl      TrimAirControl      TrimAirControl      TrimAirControl      TrimAirControl      TrimAirControl      TrimAirControl      TrimAirControl      TrimAirControl      TrimAirControl      
 Case_name      =   A320GroundCabin     A320FlyingCabin     A320FlyingCabin     A320FlyingCabin     A320FlyingCabin     A320FlyingCabin     A320FlyingCabin     A320FlyingCabin     A320FlyingCabin     A320FlyingCabin
 Run_name       =   GroundCold          Climb1Cold          Climb2Cold          Climb3Cold          Climb4Cold          Climb5Cold          Climb6Cold          Climb7Cold          CruiseCold          FaultyPackCold
 M_pack         =   1.000               1.060               1.060               1.060               1.060               1.060               1.060               1.060               1.060               0.880              kg/s
 Rec_ratio      =   0.500               0.500               0.500               0.500               0.500               0.500               0.500               0.500               0.500               0.500              -
 T_target       =   24.00               24.00               24.00               24.00               24.00               24.00               24.00               24.00               24.00               24.00              °C
-M_trim_cab     =   0.000               0.000               0.000               0.000               0.000               0.000               0.000               0.000               0.000               0.000              kg/s
-M_trim_fd      =   0.002               0.005               0.005               0.005               0.005               0.005               0.005               0.005               0.006               0.007              kg/s
 T_trim         =   100.0               100.0               100.0               100.0               100.0               100.0               100.0               100.0               100.0               100.0              °C
 
 [Environment]

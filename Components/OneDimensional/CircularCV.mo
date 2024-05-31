@@ -1,11 +1,16 @@
 within DynTherM.Components.OneDimensional;
 model CircularCV "Control volume modeling a portion of a circular channel"
 
-  outer Components.Environment environment "Environmental properties";
   replaceable model Mat = Materials.Aluminium constrainedby
     Materials.Properties "Material choice" annotation (choicesAllMatching=true);
   replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
+
+  // Options
+  parameter Boolean allowFlowReversal=true
+    "= true to allow flow reversal, false restricts to design direction";
+  parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
+    "Initialization option" annotation (Dialog(tab="Initialization"));
 
   // Geometry
   parameter Integer N=1 "Number of control volumes in parallel";
@@ -30,12 +35,10 @@ model CircularCV "Control volume modeling a portion of a circular channel"
     "Mass flow rate - start value" annotation (Dialog(tab="Initialization"));
   parameter Velocity u_start=20 "Flow velocity - start value" annotation (Dialog(tab="Initialization"));
   parameter Pressure dP_start=100 "Pressure drop - start value" annotation (Dialog(tab="Initialization"));
-  parameter Choices.InitOpt initOpt=environment.initOpt
-    "Initialization option" annotation (Dialog(tab="Initialization"));
 
   DynTherM.CustomInterfaces.FluidPort_A inlet(
     redeclare package Medium = Medium,
-    m_flow(min=if environment.allowFlowReversal then
+    m_flow(min=if allowFlowReversal then
       -Modelica.Constants.inf else 0, start=m_flow_start),
     P(start=P_start),
     h_outflow(start=Medium.specificEnthalpy(state_start)),
@@ -44,7 +47,7 @@ model CircularCV "Control volume modeling a portion of a circular channel"
             10}})));
   DynTherM.CustomInterfaces.FluidPort_B outlet(
     redeclare package Medium = Medium,
-    m_flow(max=if environment.allowFlowReversal then
+    m_flow(max=if allowFlowReversal then
       +Modelica.Constants.inf else 0, start=-m_flow_start),
     P(start=P_start),
     h_outflow(start=Medium.specificEnthalpy(state_start)),
@@ -53,6 +56,7 @@ model CircularCV "Control volume modeling a portion of a circular channel"
             10}})));
   MassTransfer.CircularPipe fluid(
     redeclare package Medium = Medium,
+    allowFlowReversal=allowFlowReversal,
     DP_opt=DynTherM.Choices.PDropOpt.correlation,
     m_flow_start=m_flow_start,
     P_start=P_start,
@@ -74,11 +78,12 @@ model CircularCV "Control volume modeling a portion of a circular channel"
     R_ext=R_ext,
     R_int=R_int,
     Tstart=T_start_solid,
-    initOpt=environment.initOpt)
+    initOpt=initOpt)
     annotation (Placement(transformation(extent={{-28,70},{28,30}})));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a solid_surface
     annotation (Placement(transformation(extent={{-10,70},{10,90}}),
         iconTransformation(extent={{-10,70},{10,90}})));
+
 equation
   connect(inlet, fluid.inlet)
     annotation (Line(points={{-100,0},{-40,0}}, color={0,0,0}));

@@ -2,29 +2,31 @@ within DynTherM.Components.MassTransfer;
 model Fan "Model of a fan"
   replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
-  outer DynTherM.Components.Environment environment "Environmental properties";
 
-  parameter Boolean allowFlowReversal=environment.allowFlowReversal
+  parameter Boolean allowFlowReversal=true
      "= true to allow flow reversal, false restricts to design direction";
+
   parameter Real eta_is=0.7 "Isentropic efficiency at design point";
   parameter Real eta_m=0.99 "Mechanical efficiency";
-  parameter Modelica.Units.SI.AngularVelocity omega_nom
+  parameter AngularVelocity omega_nom
     "Nominal rotational speed" annotation (Dialog(tab="Nominal values"));
-  parameter Modelica.Units.SI.VolumeFlowRate volFlow_nom
+  parameter VolumeFlowRate volFlow_nom
     "Nominal volumetric flow rate" annotation (Dialog(tab="Nominal values"));
-  parameter Modelica.Units.SI.SpecificEnergy Head_nom
+  parameter SpecificEnergy Head_nom
     "Nominal head provided by the fan" annotation (Dialog(tab="Nominal values"));
-  parameter Modelica.Units.SI.SpecificEnthalpy h_start=1e5
+
+  // Initialization
+  parameter SpecificEnthalpy h_start=1e5
     "Specific enthalpy - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Density rho_start=1.1 "Density - start value" annotation (Dialog(tab="Initialization"));
+  parameter Density rho_start=1.1 "Density - start value" annotation (Dialog(tab="Initialization"));
 
   Medium.ThermodynamicState state_in "Inlet thermodynamic state";
-  Modelica.Units.SI.Density rho(start=rho_start)
+  Density rho(start=rho_start)
     "Density - constant, since the fluid is incompressible";
-  Modelica.Units.SI.Power W "Power Consumption without mechanical losses";
-  Modelica.Units.SI.Power Pm "Mechanical power Consumption";
-  Modelica.Units.SI.MassFlowRate massFlow "Mass flow rate";
-  Modelica.Units.SI.VolumeFlowRate volFlow "Volumetric flow rate";
+  Power W "Power Consumption without mechanical losses";
+  Power Pm "Mechanical power Consumption";
+  MassFlowRate massFlow "Mass flow rate";
+  VolumeFlowRate volFlow "Volumetric flow rate";
   Real beta "Compression ratio";
 
   replaceable
