@@ -36,8 +36,8 @@ package EquivalentCircuitModel
           transformation(extent={{-92,30},{-72,50}}),  iconTransformation(extent={{-92,30},
               {-72,50}})));
     Modelica.Blocks.Interfaces.RealInput Temp annotation (Placement(
-          transformation(extent={{-92,-38},{-72,-18}}),  iconTransformation(
-            extent={{-92,-38},{-72,-18}})));
+          transformation(extent={{-96,-38},{-76,-18}}),  iconTransformation(
+            extent={{-96,-38},{-76,-18}})));
     Modelica.Blocks.Interfaces.RealOutput R_1 annotation (Placement(
           transformation(extent={{82,-56},{102,-36}}), iconTransformation(extent={{68,-32},
               {82,-18}})));
@@ -68,12 +68,12 @@ package EquivalentCircuitModel
   equation
     connect(OpenCircuitVoltage.y, V_ocv) annotation (Line(points={{62.9,-7},{62.9,
             -8},{84,-8},{84,2},{100,2}}, color={0,0,127}));
-    connect(Temp, Resistance1.u2) annotation (Line(points={{-82,-28},{-2,-28},
-            {-2,-49.6},{7.8,-49.6}},                   color={0,0,127}));
-    connect(Temp, OpenCircuitVoltage.u2) annotation (Line(points={{-82,-28},{
+    connect(Temp, Resistance1.u2) annotation (Line(points={{-86,-28},{-2,-28},{
+            -2,-49.6},{7.8,-49.6}},                    color={0,0,127}));
+    connect(Temp, OpenCircuitVoltage.u2) annotation (Line(points={{-86,-28},{
             -56,-28},{-56,-12.4},{42.2,-12.4}},
                                        color={0,0,127}));
-    connect(Temp, Resistance0.u2) annotation (Line(points={{-82,-28},{-56,-28},
+    connect(Temp, Resistance0.u2) annotation (Line(points={{-86,-28},{-56,-28},
             {-56,44},{-20,44},{-20,44.4},{19.8,44.4}},
                                                   color={0,0,127}));
     connect(ChargeState, Resistance0.u1) annotation (Line(points={{-82,40},{8,
@@ -99,8 +99,8 @@ package EquivalentCircuitModel
     connect(ChargeState, Capacitance1.u1) annotation (Line(points={{-82,40},{
             -42,40},{-42,-2},{-16,-2},{-16,-76},{2,-76},{2,-76.4},{21.8,-76.4}},
           color={0,0,127}));
-    connect(Temp, Capacitance1.u2) annotation (Line(points={{-82,-28},{-56,
-            -28},{-56,-89.6},{21.8,-89.6}}, color={0,0,127}));
+    connect(Temp, Capacitance1.u2) annotation (Line(points={{-86,-28},{-56,-28},
+            {-56,-89.6},{21.8,-89.6}},      color={0,0,127}));
     connect(ChargeState, combiTable1Ds.u) annotation (Line(points={{-82,40},{
             -42,40},{-42,78},{-24,78}}, color={0,0,127}));
     connect(combiTable1Ds.y[1], Entropic_coff) annotation (Line(points={{-1,78},
