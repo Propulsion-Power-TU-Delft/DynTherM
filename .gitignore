@@ -40,12 +40,6 @@ Examples/Helicopter/*
 Systems/Helicopter/*
 Materials/AirbusEES/*
 
-# Battery models
-Components/Battery/*
-Systems/Battery/*
-Tests/Battery/*
-Choices/BatteryChemistry
-
 # A320 validation
 Validation/A320/*
 
