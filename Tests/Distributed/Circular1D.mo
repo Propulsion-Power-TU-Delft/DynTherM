@@ -23,7 +23,7 @@ model Circular1D
     R_int(displayUnit="mm") = 0.0025,
     T_start_solid=323.15,
     T_start_fluid=323.15,
-    N=3,
+    N_cv=3,
     N_channels=1)
          annotation (Placement(transformation(extent={{-28,52},{28,108}})));
 

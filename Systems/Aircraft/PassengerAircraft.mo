@@ -187,9 +187,8 @@ model PassengerAircraft "Model of a passenger aircraft"
     omega_nom(displayUnit="rpm") = omega_nom,
     volFlow_nom=volFlow_nom,
     Head_nom=Head_nom,
-    redeclare
-      Components.MassTransfer.FanCharacteristics.FlowCharacteristics.linearFlow
-      flowModel) annotation (Placement(transformation(
+    redeclare Components.MassTransfer.FanCharacteristics.Flow.linear flowModel)
+    annotation (Placement(transformation(
         extent={{14,14},{-14,-14}},
         rotation=0,
         origin={-106,-98})));

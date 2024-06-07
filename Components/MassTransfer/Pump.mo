@@ -1,7 +1,6 @@
 within DynTherM.Components.MassTransfer;
-model Fan "Model of a fan"
-  replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
-    Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
+model Pump "Model of a pump"
+  replaceable package Medium = Media.IncompressibleTableBased.MEG(X=0.5) "Medium model" annotation(choicesAllMatching = true);
 
   parameter Boolean allowFlowReversal=true
      "= true to allow flow reversal, false restricts to design direction";
@@ -10,7 +9,7 @@ model Fan "Model of a fan"
   parameter AngularVelocity omega_nom "Nominal rotational speed" annotation (Dialog(tab="Nominal values"));
   parameter VolumeFlowRate volFlow_nom "Nominal volumetric flow rate" annotation (Dialog(tab="Nominal values"));
   parameter SpecificEnergy Head_nom "Nominal head provided by the fan" annotation (Dialog(tab="Nominal values"));
-  parameter Real eta_is=0.65 "Nominal isentropic efficiency" annotation (Dialog(tab="Nominal values"));
+  parameter Real eta_is=0.6 "Nominal isentropic efficiency" annotation (Dialog(tab="Nominal values"));
 
   // Initialization
   parameter SpecificEnthalpy h_start=1e5 "Specific enthalpy - start value" annotation (Dialog(tab="Initialization"));
@@ -25,18 +24,18 @@ model Fan "Model of a fan"
   Real beta "Pressure ratio";
   PressureDifference dP "Pressure differential";
 
-  replaceable DynTherM.Components.MassTransfer.FanCharacteristics.Flow.fixed
+  replaceable DynTherM.Components.MassTransfer.PumpCharacteristics.Flow.fixed
     Flow constrainedby
-    DynTherM.Components.MassTransfer.FanCharacteristics.BaseClass(
+    DynTherM.Components.MassTransfer.PumpCharacteristics.BaseClass(
     omega_nom=omega_nom,
     omega=shaft.omega,
     volFlow_nom=volFlow_nom,
     volFlow=volFlow,
     Head_nom=Head_nom) annotation (choicesAllMatching=true);
 
-  replaceable DynTherM.Components.MassTransfer.FanCharacteristics.Efficiency.fixed
+  replaceable DynTherM.Components.MassTransfer.PumpCharacteristics.Efficiency.fixed
     Efficiency constrainedby
-    DynTherM.Components.MassTransfer.FanCharacteristics.BaseClass(
+    DynTherM.Components.MassTransfer.PumpCharacteristics.BaseClass(
     omega_nom=omega_nom,
     omega=shaft.omega,
     volFlow_nom=volFlow_nom,
@@ -87,24 +86,17 @@ equation
  annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
      Ellipse(extent={{-60,60},{60,-60}}, lineColor={0,0,0},
          lineThickness=0.5),
-     Line(points={{-30,52},{44,40}}, color={0,0,0},
-         thickness=0.5),
-     Line(points={{-30,-52},{44,-40}}, color={0,0,0},
-         thickness=0.5),
-     Polygon(
-       points={{4,0},{0,0},{-20,26},{-14,24},{4,0}},
-       lineColor={0,0,0},
-       smooth=Smooth.Bezier),
-     Polygon(
-       points={{-20,-24},{-16,-24},{4,2},{-2,0},{-20,-24}},
-       lineColor={0,0,0},
-       smooth=Smooth.Bezier),
-     Ellipse(extent={{0,2},{30,-2}}, lineColor={0,0,0}),
        Line(points={{-100,0},{-60,0}}, color={0,0,0}),
        Line(points={{60,0},{92,0}}, color={0,0,0}),
-       Rectangle(extent={{-4,90},{4,60}}, lineColor={0,0,0})}), Diagram(
+       Rectangle(extent={{-4,90},{4,60}}, lineColor={0,0,0}),                                                                                Polygon(origin={-20.716,
+              0.7156},                                                                                                            rotation = 180, fillColor={255,255,
+              255},
+            fillPattern=FillPattern.HorizontalCylinder,                                                                                                    points={{19.284,
+              44.7156},{19.284,-43.2844},{-80.716,0.7156},{19.284,44.7156}},
+          lineColor={0,0,0},
+          lineThickness=0.5)}),                                 Diagram(
        coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>
 <p>The model assumes incompressible flow.</p>
 </html>"));
-end Fan;
+end Pump;
