@@ -29,7 +29,7 @@ model PouchCell1D
         eta = eta,
         capacity = capacity,
         SOC_start = SOC_start)
-    annotation (Placement(transformation(extent={{-84,-76},{8,12}})));
+    annotation (Placement(transformation(extent={{-86,-90},{6,-2}})));
 
   Components.OneDimensional.PouchCellThermal1D
     cell_1D_Discretized(
@@ -55,15 +55,14 @@ equation
   connect(temperatureSensor.T, fromKelvin.Kelvin)
     annotation (Line(points={{-38.9,47},{-40,48},{-70,48}}, color={0,0,127}));
   connect(fromKelvin.Celsius, Battery_Model.Temp) annotation (Line(points={{-93,48},
-          {-98,48},{-98,-27.6},{-52.375,-27.6}},       color={0,0,127}));
+          {-106,48},{-106,-41.6},{-54.375,-41.6}},     color={0,0,127}));
   connect(Battery_Model.Q_total, cell_1D_Discretized.Heat_gen) annotation (Line(
-        points={{-23.9125,-15.72},{-23.9125,-16},{92,-16},{92,42.71},{70.43,
-          42.71}},
+        points={{-25.9125,-29.72},{-25.9125,0},{84,0},{84,42.71},{70.43,42.71}},
         color={0,0,127}));
   connect(port_a, cell_1D_Discretized.Convection_Port) annotation (Line(points={{52,-34},
           {51,-34},{51,19.8}},                 color={191,0,0}));
-  connect(Cell_Current, Battery_Model.Curr) annotation (Line(points={{-84,0},
-          {-76,0},{-76,-76},{-44,-76},{-44,-60.16},{-43.75,-60.16}},
+  connect(Cell_Current, Battery_Model.Curr) annotation (Line(points={{-84,0},{
+          -84,-84},{-45.75,-84},{-45.75,-74.16}},
                                          color={0,0,127}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false, extent={{-180,-100},{140,100}}),
