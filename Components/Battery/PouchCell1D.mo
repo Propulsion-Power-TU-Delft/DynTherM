@@ -2,68 +2,71 @@ within DynTherM.Components.Battery;
 model PouchCell1D
   "Electro-thermal model of a pouch cell featuring 1D discretization"
 
+  replaceable model Mat = Materials.PolestarCell constrainedby
+    Materials.Properties "Material choice" annotation (choicesAllMatching=true);
+
   // Geometery
-  parameter Modelica.Units.SI.Length h = 1 "Cell height" annotation (Dialog(tab="Geometry"));
+  parameter Modelica.Units.SI.Length H = 1 "Cell height" annotation (Dialog(tab="Geometry"));
   parameter Modelica.Units.SI.Area A = 0.025  "Cell Base surface Area" annotation (Dialog(tab="Geometry"));
 
-  // Cell Electrical Parameters
-  parameter Modelica.Units.SI.PerUnit eta = 0.98 "Charging/Discharging Efficiency"  annotation (Dialog(tab="Electrical Parameters"));
-  parameter Modelica.Units.SI.ElectricCharge capacity = 230400 "Battery Capacity in Ampere-second" annotation (Dialog(tab="Electrical Parameters"));
-  parameter Modelica.Units.SI.PerUnit SOC_start = 0.10 "Starting charge state" annotation (Dialog(tab="Electrical Parameters"));
+  // Electrical Parameters of cell
+  parameter Real eta = 0.98 "Charging/discharging efficiency";
+  parameter ElectricCharge capacity = 216000 "Battery capacity";
+  parameter Real SoC_min = 0.00 "Minimum allowable state of charge";
+  parameter Real SoC_max = 1.00 "Maximum allowable state of charge";
 
   // Initialization
-  parameter Modelica.Units.SI.Temperature Tstart=298.15
-    "Temperature start value" annotation (Dialog(tab="Initialization"));
-//   parameter DynTherM.Choices.InitOpt initOpt "Initialization option"
-//     annotation (Dialog(tab="Initialization"));
-  parameter Boolean steadyStateInit = false "=true if steady-state initialization for charging current" annotation (Dialog(tab="Initialization"));
+  parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
+    "Initialization option" annotation (Dialog(tab="Initialization"));
+  parameter Real SoC_start "Starting state of charge" annotation (Dialog(tab="Initialization"));
+  parameter Temperature Tstart=288.15 "Temperature start value" annotation (Dialog(tab="Initialization"));
 
   // Discretization
   parameter Integer N(min=1)= 10 "Number of vertical sections in which the cell is discretized";
 
 
   Modelica.Thermal.HeatTransfer.Sensors.TemperatureSensor temperatureSensor
-    annotation (Placement(transformation(extent={{-20,38},{-38,56}})));
+    annotation (Placement(transformation(extent={{-32,42},{-52,62}})));
   Components.HeatTransfer.CellHeatLoss Battery_Model(
-        steadyStateInit=steadyStateInit,
         eta = eta,
         capacity = capacity,
-        SOC_start = SOC_start)
-    annotation (Placement(transformation(extent={{-86,-90},{6,-2}})));
+    SoC_min=SoC_min,
+    SoC_max=SoC_max,
+    initOpt=initOpt,
+    SoC_start=SoC_start)
+    annotation (Placement(transformation(extent={{-94,-78},{-2,10}})));
 
   Components.OneDimensional.PouchCellThermal1D
     cell_1D_Discretized(
+    redeclare model Mat = Mat,
         A=A,
-        h=h,
-        Tstart=Tstart,
-        initOpt=DynTherM.Choices.InitOpt.fixedState,
+    H=H,Tstart=Tstart,
+    initOpt=initOpt,
     N=N)    annotation (Placement(transformation(extent={{22,14},{80,72}})));
 
-  Modelica.Thermal.HeatTransfer.Celsius.FromKelvin fromKelvin
-    annotation (Placement(transformation(extent={{-72,38},{-92,58}})));
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_a annotation (
-      Placement(transformation(extent={{44,-42},{60,-26}}), iconTransformation(
-          extent={{44,-42},{60,-26}})));
-  Modelica.Blocks.Interfaces.RealInput Cell_Current annotation (Placement(
-        transformation(extent={{-92,-8},{-76,8}}), iconTransformation(
-          extent={{-92,-8},{-76,8}})));
+  Modelica.Blocks.Interfaces.RealInput I annotation (Placement(transformation(
+          extent={{-124,-96},{-108,-80}}), iconTransformation(extent={{-124,-96},
+            {-108,-80}})));
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a Top annotation (Placement(
+        transformation(extent={{44,76},{56,88}}), iconTransformation(extent={{-10,
+            -6},{4,8}})));
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a Bottom annotation (
+      Placement(transformation(extent={{44,-6},{56,6}}), iconTransformation(
+          extent={{-10,-6},{4,8}})));
 equation
 
-  connect(cell_1D_Discretized.AvgT_port, temperatureSensor.port)
-    annotation (Line(points={{32.44,43},{-14,43},{-14,47},{-20,47}},
-        color={191,0,0}));
-  connect(temperatureSensor.T, fromKelvin.Kelvin)
-    annotation (Line(points={{-38.9,47},{-40,48},{-70,48}}, color={0,0,127}));
-  connect(fromKelvin.Celsius, Battery_Model.Temp) annotation (Line(points={{-93,48},
-          {-106,48},{-106,-41.6},{-54.375,-41.6}},     color={0,0,127}));
-  connect(Battery_Model.Q_total, cell_1D_Discretized.Heat_gen) annotation (Line(
-        points={{-25.9125,-29.72},{-25.9125,0},{84,0},{84,42.71},{70.43,42.71}},
-        color={0,0,127}));
-  connect(port_a, cell_1D_Discretized.Convection_Port) annotation (Line(points={{52,-34},
-          {51,-34},{51,19.8}},                 color={191,0,0}));
-  connect(Cell_Current, Battery_Model.Curr) annotation (Line(points={{-84,0},{
-          -84,-84},{-45.75,-84},{-45.75,-74.16}},
-                                         color={0,0,127}));
+  connect(I, Battery_Model.I) annotation (Line(points={{-116,-88},{-43.4,-88},{-43.4,
+          -73.6}}, color={0,0,127}));
+  connect(temperatureSensor.T, Battery_Model.T) annotation (Line(points={{-53,52},
+          {-100,52},{-100,-55.12},{-89.975,-55.12}},     color={0,0,127}));
+  connect(Battery_Model.Q, cell_1D_Discretized.Q) annotation (Line(points={{-8.0375,
+          -13.32},{6,-13.32},{6,43},{24.9,43}}, color={0,0,127}));
+  connect(cell_1D_Discretized.Average, temperatureSensor.port) annotation (Line(
+        points={{50.13,43.29},{50.13,52},{-32,52}}, color={191,0,0}));
+  connect(Top, cell_1D_Discretized.Top) annotation (Line(points={{50,82},{50.13,
+          82},{50.13,60.69}}, color={191,0,0}));
+  connect(cell_1D_Discretized.Bottom, Bottom)
+    annotation (Line(points={{50.13,25.31},{50,24},{50,0}}, color={191,0,0}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false, extent={{-180,-100},{140,100}}),
                                                       graphics={Bitmap(

@@ -8,8 +8,8 @@ model PouchCellThermal1D
     "Control volume for cell";
 
   // Geometry
-  parameter Area A  "Base surface Area" annotation (Dialog(tab="Geometry"));
-  parameter Length h "Cell Height" annotation (Dialog(tab="Geometry"));
+  parameter Area A "Base surface Area" annotation (Dialog(tab="Geometry"));
+  parameter Length H "Cell Height" annotation (Dialog(tab="Geometry"));
 
   // Initialization
   parameter Temperature Tstart "Temperature start value" annotation (Dialog(tab="Initialization"));
@@ -20,25 +20,28 @@ model PouchCellThermal1D
 
   CV_cell Cell[N](
     redeclare model Mat = Mat,
-    each t=h/N,
+    each H=H/N,
     each A=A,
     each Tstart=Tstart,
     each initOpt=initOpt,
-    each Q_gen=Heat_gen/N);
+    each Q_gen=Q/N);
 
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a Convection_Port
-    annotation (Placement(transformation(extent={{-10,-90},{10,-70}}),
-        iconTransformation(extent={{-10,-90},{10,-70}})));
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b AvgT_port annotation (
-      Placement(transformation(extent={{-68,-4},{-60,4}}), iconTransformation(
-          extent={{-68,-4},{-60,4}})));
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a Average annotation (
+      Placement(transformation(extent={{-10,-6},{4,8}}), iconTransformation(
+          extent={{-10,-6},{4,8}})));
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b Top annotation (Placement(
+        transformation(extent={{-10,54},{4,68}}), iconTransformation(extent={{-10,
+            54},{4,68}})));
 
-  Modelica.Blocks.Interfaces.RealInput Heat_gen annotation (Placement(
-        transformation(extent={{74,-8},{60,6}}), iconTransformation(extent={{74,
-            -8},{60,6}})));
+  Modelica.Blocks.Interfaces.RealInput Q annotation (Placement(transformation(
+          extent={{-98,-8},{-82,8}}), iconTransformation(extent={{-98,-8},{-82,8}})));
+
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b Bottom annotation (
+      Placement(transformation(extent={{-10,54},{4,68}}), iconTransformation(
+          extent={{-10,-68},{4,-54}})));
 
 equation
-  AvgT_port.T =  sum(Cell.T_vol)/N;
+  Average.T = sum(Cell.T_vol)/N;
 
   // Connections for Side Conduction
   for i in 1:(N-1) loop
@@ -46,91 +49,33 @@ equation
   end for;
 
   // Convection Connection
-  connect(Cell[1].inlet, Convection_Port);
+  connect(Cell[1].inlet, Bottom);
+  connect(Cell[end].outlet, Top);
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
-                      Rectangle(
-          extent={{-90,5},{90,-5}},
-          lineColor={0,0,0},
-          fillColor={175,175,175},
-          fillPattern=FillPattern.Backward,
-          origin={55,10},
-          rotation=90),
-                      Rectangle(
-          extent={{-90,5},{90,-5}},
-          lineColor={0,0,0},
-          fillColor={175,175,175},
-          fillPattern=FillPattern.Backward,
-          origin={-55,10},
-          rotation=90),
+        Bitmap(
+          extent={{-88,-88},{88,88}},
+          fileName="modelica://DynTherM/Figures/PouchCell.PNG",
+          origin={6,0},
+          rotation=-90),
         Line(
-          points={{-60,20},{-60,-20}},
-          color={0,0,0},
-          pattern=LinePattern.Dash),
-        Line(
-          points={{0,22},{0,-78}},
+          points={{0,24},{0,-100}},
           color={0,0,0},
           pattern=LinePattern.Dash,
-          origin={-28,70},
+          origin={-52,-26},
           rotation=90),
         Line(
-          points={{60,20},{60,-20}},
-          color={0,0,0},
-          pattern=LinePattern.Dash),
-                      Rectangle(
-          extent={{-60,5},{60,-5}},
-          lineColor={0,0,0},
-          fillColor={175,175,175},
-          fillPattern=FillPattern.Backward,
-          origin={0,95},
-          rotation=180),
-        Line(
-          points={{0,22},{0,-78}},
+          points={{0,24},{0,-100}},
           color={0,0,0},
           pattern=LinePattern.Dash,
-          origin={-28,50},
+          origin={-52,0},
           rotation=90),
         Line(
-          points={{0,22},{0,-78}},
+          points={{0,24},{0,-100}},
           color={0,0,0},
           pattern=LinePattern.Dash,
-          origin={-28,30},
-          rotation=90),
-        Line(
-          points={{0,22},{0,-78}},
-          color={0,0,0},
-          pattern=LinePattern.Dash,
-          origin={-28,10},
-          rotation=90),
-        Line(
-          points={{0,22},{0,-78}},
-          color={0,0,0},
-          pattern=LinePattern.Dash,
-          origin={-28,-12},
-          rotation=90),
-        Line(
-          points={{0,22},{0,-78}},
-          color={0,0,0},
-          pattern=LinePattern.Dash,
-          origin={-28,-30},
-          rotation=90),
-        Line(
-          points={{0,22},{0,-78}},
-          color={0,0,0},
-          pattern=LinePattern.Dash,
-          origin={-28,-50},
-          rotation=90),
-        Line(
-          points={{0,22},{0,-78}},
-          color={0,0,0},
-          pattern=LinePattern.Dash,
-          origin={-28,-70},
-          rotation=90),
-        Text(
-          extent={{-26,64},{26,-44}},
-          textColor={0,0,0},
-          fontName="Arial Black",
-          textString="Cell")}),                Diagram(coordinateSystem(
+          origin={-52,26},
+          rotation=90)}),                      Diagram(coordinateSystem(
           preserveAspectRatio=false)),
               Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)));

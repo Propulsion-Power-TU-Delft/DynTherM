@@ -5,9 +5,8 @@ model PouchCellThermalCV
   replaceable model Mat=Materials.PolestarCell constrainedby Materials.Properties
     "Material choice" annotation (choicesAllMatching=true);
 
-  input Real N=1 "Number of walls in parallel" annotation (Dialog(enable=true));
-  input Length t "Wall thickness" annotation (Dialog(enable=true));
-  input Area A "Wall surface" annotation (Dialog(enable=true));
+  input Length H "Control volume height" annotation (Dialog(enable=true));
+  input Area A "Control volume surface" annotation (Dialog(enable=true));
 
   // Initialization
   parameter Temperature Tstart=300
@@ -15,9 +14,9 @@ model PouchCellThermalCV
   parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
     "Initialization option" annotation (Dialog(tab="Initialization"));
 
-  Mass m "Mass of the wall";
-  Modelica.Units.SI.HeatCapacity Cm "Heat capacity of the wall";
-  Temperature T_vol "Average temperature of the wall";
+  Mass m "Mass of the control volume";
+  Modelica.Units.SI.HeatCapacity Cm "Heat capacity of the control volume";
+  Temperature T_vol "Average temperature of the control volume";
 
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a inlet
     annotation (Placement(transformation(extent={{-14,20},{14,48}})));
@@ -29,14 +28,15 @@ model PouchCellThermalCV
         extent={{-14,-14},{14,14}},
         rotation=-90,
         origin={-40,34})));
+
 equation
-  m=Mat.rho*A*t;
+  m=Mat.rho*A*H;
   Cm=m*Mat.cm;
 
-  N*Cm*der(T_vol) = inlet.Q_flow + outlet.Q_flow + Q_gen "Energy balance";
-  inlet.Q_flow = (Mat.lambda*N*A*(inlet.T - T_vol))/(t/2)
+  Cm*der(T_vol) = inlet.Q_flow + outlet.Q_flow + Q_gen "Energy balance";
+  inlet.Q_flow = (Mat.lambda*A*(inlet.T - T_vol))/(H/2)
     "Heat conduction through the internal half-thickness";
-  outlet.Q_flow = (Mat.lambda*N*A*(outlet.T - T_vol))/(t/2)
+  outlet.Q_flow = (Mat.lambda*A*(outlet.T - T_vol))/(H/2)
     "Heat conduction through the external half-thickness";
 
 initial equation
@@ -59,10 +59,10 @@ initial equation
           lineThickness=0.5,
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid,
-          textString="WALL")}),
+          textString="Cell")}),
     Documentation(info="<html>
-<p>The heat capacity (which is lumped at the center of the wall thickness) is accounted for, as well as the thermal resistance due to the finite heat conduction coefficient. Longitudinal heat conduction is neglected. </p>
-<p>The model can be used to reproduce the heat transfer through many walls in parallel. In that case, the heat flow rate is split equally among the different elements, assuming there is no heat transfer and temperature difference between them.</p>
+<p>The heat capacity (which is lumped at the center of the Cell thickness) is accounted for, as well as the thermal resistance due to the finite heat conduction coefficient. Longitudinal heat conduction is neglected. </p>
+<p>The model can be used to reproduce the heat transfer through many Cells in parallel. In that case, the heat flow rate is split equally among the different elements, assuming there is no heat transfer and temperature difference between them.</p>
 <p>Model adapted from ThermoPower library by Francesco Casella.</p>
 </html>",
         revisions="<html>
