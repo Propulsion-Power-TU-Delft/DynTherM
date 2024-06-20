@@ -3,10 +3,11 @@ package Battery
   model PouchCellPolestar
     Components.Battery.PouchCell1D pouchCell1D(
       H=0.1,
-      A=0.35*0.01,                             capacity(displayUnit="Ah")=
-        230400,                                SoC_start=0.1,
+      A=0.35*0.01,
+      C_nom(displayUnit="Ah") = 230400,
+      SoC_start=0.1,
       Tstart=298.15)
-      annotation (Placement(transformation(extent={{-16,24},{56,76}})));
+      annotation (Placement(transformation(extent={{-20,24},{52,76}})));
     Modelica.Blocks.Sources.TimeTable I_charging(table=[0,200; 200,200; 200,200; 500,
           200; 501,120; 700,120; 701,100; 900,100; 901,120; 1000,120; 1001,70; 1200,
           70]) annotation (Placement(transformation(extent={{-58,42},{-42,58}})));
@@ -43,7 +44,7 @@ package Battery
       annotation (Placement(transformation(extent={{-88,2},{-72,18}})));
   equation
     connect(I_charging.y, pouchCell1D.I)
-      annotation (Line(points={{-41.2,50},{-11.5,50}}, color={0,0,127}));
+      annotation (Line(points={{-41.2,50},{-8,50}},    color={0,0,127}));
     connect(flow_source.outlet, single_channel.inlet)
       annotation (Line(points={{-38,-40},{-0.8,-40}}, color={0,0,0}));
     connect(single_channel.outlet, pressure_sink.inlet)
