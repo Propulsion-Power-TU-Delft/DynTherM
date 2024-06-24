@@ -1,6 +1,6 @@
 within DynTherM.Components.OneDimensional;
 model InternalConvection1D
-  "Internal convection model implementing 1D spatial discretization"
+  "Internal convection model implementing 1D spatial discretization in longitudinal direction"
 
   replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);

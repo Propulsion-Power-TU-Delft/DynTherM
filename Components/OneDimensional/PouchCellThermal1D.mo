@@ -1,8 +1,9 @@
 within DynTherM.Components.OneDimensional;
 model PouchCellThermal1D
-  "Thermal model of a pouch cell featuring 1D discretization"
+  "Thermal model of a pouch cell implementing 1D discretization in vertical direction"
 
-  replaceable model Mat = Materials.PolestarCell constrainedby
+  replaceable model Mat = Materials.PolestarCellInPlane
+                                                 constrainedby
     Materials.Properties "Material choice" annotation (choicesAllMatching=true);
   model CV_cell = Components.OneDimensional.PouchCellThermalCV
     "Control volume for cell";
@@ -23,21 +24,36 @@ model PouchCellThermal1D
     each H=H/N,
     each A=A,
     each Tstart=Tstart,
-    each initOpt=initOpt,
-    each Q_gen=Average.Q_flow/N);
+    each initOpt=initOpt);
 
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b Top annotation (Placement(
-        transformation(extent={{28,30},{48,50}}), iconTransformation(extent={{-10,
+        transformation(extent={{-10,70},{10,90}}),iconTransformation(extent={{-10,
             54},{6,70}})));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a Average annotation (
-      Placement(transformation(extent={{46,-24},{66,-4}}), iconTransformation(
+      Placement(transformation(extent={{-10,-10},{10,10}}),iconTransformation(
           extent={{-10,-8},{6,8}})));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b Bottom annotation (
-      Placement(transformation(extent={{4,-76},{24,-56}}), iconTransformation(
+      Placement(transformation(extent={{-10,-90},{10,-70}}),
+                                                           iconTransformation(
           extent={{-10,-70},{6,-54}})));
+  CustomInterfaces.DistributedHeatPort_B Distributed(Nx=N, Ny=1) annotation (
+      Placement(transformation(
+        extent={{-20,-10},{20,10}},
+        rotation=-90,
+        origin={-20,3.55271e-15}), iconTransformation(
+        extent={{-40,-13},{40,13}},
+        rotation=-90,
+        origin={-85,0})));
 
 equation
+
+  // Port connections
   Average.T = sum(Cell.T_vol)/N;
+
+  for i in 1:N loop
+    Cell[i].Q_gen = Average.Q_flow/N;
+    Cell[i].T_vol = Distributed.ports[i,1].T;
+  end for;
 
   // Internal connections
   for i in 1:(N-1) loop
@@ -74,5 +90,8 @@ equation
           rotation=90)}),                      Diagram(coordinateSystem(
           preserveAspectRatio=false)),
               Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
-        coordinateSystem(preserveAspectRatio=false)));
+        coordinateSystem(preserveAspectRatio=false)),
+    Documentation(info="<html>
+<p>Heat conduction is modelled along the in-plane direction, whereas the cross-plane conduction is neglected.</p>
+</html>"));
 end PouchCellThermal1D;

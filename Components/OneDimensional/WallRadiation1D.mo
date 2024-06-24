@@ -1,6 +1,6 @@
 within DynTherM.Components.OneDimensional;
 model WallRadiation1D
-  "Wall radiation model implementing 1D spatial discretization"
+  "Wall radiation model implementing 1D spatial discretization in longitudinal direction"
 
   outer DynTherM.Components.Environment environment "Environmental properties";
   replaceable model Material =

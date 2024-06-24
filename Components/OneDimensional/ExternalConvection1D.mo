@@ -1,6 +1,6 @@
 within DynTherM.Components.OneDimensional;
 model ExternalConvection1D
-  "External convection model implementing 1D spatial discretization"
+  "External convection model implementing 1D spatial discretization in longitudinal direction"
 
   outer Components.Environment environment "Environmental properties";
   replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby

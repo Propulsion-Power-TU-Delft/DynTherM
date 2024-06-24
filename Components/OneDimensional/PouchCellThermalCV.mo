@@ -2,14 +2,15 @@ within DynTherM.Components.OneDimensional;
 model PouchCellThermalCV
   "Control volume modeling a portion of a pouch cell"
 
-  replaceable model Mat=Materials.PolestarCell constrainedby Materials.Properties
+  replaceable model Mat=Materials.PolestarCellInPlane
+                                               constrainedby Materials.Properties
     "Material choice" annotation (choicesAllMatching=true);
 
   input Length H "Control volume height" annotation (Dialog(enable=true));
-  input Area A "Control volume surface" annotation (Dialog(enable=true));
+  input Area A "Control volume base surface" annotation (Dialog(enable=true));
 
   // Initialization
-  parameter Temperature Tstart=300
+  parameter Temperature Tstart=298.15
     "Temperature start value" annotation (Dialog(tab="Initialization"));
   parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
     "Initialization option" annotation (Dialog(tab="Initialization"));
@@ -61,9 +62,8 @@ initial equation
           fillPattern=FillPattern.Solid,
           textString="Cell")}),
     Documentation(info="<html>
-<p>The heat capacity (which is lumped at the center of the Cell thickness) is accounted for, as well as the thermal resistance due to the finite heat conduction coefficient. Longitudinal heat conduction is neglected. </p>
-<p>The model can be used to reproduce the heat transfer through many Cells in parallel. In that case, the heat flow rate is split equally among the different elements, assuming there is no heat transfer and temperature difference between them.</p>
-<p>Model adapted from ThermoPower library by Francesco Casella.</p>
+<p>Model adapted from WallConduction.</p>
+<p>Heat conduction is modelled along the in-plane direction, whereas the cross-plane conduction is neglected.</p>
 </html>",
         revisions="<html>
 </html>"));

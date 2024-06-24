@@ -2,16 +2,22 @@ within DynTherM.Components.Battery;
 model PouchCell1D
   "Electro-thermal model of a pouch cell featuring 1D discretization"
 
-  replaceable model Mat = Materials.PolestarCell constrainedby
-    Materials.Properties "Material choice" annotation (choicesAllMatching=true);
+  replaceable model InPlaneMat = Materials.PolestarCellInPlane constrainedby
+    Materials.Properties "In-plane material properties"
+    annotation (choicesAllMatching=true);
 
-  // Geometery
-  parameter Modelica.Units.SI.Length H=1 "Height" annotation (Dialog(tab="Geometry"));
-  parameter Modelica.Units.SI.Area A=0.025  "Base surface area" annotation (Dialog(tab="Geometry"));
+  replaceable model CrossPlaneMat = Materials.PolestarCellCrossPlane constrainedby
+    Materials.Properties "Cross-plane material properties"
+    annotation (choicesAllMatching=true);
 
-  // Electrical Parameters of cell
-  parameter Real eta = 0.98 "Charging/discharging efficiency";
-  parameter ElectricCharge C_nom = 216000 "Nominal capacity";
+  // Geometry
+  parameter Length W "Width" annotation (Dialog(tab="Geometry"));
+  parameter Length H "Height" annotation (Dialog(tab="Geometry"));
+  parameter Length t "Thickness" annotation (Dialog(tab="Geometry"));
+
+  // Electrical parameters
+  parameter Real eta=0.98 "Charging/discharging efficiency";
+  parameter ElectricCharge C_nom "Nominal capacity";
 
   // Initialization
   parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
@@ -20,19 +26,16 @@ model PouchCell1D
   parameter Temperature Tstart=288.15 "Temperature start value" annotation (Dialog(tab="Initialization"));
 
   // Discretization
-  parameter Integer N(min=1)= 10 "Number of vertical sections in which the cell is discretized";
+  parameter Integer N(min=1)=10 "Number of vertical sections in which the cell is discretized";
 
-  Modelica.Thermal.HeatTransfer.Sensors.TemperatureSensor temperatureSensor
-    annotation (Placement(transformation(extent={{-12,32},{-28,48}})));
-
+  Modelica.Thermal.HeatTransfer.Sensors.TemperatureSensor temperatureSensor annotation (Placement(transformation(extent={{-12,32},{-28,48}})));
   Components.OneDimensional.PouchCellThermal1D thermal(
-    redeclare model Mat = Mat,
-    A=A,
+    redeclare model Mat = InPlaneMat,
+    A=W*t,
     H=H,
     Tstart=Tstart,
     initOpt=initOpt,
     N=N) annotation (Placement(transformation(extent={{22,-28},{80,28}})));
-
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a Top annotation (Placement(
         transformation(extent={{44,34},{56,46}}), iconTransformation(extent={{-6,40},
             {6,52}})));
@@ -40,47 +43,102 @@ model PouchCell1D
       Placement(transformation(extent={{44,-46},{56,-34}}),
                                                          iconTransformation(
           extent={{-6,-54},{6,-42}})));
-
-  Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow prescribedHeatFlow
-    annotation (Placement(transformation(
+  Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow prescribedHeatFlow annotation (Placement(transformation(
         extent={{-8,8},{8,-8}},
         rotation=0,
-        origin={10,-8})));
-  RC1 electrical(C_nom=C_nom,
-    eta=eta,                  SoC_start=SoC_start)
-    annotation (Placement(transformation(extent={{-62,-50},{-6,6}})));
-  Modelica.Electrical.Analog.Sources.SignalCurrent signalCurrent
-    annotation (Placement(transformation(extent={{12,12},{-12,-12}},
+        origin={20,-40})));
+  RC1 electrical(
+    C_nom=C_nom,
+    eta=eta,
+    SoC_start=SoC_start)
+    annotation (Placement(transformation(extent={{-66,-50},{-10,6}})));
+  Modelica.Electrical.Analog.Sources.SignalCurrent signalCurrent annotation (Placement(transformation(extent={{12,12},{-12,-12}},
         rotation=-90,
-        origin={-72,-28})));
-  Modelica.Blocks.Interfaces.RealInput I "Positive if charging"
-                                         annotation (Placement(transformation(
+        origin={-74,-28})));
+  Modelica.Blocks.Interfaces.RealInput I "Positive if charging" annotation (Placement(transformation(
           extent={{-116,-38},{-96,-18}}), iconTransformation(
         extent={{-8,-8},{8,8}},
-        rotation=0,
-        origin={-70,0})));
+        rotation=180,
+        origin={78,20})));
+
+  CustomInterfaces.DistributedHeatPort_A Left(Nx=N, Ny=1) annotation (Placement(
+        transformation(
+        extent={{-10,-5},{10,5}},
+        rotation=90,
+        origin={5,20}), iconTransformation(
+        extent={{-30,-9},{30,9}},
+        rotation=90,
+        origin={-63,0})));
+  Modelica.Blocks.Interfaces.RealOutput V_OCV "Open circuit voltage"
+    annotation (Placement(transformation(
+        extent={{10,-10},{-10,10}},
+        rotation=180,
+        origin={86,52}),   iconTransformation(extent={{8,-8},{-8,8}},
+        rotation=180,
+        origin={80,-22})));
+  CustomInterfaces.DistributedHeatPort_A Right(Nx=N, Ny=1) annotation (
+      Placement(transformation(
+        extent={{-10,-5},{10,5}},
+        rotation=90,
+        origin={5,-20}), iconTransformation(
+        extent={{-30,-9},{30,9}},
+        rotation=90,
+        origin={45,0})));
+  OneDimensional.WallConduction1D cross_plane_conduction_left(
+    redeclare model Mat = CrossPlaneMat,
+    t=t/2,
+    A=W*H,
+    Tstart=Tstart,
+    initOpt=initOpt,
+    N=N) annotation (Placement(transformation(
+        extent={{-10,-9},{10,9}},
+        rotation=-90,
+        origin={13,20})));
+  OneDimensional.WallConduction1D cross_plane_conduction_right(
+    redeclare model Mat = CrossPlaneMat,
+    t=t/2,
+    A=W*H,
+    Tstart=Tstart,
+    initOpt=initOpt,
+    N=N) annotation (Placement(transformation(
+        extent={{-10,-9},{10,9}},
+        rotation=-90,
+        origin={13,-20})));
 equation
 
   connect(Top,thermal. Top) annotation (Line(points={{50,40},{50.42,40},{50.42,17.36}},
                    color={191,0,0}));
   connect(Bottom,thermal. Bottom) annotation (Line(points={{50,-40},{50,-18.68},
           {50.42,-18.68},{50.42,-17.36}}, color={191,0,0}));
-  connect(thermal.Average, temperatureSensor.port) annotation (Line(points={{50.42,0},
-          {20,0},{20,40},{-12,40}},        color={191,0,0}));
   connect(electrical.Q, prescribedHeatFlow.Q_flow)
-    annotation (Line(points={{-6,-8},{2,-8}}, color={0,0,127}));
-  connect(prescribedHeatFlow.port, thermal.Average) annotation (Line(points={{18,
-          -8},{20,-8},{20,0},{50.42,0},{50.42,3.55271e-15}}, color={191,0,0}));
+    annotation (Line(points={{-10,-8},{-4,-8},{-4,-40},{12,-40}},
+                                              color={0,0,127}));
   connect(temperatureSensor.T, electrical.T) annotation (Line(points={{-28.8,40},
-          {-72,40},{-72,-2.86667},{-62,-2.86667}}, color={0,0,127}));
+          {-80,40},{-80,-2.86667},{-66,-2.86667}}, color={0,0,127}));
   connect(signalCurrent.i, I)
-    annotation (Line(points={{-86.4,-28},{-106,-28}}, color={0,0,127}));
-  connect(signalCurrent.n, electrical.positive1) annotation (Line(points={{-72,
-          -16},{-52.6833,-16},{-52.6833,-15.7},{-53.3667,-15.7}}, color={0,0,
+    annotation (Line(points={{-88.4,-28},{-106,-28}}, color={0,0,127}));
+  connect(signalCurrent.n, electrical.positive1) annotation (Line(points={{-74,-16},
+          {-58.6833,-16},{-58.6833,-15.7},{-57.3667,-15.7}},      color={0,0,
           255}));
-  connect(signalCurrent.p, electrical.negative1) annotation (Line(points={{-72,
-          -40},{-52.6833,-40},{-52.6833,-39.9667},{-53.3667,-39.9667}}, color={
+  connect(signalCurrent.p, electrical.negative1) annotation (Line(points={{-74,-40},
+          {-56.6833,-40},{-56.6833,-39.9667},{-57.3667,-39.9667}},      color={
           0,0,255}));
+  connect(temperatureSensor.port, thermal.Average) annotation (Line(points={{-12,40},
+          {40,40},{40,3.55271e-15},{50.42,3.55271e-15}},
+                                         color={191,0,0}));
+  connect(prescribedHeatFlow.port, thermal.Average) annotation (Line(points={{28,-40},
+          {40,-40},{40,0},{50.42,0}},                          color={191,0,0}));
+  connect(electrical.V_OCV, V_OCV) annotation (Line(points={{-10,1.33333},{-4,1.33333},
+          {-4,52},{86,52}},         color={0,0,127}));
+  connect(Left, cross_plane_conduction_left.outlet)
+    annotation (Line(points={{5,20},{10.3,20}}, color={191,0,0}));
+  connect(Right, cross_plane_conduction_right.outlet)
+    annotation (Line(points={{5,-20},{10.3,-20}}, color={191,0,0}));
+  connect(cross_plane_conduction_left.inlet, thermal.Distributed) annotation (
+      Line(points={{15.7,20},{20,20},{20,0},{26.35,0}}, color={191,0,0}));
+  connect(cross_plane_conduction_right.inlet, thermal.Distributed) annotation (
+      Line(points={{15.7,-20},{20,-20},{20,0},{26.35,0},{26.35,3.55271e-15}},
+        color={191,0,0}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-60},{80,60}}),
                                                       graphics={Bitmap(
