@@ -12,3 +12,4 @@ WindowRadiation
 SphereConduction
 EnclosedAirSpace
 HeatCapacity
+WallConduction2D

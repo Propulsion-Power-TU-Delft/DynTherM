@@ -6,9 +6,9 @@ model TubeConduction "Dynamic model of conduction in a hollow cylinder"
 
   parameter Integer N=1 "Number of tubes in parallel";
   parameter Real coeff "Fraction of tube with active heat transfer";
-  parameter Length L "Tube length";
-  parameter Length R_ext "Tube external radius";
-  parameter Length R_int "Tube internal radius";
+  parameter Length L "Length";
+  parameter Length R_ext "External radius";
+  parameter Length R_int "Internal radius";
 
   parameter Length L_window=0 "Window length - aircraft fuselage application" annotation (Dialog(tab="Passive surface"));
   parameter Length H_window=0 "Window height - aircraft fuselage application" annotation (Dialog(tab="Passive surface"));
@@ -24,7 +24,7 @@ model TubeConduction "Dynamic model of conduction in a hollow cylinder"
   final parameter Modelica.Units.SI.HeatCapacity Cm=m*Mat.cm
     "Heat capacity of the tube";
 
-  Temperature T_vol "Average temperature of the tube";
+  Temperature T_vol "Average temperature";
   Length A_window_int
     "Equivalent internal window area - aircraft fuselage application";
   Length A_window_ext

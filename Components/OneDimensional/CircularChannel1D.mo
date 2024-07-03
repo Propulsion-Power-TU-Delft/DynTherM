@@ -34,10 +34,10 @@ model CircularChannel1D "Circular channel implementing 1D spatial discretization
   parameter MassFlowRate m_flow_start=1 "Mass flow rate - start value" annotation (Dialog(tab="Initialization"));
 
   // Discretization
-  parameter Integer N_cv=1 "Number of control volumes in which the cooling channels are discretized";
+  parameter Integer N_cv(min=1) "Number of control volumes in which the cooling channels are discretized";
   parameter Integer N_channels(min=1) "Number of channels in parallel";
 
-  CV fluid_cv[N_cv](
+  CV cv[N_cv](
     redeclare model Mat = Mat,
     redeclare package Medium = Medium,
     each N=N_channels,
@@ -67,6 +67,12 @@ model CircularChannel1D "Circular channel implementing 1D spatial discretization
     each initOpt=initOpt,
     each allowFlowReversal=allowFlowReversal);
 
+  Mass m_tot "Total mass";
+  Mass m_fluid "Mass of fluid";
+  Mass m_solid "Mass of solid walls";
+  Pressure dP "Pressure drop";
+  HeatFlowRate Q "Heat flow rate - positive entering";
+
   DynTherM.CustomInterfaces.FluidPort_A inlet(
     redeclare package Medium = Medium,
     m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0, start=
@@ -91,20 +97,26 @@ model CircularChannel1D "Circular channel implementing 1D spatial discretization
           extent={{-40,14},{40,80}})));
 
 equation
+  m_tot = sum(cv.m_tot);
+  m_fluid = sum(cv.m_fluid);
+  m_solid = sum(cv.m_solid);
+  dP = sum(cv.fluid.dP);
+  Q = sum(cv.Q);
+
   // thermal connections
   for i in 1:N_cv loop
-    connect(solid_surface.ports[i,1], fluid_cv[i].solid_surface);
+    connect(solid_surface.ports[i,1], cv[i].solid_surface);
   end for;
 
   // internal flow connections
   for i in 1:(N_cv-1) loop
-    connect(fluid_cv[i].outlet, inertia[i].inlet);
-    connect(inertia[i].outlet, fluid_cv[i+1].inlet);
+    connect(cv[i].outlet, inertia[i].inlet);
+    connect(inertia[i].outlet, cv[i+1].inlet);
   end for;
 
   // boundary flow connections
-  connect(inlet, fluid_cv[1].inlet);
-  connect(outlet, fluid_cv[N_cv].outlet);
+  connect(inlet, cv[1].inlet);
+  connect(outlet, cv[N_cv].outlet);
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
                       Rectangle(
@@ -134,5 +146,8 @@ equation
           points={{60,20},{60,-20}},
           color={0,0,0},
           pattern=LinePattern.Dash)}),         Diagram(coordinateSystem(
-          preserveAspectRatio=false)));
+          preserveAspectRatio=false)),
+    Documentation(info="<html>
+<p><span style=\"font-family: Courier New;\">Model created by stacking CircularCV in series and adding SimplePlenum in between to improve solver robustness.</span></p>
+</html>"));
 end CircularChannel1D;

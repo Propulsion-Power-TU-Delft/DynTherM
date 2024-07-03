@@ -1,6 +1,6 @@
 within DynTherM.Components.OneDimensional;
-model RectangularCV
-  "Control volume modeling a portion of a rectangular channel"
+model CircularAsymmetricCV
+  "Control volume modeling a portion of a circular channel"
 
   replaceable model Mat = Materials.Aluminium constrainedby
     Materials.Properties "Material choice" annotation (choicesAllMatching=true);
@@ -14,14 +14,14 @@ model RectangularCV
     "Initialization option" annotation (Dialog(tab="Initialization"));
 
   // Geometry
-  input Real N=1 "Number of control volumes in parallel" annotation (Dialog(enable=true));
+  parameter Integer N=1 "Number of control volumes in parallel";
   parameter Length L "Length of the control volume" annotation (Dialog(tab="Geometry"));
-  input Length W "Width of the control volume" annotation (Dialog(tab="Geometry", enable=true));
-  input Length H "Height of the control volume" annotation (Dialog(tab="Geometry", enable=true));
-  input Length t_north "Thickness of north wall" annotation (Dialog(tab="Geometry", enable=true));
-  input Length t_east "Thickness of east wall" annotation (Dialog(tab="Geometry", enable=true));
-  input Length t_south "Thickness of south wall" annotation (Dialog(tab="Geometry", enable=true));
-  input Length t_west "Thickness of west wall" annotation (Dialog(tab="Geometry", enable=true));
+  parameter Length R_ext_north "External radius of the control volume - north side" annotation (Dialog(tab="Geometry"));
+  parameter Length R_ext_east "External radius of the control volume - north side" annotation (Dialog(tab="Geometry"));
+  parameter Length R_ext_south "External radius of the control volume - north side" annotation (Dialog(tab="Geometry"));
+  parameter Length R_ext_west "External radius of the control volume - north side" annotation (Dialog(tab="Geometry"));
+  parameter Length R_int "Internal radius of the control volume" annotation (Dialog(tab="Geometry"));
+  parameter Length Roughness=0.015*10^(-3) "Pipe roughness" annotation (Dialog(tab="Geometry"));
 
   // Initialization
   parameter Temperature T_start_solid=288.15
@@ -35,9 +35,9 @@ model RectangularCV
   parameter Medium.ThermodynamicState state_start=
     Medium.setState_pTX(P_start, T_start_fluid, X_start)
     "Starting thermodynamic state" annotation (Dialog(tab="Initialization"));
-  parameter MassFlowRate m_flow_start=1 "Mass flow rate - start value" annotation (Dialog(tab="Initialization"));
+  parameter MassFlowRate m_flow_start=1
+    "Mass flow rate - start value" annotation (Dialog(tab="Initialization"));
   parameter Velocity u_start=20 "Flow velocity - start value" annotation (Dialog(tab="Initialization"));
-  parameter Density rho_start=1 "Density - start value" annotation (Dialog(tab="Initialization"));
   parameter Pressure dP_start=100 "Pressure drop - start value" annotation (Dialog(tab="Initialization"));
 
   Volume V_tot "Total volume";
@@ -50,8 +50,8 @@ model RectangularCV
 
   DynTherM.CustomInterfaces.FluidPort_A inlet(
     redeclare package Medium = Medium,
-    m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0, start=
-          m_flow_start),
+    m_flow(min=if allowFlowReversal then
+      -Modelica.Constants.inf else 0, start=m_flow_start),
     P(start=P_start),
     h_outflow(start=Medium.specificEnthalpy(state_start)),
     Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{-106,-6},
@@ -59,14 +59,14 @@ model RectangularCV
             10}})));
   DynTherM.CustomInterfaces.FluidPort_B outlet(
     redeclare package Medium = Medium,
-    m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0, start=
-          -m_flow_start),
+    m_flow(max=if allowFlowReversal then
+      +Modelica.Constants.inf else 0, start=-m_flow_start),
     P(start=P_start),
     h_outflow(start=Medium.specificEnthalpy(state_start)),
     Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{94,-6},
             {106,6}},       rotation=0), iconTransformation(extent={{70,-10},{90,
             10}})));
-  MassTransfer.RectangularPipe fluid(
+  MassTransfer.CircularPipe fluid(
     redeclare package Medium = Medium,
     allowFlowReversal=allowFlowReversal,
     DP_opt=DynTherM.Choices.PDropOpt.correlation,
@@ -75,62 +75,70 @@ model RectangularCV
     T_start=T_start_fluid,
     X_start=X_start,
     u_start=u_start,
-    rho_start(displayUnit="kg/m3") = rho_start,
     dP_start=dP_start,
     state_start=state_start,
     N=N,
     L=L,
-    W=W,
-    H=H)
+    D=R_int*2,
+    Roughness=Roughness)
     annotation (Placement(transformation(extent={{-40,-40},{40,40}})));
+  HeatTransfer.TubeConduction solid_north(
+    redeclare model Mat = Mat,
+    N=N,
+    coeff=1/4,
+    L=L,
+    R_ext=R_ext_north,
+    R_int=R_int,
+    Tstart=T_start_solid,
+    initOpt=initOpt)
+    annotation (Placement(transformation(extent={{-100,66},{-60,34}})));
+
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a solid_surface_north
-    annotation (Placement(transformation(extent={{-88,80},{-72,96}}),
+    annotation (Placement(transformation(extent={{-88,72},{-72,88}}),
         iconTransformation(extent={{-70,60},{-50,80}})));
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a solid_surface_east
+    annotation (Placement(transformation(extent={{-38,72},{-22,88}}),
+        iconTransformation(extent={{-30,60},{-10,80}})));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a solid_surface_south
-    annotation (Placement(transformation(extent={{22,80},{38,96}}),
+    annotation (Placement(transformation(extent={{22,72},{38,88}}),
         iconTransformation(extent={{10,60},{30,80}})));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a solid_surface_west
-    annotation (Placement(transformation(extent={{72,80},{88,96}}),
+    annotation (Placement(transformation(extent={{72,72},{88,88}}),
         iconTransformation(extent={{50,60},{70,80}})));
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a solid_surface_east
-    annotation (Placement(transformation(extent={{-38,80},{-22,96}}),
-        iconTransformation(extent={{-30,60},{-10,80}})));
-  HeatTransfer.WallConduction solid_north(
+  HeatTransfer.TubeConduction solid_east(
     redeclare model Mat = Mat,
     N=N,
-    t=t_north,
-    A=W*L,
+    coeff=1/4,
+    L=L,
+    R_ext=R_ext_east,
+    R_int=R_int,
     Tstart=T_start_solid,
     initOpt=initOpt)
-    annotation (Placement(transformation(extent={{-100,66},{-60,36}})));
-  HeatTransfer.WallConduction solid_east(
-    redeclare model Mat = Mat,
-    N=1,
-    t=t_east,
-    A=(H + 2*t_east)*L,
-    Tstart=T_start_solid,
-    initOpt=initOpt)
-    annotation (Placement(transformation(extent={{-50,66},{-10,36}})));
-  HeatTransfer.WallConduction solid_south(
+    annotation (Placement(transformation(extent={{-50,66},{-10,34}})));
+  HeatTransfer.TubeConduction solid_south(
     redeclare model Mat = Mat,
     N=N,
-    t=t_south,
-    A=W*L,
+    coeff=1/4,
+    L=L,
+    R_ext=R_ext_south,
+    R_int=R_int,
     Tstart=T_start_solid,
     initOpt=initOpt)
-    annotation (Placement(transformation(extent={{10,66},{50,36}})));
-  HeatTransfer.WallConduction solid_west(
+    annotation (Placement(transformation(extent={{10,66},{50,34}})));
+  HeatTransfer.TubeConduction solid_west(
     redeclare model Mat = Mat,
-    N=1,
-    t=t_west,
-    A=(H + 2*t_west)*L,
+    N=N,
+    coeff=1/4,
+    L=L,
+    R_ext=R_ext_west,
+    R_int=R_int,
     Tstart=T_start_solid,
     initOpt=initOpt)
-    annotation (Placement(transformation(extent={{60,66},{100,36}})));
+    annotation (Placement(transformation(extent={{60,66},{100,34}})));
 
 equation
-  V_tot = N*L*(H + t_north + t_south)*(W + t_east + t_west);
-  V_fluid = N*L*H*W;
+  V_tot = N*L*pi*((R_ext_north + R_ext_east + R_ext_south + R_ext_west)/4)^2;
+  V_fluid = N*L*pi*R_int^2;
   V_tot = V_fluid + V_solid;
   m_tot = m_fluid + m_solid;
   m_fluid = fluid.rho*V_fluid;
@@ -141,22 +149,22 @@ equation
     annotation (Line(points={{-100,0},{-40,0}}, color={0,0,0}));
   connect(fluid.outlet, outlet)
     annotation (Line(points={{40,0},{100,0}}, color={0,0,0}));
-  connect(solid_north.inlet, fluid.thermalPort) annotation (Line(points={{-80,45.9},
-          {-80,30},{0,30},{0,15.2}}, color={191,0,0}));
-  connect(solid_east.inlet, fluid.thermalPort) annotation (Line(points={{-30,45.9},
-          {-30,30},{0,30},{0,15.2}}, color={191,0,0}));
-  connect(solid_west.inlet, fluid.thermalPort) annotation (Line(points={{80,45.9},
-          {80,30},{0,30},{0,15.2}}, color={191,0,0}));
-  connect(solid_south.inlet, fluid.thermalPort) annotation (Line(points={{30,45.9},
-          {30,30},{0,30},{0,15.2}}, color={191,0,0}));
-  connect(solid_surface_north, solid_north.outlet)
-    annotation (Line(points={{-80,88},{-80,56.1}}, color={191,0,0}));
   connect(solid_surface_east, solid_east.outlet)
-    annotation (Line(points={{-30,88},{-30,56.1}}, color={191,0,0}));
+    annotation (Line(points={{-30,80},{-30,55.44}}, color={191,0,0}));
   connect(solid_surface_south, solid_south.outlet)
-    annotation (Line(points={{30,88},{30,56.1}}, color={191,0,0}));
+    annotation (Line(points={{30,80},{30,55.44}}, color={191,0,0}));
   connect(solid_surface_west, solid_west.outlet)
-    annotation (Line(points={{80,88},{80,56.1}}, color={191,0,0}));
+    annotation (Line(points={{80,80},{80,55.44}}, color={191,0,0}));
+  connect(fluid.thermalPort, solid_west.inlet) annotation (Line(points={{0,15.2},
+          {0,30},{80,30},{80,44.56}}, color={191,0,0}));
+  connect(fluid.thermalPort, solid_north.inlet) annotation (Line(points={{0,15.2},
+          {0,30},{-80,30},{-80,44.56}}, color={191,0,0}));
+  connect(fluid.thermalPort, solid_east.inlet) annotation (Line(points={{0,15.2},
+          {0,30},{-30,30},{-30,44.56}}, color={191,0,0}));
+  connect(fluid.thermalPort, solid_south.inlet) annotation (Line(points={{0,15.2},
+          {0,30},{30,30},{30,44.56}}, color={191,0,0}));
+  connect(solid_north.outlet, solid_surface_north)
+    annotation (Line(points={{-80,55.44},{-80,80}}, color={191,0,0}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
                       Rectangle(
           extent={{-80,40},{80,20}},
@@ -174,5 +182,6 @@ equation
           preserveAspectRatio=false)),
     Documentation(info="<html>
 <p>The model accounts for both mass transfer through the internal fluid control volume and heat transfer through the external solid control volume.</p>
+<p>The external radius of the solid control volume may vary along the circumferential direction.</p>
 </html>"));
-end RectangularCV;
+end CircularAsymmetricCV;

@@ -1,7 +1,9 @@
 CircularCV
+CircularAsymmetricCV
 RectangularCV
 RectangularFluxCV
 CircularChannel1D
+CircularAsymmetricChannel1D
 RectangularChannel1D
 RectangularChannelFlux1D
 ExternalConvection1D
@@ -11,3 +13,4 @@ HeatCapacity1D
 PouchCellThermalCV
 PouchCellThermal1D
 WallConduction1D
+WallConductionDiscretized2D

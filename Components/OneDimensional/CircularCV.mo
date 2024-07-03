@@ -36,6 +36,14 @@ model CircularCV "Control volume modeling a portion of a circular channel"
   parameter Velocity u_start=20 "Flow velocity - start value" annotation (Dialog(tab="Initialization"));
   parameter Pressure dP_start=100 "Pressure drop - start value" annotation (Dialog(tab="Initialization"));
 
+  Volume V_tot "Total volume";
+  Volume V_fluid "Volume of fluid";
+  Volume V_solid "Volume of solid walls";
+  Mass m_tot "Total mass";
+  Mass m_fluid "Mass of fluid";
+  Mass m_solid "Mass of solid walls";
+  HeatFlowRate Q "Heat flow rate - positive entering";
+
   DynTherM.CustomInterfaces.FluidPort_A inlet(
     redeclare package Medium = Medium,
     m_flow(min=if allowFlowReversal then
@@ -85,6 +93,14 @@ model CircularCV "Control volume modeling a portion of a circular channel"
         iconTransformation(extent={{-10,70},{10,90}})));
 
 equation
+  V_tot = N*L*pi*R_ext^2;
+  V_fluid = N*L*pi*R_int^2;
+  V_tot = V_fluid + V_solid;
+  m_tot = m_fluid + m_solid;
+  m_fluid = fluid.rho*V_fluid;
+  m_solid = Mat.rho*V_solid;
+  Q = fluid.thermalPort.Q_flow;
+
   connect(inlet, fluid.inlet)
     annotation (Line(points={{-100,0},{-40,0}}, color={0,0,0}));
   connect(fluid.outlet, outlet)
@@ -108,5 +124,9 @@ equation
         Rectangle(extent={{-80,20},{80,-20}},   lineColor={0,0,0}),
         Rectangle(extent={{-100,60},{100,-60}}, lineColor={0,0,0},
           pattern=LinePattern.Dash)}), Diagram(coordinateSystem(
-          preserveAspectRatio=false)));
+          preserveAspectRatio=false)),
+    Documentation(info="<html>
+<p>The model accounts for both mass transfer through the internal fluid control volume and heat transfer through the external solid control volume.</p>
+<p>The heat port is connected to the whole external solid surface.</p>
+</html>"));
 end CircularCV;

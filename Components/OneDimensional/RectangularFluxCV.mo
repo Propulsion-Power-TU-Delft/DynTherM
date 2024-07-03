@@ -190,5 +190,8 @@ equation
         Rectangle(extent={{-80,20},{80,-20}},   lineColor={0,0,0}),
         Rectangle(extent={{-100,60},{100,-60}}, lineColor={0,0,0},
           pattern=LinePattern.Dash)}), Diagram(coordinateSystem(
-          preserveAspectRatio=false)));
+          preserveAspectRatio=false)),
+    Documentation(info="<html>
+<p>The model accounts for both mass transfer through the internal fluid control volume and heat transfer through the external solid control volume.</p>
+</html>"));
 end RectangularFluxCV;
