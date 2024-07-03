@@ -1,4 +1,4 @@
-﻿within DynTherM.Systems.Aircraft.Subsystems;
+within DynTherM.Systems.Aircraft.Subsystems;
 model CabinWall "Simplified model of cabin wall separating cabin and cockpit"
 
   // Initialization

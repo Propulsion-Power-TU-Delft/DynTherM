@@ -11,4 +11,3 @@ HeatCapacity1D
 PouchCellThermalCV
 PouchCellThermal1D
 WallConduction1D
-CircularPipeSideCond

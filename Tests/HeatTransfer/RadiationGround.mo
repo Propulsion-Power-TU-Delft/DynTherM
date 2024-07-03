@@ -1,4 +1,4 @@
-﻿within DynTherM.Tests.HeatTransfer;
+within DynTherM.Tests.HeatTransfer;
 model RadiationGround
   "Validation test case for thermal radiation. Reference: example 8, pag. 298, ASHRAE Handbook – Fundamentals, chapter 14, 2013."
   Components.HeatTransfer.SolarRadiation thermalRadiation1(csi=0)

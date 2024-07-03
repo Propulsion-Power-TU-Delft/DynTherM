@@ -128,8 +128,8 @@ equation
                                          color={191,0,0}));
   connect(prescribedHeatFlow.port, thermal.Average) annotation (Line(points={{28,-40},
           {40,-40},{40,0},{50.42,0}},                          color={191,0,0}));
-  connect(electrical.V_OCV, V_OCV) annotation (Line(points={{-10,1.33333},{-4,1.33333},
-          {-4,52},{86,52}},         color={0,0,127}));
+  connect(electrical.V, V_OCV) annotation (Line(points={{-10,1.33333},{-4,
+          1.33333},{-4,52},{86,52}}, color={0,0,127}));
   connect(Left, cross_plane_conduction_left.outlet)
     annotation (Line(points={{5,20},{10.3,20}}, color={191,0,0}));
   connect(Right, cross_plane_conduction_right.outlet)

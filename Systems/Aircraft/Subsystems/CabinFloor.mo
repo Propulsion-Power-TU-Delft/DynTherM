@@ -1,4 +1,4 @@
-﻿within DynTherM.Systems.Aircraft.Subsystems;
+within DynTherM.Systems.Aircraft.Subsystems;
 model CabinFloor
   "Simplified model of cabin floor separating cabin and cargo bay"
 

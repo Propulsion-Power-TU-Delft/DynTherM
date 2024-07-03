@@ -80,8 +80,8 @@ model RC1
         rotation=-90,
         origin={0,126}),                  iconTransformation(extent={{-132,70},{
             -108,94}})));
-  Modelica.Blocks.Interfaces.RealOutput V_OCV "Open circuit voltage"
-    annotation (Placement(transformation(
+  Modelica.Blocks.Interfaces.RealOutput V "Voltage drop" annotation (Placement(
+        transformation(
         extent={{14,-14},{-14,14}},
         rotation=90,
         origin={70,-126}), iconTransformation(extent={{108,88},{132,112}})));
@@ -142,7 +142,7 @@ equation
     annotation (Line(points={{0,126},{0,88},{4,88},{4,62}}, color={0,0,127}));
   connect(T, R1_interpolation.u2) annotation (Line(points={{0,126},{0,88},{44,88},
           {44,62}}, color={0,0,127}));
-  connect(voltageSensor.v, V_OCV)
+  connect(voltageSensor.v, V)
     annotation (Line(points={{70,-51},{70,-126}}, color={0,0,127}));
   connect(stateOfCharge.SoC, Entropic_interpolation.u) annotation (Line(points={{-70,
           -42.24},{-70,-60},{-100,-60},{-100,100},{-82,100}},  color={0,0,127}));

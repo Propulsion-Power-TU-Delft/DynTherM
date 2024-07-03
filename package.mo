@@ -7,8 +7,8 @@ package DynTherM "Dynamic modeling and simulation of Thermal Management systems"
   import Modelica.Blocks.Interfaces.*;
 
   annotation (uses(Modelica(version="4.0.0"),
-    ExternData(version="3.0.3"),
-    ModelicaServices(version="4.0.0")),
+    ModelicaServices(version="4.0.0"),
+      ExternData(version="3.0.5")),
       version="2",
       conversion(noneFromVersion="1"));
 end DynTherM;
