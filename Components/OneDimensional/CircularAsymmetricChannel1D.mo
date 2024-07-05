@@ -19,13 +19,13 @@ model CircularAsymmetricChannel1D
 
   // Geometry
   parameter Length L "Channel length" annotation (Dialog(tab="Geometry"));
-  parameter Length R_ext_north "External radius of the control volume - north side" annotation (Dialog(tab="Geometry"));
-  parameter Length R_ext_east "External radius of the control volume - north side" annotation (Dialog(tab="Geometry"));
-  parameter Length R_ext_south "External radius of the control volume - north side" annotation (Dialog(tab="Geometry"));
-  parameter Length R_ext_west "External radius of the control volume - north side" annotation (Dialog(tab="Geometry"));
+  input Length R_ext_north "External radius of the control volume - north side" annotation (Dialog(tab="Geometry", enable=true));
+  input Length R_ext_east "External radius of the control volume - east side" annotation (Dialog(tab="Geometry", enable=true));
+  input Length R_ext_south "External radius of the control volume - south side" annotation (Dialog(tab="Geometry", enable=true));
+  input Length R_ext_west "External radius of the control volume - west side" annotation (Dialog(tab="Geometry", enable=true));
   parameter Length R_int "Channel internal radius" annotation (Dialog(tab="Geometry"));
   parameter Length Roughness=0.015*10^(-3) "Channel roughness" annotation (Dialog(tab="Geometry"));
-  parameter Volume V_inertia=1e-6 "Volume of the plenum placed between two consecutive control volumes" annotation (Dialog(tab="Geometry"));
+  parameter Volume V_inertia=1e-10 "Volume of the plenum placed between two consecutive control volumes" annotation (Dialog(tab="Geometry"));
 
   // Initialization
   parameter Temperature T_start_solid=288.15 "Temperature of the solid part - start value" annotation (Dialog(tab="Initialization"));
@@ -111,6 +111,7 @@ model CircularAsymmetricChannel1D
   CustomInterfaces.DistributedHeatPort_B solid_surface_west(Nx=N_cv, Ny=1)
     annotation (Placement(transformation(extent={{-90,16},{-60,76}}),
         iconTransformation(extent={{60,16},{90,76}})));
+
 equation
   m_tot = sum(cv.m_tot);
   m_fluid = sum(cv.m_fluid);

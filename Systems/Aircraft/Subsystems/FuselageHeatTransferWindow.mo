@@ -27,19 +27,11 @@ model FuselageHeatTransferWindow
   // Geometry
   parameter Real coeff "Fraction of cylinder with active heat transfer" annotation (Dialog(tab="Geometry"));
   parameter Length L_fuselage "Length of the fuselage cylindrical section" annotation (Dialog(tab="Geometry"));
-  parameter Length R_ext "External radius of the fuselage" annotation (Dialog(tab="Geometry"));
+  input Length R_ext "External radius of the fuselage" annotation (Dialog(tab="Geometry", enable=true));
   parameter Length t_fuselage "Overall fuselage thickness (half for lower section)" annotation (Dialog(tab="Geometry"));
   parameter Length L_window "Window length" annotation (Dialog(tab="Geometry"));
   parameter Length H_window "Window height" annotation (Dialog(tab="Geometry"));
   parameter Integer Nw_side=0 "Number of windows per fuselage side" annotation (Dialog(tab="Geometry"));
-  final parameter Length R_int=composite.interiorPanel_int.R_int
-    "Internal radius of the fuselage";
-  final parameter Area A_tot_window=L_window*H_window*Nw_side
-    "Total window area";
-  final parameter Area A_int=coeff*2*pi*
-    L_fuselage*R_int - A_tot_window "Internal fuselage area (minus windows)";
-  final parameter Area A_ext=coeff*2*pi*
-    L_fuselage*R_ext - A_tot_window "External fuselage area (minus windows)";
 
   // Radiation
   parameter Real rho_g=0.2 "Ground reflectance" annotation (Dialog(tab="Radiation"));
@@ -52,6 +44,11 @@ model FuselageHeatTransferWindow
 
   input Pressure P_air_gap "Average pressure inside the air cavity";
   input MassFraction X_air_gap[2] "Composition of the air cavity";
+
+  Length R_int "Internal radius of the fuselage";
+  Area A_tot_window "Total window area";
+  Area A_int "Internal fuselage area (minus windows)";
+  Area A_ext "External fuselage area (minus windows)";
 
   Components.HeatTransfer.ExternalConvection extConvection(A=A_ext,
     redeclare model HTC = HTC_ext)
@@ -106,6 +103,11 @@ model FuselageHeatTransferWindow
 equation
   cabinWindow.P_air = P_air_gap;
   cabinWindow.X_air = X_air_gap;
+
+  R_int = composite.interiorPanel_int.R_int;
+  A_tot_window = L_window*H_window*Nw_side;
+  A_int = coeff*2*pi*L_fuselage*R_int - A_tot_window;
+  A_ext = coeff*2*pi*L_fuselage*R_ext - A_tot_window;
 
   connect(solarRadiation.inlet, wallRadiation.outlet)
     annotation (Line(points={{-20,59.6},{-20,60},{20,60},{20,43.96}},

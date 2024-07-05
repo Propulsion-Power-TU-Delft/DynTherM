@@ -9,9 +9,9 @@ equation
   if Re < 2000 then                    // Laminar
     f = 64/Re;
   elseif Re > 4000 and Re < 10^4 then  // Transition
-    f = 0.316/(Re^0.25);
+    f = 0.316/regPow(Re, 0.25, 1e-6);
   else                                 // Turbulent
-    1/sqrt(f) = -2*log10(Roughness/(3.7*Dh) + 2.51/(Re*sqrt(f)));
+    1/regRoot(f, 1e-6) = -2*log10(Roughness/(3.7*Dh) + 2.51/(Re*regRoot(f, 1e-6)));
   end if;
 
   annotation (Documentation(info="<html>

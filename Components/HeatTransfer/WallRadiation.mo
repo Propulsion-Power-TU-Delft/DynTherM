@@ -6,7 +6,7 @@ model WallRadiation "Model of incident and emitted thermal radiation for a plana
     Materials.Paints.WhiteCoatings.CatalacWhitePaint
     constrainedby Materials.Paints.BasePaint "Surface paint material" annotation (choicesAllMatching=true);
 
-  parameter Area A "Heat transfer surface";
+  input Area A "Heat transfer surface" annotation (Dialog(enable=true));
   parameter Angle csi
     "Tilt angle of the surface wrt horizontal";
 

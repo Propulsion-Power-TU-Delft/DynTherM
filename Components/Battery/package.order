@@ -1,6 +1,7 @@
 CylindricalCellPortion
 CylindricalCell
 Cell18650
-ColdPlate
+ParallelCircularColdPlate
+ParallelRectangularColdPlate
 RC1
 PouchCell1D

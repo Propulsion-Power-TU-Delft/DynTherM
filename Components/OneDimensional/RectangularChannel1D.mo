@@ -25,7 +25,7 @@ model RectangularChannel1D
   input Length t_east "Thickness of east wall" annotation (Dialog(tab="Geometry", enable=true));
   input Length t_south "Thickness of south wall" annotation (Dialog(tab="Geometry", enable=true));
   input Length t_west "Thickness of west wall" annotation (Dialog(tab="Geometry", enable=true));
-  parameter Volume V_inertia=1e-6 "Volume of the plenum placed between two consecutive control volumes" annotation (Dialog(tab="Geometry"));
+  parameter Volume V_inertia=1e-10 "Volume of the plenum placed between two consecutive control volumes" annotation (Dialog(tab="Geometry"));
 
   // Initialization
   parameter Temperature T_start_solid=288.15 "Temperature of the solid part - start value" annotation (Dialog(tab="Initialization"));

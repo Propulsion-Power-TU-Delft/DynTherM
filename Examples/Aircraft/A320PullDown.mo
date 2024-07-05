@@ -8,147 +8,99 @@ model A320PullDown "Aircraft on ground, pull down test case"
   parameter Real N_pax=0 "Number of passengers inside the aircraft" annotation (Dialog(tab="Flight conditions"));
   parameter Real N_crew=6 "Number of cabin crew members inside the aircraft" annotation (Dialog(tab="Flight conditions"));
   parameter Real N_pilots=3 "Number of pilots inside the aircraft" annotation (Dialog(tab="Flight conditions"));
-  parameter Modelica.Units.SI.HeatFlowRate Q_el=1200
+  parameter HeatFlowRate Q_el=1200
     "Internal heat load due to flight deck electronics" annotation (Dialog(tab="Flight conditions"));
-  parameter Modelica.Units.SI.HeatFlowRate Q_galley=0
+  parameter HeatFlowRate Q_galley=0
     "Internal heat load due to galleys" annotation (Dialog(tab="Flight conditions"));
-  parameter Modelica.Units.SI.HeatFlowRate Q_avionics=0
+  parameter HeatFlowRate Q_avionics=0
     "Internal heat load due to avionics"  annotation (Dialog(tab="Flight conditions"));
   parameter Real cabinLights=100 "Percentage of usage [0-100] of cabin lights" annotation (Dialog(tab="Flight conditions"));
   parameter Real inFlightEntertainment=0 "Percentage of usage [0-100] of in-flight entertainment" annotation (Dialog(tab="Flight conditions"));
   parameter Real rec_target=0.2
     "Target ratio among the recirculated airflow and the total airflow";
-  parameter Modelica.Units.SI.Length R_fuselage=2.07
+  parameter Length R_fuselage=2.07
     "External radius of the fuselage";
-  parameter Modelica.Units.SI.Length R_cockpit=R_fuselage "External radius of the cockpit";
-  parameter Modelica.Units.SI.Length L_fuselage=26.9 "Length of the fuselage";
-  parameter Modelica.Units.SI.Length L_cockpit=3.5 "Length of the cockpit";
-  parameter Modelica.Units.SI.Length L_cargo=4.95 + 9.8 "Length of cargo bay: fwd + aft";
-  parameter Modelica.Units.SI.Length L_EEbay=4 "Length of electronics bay";
-  parameter Modelica.Units.SI.Volume V_cabin=139 "Passenger cabin internal volume";
-  parameter Modelica.Units.SI.Volume V_cargo=15.56 + 20.77
+  parameter Length R_cockpit=R_fuselage "External radius of the cockpit";
+  parameter Length L_fuselage=26.9 "Length of the fuselage";
+  parameter Length L_cockpit=3.5 "Length of the cockpit";
+  parameter Length L_cargo=4.95 + 9.8 "Length of cargo bay: fwd + aft";
+  parameter Length L_EEbay=4 "Length of electronics bay";
+  parameter Volume V_cabin=139 "Passenger cabin internal volume";
+  parameter Volume V_cargo=15.56 + 20.77
     "Cargo bay internal volume: fwd + aft";
-  parameter Modelica.Units.SI.Volume V_cockpit=9 "Cockpit internal volume";
-  parameter Modelica.Units.SI.Volume V_EEbay=V_cockpit "Electronics bay internal volume";
-  parameter Modelica.Units.SI.Length L_window=0.23 "Cabin window length";
-  parameter Modelica.Units.SI.Length H_window=0.33 "Cabin window height";
-  parameter Modelica.Units.SI.Area A_windshield_front=0.52*2
+  parameter Volume V_cockpit=9 "Cockpit internal volume";
+  parameter Volume V_EEbay=V_cockpit "Electronics bay internal volume";
+  parameter Length L_window=0.23 "Cabin window length";
+  parameter Length H_window=0.33 "Cabin window height";
+  parameter Area A_windshield_front=0.52*2
     "Surface of windshield - frontal section";
-  parameter Modelica.Units.SI.Length L_windshield_lat=(0.3+0.36)/0.5
+  parameter Length L_windshield_lat=(0.3+0.36)/0.5
     "Windshield length - lateral section";
-  parameter Modelica.Units.SI.Length H_windshield_lat=0.5
+  parameter Length H_windshield_lat=0.5
     "Windshield height - lateral section";
-  parameter Modelica.Units.SI.Length L_windshield_front=(0.3+0.36)/0.5
+  parameter Length L_windshield_front=(0.3+0.36)/0.5
     "Windshield length - frontal section";
-  parameter Modelica.Units.SI.Length H_windshield_front=0.5
+  parameter Length H_windshield_front=0.5
     "Windshield height - frontal section";
   parameter Integer Nw_side=30 "Number of windows per fuselage side";
-  parameter Modelica.Units.SI.Length H_fl=1.3 "Floor height";
-  parameter Modelica.Units.SI.SpecificHeatCapacity c_cabin=1000
+  parameter Length H_fl=1.3 "Floor height";
+  parameter SpecificHeatCapacity c_cabin=1000
     "Specific heat capacity of cabin interior";
-  parameter Modelica.Units.SI.SpecificHeatCapacity c_cockpit=c_cabin
+  parameter SpecificHeatCapacity c_cockpit=c_cabin
     "Specific heat capacity of cockpit interior";
-  parameter Modelica.Units.SI.Mass m_cabin=20*180 "Mass of cabin interior";
-  parameter Modelica.Units.SI.Mass m_cockpit=20*4 "Mass of cockpit interior";
-  parameter Modelica.Units.SI.Area A_cabin=2*180
+  parameter Mass m_cabin=20*180 "Mass of cabin interior";
+  parameter Mass m_cockpit=20*4 "Mass of cockpit interior";
+  parameter Area A_cabin=2*180
     "Heat transfer surface of cabin interior";
-  parameter Modelica.Units.SI.Area A_cockpit=2*4
+  parameter Area A_cockpit=2*4
     "Heat transfer surface of cockpit interior";
-  parameter Modelica.Units.SI.Length t_upper=0.1
+  parameter Length t_upper=0.1
     "Overall fuselage thickness - upper part";
-  parameter Modelica.Units.SI.Length t_lower=0.1
+  parameter Length t_lower=0.1
     "Overall fuselage thickness - lower part";
 
-  parameter Modelica.Units.SI.Irradiance E_tb_1=259.64
-    "Fixed value of solar irradiance - section 1" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_td_1=206.74
-    "Fixed value of solar irradiance - section 1" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tr_1=165.84
-    "Fixed value of solar irradiance - section 1" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Angle theta_1=1.3004797322460149
-    "Fixed value of incidence angle - section 1" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tb_2=798.63
-    "Fixed value of solar irradiance - section 2" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_td_2=118.04
-    "Fixed value of solar irradiance - section 1" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tr_2=48.57
-    "Fixed value of solar irradiance - section 1" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Angle theta_2=0.606973153966068
-    "Fixed value of incidence angle - section 2" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tb_3=869.79
-    "Fixed value of solar irradiance - section 3" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_td_3=81.35
-    "Fixed value of solar irradiance - section 1" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tr_3=0
-    "Fixed value of solar irradiance - section 1" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Angle theta_3=0.46335000981945457
-    "Fixed value of incidence angle - section 3" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tb_4=431.44
-    "Fixed value of solar irradiance - section 4" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_td_4=117.63
-    "Fixed value of solar irradiance - section 1" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tr_4=48.57
-    "Fixed value of solar irradiance - section 1" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Angle theta_4=1.1110416952345503
-    "Fixed value of incidence angle - section 4" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tb_5=0
-    "Fixed value of solar irradiance - section 5" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_td_5=206.14
-    "Fixed value of solar irradiance - section 1" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tr_5=165.84
-    "Fixed value of solar irradiance - section 1" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Angle theta_5=1.8411129213437782
-    "Fixed value of incidence angle - section 5" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tb_6=0
-    "Fixed value of solar irradiance - section 6" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_td_6=295.66
-    "Fixed value of solar irradiance - section 1" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tr_6=283.11
-    "Fixed value of solar irradiance - section 1" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Angle theta_6=2.5346194996237252
-    "Fixed value of incidence angle - section 6" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tb_7=0
-    "Fixed value of solar irradiance - section 7" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_td_7=333.16
-    "Fixed value of solar irradiance - section 1" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tr_7=331.69
-    "Fixed value of solar irradiance - section 1" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Angle theta_7=2.6782426437703384
-    "Fixed value of incidence angle - section 7" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tb_8=0
-    "Fixed value of solar irradiance - section 8" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_td_8=296.13
-    "Fixed value of solar irradiance - section 1" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tr_8=283.11
-    "Fixed value of solar irradiance - section 1" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Angle theta_8=2.030550958355243
-    "Fixed value of incidence angle - section 8" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tb_front=368.63
+  parameter Irradiance E_tb[8]={259.64, 798.63, 869.79, 431.44, 0, 0, 0, 0}
+    "Fixed value of solar irradiance" annotation (Dialog(tab="Solar radiation"));
+  parameter Irradiance E_td[8]={206.74, 118.04, 81.35, 117.63, 206.14, 295.66, 333.16, 296.13}
+    "Fixed value of solar irradiance" annotation (Dialog(tab="Solar radiation"));
+  parameter Irradiance E_tr[8]={165.84, 48.57, 0, 48.57, 165.84, 283.11, 331.69, 283.11}
+    "Fixed value of solar irradiance" annotation (Dialog(tab="Solar radiation"));
+  parameter Angle theta[8]={
+    1.3004797322460149,
+    0.606973153966068,
+    0.46335000981945457,
+    1.1110416952345503,
+    1.8411129213437782,
+    2.5346194996237252,
+    2.6782426437703384,
+    2.030550958355243}
+    "Fixed value of incidence angle" annotation (Dialog(tab="Solar radiation"));
+  parameter Irradiance E_tb_front=368.63
     "Fixed value of solar irradiance - frontal section" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_td_front=116.93
+  parameter Irradiance E_td_front=116.93
     "Fixed value of solar irradiance - section 1" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Irradiance E_tr_front=47.99
+  parameter Irradiance E_tr_front=47.99
     "Fixed value of solar irradiance - section 1" annotation (Dialog(tab="Solar radiation"));
-  parameter Modelica.Units.SI.Angle theta_front=1.18193696945056
+  parameter Angle theta_front=1.18193696945056
     "Fixed value of incidence angle - frontal section" annotation (Dialog(tab="Solar radiation"));
 
-  parameter Modelica.Units.SI.Length L_pipe_cab=L_fuselage/2
+  parameter Length L_pipe_cab=L_fuselage/2
     "Length of air distribution pipe - cabin" annotation (Dialog(tab="Air distribution"));
-  parameter Modelica.Units.SI.Length D_pipe_cab=0.18
+  parameter Length D_pipe_cab=0.18
     "Diameter of air distribution pipe - cabin" annotation (Dialog(tab="Air distribution"));
-  parameter Modelica.Units.SI.Length L_pipe_fd=L_fuselage/2
+  parameter Length L_pipe_fd=L_fuselage/2
     "Length of air distribution pipe - cockpit" annotation (Dialog(tab="Air distribution"));
-  parameter Modelica.Units.SI.Length D_pipe_fd=0.08
+  parameter Length D_pipe_fd=0.08
     "Diameter of air distribution pipe - cockpit" annotation (Dialog(tab="Air distribution"));
-  parameter Modelica.Units.SI.Volume V_mixingManifold=0.5
+  parameter Volume V_mixingManifold=0.5
     "Mixing manifold internal volume" annotation (Dialog(tab="Air distribution"));
   parameter Real eta_is=0.65 "Fan: isentropic efficiency at design point" annotation (Dialog(tab="Air distribution"));
   parameter Real eta_m=0.95 "Fan: mechanical efficiency" annotation (Dialog(tab="Air distribution"));
-  parameter Modelica.Units.SI.AngularVelocity omega_nom=157.08
+  parameter AngularVelocity omega_nom=157.08
     "Fan: nominal rotational speed" annotation (Dialog(tab="Air distribution"));
-  parameter Modelica.Units.SI.VolumeFlowRate volFlow_nom=0.7
+  parameter VolumeFlowRate volFlow_nom=0.7
     "Fan: nominal volumetric flow rate" annotation (Dialog(tab="Air distribution"));
-  parameter Modelica.Units.SI.SpecificEnergy Head_nom=400 "Fan: nominal head" annotation (Dialog(tab="Air distribution"));
+  parameter SpecificEnergy Head_nom=400 "Fan: nominal head" annotation (Dialog(tab="Air distribution"));
   parameter DynTherM.CustomUnits.HydraulicConductance Kv=0.005
     "Outflow valve: hydraulic conductance" annotation (Dialog(tab="Air distribution"));
   parameter DynTherM.CustomUnits.HydraulicResistance R_HEPA=2000
@@ -156,32 +108,30 @@ model A320PullDown "Aircraft on ground, pull down test case"
   parameter DynTherM.CustomUnits.HydraulicResistance R_dado=100
     "Dado panel: hydraulic Resistance" annotation (Dialog(tab="Air distribution"));
 
-  parameter Modelica.Units.SI.Temperature Tstart_fuselage=323.15
+  parameter Temperature Tstart_fuselage=323.15
     "Fuselage temperature - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Temperature Tstart_floor=313.15
+  parameter Temperature Tstart_floor=313.15
     "Floor temperature - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Temperature Tstart_wall=313.15
+  parameter Temperature Tstart_wall=313.15
     "Cabin wall temperature - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Temperature Tstart_cabin=313.15
+  parameter Temperature Tstart_cabin=313.15
     "Cabin temperature - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Temperature Tstart_cargo=313.15
+  parameter Temperature Tstart_cargo=313.15
     "Cargo bay temperature start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Temperature Tstart_flightDeck=313.15
+  parameter Temperature Tstart_flightDeck=313.15
     "Flight deck temperature start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Temperature Tstart_mixingManifold=313.15
+  parameter Temperature Tstart_mixingManifold=313.15
     "Mixing manifold temperature - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Pressure Pstart_cabin=101325
+  parameter Pressure Pstart_cabin=101325
     "Cabin pressure - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Pressure Pstart_cargo=101325
+  parameter Pressure Pstart_cargo=101325
     "Cargo bay pressure start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Pressure Pstart_flightDeck=101325
+  parameter Pressure Pstart_flightDeck=101325
     "Flight deck pressure start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Pressure Pstart_mixingManifold=101325
+  parameter Pressure Pstart_mixingManifold=101325
     "Mixing manifold pressure - start value" annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.Density rho_start_fan=1.1 "Density - start value"
-    annotation (Dialog(tab="Initialization"));
-  parameter Modelica.Units.SI.SpecificEnthalpy h_start_fan=1e5
-    "Specific enthalpy - start value" annotation (Dialog(tab="Initialization"));
+  parameter Density rho_start_fan=1.1 "Density - start value" annotation (Dialog(tab="Initialization"));
+  parameter SpecificEnthalpy h_start_fan=1e5 "Specific enthalpy - start value" annotation (Dialog(tab="Initialization"));
   parameter Boolean noInitialPressure_cabin=false "Remove initial equation on pressure - cabin" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
   parameter Boolean noInitialTemperature_cabin=false "Remove initial equation on temperature - cabin" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
   parameter Boolean noInitialPressure_cargo=false "Remove initial equation on pressure - cargo" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
@@ -189,46 +139,37 @@ model A320PullDown "Aircraft on ground, pull down test case"
   parameter Boolean noInitialPressure_cockpit=false "Remove initial equation on pressure - cockpit" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
   parameter Boolean noInitialTemperature_cockpit=false "Remove initial equation on temperature - cockpit" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
 
-  final parameter Modelica.Units.SI.HeatFlux Q_light_m2=11.2
+  final parameter HeatFlux Q_light_m2=11.2
     "Internal heat load due to cabin lights / cabin floor m2";
-  final parameter Modelica.Units.SI.HeatFlowRate Q_ife_pax=30
+  final parameter HeatFlowRate Q_ife_pax=30
     "Internal heat load due to in-flight entertainment / pax";
-  final parameter Modelica.Units.SI.Area A_floor=cabin.W_fl*L_fuselage
-    "Approximated surface area of cabin floor";
-  final parameter Modelica.Units.SI.Area A_floor_cargo=cabin.W_fl*L_cargo
-    "Approximated surface area of cargo floor";
-  final parameter Modelica.Units.SI.Area A_floor_cockpit=cockpit.W_fl*L_EEbay
-    "Approximated surface area of cockpit floor";
-  final parameter Modelica.Units.SI.Area A_wall=theta/2*R_fuselage^2 + cabin.W_fl
-      *(R_fuselage - H_fl)/2 "Approximated surface area of cabin wall";
-  final parameter Modelica.Units.SI.Angle theta=atan((R_fuselage - H_fl)/
-      R_fuselage);
-  final parameter Modelica.Units.SI.HeatFlowRate Q_utilities=
-      inFlightEntertainment/100*N_pax*Q_ife_pax + cabinLights/100*
-      Q_light_m2*A_floor + Q_galley;
 
   Real rec "Ratio among the recirculated airflow and the total airflow";
   Real flowSplit "Ratio among the cockpit and the cabin airflow";
-   Modelica.Units.SI.HeatFlowRate Q_tot
-     "Total net heat flow rate removed by ECS";
-   Modelica.Units.SI.HeatFlowRate Q_tot_cab
-     "Total net heat flow rate removed by ECS - cabin";
-   Modelica.Units.SI.HeatFlowRate Q_tot_fd
-     "Total net heat flow rate removed by ECS - flight deck";
-   Modelica.Units.SI.HeatFlowRate Q_int_cab
-     "Total internal heat generation - cabin";
-   Modelica.Units.SI.HeatFlowRate Q_int_fd
-     "Total internal heat generation - flight deck";
-   Modelica.Units.SI.HeatFlowRate Q_ext_cab
-     "Total net heat flow rate across boundaries - cabin";
-   Modelica.Units.SI.HeatFlowRate Q_ext_fd
-     "Total net heat flow rate across boundaries - flight deck";
+  HeatFlowRate Q_tot "Total net heat flow rate removed by ECS";
+  HeatFlowRate Q_tot_cab "Total net heat flow rate removed by ECS - cabin";
+  HeatFlowRate Q_tot_fd "Total net heat flow rate removed by ECS - flight deck";
+  HeatFlowRate Q_int_cab "Total internal heat generation - cabin";
+  HeatFlowRate Q_int_fd "Total internal heat generation - flight deck";
+  HeatFlowRate Q_ext_cab "Total net heat flow rate across boundaries - cabin";
+  HeatFlowRate Q_ext_fd "Total net heat flow rate across boundaries - flight deck";
+  HeatFlowRate Q_utilities;
   Medium.ThermodynamicState state_rec
     "Thermodynamic state at the outlet of recirculation fan";
   Medium.ThermodynamicState state_pack
     "Thermodynamic state at the pack discharge";
   Medium.Temperature T_rec "Temperature at the outlet of recirculation fan";
   Real phi_pack "Relative humidity at pack discharge";
+  Real phi_cockpit "Relative humidity in the cockpit";
+  Real phi_cabin "Relative humidity in the cabin";
+  Real phi_cargo "Relative humidity in the cargo bay";
+  Real phi_EE_bay "Relative humidity in the E/E bay";
+  Real phi_mix "Relative humidity in the mixing manifold";
+  Area A_floor "Approximated surface area of cabin floor";
+  Area A_floor_cargo "Approximated surface area of cargo floor";
+  Area A_floor_cockpit "Approximated surface area of cockpit floor";
+  Area A_wall "Approximated surface area of cabin wall";
+  Angle alpha;
 
   Components.MassTransfer.Mixer mixingManifold(
     V=V_mixingManifold,
@@ -244,7 +185,11 @@ model A320PullDown "Aircraft on ground, pull down test case"
     volFlow_nom=volFlow_nom,
     Head_nom=Head_nom,
     redeclare DynTherM.Components.MassTransfer.FanCharacteristics.Flow.linear
-      flowModel) annotation (Placement(transformation(
+      Flow,
+    redeclare
+      DynTherM.Components.MassTransfer.FanCharacteristics.Efficiency.fixed
+      Efficiency)
+                 annotation (Placement(transformation(
         extent={{14,14},{-14,-14}},
         rotation=0,
         origin={-114,-78})));
@@ -285,18 +230,10 @@ model A320PullDown "Aircraft on ground, pull down test case"
     L_cargo=L_cargo,
     V_cargo=V_cargo,
     t_cargo=t_lower,
-    E_tb_6=E_tb_6,
-    E_td_6=E_td_6,
-    E_tr_6=E_tr_6,
-    theta_6=theta_6,
-    E_tb_7=E_tb_7,
-    E_td_7=E_td_7,
-    E_tr_7=E_tr_7,
-    theta_7=theta_7,
-    E_tb_8=E_tb_8,
-    E_td_8=E_td_8,
-    E_tr_8=E_tr_8,
-    theta_8=theta_8,
+    E_tb=E_tb[6:8],
+    E_td=E_td[6:8],
+    E_tr=E_tr[6:8],
+    theta=theta[6:8],
     Tstart_fuselage=Tstart_fuselage,
     Tstart_cargo=Tstart_cargo,
     Pstart_cargo=Pstart_cargo,
@@ -353,26 +290,10 @@ model A320PullDown "Aircraft on ground, pull down test case"
     L_windshield_lat=L_windshield_lat,
     H_windshield_lat=H_windshield_lat,
     t_cockpit=t_upper,
-    E_tb_1=E_tb_1,
-    E_td_1=E_td_1,
-    E_tr_1=E_tr_1,
-    theta_1=theta_1,
-    E_tb_2=E_tb_2,
-    E_td_2=E_td_2,
-    E_tr_2=E_tr_2,
-    theta_2=theta_2,
-    E_tb_3=E_tb_3,
-    E_td_3=E_td_3,
-    E_tr_3=E_tr_3,
-    theta_3=theta_3,
-    E_tb_4=E_tb_4,
-    E_td_4=E_td_4,
-    E_tr_4=E_tr_4,
-    theta_4=theta_4,
-    E_tb_5=E_tb_5,
-    E_td_5=E_td_5,
-    E_tr_5=E_tr_5,
-    theta_5=theta_5,
+    E_tb=E_tb[1:5],
+    E_td=E_td[1:5],
+    E_tr=E_tr[1:5],
+    theta=theta[1:5],
     E_tb_front=E_tb_front,
     E_td_front=E_td_front,
     E_tr_front=E_tr_front,
@@ -409,18 +330,10 @@ model A320PullDown "Aircraft on ground, pull down test case"
     L_cargo=L_EEbay,
     V_cargo=V_EEbay,
     t_cargo=t_lower,
-    E_tb_6=E_tb_6,
-    E_td_6=E_td_6,
-    E_tr_6=E_tr_6,
-    theta_6=theta_6,
-    E_tb_7=E_tb_7,
-    E_td_7=E_td_7,
-    E_tr_7=E_tr_7,
-    theta_7=theta_7,
-    E_tb_8=E_tb_8,
-    E_td_8=E_td_8,
-    E_tr_8=E_tr_8,
-    theta_8=theta_8,
+    E_tb=E_tb[6:8],
+    E_td=E_td[6:8],
+    E_tr=E_tr[6:8],
+    theta=theta[6:8],
     Tstart_fuselage=Tstart_fuselage,
     Tstart_cargo=Tstart_cargo,
     Pstart_cargo=Pstart_cargo,
@@ -509,26 +422,10 @@ model A320PullDown "Aircraft on ground, pull down test case"
     H_window=H_window,
     Nw_side=Nw_side,
     t_cabin=t_upper,
-    E_tb_1=E_tb_1,
-    E_td_1=E_td_1,
-    E_tr_1=E_tr_1,
-    theta_1=theta_1,
-    E_tb_2=E_tb_2,
-    E_td_2=E_td_2,
-    E_tr_2=E_tr_2,
-    theta_2=theta_2,
-    E_tb_3=E_tb_3,
-    E_td_3=E_td_3,
-    E_tr_3=E_tr_3,
-    theta_3=theta_3,
-    E_tb_4=E_tb_4,
-    E_td_4=E_td_4,
-    E_tr_4=E_tr_4,
-    theta_4=theta_4,
-    E_tb_5=E_tb_5,
-    E_td_5=E_td_5,
-    E_tr_5=E_tr_5,
-    theta_5=theta_5,
+    E_tb=E_tb[1:5],
+    E_td=E_td[1:5],
+    E_tr=E_tr[1:5],
+    theta=theta[1:5],
     Tstart_fuselage=Tstart_fuselage,
     Tstart_cabin=Tstart_cabin,
     Pstart_cabin=Pstart_cabin,
@@ -547,16 +444,26 @@ model A320PullDown "Aircraft on ground, pull down test case"
     initOpt=DynTherM.Choices.InitOpt.fixedState)
     annotation (Placement(transformation(extent={{98,76},{138,116}})));
 equation
+  // Recirculation and flow split between cabin and cockpit
   rec = mixingManifold.inlet2.m_flow/
     (mixingManifold.inlet1.m_flow + mixingManifold.inlet2.m_flow);
+  state_rec = Medium.setState_phX(recirculationFan.outlet.P,
+    recirculationFan.outlet.h_outflow, recirculationFan.outlet.Xi_outflow);
+  T_rec = Medium.temperature(state_rec);
+  flowSplit = distributionPipeCockpit.outlet.m_flow/distributionPipeCabin.outlet.m_flow;
 
-  flowSplit = distributionPipeCockpit.inlet.m_flow/max(0.0001, distributionPipeCabin.inlet.m_flow);
-
+  // Heat flow rate
   Q_tot = - outflowValve.outlet.m_flow*outflowValve.outlet.h_outflow +
-    packFlow.outlet.m_flow*packFlow.outlet.h_outflow;
+    packFlow.outlet.m_flow*packFlow.outlet.h_outflow +
+    cabinTrimFlow.outlet.m_flow*cabinTrimFlow.outlet.h_outflow +
+    cockpitTrimFlow.outlet.m_flow*cockpitTrimFlow.outlet.h_outflow;
+
   Q_tot_cab = - cabin.cabinToCargo.m_flow*cabin.cabinToCargo.h_outflow +
+    cabinTrimFlow.outlet.m_flow*cabinTrimFlow.outlet.h_outflow +
     distributionPipeCabin.outlet.m_flow*distributionPipeCabin.outlet.h_outflow;
+
   Q_tot_fd = - cockpit.cockpitToCargo.m_flow*cockpit.cockpitToCargo.h_outflow +
+    cockpitTrimFlow.outlet.m_flow*cockpitTrimFlow.outlet.h_outflow +
     distributionPipeCockpit.outlet.m_flow*distributionPipeCockpit.outlet.h_outflow;
 
   Q_int_cab = sum(cabin.cabin.Q_sens) + sum(cabin.cabin.Q_lat) + cabin.cabin.Q_int;
@@ -565,13 +472,25 @@ equation
   Q_ext_cab = Q_tot_cab - Q_int_cab;
   Q_ext_fd = Q_tot_fd - Q_int_fd;
 
-  state_rec = Medium.setState_phX(recirculationFan.outlet.P,
-    recirculationFan.outlet.h_outflow, recirculationFan.outlet.Xi_outflow);
-  T_rec = Medium.temperature(state_rec);
+  Q_utilities = inFlightEntertainment/100*N_pax*Q_ife_pax +
+    cabinLights/100*Q_light_m2*A_floor + Q_galley;
 
+  // Relative humidity
   state_pack = Medium.setState_phX(packFlow.outlet.P,
     packFlow.outlet.h_outflow, packFlow.outlet.Xi_outflow);
   phi_pack = Medium.relativeHumidity(state_pack);
+  phi_cockpit = Medium.relativeHumidity(cockpit.flightDeck.state);
+  phi_cabin = Medium.relativeHumidity(cabin.cabin.state);
+  phi_cargo = Medium.relativeHumidity(cargo.cargo.state);
+  phi_EE_bay = Medium.relativeHumidity(EEbay.cargo.state);
+  phi_mix = Medium.relativeHumidity(mixingManifold.state);
+
+  // Geometry
+  A_floor = cabin.W_fl*L_fuselage;
+  A_floor_cargo = cabin.W_fl*L_cargo;
+  A_floor_cockpit = cockpit.W_fl*L_EEbay;
+  A_wall = alpha/2*R_fuselage^2 + cabin.W_fl*(R_fuselage - H_fl)/2;
+  alpha = atan((R_fuselage - H_fl)/R_fuselage);
 
   connect(outflowValve.outlet, pressureSink.inlet)
     annotation (Line(points={{50,-78},{70,-78}}, color={0,0,0}));

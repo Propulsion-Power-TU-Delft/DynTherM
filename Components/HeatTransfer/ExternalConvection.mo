@@ -5,7 +5,7 @@ model ExternalConvection "Model of external convection"
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
   outer Components.Environment environment "Environmental properties";
 
-  parameter Area A "Heat transfer area";
+  input Area A "Heat transfer area" annotation (Dialog(enable=true));
 
   replaceable model HTC =
     Components.HeatTransfer.HTCorrelations.ExternalConvection.FixedValue

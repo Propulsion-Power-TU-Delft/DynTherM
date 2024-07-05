@@ -49,7 +49,7 @@ model A320GroundCockpit "Aircraft on ground, two temperature zones"
     Q_avionics=10000,
     cabinLights=100,
     inFlightEntertainment=100,
-    rec_target=0.45,
+    rec_target=0.5,
     allowFlowReversal=environment.allowFlowReversal,
     initOpt=environment.initOpt)
     annotation (Placement(transformation(extent={{-74,-46},{42,44}})));
@@ -104,9 +104,9 @@ model A320GroundCockpit "Aircraft on ground, two temperature zones"
         rotation=-90,
         origin={-28,50})));
   inner Components.Environment environment(
-    ISA_plus=0,
-    phi_amb=0.0,
-    phi_amb_ground=0.22,
+    ISA_plus=16,
+    phi_amb=0.6,
+    phi_amb_ground=0.6,
     T_ground(displayUnit="degC") = 298.15,
     use_ext_sw=true,
     allowFlowReversal=false,

@@ -8,7 +8,7 @@ model CabinFloor
   parameter Temperature Tstart=300 "Temperature start value" annotation (Dialog(tab="Initialization"));
 
   // Geometry
-  parameter Area A "Surface of the cabin floor";
+  input Area A "Surface of the cabin floor" annotation (Dialog(enable=true));
   final parameter Length t_tot=0.0254 "Floor thcikness";
   final parameter Length t_fl_f=0.000762 "Floor facing thickness";
   final parameter Length t_fl_c=t_tot - 2*t_fl_f "Floor core thickness";

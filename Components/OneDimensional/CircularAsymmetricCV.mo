@@ -16,10 +16,10 @@ model CircularAsymmetricCV
   // Geometry
   parameter Integer N=1 "Number of control volumes in parallel";
   parameter Length L "Length of the control volume" annotation (Dialog(tab="Geometry"));
-  parameter Length R_ext_north "External radius of the control volume - north side" annotation (Dialog(tab="Geometry"));
-  parameter Length R_ext_east "External radius of the control volume - north side" annotation (Dialog(tab="Geometry"));
-  parameter Length R_ext_south "External radius of the control volume - north side" annotation (Dialog(tab="Geometry"));
-  parameter Length R_ext_west "External radius of the control volume - north side" annotation (Dialog(tab="Geometry"));
+  input Length R_ext_north "External radius of the control volume - north side" annotation (Dialog(tab="Geometry", enable=true));
+  input Length R_ext_east "External radius of the control volume - east side" annotation (Dialog(tab="Geometry", enable=true));
+  input Length R_ext_south "External radius of the control volume - south side" annotation (Dialog(tab="Geometry", enable=true));
+  input Length R_ext_west "External radius of the control volume - west side" annotation (Dialog(tab="Geometry", enable=true));
   parameter Length R_int "Internal radius of the control volume" annotation (Dialog(tab="Geometry"));
   parameter Length Roughness=0.015*10^(-3) "Pipe roughness" annotation (Dialog(tab="Geometry"));
 
@@ -183,5 +183,6 @@ equation
     Documentation(info="<html>
 <p>The model accounts for both mass transfer through the internal fluid control volume and heat transfer through the external solid control volume.</p>
 <p>The external radius of the solid control volume may vary along the circumferential direction.</p>
+<p><img src=\"modelica://DynTherM/Figures/Circular_asymmetric_CV.png\"/></p>
 </html>"));
 end CircularAsymmetricCV;

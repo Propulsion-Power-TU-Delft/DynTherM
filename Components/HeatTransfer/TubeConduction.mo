@@ -7,8 +7,8 @@ model TubeConduction "Dynamic model of conduction in a hollow cylinder"
   parameter Integer N=1 "Number of tubes in parallel";
   parameter Real coeff "Fraction of tube with active heat transfer";
   parameter Length L "Length";
-  parameter Length R_ext "External radius";
-  parameter Length R_int "Internal radius";
+  input Length R_ext "External radius" annotation (Dialog(enable=true));
+  input Length R_int "Internal radius" annotation (Dialog(enable=true));
 
   parameter Length L_window=0 "Window length - aircraft fuselage application" annotation (Dialog(tab="Passive surface"));
   parameter Length H_window=0 "Window height - aircraft fuselage application" annotation (Dialog(tab="Passive surface"));
@@ -20,15 +20,11 @@ model TubeConduction "Dynamic model of conduction in a hollow cylinder"
   parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
     "Initialization option" annotation (Dialog(tab="Initialization"));
 
-  final parameter Mass m=coeff*Mat.rho*L*pi*(R_ext^2 - R_int^2) "Mass of the tube";
-  final parameter Modelica.Units.SI.HeatCapacity Cm=m*Mat.cm
-    "Heat capacity of the tube";
-
+  Mass m "Mass";
+  Modelica.Units.SI.HeatCapacity Cm "Heat capacity";
   Temperature T_vol "Average temperature";
-  Length A_window_int
-    "Equivalent internal window area - aircraft fuselage application";
-  Length A_window_ext
-    "Equivalent external window area - aircraft fuselage application";
+  Length A_window_int "Equivalent internal window area - aircraft fuselage application";
+  Length A_window_ext "Equivalent external window area - aircraft fuselage application";
 
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a inlet
     annotation (Placement(transformation(extent={{-14,20},{14,48}})));
@@ -37,6 +33,9 @@ model TubeConduction "Dynamic model of conduction in a hollow cylinder"
 
 equation
   assert(R_ext > R_int, "External radius must be greater than internal radius");
+
+  m=coeff*Mat.rho*L*pi*(R_ext^2 - R_int^2);
+  Cm=m*Mat.cm;
 
   A_window_int = H_window/R_int*L_window*Nw_side;
   A_window_ext = H_window/R_ext*L_window*Nw_side;

@@ -138,19 +138,6 @@ model PassengerAircraft "Model of a passenger aircraft"
     "Internal heat load due to cabin lights / cabin floor m2";
   final parameter HeatFlowRate Q_ife_pax=30
     "Internal heat load due to in-flight entertainment / pax";
-  final parameter Area A_floor=cabin.W_fl*L_fuselage
-    "Approximated surface area of cabin floor";
-  final parameter Area A_floor_cargo=cabin.W_fl*L_cargo
-    "Approximated surface area of cargo floor";
-  final parameter Area A_floor_cockpit=cockpit.W_fl*L_EEbay
-    "Approximated surface area of cockpit floor";
-  final parameter Area A_wall=alpha/2*R_fuselage^2 + cabin.W_fl
-      *(R_fuselage - H_fl)/2 "Approximated surface area of cabin wall";
-  final parameter Angle alpha=atan((R_fuselage - H_fl)/
-      R_fuselage);
-  final parameter HeatFlowRate Q_utilities=
-      inFlightEntertainment/100*N_pax*Q_ife_pax + cabinLights/100*
-      Q_light_m2*A_floor + Q_galley;
 
   Real rec "Ratio among the recirculated airflow and the total airflow";
   Real flowSplit "Ratio among the cockpit and the cabin airflow";
@@ -161,6 +148,7 @@ model PassengerAircraft "Model of a passenger aircraft"
   HeatFlowRate Q_int_fd "Total internal heat generation - flight deck";
   HeatFlowRate Q_ext_cab "Total net heat flow rate across boundaries - cabin";
   HeatFlowRate Q_ext_fd "Total net heat flow rate across boundaries - flight deck";
+  HeatFlowRate Q_utilities;
   Medium.ThermodynamicState state_rec "Thermodynamic state at the outlet of recirculation fan";
   Medium.ThermodynamicState state_pack "Thermodynamic state at the pack discharge";
   Medium.Temperature T_rec "Temperature at the outlet of recirculation fan";
@@ -170,6 +158,11 @@ model PassengerAircraft "Model of a passenger aircraft"
   Real phi_cargo "Relative humidity in the cargo bay";
   Real phi_EE_bay "Relative humidity in the E/E bay";
   Real phi_mix "Relative humidity in the mixing manifold";
+  Area A_floor "Approximated surface area of cabin floor";
+  Area A_floor_cargo "Approximated surface area of cargo floor";
+  Area A_floor_cockpit "Approximated surface area of cockpit floor";
+  Area A_wall "Approximated surface area of cabin wall";
+  Angle alpha;
 
   Components.MassTransfer.Mixer mixingManifold(
     allowFlowReversal=allowFlowReversal,
@@ -490,11 +483,15 @@ model PassengerAircraft "Model of a passenger aircraft"
     annotation (Placement(transformation(extent={{22,26},{66,70}})));
 
 equation
+  // Recirculation and flow split between cabin and cockpit
   rec = mixingManifold.inlet2.m_flow/
     (mixingManifold.inlet1.m_flow + mixingManifold.inlet2.m_flow);
-
+  state_rec = Medium.setState_phX(recirculationFan.outlet.P,
+    recirculationFan.outlet.h_outflow, recirculationFan.outlet.Xi_outflow);
+  T_rec = Medium.temperature(state_rec);
   flowSplit = distributionPipeCockpit.outlet.m_flow/distributionPipeCabin.outlet.m_flow;
 
+  // Heat flow rate
   Q_tot = - outflowValve.outlet.m_flow*outflowValve.outlet.h_outflow +
     packFlow.outlet.m_flow*packFlow.outlet.h_outflow +
     cabinTrimFlow.outlet.m_flow*cabinTrimFlow.outlet.h_outflow +
@@ -514,10 +511,10 @@ equation
   Q_ext_cab = Q_tot_cab - Q_int_cab;
   Q_ext_fd = Q_tot_fd - Q_int_fd;
 
-  state_rec = Medium.setState_phX(recirculationFan.outlet.P,
-    recirculationFan.outlet.h_outflow, recirculationFan.outlet.Xi_outflow);
-  T_rec = Medium.temperature(state_rec);
+  Q_utilities = inFlightEntertainment/100*N_pax*Q_ife_pax +
+    cabinLights/100*Q_light_m2*A_floor + Q_galley;
 
+  // Relative humidity
   state_pack = Medium.setState_phX(packFlow.outlet.P,
     packFlow.outlet.h_outflow, packFlow.outlet.Xi_outflow);
   phi_pack = Medium.relativeHumidity(state_pack);
@@ -526,6 +523,13 @@ equation
   phi_cargo = Medium.relativeHumidity(cargo.cargo.state);
   phi_EE_bay = Medium.relativeHumidity(EEbay.cargo.state);
   phi_mix = Medium.relativeHumidity(mixingManifold.state);
+
+  // Geometry
+  A_floor = cabin.W_fl*L_fuselage;
+  A_floor_cargo = cabin.W_fl*L_cargo;
+  A_floor_cockpit = cockpit.W_fl*L_EEbay;
+  A_wall = alpha/2*R_fuselage^2 + cabin.W_fl*(R_fuselage - H_fl)/2;
+  alpha = atan((R_fuselage - H_fl)/R_fuselage);
 
   connect(outflowValve.outlet, pressureSink.inlet)
     annotation (Line(points={{70,-80},{82,-80}}, color={0,0,0}));

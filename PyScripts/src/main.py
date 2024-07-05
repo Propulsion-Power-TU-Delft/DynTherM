@@ -13,7 +13,7 @@ from GUI import *
 
 
 # user-defined input
-package_dir = "C:\\Users\\agiuffre\\Projects\\ModelicaProjects\\DynTherM\\package.mo"
+package_dir = os.path.join('C:\\Users', 'Public', 'Projects', 'ModelicaProjects', 'DynTherM', 'package.mo')
 
 if __name__ == '__main__':
     start_time = time.time()

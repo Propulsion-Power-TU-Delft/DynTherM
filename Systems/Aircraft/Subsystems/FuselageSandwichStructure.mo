@@ -11,7 +11,7 @@ model FuselageSandwichStructure
   parameter Real coeff "Fraction of fuselage with active heat transfer";
   parameter Length L_fuselage
     "Length of the fuselage cylindrical section";
-  parameter Length R_ext "External radius of the fuselage";
+  input Length R_ext "External radius of the fuselage" annotation (Dialog(enable=true));
   parameter Length t_tot=0.1
     "Overall fuselage thickness (half for lower section)";
   parameter Length L_window=0 "Window length";

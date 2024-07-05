@@ -69,11 +69,12 @@ model PouchCell1D
         extent={{-30,-9},{30,9}},
         rotation=90,
         origin={-63,0})));
-  Modelica.Blocks.Interfaces.RealOutput V_OCV "Open circuit voltage"
-    annotation (Placement(transformation(
+  Modelica.Blocks.Interfaces.RealOutput V "Voltage drop" annotation (Placement(
+        transformation(
         extent={{10,-10},{-10,10}},
         rotation=180,
-        origin={86,52}),   iconTransformation(extent={{8,-8},{-8,8}},
+        origin={86,52}), iconTransformation(
+        extent={{8,-8},{-8,8}},
         rotation=180,
         origin={80,-22})));
   CustomInterfaces.DistributedHeatPort_A Right(Nx=N, Ny=1) annotation (
@@ -128,8 +129,8 @@ equation
                                          color={191,0,0}));
   connect(prescribedHeatFlow.port, thermal.Average) annotation (Line(points={{28,-40},
           {40,-40},{40,0},{50.42,0}},                          color={191,0,0}));
-  connect(electrical.V, V_OCV) annotation (Line(points={{-10,1.33333},{-4,
-          1.33333},{-4,52},{86,52}}, color={0,0,127}));
+  connect(electrical.V, V) annotation (Line(points={{-10,1.33333},{-4,1.33333},
+          {-4,52},{86,52}}, color={0,0,127}));
   connect(Left, cross_plane_conduction_left.outlet)
     annotation (Line(points={{5,20},{10.3,20}}, color={191,0,0}));
   connect(Right, cross_plane_conduction_right.outlet)
@@ -153,5 +154,9 @@ equation
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-60},{80,60}})),
     experiment(StopTime=1200, __Dymola_Algorithm="Dassl"),
               Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
-        coordinateSystem(preserveAspectRatio=false)));
+        coordinateSystem(preserveAspectRatio=false)),
+    Documentation(info="<html>
+<p>Heat conduction is modelled both in-plane and cross-plane.</p>
+<p><br><img src=\"modelica://DynTherM/Figures/pouch_cell_thermal_1D.png\"/></p>
+</html>"));
 end PouchCell1D;

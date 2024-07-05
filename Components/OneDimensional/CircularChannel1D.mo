@@ -21,7 +21,7 @@ model CircularChannel1D "Circular channel implementing 1D spatial discretization
   parameter Length R_ext "Channel external radius" annotation (Dialog(tab="Geometry"));
   parameter Length R_int "Channel internal radius" annotation (Dialog(tab="Geometry"));
   parameter Length Roughness=0.015*10^(-3) "Channel roughness" annotation (Dialog(tab="Geometry"));
-  parameter Volume V_inertia=1e-6 "Volume of the plenum placed between two consecutive control volumes" annotation (Dialog(tab="Geometry"));
+  parameter Volume V_inertia=1e-10 "Volume of the plenum placed between two consecutive control volumes" annotation (Dialog(tab="Geometry"));
 
   // Initialization
   parameter Temperature T_start_solid=288.15 "Temperature of the solid part - start value" annotation (Dialog(tab="Initialization"));

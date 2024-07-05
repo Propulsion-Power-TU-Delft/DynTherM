@@ -20,22 +20,18 @@ model PassengerCabin "Upper section of the fuselage: cabin section"
     "External convection correlation" annotation (choicesAllMatching=true);
 
   parameter Real N_occupants[3] "Number of: passengers, cabin crew, pilots inside the cabin";
-  parameter HeatFlowRate Q_int "Internal heat load";
-  parameter Length L_fuselage
-    "Length of the fuselage cylindrical section";
+  input HeatFlowRate Q_int "Internal heat load" annotation (Dialog(enable=true));
+  parameter Length L_fuselage "Length of the fuselage cylindrical section";
   parameter Length R_ext "External radius of the fuselage";
   parameter Volume V_cabin "Passenger cabin internal volume";
-  parameter SpecificHeatCapacity c_cabin
-    "Specific heat capacity of cabin interior";
+  parameter SpecificHeatCapacity c_cabin "Specific heat capacity of cabin interior";
   parameter Mass m_cabin "Mass of cabin interior";
-  parameter Area A_cabin
-    "Heat transfer surface of cabin interior";
-  parameter Area A_floor "Surface area of cabin floor";
+  parameter Area A_cabin "Heat transfer surface of cabin interior";
+  input Area A_floor "Surface area of cabin floor" annotation (Dialog(enable=true));
   parameter Length L_window "Window length";
   parameter Length H_window "Window height";
   parameter Integer Nw_side "Number of windows per fuselage side";
-  parameter Length t_cabin
-    "Overall fuselage thickness (cabin section)";
+  parameter Length t_cabin "Overall fuselage thickness (cabin section)";
 
   // Radiation
   parameter Real rho_g=0.2 "Ground reflectance" annotation (Dialog(tab="Radiation"));
@@ -56,21 +52,15 @@ model PassengerCabin "Upper section of the fuselage: cabin section"
   parameter Angle theta[5] "Incidence angle - sections 1-5" annotation (Dialog(tab="Radiation"));
 
   // Initialization
-  parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
-    "Initialization option" annotation (Dialog(tab="Initialization"));
-  parameter Temperature Tstart_fuselage
-    "Fuselage temperature start value" annotation (Dialog(tab="Initialization"));
-  parameter Temperature Tstart_cabin
-    "Cabin temperature start value" annotation (Dialog(tab="Initialization"));
-  parameter Pressure Pstart_cabin
-    "Cabin pressure start value" annotation (Dialog(tab="Initialization"));
+  parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState "Initialization option" annotation (Dialog(tab="Initialization"));
+  parameter Temperature Tstart_fuselage "Fuselage temperature start value" annotation (Dialog(tab="Initialization"));
+  parameter Temperature Tstart_cabin "Cabin temperature start value" annotation (Dialog(tab="Initialization"));
+  parameter Pressure Pstart_cabin "Cabin pressure start value" annotation (Dialog(tab="Initialization"));
   parameter Boolean noInitialPressure=false "Remove initial equation on pressure" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
   parameter Boolean noInitialTemperature=false "Remove initial equation on temperature" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
 
-  final parameter Length L_oct=section_1.R_ext*sqrt(2 - sqrt(
-      2)) "Approximated length of one fuselage section (octagon)";
-  final parameter Length W_fl=L_oct*(1 + sqrt(2))
-    "Floor Width";
+  Length L_oct "Approximated length of one fuselage section (octagon)";
+  Length W_fl "Floor Width";
 
   Components.MassTransfer.Plenum cabin(
     initOpt=initOpt,
@@ -213,11 +203,15 @@ model PassengerCabin "Upper section of the fuselage: cabin section"
     redeclare model HTC=HTC_int,
     A=A_cabin)
     annotation (Placement(transformation(extent={{-30,-6},{-10,-26}})));
+
 equation
   section_5.P_air_gap = cabinInflow.P;
   section_5.X_air_gap = cabinInflow.Xi_outflow;
   section_1.P_air_gap = cabinInflow.P;
   section_1.X_air_gap = cabinInflow.Xi_outflow;
+
+  L_oct = section_1.R_ext*sqrt(2 - sqrt(2));
+  W_fl = L_oct*(1 + sqrt(2));
 
   connect(cabinToCargo, cabin.outlet)
     annotation (Line(points={{-100,-80},{-20,-80},{-20,-60}}, color={0,0,0}));

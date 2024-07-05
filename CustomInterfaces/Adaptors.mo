@@ -119,6 +119,7 @@ package Adaptors "Models used to couple two connectors of different type"
       annotation (Placement(transformation(extent={{-10,-70},{10,-50}})));
     CustomInterfaces.FluidPort_B outlet(redeclare package Medium = Medium)
       annotation (Placement(transformation(extent={{-10,50},{10,70}})));
+
   equation
     inlet.m_flow + scaler*outlet.m_flow = 0 "Mass balance";
     inlet.P = outlet.P "Momentum balance";

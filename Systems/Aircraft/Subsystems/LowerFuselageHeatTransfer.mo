@@ -27,12 +27,8 @@ model LowerFuselageHeatTransfer
   // Geometry
   parameter Real coeff "Fraction of cylinder with active heat transfer" annotation (Dialog(tab="Geometry"));
   parameter Length L_fuselage "Length of the fuselage cylindrical section" annotation (Dialog(tab="Geometry"));
-  parameter Length R_ext "External radius of the fuselage" annotation (Dialog(tab="Geometry"));
+  input Length R_ext "External radius of the fuselage" annotation (Dialog(tab="Geometry", enable=true));
   parameter Length t_fuselage "Overall fuselage thickness" annotation (Dialog(tab="Geometry"));
-  final parameter Length R_int=composite.interiorPanel_int.R_int
-    "Internal radius of the fuselage";
-  final parameter Area A_int=coeff*2*pi*L_fuselage*R_int "Internal fuselage area";
-  final parameter Area A_ext=coeff*2*pi*L_fuselage*R_ext "External fuselage area";
 
   // Radiation
   parameter Real rho_g=0.2 "Ground reflectance" annotation (Dialog(tab="Radiation"));
@@ -42,6 +38,10 @@ model LowerFuselageHeatTransfer
   parameter Irradiance E_td "Diffuse component of the clear-sky solar irradiance" annotation (Dialog(tab="Radiation"));
   parameter Irradiance E_tr "Ground reflected component of the clear-sky solar irradiance" annotation (Dialog(tab="Radiation"));
   parameter Angle theta "Incidence angle" annotation (Dialog(tab="Radiation"));
+
+  Length R_int "Internal radius of the fuselage";
+  Area A_int "Internal fuselage area";
+  Area A_ext "External fuselage area";
 
   Components.HeatTransfer.ExternalConvection extConvection(A=A_ext,
     redeclare model HTC = HTC_ext)
@@ -79,6 +79,10 @@ model LowerFuselageHeatTransfer
     Tstart=Tstart_fuselage)
     annotation (Placement(transformation(extent={{-26,-18},{26,20}})));
 equation
+  R_int = composite.interiorPanel_int.R_int;
+  A_int = coeff*2*pi*L_fuselage*R_int;
+  A_ext = coeff*2*pi*L_fuselage*R_ext;
+
   connect(solarRadiation.inlet, wallRadiation.outlet)
     annotation (Line(points={{-20,59.6},{-20,43.96}},  color={191,0,0}));
   connect(heatToInner, intConvection.inlet)

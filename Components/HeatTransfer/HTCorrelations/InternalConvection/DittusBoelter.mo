@@ -15,16 +15,16 @@ equation
 
   // Cooled pipe
   if T_in >= T_out then
-    Nu = 0.023*Re^(4/5)*Pr^0.3;
+    Nu = 0.023*regPow(Re, 4/5, 1e-6)*regPow(Pr, 0.3, 1e-6);
   else
   // Heated pipe
-    Nu = 0.023*Re^(4/5)*Pr^0.4;
+    Nu = 0.023*regPow(Re, 4/5, 1e-6)*regPow(Pr, 0.4, 1e-6);
   end if;
 
   Nu = ht*Dh/Medium.thermalConductivity(state);
 
   // Sanity check
-  assert(Re >= 10e3, "The Dittus-Boelter correlation is valid only for Reynolds numbers greater than 10e3", AssertionLevel.warning);
+  assert(Re >= 10e3, "The Dittus-Boelter correlation is strictly valid for Reynolds numbers greater than 10e3", AssertionLevel.warning);
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)),

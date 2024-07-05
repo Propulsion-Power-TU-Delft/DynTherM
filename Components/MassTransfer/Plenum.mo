@@ -15,7 +15,7 @@ model Plenum
   parameter Volume V "Inner volume";
   parameter Real N_occupants[3]={0,0,0}
     "Number of: passengers, cabin crew, pilots inside the plenum";
-  parameter HeatFlowRate Q_int=0 "Internal heat load";
+  input HeatFlowRate Q_int=0 "Internal heat load" annotation (Dialog(enable=true));
   parameter HeatFlowRate Q_sens_fixed[3]={0,0,0}
     "Fixed value of sensible heat from the occupants" annotation (Dialog(enable=fixed_Q));
   parameter HeatFlowRate Q_lat_fixed[3]={0,0,0}

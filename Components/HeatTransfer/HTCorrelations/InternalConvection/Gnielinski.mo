@@ -9,7 +9,7 @@ model Gnielinski
   input ReynoldsNumber Re "Reynolds number" annotation(Dialog(enable = true));
   input PrandtlNumber Pr "Prandtl number" annotation(Dialog(enable = true));
   input Medium.ThermodynamicState state "Average thermodynamic state" annotation(Dialog(enable = true));
-  input ReynoldsNumber f "Friction factor";
+  input Real f "Friction factor";
 
   NusseltNumber Nu "Nusselt number";
 
@@ -20,14 +20,14 @@ equation
     Nu = 4.36       "Constant heat flux";
   // Turbulent Flow
   else
-    Nu = ((f/8)*(Re - 1000)*Pr)/(1 + 12.7*((f/8)^0.5)*((Pr^0.6667) - 1));
+    Nu = (f/8*(Re - 1000)*Pr)/(1 + 12.7*regRoot(f/8, 1e-6)*(regPow(Pr, 0.6667, 1e-6) - 1));
   end if;
 
   Nu = ht*Dh/Medium.thermalConductivity(state);
 
   // Sanity check
-  assert(Re >= 5e6, "The Gnielinski's correlation is only valid only for Reynolds numbers greater than 5e6", AssertionLevel.warning);
-  assert(Re <= 3e3, "The Gnielinski's correlation is only valid only for Reynolds numbers greater than 3e3", AssertionLevel.warning);
+  assert(Re >= 5e6, "The Gnielinski's correlation is strictly valid for Reynolds numbers greater than 5e6", AssertionLevel.warning);
+  assert(Re <= 3e3, "The Gnielinski's correlation is strictly valid for Reynolds numbers greater than 3e3", AssertionLevel.warning);
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)));

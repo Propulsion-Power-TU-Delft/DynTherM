@@ -4,7 +4,7 @@ model InternalConvection "Model of internal convection"
   replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
 
-  parameter Area A "Heat transfer area";
+  input Area A "Heat transfer area" annotation (Dialog(enable=true));
 
   replaceable model HTC =
     Components.HeatTransfer.HTCorrelations.InternalConvection.FixedValue

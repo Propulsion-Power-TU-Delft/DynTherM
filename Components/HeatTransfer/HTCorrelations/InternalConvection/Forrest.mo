@@ -14,12 +14,12 @@ model Forrest
 equation
 
   // Nusselt number
-  Nu = 0.199*(Re - 600)^(7/8)*Pr/(5*(Pr - 2)*phi_star^(1/8) + 10.05*(Re - 600)^(1/8)*phi_star^(1/4));
+  Nu = 0.199*regPow(Re - 600, 7/8, 1e-6)*Pr/(5*(Pr - 2)*phi_star^(1/8) + 10.05*regPow(Re - 600, 1/8, 1e-6)*phi_star^(1/4));
   Nu = ht*Dh/Medium.thermalConductivity(state);
 
   // Sanity check
-  assert(Re >= 4e3, "The Forrest correlation is valid only for Reynolds numbers greater than 4e3", AssertionLevel.warning);
-  assert(Re <= 70e3, "The Forrest correlation is valid only for Reynolds numbers lower than 70e3", AssertionLevel.warning);
+  assert(Re >= 4e3, "The Forrest correlation is strictly valid for Reynolds numbers greater than 4e3", AssertionLevel.warning);
+  assert(Re <= 70e3, "The Forrest correlation is strictly valid for Reynolds numbers lower than 70e3", AssertionLevel.warning);
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)),

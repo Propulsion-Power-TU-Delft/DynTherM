@@ -1,7 +1,8 @@
 within DynTherM.Validation;
 package Battery
   model PouchCellPolestar
-    package Water = Modelica.Media.Water.StandardWater;
+    package Water = Modelica.Media.Water.ConstantPropertyLiquidWater;
+    //package Water = Modelica.Media.Water.StandardWater;
     Components.Battery.PouchCell1D pouchCell1D(
       H=0.1,
       W=0.35,
@@ -45,7 +46,7 @@ package Battery
       startTime=20)
       annotation (Placement(transformation(extent={{-88,-28},{-72,-12}})));
     Modelica.Blocks.Sources.Constant T_cool(k=298.15)
-      annotation (Placement(transformation(extent={{-88,2},{-72,18}})));
+      annotation (Placement(transformation(extent={{-88,12},{-72,28}})));
     inner Components.Environment environment(allowFlowReversal=false, initOpt=
           DynTherM.Choices.InitOpt.fixedState)
       annotation (Placement(transformation(extent={{-98,40},{-64,74}})));
@@ -59,8 +60,8 @@ package Battery
                                                       color={191,0,0}));
     connect(m_cool.y, flow_source.in_massFlow) annotation (Line(points={{-71.2,-20},
             {-59.6,-20},{-59.6,-31.6}}, color={0,0,127}));
-    connect(T_cool.y, flow_source.in_T) annotation (Line(points={{-71.2,10},{-52.4,
-            10},{-52.4,-31.6}}, color={0,0,127}));
+    connect(T_cool.y, flow_source.in_T) annotation (Line(points={{-71.2,20},{-52.4,
+            20},{-52.4,-31.6}}, color={0,0,127}));
     connect(I_charging.y, pouchCell1D.I) annotation (Line(points={{81.2,60},{54,
             60},{54,59.3333},{53.1556,59.3333}},
                                              color={0,0,127}));
@@ -81,8 +82,6 @@ package Battery
     parameter Length H_cell=0.1;
     parameter Length t_cell=0.01;
     parameter Length t_fw=0.001;
-    parameter Length R_int_channel=0.005;
-    parameter Length R_ext_channel=0.0051;
 
     Modelica.Blocks.Sources.TimeTable I_charging(table=[0,200; 200,200; 200,200; 500,
           200; 501,120; 700,120; 701,100; 900,100; 901,120; 1000,120; 1001,70; 1200,
@@ -131,7 +130,8 @@ package Battery
       SoC_start=0.1,
       Tstart=298.15,
       N_cv=N_cv,
-      N_cells=2)
+      N_parallel=1,
+      N_series=2)
       annotation (Placement(transformation(extent={{-32,-14},{48,66}})));
   equation
     connect(firewall.inlet, cell_right.Left) annotation (Line(points={{4.8,-50},
@@ -145,7 +145,8 @@ package Battery
             60},{80,-20},{-20,-20},{-20,-40.6667},{-32.8444,-40.6667}}, color={
             0,0,127}));
     connect(I_charging.y, battery_module.I)
-      annotation (Line(points={{101.2,60},{8,60},{8,50}}, color={0,0,127}));
+      annotation (Line(points={{101.2,60},{4.8,60},{4.8,45.2}},
+                                                          color={0,0,127}));
     annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,
               -80},{120,80}})),                                    Diagram(
           coordinateSystem(preserveAspectRatio=false, extent={{-100,-80},{120,
@@ -155,4 +156,82 @@ package Battery
         Interval=1,
         __Dymola_Algorithm="Dassl"));
   end PouchCellModule;
+
+  model PouchCellModuleCooling
+    package Water = Modelica.Media.Water.ConstantPropertyLiquidWater;
+
+    parameter Integer N_cv=10;
+    parameter Length W_cell=0.35;
+    parameter Length H_cell=0.1;
+    parameter Length t_cell=0.01;
+    parameter Length t_fw=0.001;
+
+    Modelica.Blocks.Sources.TimeTable I_charging(table=[0,200; 200,200; 200,200; 500,
+          200; 501,120; 700,120; 701,100; 900,100; 901,120; 1000,120; 1001,70; 1200,
+          70]) annotation (Placement(transformation(extent={{118,52},{102,68}})));
+    inner Components.Environment environment(allowFlowReversal=true,  initOpt=
+          DynTherM.Choices.InitOpt.fixedState)
+      annotation (Placement(transformation(extent={{-86,34},{-42,78}})));
+    Systems.Battery.PouchModuleFirewall battery_module(
+      W_cell=W_cell,
+      H_cell=H_cell,
+      t_cell(displayUnit="mm") = t_cell,
+      t_fw(displayUnit="mm") = t_fw,
+      C_nom(displayUnit="Ah") = 230400,
+      initOpt=environment.initOpt,
+      SoC_start=0.1,
+      Tstart=298.15,
+      N_cv=N_cv,
+      N_parallel=1,
+      N_series=10)
+      annotation (Placement(transformation(extent={{-32,-14},{48,66}})));
+    Components.Battery.ParallelRectangularColdPlate parallelRectangularColdPlate(
+      redeclare package Medium = Water,
+      L=0.109,
+      W_plate=W_cell,
+      V_inertia=1e-6,
+        allowFlowReversal=environment.allowFlowReversal,
+      initOpt=environment.initOpt,
+      T_start_plate=298.15,
+      T_start_fluid=298.15,
+      P_start=400000,
+      m_flow_start=1,
+      u_start=20,
+      rho_start(displayUnit="kg/m3") = 1,                N_cv=battery_module.N_cells)
+      annotation (Placement(transformation(extent={{-24,-54},{24,-6}})));
+    BoundaryConditions.flow_source flow_source(
+      redeclare package Medium = Water,
+      P_nom=400000,
+      T_nom=298.15,
+      massFlow_nom=1,
+      allowFlowReversal=environment.allowFlowReversal,
+      use_in_massFlow=false,
+      use_in_T=false)
+      annotation (Placement(transformation(extent={{-84,-42},{-60,-18}})));
+    BoundaryConditions.pressure_sink pressure_sink(
+      redeclare package Medium = Water,
+      allowFlowReversal=environment.allowFlowReversal,
+      use_ambient=false,
+      P_di=400000,
+      T_di=298.15)
+      annotation (Placement(transformation(extent={{70,-40},{90,-20}})));
+  equation
+    connect(I_charging.y, battery_module.I)
+      annotation (Line(points={{101.2,60},{4.8,60},{4.8,45.2}},
+                                                          color={0,0,127}));
+    connect(parallelRectangularColdPlate.upper_surface, battery_module.Bottom)
+      annotation (Line(points={{0,-13.68},{0,-0.4}}, color={191,0,0}));
+    connect(flow_source.outlet, parallelRectangularColdPlate.inlet)
+      annotation (Line(points={{-60,-30},{-24,-30}}, color={0,0,0}));
+    connect(parallelRectangularColdPlate.outlet, pressure_sink.inlet)
+      annotation (Line(points={{24,-30},{70,-30}}, color={0,0,0}));
+    annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,
+              -80},{120,80}})),                                    Diagram(
+          coordinateSystem(preserveAspectRatio=false, extent={{-100,-80},{120,
+              80}})),
+      experiment(
+        StopTime=1200,
+        Interval=1,
+        __Dymola_Algorithm="Dassl"));
+  end PouchCellModuleCooling;
 end Battery;

@@ -109,11 +109,11 @@ class Aircraft:
             dymola = DymolaInterface()
             dymola.openModel(path=self.package_dir)
 
-            # translate the prescribed model to avoid issues with non-evaluated parameters
-            dymola.translateModel(model_name + "(environment.ISA_plus=%d)" % data['Delta_ISA'][case_idx])
-
             # run the prescribed model in Dymola
-            result = dymola.simulateExtendedModel("", 0.0, 10.0, 0, 0.0, "Dassl", 0.0001, 0.0,
+            dymola.ExecuteCommand("Evaluate = false")
+            dymola.ExecuteCommand("Advanced.EvaluateAlsoTop = false")
+            dymola.ExecuteCommand("Advanced.Translation.SmartSimulateExtended = true")
+            result = dymola.simulateExtendedModel(model_name, 0.0, 10.0, 0, 0.0, "Dassl", 0.0001, 0.0,
                                                   'Simulations/' + data['Run_name'][case_idx],
                                                   input_keys, input_values, output_keys, True)
             # get output values

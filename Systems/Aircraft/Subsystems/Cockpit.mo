@@ -21,25 +21,17 @@ model Cockpit "Upper section of the fuselage: cockpit section"
 
   parameter Real N_occupants[3] "Number of: passengers, cabin crew, pilots inside the cockpit";
   parameter HeatFlowRate Q_int "Internal heat load";
-  parameter Length L_cockpit
-    "Length of the cockpit cylindrical section";
+  parameter Length L_cockpit "Length of the cockpit cylindrical section";
   parameter Length R_ext "External radius of the fuselage";
   parameter Volume V_cockpit "Cockpit internal volume";
-  parameter SpecificHeatCapacity c_cockpit
-    "Specific heat capacity of cockpit interior";
+  parameter SpecificHeatCapacity c_cockpit "Specific heat capacity of cockpit interior";
   parameter Mass m_cockpit "Mass of cockpit interior";
-  parameter Area A_cockpit
-    "Heat transfer surface of cockpit interior";
-  parameter Length L_windshield_front
-    "Windshield length - frontal section";
-  parameter Length H_windshield_front
-    "Windshield height - frontal section";
-  parameter Length L_windshield_lat
-    "Windshield length - lateral section";
-  parameter Length H_windshield_lat
-    "Windshield height - lateral section";
-  parameter Length t_cockpit
-    "Overall fuselage thickness (cockpit section)";
+  parameter Area A_cockpit "Heat transfer surface of cockpit interior";
+  parameter Length L_windshield_front "Windshield length - frontal section";
+  parameter Length H_windshield_front "Windshield height - frontal section";
+  parameter Length L_windshield_lat "Windshield length - lateral section";
+  parameter Length H_windshield_lat "Windshield height - lateral section";
+  parameter Length t_cockpit "Overall fuselage thickness (cockpit section)";
 
   // Radiation
   parameter Real rho_g=0.2 "Ground reflectance" annotation (Dialog(tab="Radiation"));
@@ -68,21 +60,15 @@ model Cockpit "Upper section of the fuselage: cockpit section"
   parameter Angle theta_front=0 "Incidence angle - frontal section" annotation (Dialog(tab="Radiation"));
 
   // Initialization
-  parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
-    "Initialization option" annotation (Dialog(tab="Initialization"));
-  parameter Temperature Tstart_fuselage
-    "Fuselage temperature start value" annotation (Dialog(tab="Initialization"));
-  parameter Temperature Tstart_flightDeck
-    "Cabin temperature start value" annotation (Dialog(tab="Initialization"));
-  parameter Pressure Pstart_flightDeck
-    "Cabin pressure start value" annotation (Dialog(tab="Initialization"));
+  parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState "Initialization option" annotation (Dialog(tab="Initialization"));
+  parameter Temperature Tstart_fuselage "Fuselage temperature start value" annotation (Dialog(tab="Initialization"));
+  parameter Temperature Tstart_flightDeck "Cabin temperature start value" annotation (Dialog(tab="Initialization"));
+  parameter Pressure Pstart_flightDeck "Cabin pressure start value" annotation (Dialog(tab="Initialization"));
   parameter Boolean noInitialPressure=false "Remove initial equation on pressure" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
   parameter Boolean noInitialTemperature=false "Remove initial equation on temperature" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
 
-  final parameter Length L_oct=section_1.R_ext*sqrt(2 - sqrt(
-      2)) "Approximated length of one fuselage section (octagon)";
-  final parameter Length W_fl=L_oct*(1 + sqrt(2))
-    "Floor Width";
+  Length L_oct "Approximated length of one fuselage section (octagon)";
+  Length W_fl "Floor Width";
 
   Components.MassTransfer.Plenum flightDeck(
     initOpt=initOpt,
@@ -255,6 +241,9 @@ equation
   section_5.X_air_gap = cockpitInflow.Xi_outflow;
   section_1.P_air_gap = cockpitInflow.P;
   section_1.X_air_gap = cockpitInflow.Xi_outflow;
+
+  L_oct = section_1.R_ext*sqrt(2 - sqrt(2));
+  W_fl = L_oct*(1 + sqrt(2));
 
   connect(cockpitToCargo, flightDeck.outlet)
     annotation (Line(points={{-100,-80},{-20,-80},{-20,-60}}, color={0,0,0}));

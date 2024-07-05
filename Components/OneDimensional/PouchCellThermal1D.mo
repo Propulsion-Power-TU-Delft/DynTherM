@@ -5,7 +5,7 @@ model PouchCellThermal1D
   replaceable model Mat = Materials.PolestarCellInPlane
                                                  constrainedby
     Materials.Properties "Material choice" annotation (choicesAllMatching=true);
-  model CV_cell = Components.OneDimensional.PouchCellThermalCV
+  model CV = Components.OneDimensional.PouchCellThermalCV
     "Control volume for cell";
 
   // Geometry
@@ -19,7 +19,7 @@ model PouchCellThermal1D
   // Discretization
   parameter Integer N(min=1) "Number of vertical sections in which the cell is discretized";
 
-  CV_cell Cell[N](
+  CV cv[N](
     redeclare model Mat=Mat,
     each H=H/N,
     each A=A,
@@ -48,21 +48,21 @@ model PouchCellThermal1D
 equation
 
   // Port connections
-  Average.T = sum(Cell.T_vol)/N;
+  Average.T = sum(cv.T_vol)/N;
 
   for i in 1:N loop
-    Cell[i].Q_gen = Average.Q_flow/N;
-    Cell[i].T_vol = Distributed.ports[i,1].T;
+    cv[i].Q_gen = Average.Q_flow/N;
+    cv[i].T_vol = Distributed.ports[i,1].T;
   end for;
 
   // Internal connections
   for i in 1:(N-1) loop
-    connect(Cell[i].outlet, Cell[i+1].inlet);
+    connect(cv[i].outlet, cv[i+1].inlet);
   end for;
 
   // Boundary connections
-  connect(Cell[1].inlet, Bottom);
-  connect(Cell[end].outlet, Top);
+  connect(cv[1].inlet, Bottom);
+  connect(cv[end].outlet, Top);
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Bitmap(
@@ -92,6 +92,7 @@ equation
               Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>
-<p>Heat conduction is modelled along the in-plane direction, whereas the cross-plane conduction is neglected.</p>
+<p>Heat generation is assumed uniform over the vertical control volumes.</p>
+<p>Heat conduction is modelled only in-plane, whereas cross-plane heat conduction is disregarded.</p>
 </html>"));
 end PouchCellThermal1D;

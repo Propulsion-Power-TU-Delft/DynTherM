@@ -32,7 +32,9 @@ model PouchModuleFirewall
 
   // Discretization
   parameter Integer N_cv(min=1)=10 "Number of vertical control volumes in which each cell is discretized";
-  parameter Integer N_cells(min=1)=3 "Number of cells stacked in parallel";
+  parameter Integer N_parallel(min=1) "Number of cells electrically connected in parallel";
+  parameter Integer N_series(min=1) "Number of cells electrically connected in series";
+  final parameter Integer N_cells=N_parallel*N_series "Number of cells stacked in parallel";
 
   Cell cell[N_cells](
     redeclare model InPlaneMat=InPlaneCellMat,
@@ -46,7 +48,7 @@ model PouchModuleFirewall
     each Tstart=Tstart,
     each initOpt=initOpt,
     each N=N_cv,
-    each I=I);
+    each I=I/N_parallel);
 
   Firewall firewall[N_cells-1](
     redeclare model Mat=FirewallMat,
@@ -56,8 +58,9 @@ model PouchModuleFirewall
     each initOpt=initOpt,
     each N=N_cv);
 
-  CustomInterfaces.DistributedHeatPort_A Bottom(Nx=N_cells, Ny=1)
-                                                            annotation (
+  Length t_module "Module thickness";
+
+  CustomInterfaces.DistributedHeatPort_A Bottom(Nx=N_cells, Ny=1) annotation (
       Placement(transformation(
         extent={{-12,-12},{12,12}},
         rotation=180,
@@ -65,8 +68,7 @@ model PouchModuleFirewall
         extent={{-30,-16},{30,16}},
         rotation=0,
         origin={-20,-66})));
-  CustomInterfaces.DistributedHeatPort_A Top(Nx=N_cells, Ny=1)
-                                                         annotation (Placement(
+  CustomInterfaces.DistributedHeatPort_A Top(Nx=N_cells, Ny=1) annotation (Placement(
         transformation(
         extent={{-12.5,-12.5},{12.5,12.5}},
         rotation=180,
@@ -74,8 +76,7 @@ model PouchModuleFirewall
         extent={{-30,-16},{30,16}},
         rotation=0,
         origin={-20,26})));
-  CustomInterfaces.DistributedHeatPort_A Left(Nx=N_cv, Ny=1)
-                                                          annotation (Placement(
+  CustomInterfaces.DistributedHeatPort_A Left(Nx=N_cv, Ny=1) annotation (Placement(
         transformation(
         extent={{-12,-12},{12,12}},
         rotation=90,
@@ -83,8 +84,7 @@ model PouchModuleFirewall
         extent={{-30,-16},{30,16}},
         rotation=-90,
         origin={-76,-20})));
-  CustomInterfaces.DistributedHeatPort_A Right(Nx=N_cv, Ny=1)
-                                                           annotation (
+  CustomInterfaces.DistributedHeatPort_A Right(Nx=N_cv, Ny=1) annotation (
       Placement(transformation(
         extent={{-12,-12},{12,12}},
         rotation=90,
@@ -92,14 +92,24 @@ model PouchModuleFirewall
         extent={{-30,-16},{30,16}},
         rotation=-90,
         origin={36,-20})));
-
-  Modelica.Blocks.Interfaces.RealInput I "Positive if charging" annotation (Placement(transformation(
+  Modelica.Blocks.Interfaces.RealInput I "Current - positive if charging" annotation (Placement(transformation(
           extent={{-116,-38},{-96,-18}}), iconTransformation(
         extent={{8,-8},{-8,8}},
         rotation=90,
-        origin={0,60})));
+        origin={-8,48})));
+  Modelica.Blocks.Interfaces.RealOutput V "Voltage drop" annotation (Placement(
+        transformation(
+        extent={{10,-10},{-10,10}},
+        rotation=180,
+        origin={102,-38}), iconTransformation(
+        extent={{-8,-8},{8,8}},
+        rotation=90,
+        origin={8,48})));
 
 equation
+  V = cell[1].V*N_series;
+  t_module = N_cells*t_cell + (N_cells - 1)*t_fw;
+
   // External ports connections
   for i in 1:N_cells loop
     connect(Top.ports[i,1], cell[i].Top);
@@ -155,6 +165,6 @@ equation
                                                                  Diagram(
         coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>
-<p>Pouch cells are physically stacked in parallel, but they might be electrically connected in series.</p>
+<p>Pouch cells are physically stacked in parallel, but they might be electrically connected both in series and parallel.</p>
 </html>"));
 end PouchModuleFirewall;
