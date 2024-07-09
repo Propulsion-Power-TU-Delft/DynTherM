@@ -13,3 +13,4 @@ SphereConduction
 EnclosedAirSpace
 HeatCapacity
 WallConduction2D
+ConductionPlanoConcave2D
