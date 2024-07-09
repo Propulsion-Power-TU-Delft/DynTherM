@@ -5,9 +5,9 @@ model WallConduction2D
                          "Material choice" annotation (choicesAllMatching=true);
 
   input Real N=1 "Number of walls in parallel" annotation (Dialog(enable=true));
-  input Length t "Wall thickness" annotation (Dialog(enable=true));
-  input Length h "Wall height, dimension perpendicular to thickness along heat transfer" annotation (Dialog(enable=true));
-  input Area A "Wall surface" annotation (Dialog(enable=true));
+  input Length w "Width of the Plane, sides facing east and west"  annotation (Dialog(enable=true));
+  input Length l "Length of the plane,sides facing north and south" annotation (Dialog(enable=true));
+  input Length dz "Thickness of the slice, out of plane" annotation (Dialog(enable=true));
 
   // Initialization
   parameter Temperature Tstart=300
@@ -15,37 +15,39 @@ model WallConduction2D
   parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
     "Initialization option" annotation (Dialog(tab="Initialization"));
 
-  Mass m "Mass of the wall";
-  Modelica.Units.SI.HeatCapacity Cm "Heat capacity of the wall";
-  Temperature T_vol "Average temperature of the wall";
+  Mass m "Mass of the volume";
+  Modelica.Units.SI.HeatCapacity Cm "Heat capacity of the volume";
+  Temperature T_vol "Average temperature of the volume";
 
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a inlet
-    annotation (Placement(transformation(extent={{-14,22},{14,50}}),
-        iconTransformation(extent={{-14,22},{14,50}})));
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b outletH
-    annotation (Placement(transformation(extent={{-100,-14},{-72,14}}),
-        iconTransformation(extent={{-100,-14},{-72,14}})));
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b outlet
-    annotation (Placement(transformation(extent={{-14,-48},{14,-20}})));
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a inletN annotation (
+      Placement(transformation(extent={{-10,60},{12,82}}), iconTransformation(
+          extent={{-10,60},{12,82}})));
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b outletW
+    annotation (Placement(transformation(extent={{-100,-10},{-80,10}}),
+        iconTransformation(extent={{-100,-10},{-80,10}})));
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b outletS
+    annotation (Placement(transformation(extent={{-12,-82},{10,-60}}),
+        iconTransformation(extent={{-12,-82},{10,-60}})));
 
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a inletH
-    annotation (Placement(transformation(extent={{72,-12},{100,16}}),
-        iconTransformation(extent={{72,-12},{100,16}})));
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a inletE
+    annotation (Placement(transformation(extent={{80,-10},{100,10}}),
+        iconTransformation(extent={{80,-10},{100,10}})));
 
 equation
 
-  m=Mat.rho*A*t;
+  m=Mat.rho*w*l*dz;
   Cm=m*Mat.cm;
 
-  N*Cm*der(T_vol) = inlet.Q_flow + outlet.Q_flow +  inletH.Q_flow + outletH.Q_flow  "Energy balance";
-  inlet.Q_flow = (Mat.lambda*N*A*(inlet.T - T_vol))/(t/2)
-    "Heat conduction through the internal half-thickness";
-  outlet.Q_flow = (Mat.lambda*N*A*(outlet.T - T_vol))/(t/2)
-    "Heat conduction through the external half-thickness";
-  inletH.Q_flow = (Mat.lambda*N*A*(inletH.T - T_vol))/(h/2)
-    "Vertical heat conduction through the upper half-height";
-  outletH.Q_flow = (Mat.lambda*N*A*(outletH.T - T_vol))/(h/2)
-    "Vertical heat conduction through the lower half-height";
+  N*Cm*der(T_vol) =inletN.Q_flow +outletS.Q_flow  +inletE.Q_flow  +outletW.Q_flow         "Energy balance";
+
+  inletN.Q_flow = (Mat.lambda*N*w*dz*(inletN.T - T_vol))/(l/2)
+    "Heat conduction through north side";
+  outletS.Q_flow = (Mat.lambda*N*w*dz*(outletS.T - T_vol))/(l/2)
+    "Heat conduction through the southern side";
+  inletE.Q_flow = (Mat.lambda*N*l*dz*(inletE.T - T_vol))/(w/2)
+    "Heat conduction through the eastern side";
+  outletW.Q_flow = (Mat.lambda*N*l*dz*(outletW.T - T_vol))/(w/2)
+    "Heat conduction through the Western side";
 
 
 initial equation
@@ -58,17 +60,18 @@ initial equation
   end if;
   annotation (
     Icon(graphics={   Rectangle(
-          extent={{-80,22},{80,-20}},
+          extent={{-80,60},{80,-60}},
           lineColor={0,0,0},
           fillColor={175,175,175},
           fillPattern=FillPattern.Backward),
         Text(
-          extent={{-32,30},{32,-34}},
+          extent={{-32,20},{32,-44}},
           lineColor={255,255,255},
           lineThickness=0.5,
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid,
-          textString="WALL")}),
+          textString="Plane
+")}),
     Documentation(info="<html>
 <p>The heat capacity (which is lumped at the center of the wall thickness) is accounted for, as well as the thermal resistance due to the finite heat conduction coefficient. Longitudinal heat conduction is neglected. </p>
 <p>The model can be used to reproduce the heat transfer through many walls in parallel. In that case, the heat flow rate is split equally among the different elements, assuming there is no heat transfer and temperature difference between them.</p>
