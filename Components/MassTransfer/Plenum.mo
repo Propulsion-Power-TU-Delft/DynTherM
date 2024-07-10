@@ -27,7 +27,7 @@ model Plenum
   parameter MassFlowRate m_flow_start=1
     "Mass flow rate - start value" annotation (Dialog(tab="Initialization"));
   parameter Pressure P_start=101325 "Pressure start value" annotation (Dialog(tab="Initialization"));
-  parameter Temperature T_start=300 "Temperature start value" annotation (Dialog(tab="Initialization"));
+  parameter Temperature T_start=288.15 "Temperature start value" annotation (Dialog(tab="Initialization"));
   parameter MassFraction X_start[Medium.nX]=Medium.reference_X "Start gas composition" annotation (Dialog(tab="Initialization"));
   parameter Medium.ThermodynamicState state_start = Medium.setState_pTX(P_start, T_start, X_start)
     "Starting thermodynamic state" annotation (Dialog(tab="Initialization"));

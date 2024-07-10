@@ -1,5 +1,5 @@
 within DynTherM.Components.Battery;
-model RC1
+model RC1 "First order equivalent circuit model"
   parameter ElectricCharge C_nom "Nominal capacity";
   parameter Real eta "Charging/discharging efficiency";
   parameter Real SoC_start(start = 1) "Start Condition" annotation (Dialog(tab="Initialization"));

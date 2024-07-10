@@ -12,13 +12,23 @@ model pressure_sink "Pressure sink"
   input Modelica.Units.SI.Temperature T_di=288.15 "Fixed value of temperature" annotation (Dialog(enable=not use_ambient));
   input Medium.MassFraction X_di[Medium.nX]=Medium.reference_X "Fixed value of mass fractions" annotation (Dialog(enable=not use_ambient));
 
+  parameter Pressure P_start=101325 "Pressure start value" annotation (Dialog(tab="Initialization"));
+  parameter Temperature T_start=300 "Temperature start value" annotation (Dialog(tab="Initialization"));
+  parameter MassFraction X_start[Medium.nX]=Medium.reference_X "Start gas composition" annotation (Dialog(tab="Initialization"));
+  parameter Medium.ThermodynamicState state_start = Medium.setState_pTX(P_start, T_start, X_start)
+    "Starting thermodynamic state" annotation (Dialog(tab="Initialization"));
+
   Medium.ThermodynamicState state_sink "Thermodynamic state of the sink";
 
-  DynTherM.CustomInterfaces.FluidPort_A inlet(redeclare package Medium = Medium,
-                                              m_flow(min=if allowFlowReversal
-           then -Modelica.Constants.inf else 0)) annotation (Placement(
+  DynTherM.CustomInterfaces.FluidPort_A inlet(
+    redeclare package Medium = Medium,
+    m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0),
+    P(start=P_start),
+    h_outflow(start=Medium.specificEnthalpy(state_start)),
+    Xi_outflow(start=X_start)) annotation (Placement(
         transformation(extent={{-120,-20},{-80,20}}, rotation=0),
         iconTransformation(extent={{-110,-10},{-90,10}})));
+
 equation
   if use_ambient then
 

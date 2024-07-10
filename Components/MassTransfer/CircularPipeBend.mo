@@ -1,5 +1,6 @@
 within DynTherM.Components.MassTransfer;
-model RectangularPipe "Model of pipe with rectangular cross-section"
+model CircularPipeBend
+  "Pressure drop in a pipe elbow with circular cross-section"
 
   replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
@@ -7,11 +8,6 @@ model RectangularPipe "Model of pipe with rectangular cross-section"
   // Options
   parameter Boolean allowFlowReversal=true
     "= true to allow flow reversal, false restricts to design direction";
-  parameter Choices.PDropOpt DP_opt
-    "Select the type of pressure drop to impose";
-
-  parameter CustomUnits.HydraulicResistance Rh=1 "Hydraulic Resistance" annotation (Dialog(enable=DP_opt == Choices.PDropOpt.linear));
-  parameter Pressure dP_fixed=0 "Fixed pressure drop" annotation (Dialog(enable=DP_opt == Choices.PDropOpt.fixed));
 
   // Initialization
   parameter MassFlowRate m_flow_start=1 "Mass flow rate - start value" annotation (Dialog(tab="Initialization"));
@@ -29,33 +25,24 @@ model RectangularPipe "Model of pipe with rectangular cross-section"
   parameter PrandtlNumber Pr_start=1.5 "Prandtl number - start value" annotation (Dialog(tab="Initialization"));
 
   // Geometry
-  input Real N=1 "Number of pipes in parallel" annotation (Dialog(enable=true));
+  parameter Integer N=1 "Number of pipes in parallel";
   parameter Length L "Length" annotation (Dialog(tab="Geometry"));
-  input Length W "Width of rectangular channel" annotation (Dialog(tab="Geometry", enable=true));
-  input Length H "Height of rectangular channel" annotation (Dialog(tab="Geometry", enable=true));
+  parameter Length D "Diameter" annotation (Dialog(tab="Geometry"));
+  parameter Length R_bend "Radius of curvature of the elbow" annotation (Dialog(tab="Geometry"));
+  parameter Length Roughness=0.015*10^(-3) "Roughness" annotation (Dialog(tab="Geometry"));
 
   model GEO =
-    Components.MassTransfer.PipeGeometry.Rectangular (L=L, W=W, H=H) annotation (choicesAllMatching=true);
-
-  // Heat transfer
-  model HTC =
-    Components.HeatTransfer.HTCorrelations.InternalConvection.Forrest (
-       redeclare package Medium=Medium,
-      Dh=geometry.Dh,
-      phi_star=geometry.phi_star,
-      Re=Re,
-      Pr=Pr,
-      state=state) annotation (choicesAllMatching=true);
+    Components.MassTransfer.PipeGeometry.Circular (L=L, D=D) annotation (choicesAllMatching=true);
 
   // Pressure drop
   model DPC =
-    Components.MassTransfer.DPCorrelations.Forrest (
+    Components.MassTransfer.DPCorrelations.Crawford (
       redeclare package Medium=Medium,
       Dh=geometry.Dh,
-      phi_star=geometry.phi_star,
-      Re=Re) annotation (choicesAllMatching=true);
+      R_bend=R_bend,
+      Re=Re,
+      Roughness=Roughness) annotation (choicesAllMatching=true);
 
-  HTC convection;
   DPC friction;
   GEO geometry;
 
@@ -80,15 +67,13 @@ model RectangularPipe "Model of pipe with rectangular cross-section"
             {-90,10}})));
   CustomInterfaces.FluidPort_B outlet(
     redeclare package Medium = Medium,
-    m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0, start=
-          -m_flow_start),
+    m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0, start=-
+          m_flow_start),
     P(start=P_start),
     h_outflow(start=Medium.specificEnthalpy(state_start)),
-    Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{80,
-            -20},{120,20}}, rotation=0), iconTransformation(extent={{90,-10},{
+    Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{80,-20},
+            {120,20}},      rotation=0), iconTransformation(extent={{90,-10},{
             110,10}})));
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b thermalPort
-    annotation (Placement(transformation(extent={{-10,28},{10,48}})));
 
 equation
   state_inlet =
@@ -113,9 +98,8 @@ equation
   outlet.Xi_outflow = inStream(inlet.Xi_outflow);
 
   // Energy balance
-  outlet.h_outflow = inStream(inlet.h_outflow) + thermalPort.Q_flow/inlet.m_flow;
-  inlet.h_outflow = inStream(outlet.h_outflow) + thermalPort.Q_flow/inlet.m_flow;
-  thermalPort.Q_flow = convection.ht*N*geometry.A_ht*(thermalPort.T - Medium.temperature(state));
+  outlet.h_outflow = inStream(inlet.h_outflow);
+  inlet.h_outflow = inStream(outlet.h_outflow);
 
   // Non-dimensional numbers
   rho = Medium.density(state);
@@ -125,34 +109,39 @@ equation
     Medium.thermalConductivity(state);
 
   // Pressure drop
-  if DP_opt == Choices.PDropOpt.fixed then
-    dP = dP_fixed;
-  elseif DP_opt == Choices.PDropOpt.correlation then
-    dP = 0.5*friction.f*rho*u^2/geometry.Dh*geometry.L;
-  elseif DP_opt == Choices.PDropOpt.linear then
-    dP = Rh*inlet.m_flow;
-  else
-    dP = 0;
-  end if;
-
+  dP = 0.5*homotopy(friction.Kt, 1.2)*rho*u^2;
   inlet.P - outlet.P = dP;
 
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
-                      Rectangle(
-          extent={{-100,40},{100,20}},
-          lineColor={0,0,0},
-          fillColor={175,175,175},
-          fillPattern=FillPattern.Backward),
-                      Rectangle(
-          extent={{-100,-20},{100,-40}},
-          lineColor={0,0,0},
-          fillColor={175,175,175},
-          fillPattern=FillPattern.Backward),
-        Rectangle(extent={{-100,20},{100,-20}}, lineColor={0,0,0})}), Diagram(
-        coordinateSystem(preserveAspectRatio=false)),
+  annotation (
+    Icon(coordinateSystem(preserveAspectRatio=false), graphics={
+        Line(
+          points={{-100,20},{-40,60},{40,60},{100,20}},
+          color={0,0,0},
+          smooth=Smooth.Bezier),
+        Line(
+          points={{-100,-20},{-40,20},{40,20},{100,-20}},
+          color={0,0,0},
+          smooth=Smooth.Bezier),
+        Line(
+          points={{-100,-40},{-40,0},{40,0},{100,-40}},
+          color={0,0,0},
+          smooth=Smooth.Bezier),
+        Line(
+          points={{-100,40},{-40,80},{40,80},{100,40}},
+          color={0,0,0},
+          smooth=Smooth.Bezier),
+        Line(
+          points={{-100,40},{-100,-40}},
+          color={0,0,0},
+          smooth=Smooth.Bezier),
+        Line(
+          points={{100,40},{100,-40}},
+          color={0,0,0},
+          smooth=Smooth.Bezier)}),
+    Diagram(coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>
-<p>The convective heat transfer coefficient and the friction factor can be fixed by the user or computed with semi-empirical correlations.</p>
-<p>The conductive heat transfer through the solid walls is not included in this model and must be treated separately.</p>
-<p>The model can be used to reproduce the flow through many tubes in parallel. In that case, the mass flow rate is split equally among the different tubes.</p>
+<p>Heat transfer is neglected.</p>
+<h4>Reference:</h4>
+<p>[1] N. Crawford et al. &quot;An Experimental Investigation into the Pressure Drop for Turbulent Flow 90 Degrees Elbow Bends&quot;, Institution of Mechanical Engineers. Proceedings. Part E: Journal of Process Mechanical Engineering, 2007.</p>
 </html>"));
-end RectangularPipe;
+end CircularPipeBend;

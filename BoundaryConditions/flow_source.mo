@@ -25,6 +25,12 @@ model flow_source "Flow rate source"
   input Medium.Temperature T_di=T_nom "Temperature" annotation(Dialog(tab="Inputs", group="Direct inputs", enable=use_di_T));
   input Medium.MassFraction X_di[Medium.nX]=X_nom "Water mass fraction" annotation(Dialog(tab="Inputs", group="Direct inputs", enable=use_di_X));
 
+  parameter Pressure P_start=101325 "Pressure start value" annotation (Dialog(tab="Initialization"));
+  parameter Temperature T_start=300 "Temperature start value" annotation (Dialog(tab="Initialization"));
+  parameter MassFraction X_start[Medium.nX]=Medium.reference_X "Start gas composition" annotation (Dialog(tab="Initialization"));
+  parameter Medium.ThermodynamicState state_start = Medium.setState_pTX(P_start, T_start, X_start)
+    "Starting thermodynamic state" annotation (Dialog(tab="Initialization"));
+
   Medium.MassFlowRate massFlow(start=massFlow_nom) "Mass flow rate";
   Medium.AbsolutePressure P(start=P_nom) "Pressure";
   Medium.Temperature T(start=T_nom) "Temperature";
@@ -32,7 +38,10 @@ model flow_source "Flow rate source"
   Medium.ThermodynamicState state "Thermodynamic state";
 
   DynTherM.CustomInterfaces.FluidPort_B outlet(redeclare package Medium = Medium,
-    m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0)) annotation (Placement(
+    m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0),
+    P(start=P_start),
+    h_outflow(start=Medium.specificEnthalpy(state_start)),
+    Xi_outflow(start=X_start)) annotation (Placement(
         transformation(extent={{80,-20},{120,20}}, rotation=0),
         iconTransformation(extent={{90,-10},{110,10}})));
   Modelica.Blocks.Interfaces.RealInput in_massFlow if use_in_massFlow annotation (Placement(

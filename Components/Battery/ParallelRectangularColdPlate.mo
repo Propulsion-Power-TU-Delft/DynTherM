@@ -10,7 +10,7 @@ model ParallelRectangularColdPlate
   // Geometry
   parameter Length L "Length" annotation (Dialog(tab="Geometry"));
   parameter Length W_plate "Width of the plate" annotation (Dialog(tab="Geometry"));
-  parameter Length W_channel=12e3-3 "Width of one mini-channel" annotation (Dialog(tab="Geometry"));
+  parameter Length W_channel=12e-3 "Width of one mini-channel" annotation (Dialog(tab="Geometry"));
   parameter Length H_plate=2e-3 "Height of the plate" annotation (Dialog(tab="Geometry"));
   parameter Length H_channel=0.6e-3 "Height of one mini-channel" annotation (Dialog(tab="Geometry"));
   parameter Length d=14e-3 "Distance between adjacent mini-channels" annotation (Dialog(tab="Geometry"));
@@ -35,6 +35,8 @@ model ParallelRectangularColdPlate
   parameter Velocity u_start=2 "Flow velocity within one channel - start value" annotation (Dialog(tab="Initialization"));
   parameter Density rho_start=1 "Density - start value" annotation (Dialog(tab="Initialization"));
   parameter Pressure dP_start=0.1e5 "Pressure drop - start value" annotation (Dialog(tab="Initialization"));
+  parameter ReynoldsNumber Re_start=20e3 "Reynolds number - start value" annotation (Dialog(tab="Initialization"));
+  parameter PrandtlNumber Pr_start=1.5 "Prandtl number - start value" annotation (Dialog(tab="Initialization"));
 
   // Discretization
   parameter Integer N_cv(min=1) "Number of longitudinal control volumes";
@@ -84,6 +86,8 @@ model ParallelRectangularColdPlate
     rho_start=rho_start,
     dP_start=dP_start,
     initOpt=initOpt,
+    Re_start=Re_start,
+    Pr_start=Pr_start,
     N_cv=N_cv,
     N_channels=ceil(N_channels_real))
     annotation (Placement(transformation(extent={{-40,-40},{40,40}})));

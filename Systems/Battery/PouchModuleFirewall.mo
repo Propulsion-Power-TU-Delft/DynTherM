@@ -2,7 +2,7 @@ within DynTherM.Systems.Battery;
 model PouchModuleFirewall
   "Battery module made by stacking pouch cells in parallel and by adding internal firewall between adjacent cells"
 
-    replaceable model InPlaneCellMat = Materials.PolestarCellInPlane constrainedby
+  replaceable model InPlaneCellMat = Materials.PolestarCellInPlane constrainedby
     Materials.Properties "In-plane cell material properties" annotation (choicesAllMatching=true);
 
   replaceable model CrossPlaneCellMat = Materials.PolestarCellCrossPlane constrainedby

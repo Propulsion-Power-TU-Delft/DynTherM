@@ -13,7 +13,7 @@ model Mixer "Mixer of two streams with heat and mass transfer"
 
   // Initialization
   parameter Pressure P_start=101325 "Pressure start value" annotation (Dialog(tab="Initialization"));
-  parameter Temperature T_start=300 "Temperature start value" annotation (Dialog(tab="Initialization"));
+  parameter Temperature T_start=288.15 "Temperature start value" annotation (Dialog(tab="Initialization"));
   parameter MassFraction X_start[Medium.nX]=Medium.reference_X "Start gas composition" annotation (Dialog(tab="Initialization"));
   parameter Boolean noInitialPressure=false "Remove initial equation on pressure" annotation (Dialog(tab="Initialization"),choices(checkBox=true));
   parameter Boolean noInitialTemperature=false "Remove initial equation on temperature" annotation (Dialog(tab="Initialization"),choices(checkBox=true));

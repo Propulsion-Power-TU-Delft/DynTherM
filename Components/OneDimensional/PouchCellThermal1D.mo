@@ -2,11 +2,9 @@ within DynTherM.Components.OneDimensional;
 model PouchCellThermal1D
   "Thermal model of a pouch cell implementing 1D discretization in vertical direction"
 
-  replaceable model Mat = Materials.PolestarCellInPlane
-                                                 constrainedby
+  replaceable model Mat = Materials.PolestarCellInPlane constrainedby
     Materials.Properties "Material choice" annotation (choicesAllMatching=true);
-  model CV = Components.OneDimensional.PouchCellThermalCV
-    "Control volume for cell";
+  model CV = Components.OneDimensional.PouchCellThermalCV "Control volume";
 
   // Geometry
   parameter Area A "Base surface area" annotation (Dialog(tab="Geometry"));

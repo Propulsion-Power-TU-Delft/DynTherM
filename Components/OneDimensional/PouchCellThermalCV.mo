@@ -2,9 +2,8 @@ within DynTherM.Components.OneDimensional;
 model PouchCellThermalCV
   "Control volume modeling a portion of a pouch cell"
 
-  replaceable model Mat=Materials.PolestarCellInPlane
-                                               constrainedby Materials.Properties
-    "Material choice" annotation (choicesAllMatching=true);
+  replaceable model Mat = Materials.PolestarCellInPlane constrainedby
+    Materials.Properties "Material choice" annotation (choicesAllMatching=true);
 
   input Length H "Control volume height" annotation (Dialog(enable=true));
   input Area A "Control volume base surface" annotation (Dialog(enable=true));

@@ -1,7 +1,6 @@
 within DynTherM.Tests.MassTransfer;
 model RectangularPipe "Simple test of component pipe"
-  package Refrigerant = DynTherM.Media.IncompressibleTableBased.MEG(X=0.1)
-    "Refrigerant";
+  package Refrigerant = DynTherM.Media.IncompressibleTableBased.MEG(X=0.1) "Refrigerant";
 
   inner Components.Environment environment(
     allowFlowReversal=false,

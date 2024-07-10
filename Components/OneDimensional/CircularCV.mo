@@ -33,8 +33,11 @@ model CircularCV "Control volume modeling a portion of a circular channel"
     "Starting thermodynamic state" annotation (Dialog(tab="Initialization"));
   parameter MassFlowRate m_flow_start=1
     "Mass flow rate - start value" annotation (Dialog(tab="Initialization"));
+  parameter Density rho_start=1 "Density - start value" annotation (Dialog(tab="Initialization"));
   parameter Velocity u_start=20 "Flow velocity - start value" annotation (Dialog(tab="Initialization"));
   parameter Pressure dP_start=100 "Pressure drop - start value" annotation (Dialog(tab="Initialization"));
+  parameter ReynoldsNumber Re_start=20e3 "Reynolds number - start value" annotation (Dialog(tab="Initialization"));
+  parameter PrandtlNumber Pr_start=1.5 "Prandtl number - start value" annotation (Dialog(tab="Initialization"));
 
   Volume V_tot "Total volume";
   Volume V_fluid "Volume of fluid";
@@ -71,8 +74,11 @@ model CircularCV "Control volume modeling a portion of a circular channel"
     T_start=T_start_fluid,
     X_start=X_start,
     u_start=u_start,
+    rho_start=rho_start,
     dP_start=dP_start,
     state_start=state_start,
+    Re_start=Re_start,
+    Pr_start=Pr_start,
     N=N,
     L=L,
     D=R_int*2,

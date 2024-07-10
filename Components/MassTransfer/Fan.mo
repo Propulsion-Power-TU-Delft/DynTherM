@@ -25,18 +25,16 @@ model Fan "Model of a fan"
   Real beta "Pressure ratio";
   PressureDifference dP "Pressure differential";
 
-  replaceable DynTherM.Components.MassTransfer.FanCharacteristics.Flow.fixed
-    Flow constrainedby
-    DynTherM.Components.MassTransfer.FanCharacteristics.BaseClass(
+  replaceable DynTherM.Utilities.FanCharacteristics.Flow.fixed Flow
+    constrainedby DynTherM.Utilities.FanCharacteristics.BaseClass(
     omega_nom=omega_nom,
     omega=shaft.omega,
     volFlow_nom=volFlow_nom,
     volFlow=volFlow,
     Head_nom=Head_nom) annotation (choicesAllMatching=true);
 
-  replaceable DynTherM.Components.MassTransfer.FanCharacteristics.Efficiency.fixed
-    Efficiency constrainedby
-    DynTherM.Components.MassTransfer.FanCharacteristics.BaseClass(
+  replaceable DynTherM.Utilities.FanCharacteristics.Efficiency.fixed Efficiency
+    constrainedby DynTherM.Utilities.FanCharacteristics.BaseClass(
     omega_nom=omega_nom,
     omega=shaft.omega,
     volFlow_nom=volFlow_nom,

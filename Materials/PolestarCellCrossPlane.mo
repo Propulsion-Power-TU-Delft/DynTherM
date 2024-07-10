@@ -4,7 +4,7 @@ model PolestarCellCrossPlane
   extends Modelica.Icons.MaterialProperty;
   extends Materials.Properties(
     rho=2740,
-    lambda=0.8,
+    lambda=2,
     cm=1204);
   annotation (Documentation(info="<html>
 </html>"));

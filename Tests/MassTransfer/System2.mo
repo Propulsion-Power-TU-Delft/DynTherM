@@ -46,7 +46,8 @@ model System2
     omega_nom(displayUnit="rpm") = 314.15926535898,
     volFlow_nom=1,
     Head_nom=10000,
-    redeclare Components.MassTransfer.FanCharacteristics.Flow.linear flowModel)
+    redeclare DynTherM.Utilities.FanCharacteristics.Flow.linear Flow,
+    redeclare DynTherM.Utilities.FanCharacteristics.Efficiency.fixed Efficiency)
     annotation (Placement(transformation(extent={{-16,-46},{16,-14}})));
   BoundaryConditions.mechanical mechanical(
     omega(displayUnit="rpm"),

@@ -1,6 +1,4 @@
 DPCorrelations
-FanCharacteristics
-PumpCharacteristics
 Fan
 Pump
 PressureDrop
@@ -10,5 +8,6 @@ Plenum
 Mixer
 CircularPipe
 RectangularPipe
+CircularPipeBend
 ActuatorDisk
 PipeGeometry

@@ -1,7 +1,7 @@
 within DynTherM.Tests.Distributed;
 model Rectangular1D
-  package Refrigerant = Modelica.Media.Water.ConstantPropertyLiquidWater;
-  //package Refrigerant = DynTherM.Media.IncompressibleTableBased.MEG(X=0.1);
+  //package Refrigerant = Modelica.Media.Water.ConstantPropertyLiquidWater;
+  package Refrigerant = DynTherM.Media.IncompressibleTableBased.MEG(X=0.1);
   BoundaryConditions.flow_source flow_source_distributed(
     redeclare package Medium = Refrigerant,
     use_in_massFlow=true,

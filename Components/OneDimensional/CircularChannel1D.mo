@@ -31,7 +31,13 @@ model CircularChannel1D "Circular channel implementing 1D spatial discretization
     "Mass fractions - start value" annotation (Dialog(tab="Initialization"));
   parameter Medium.ThermodynamicState state_start = Medium.setState_pTX(P_start, T_start_fluid, X_start)
     "Starting thermodynamic state" annotation (Dialog(tab="Initialization"));
-  parameter MassFlowRate m_flow_start=1 "Mass flow rate - start value" annotation (Dialog(tab="Initialization"));
+  parameter MassFlowRate m_flow_start=1
+    "Mass flow rate - start value" annotation (Dialog(tab="Initialization"));
+  parameter Density rho_start=1 "Density - start value" annotation (Dialog(tab="Initialization"));
+  parameter Velocity u_start=20 "Flow velocity - start value" annotation (Dialog(tab="Initialization"));
+  parameter Pressure dP_start=100 "Pressure drop - start value" annotation (Dialog(tab="Initialization"));
+  parameter ReynoldsNumber Re_start=20e3 "Reynolds number - start value" annotation (Dialog(tab="Initialization"));
+  parameter PrandtlNumber Pr_start=1.5 "Prandtl number - start value" annotation (Dialog(tab="Initialization"));
 
   // Discretization
   parameter Integer N_cv(min=1) "Number of control volumes in which the cooling channels are discretized";
@@ -51,6 +57,11 @@ model CircularChannel1D "Circular channel implementing 1D spatial discretization
     each X_start=X_start,
     each state_start=state_start,
     each m_flow_start=m_flow_start,
+    each u_start=u_start,
+    each rho_start=rho_start,
+    each dP_start=dP_start,
+    each Re_start=Re_start,
+    each Pr_start=Pr_start,
     each initOpt=initOpt,
     each allowFlowReversal=allowFlowReversal);
 

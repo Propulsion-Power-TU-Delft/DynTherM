@@ -16,7 +16,7 @@ model CircularPipe "Model of pipe with circular cross-section"
   // Initialization
   parameter MassFlowRate m_flow_start=1 "Mass flow rate - start value" annotation (Dialog(tab="Initialization"));
   parameter Pressure P_start=101325 "Pressure - start value" annotation (Dialog(tab="Initialization"));
-  parameter Temperature T_start=300 "Temperature - start value" annotation (Dialog(tab="Initialization"));
+  parameter Temperature T_start=288.15 "Temperature - start value" annotation (Dialog(tab="Initialization"));
   parameter MassFraction X_start[Medium.nX]=Medium.reference_X
     "Mass fractions - start value" annotation (Dialog(tab="Initialization"));
   parameter Velocity u_start=20 "Flow velocity - start value" annotation (Dialog(tab="Initialization"));
