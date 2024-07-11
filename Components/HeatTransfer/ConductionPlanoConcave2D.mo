@@ -8,7 +8,7 @@ model ConductionPlanoConcave2D
   input Real N = 1;
   input Length R "Radius of curvature of concave side" annotation (Dialog(enable=true));
   input Length y "Distance from the center of of curvature of concave side to the side opposite to the concave side" annotation (Dialog(enable=true));
-  input Length dz "Out of plane thickness";
+  input Length dz "Out of plane thickness" annotation (Dialog(enable=true));
 
   // Initialization
   parameter Temperature Tstart=300
@@ -16,9 +16,9 @@ model ConductionPlanoConcave2D
   parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
     "Initialization option" annotation (Dialog(tab="Initialization"));
 
-  Length t_avg "Equivalent thickness if it was a rectangle" annotation (Dialog(enable=true));
-  Length h "Height, In-plane dimension perpendicular to thickness" annotation (Dialog(enable=true));
-  Area As "Plane area" annotation (Dialog(enable=true));
+  Length t_avg "Equivalent thickness if it was a rectangle";
+  Length h "Height, In-plane dimension perpendicular to thickness";
+  Area As "Plane area";
 
   Mass m "Mass of the wall";
   Modelica.Units.SI.HeatCapacity Cm "Heat capacity of the wall";

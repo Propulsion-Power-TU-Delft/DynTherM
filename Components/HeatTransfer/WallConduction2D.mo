@@ -71,7 +71,12 @@ initial equation
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid,
           textString="Plane
-")}),
+"),
+        Line(
+          points={{-2,-34},{-2,36}},
+          color={0,0,0},
+          arrow={Arrow.None,Arrow.Filled},
+          thickness=0.5)}),
     Documentation(info="<html>
 <p>The heat capacity (which is lumped at the center of the wall thickness) is accounted for, as well as the thermal resistance due to the finite heat conduction coefficient. Longitudinal heat conduction is neglected. </p>
 <p>The model can be used to reproduce the heat transfer through many walls in parallel. In that case, the heat flow rate is split equally among the different elements, assuming there is no heat transfer and temperature difference between them.</p>
