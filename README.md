@@ -62,7 +62,6 @@ A. Giuffré, P. Colonna, and C. De Servi. "Dynamic Thermal Model of Passenger Ai
 ---
 
 ### Setting Python - Dymola interface
-
 The following instructions are tested for Python 3.7+ and Dymola 2022, assuming the Dymola installation folder to be the standard one.
 
 1. Add to Path (environment variable): C:\\Program Files\\Dymola 2022\\bin64\\Dymola.exe
@@ -78,6 +77,13 @@ The following instructions are tested for Python 3.7+ and Dymola 2022, assuming 
 
 5. Open PyCharm and go to File/Settings/Project Interpreter. At the top right, select show all, show paths for the selected interpreter and add: C:\Program Files\Dymola 2022\Modelica\Library\python_interface/dymola.egg
     
+---
+
+### Improve convergence in Dymola
+Go to Simulation, Setup, Translation and activate the option "Evaluate parameters to reduce models".
+This will allow the simulation of some models that otherwise do not converge.
+The reason for that still remains a mystery...
+
 ---
 
 ### How to get started
