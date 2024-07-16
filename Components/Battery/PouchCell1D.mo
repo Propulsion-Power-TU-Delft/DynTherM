@@ -52,14 +52,6 @@ model PouchCell1D
     eta=eta,
     SoC_start=SoC_start)
     annotation (Placement(transformation(extent={{-66,-50},{-10,6}})));
-  Modelica.Electrical.Analog.Sources.SignalCurrent signalCurrent annotation (Placement(transformation(extent={{12,12},{-12,-12}},
-        rotation=-90,
-        origin={-74,-28})));
-  Modelica.Blocks.Interfaces.RealInput I "Positive if charging" annotation (Placement(transformation(
-          extent={{-116,-38},{-96,-18}}), iconTransformation(
-        extent={{-8,-8},{8,8}},
-        rotation=180,
-        origin={78,20})));
 
   CustomInterfaces.DistributedHeatPort_A Left(Nx=N, Ny=1) annotation (Placement(
         transformation(
@@ -69,14 +61,6 @@ model PouchCell1D
         extent={{-30,-9},{30,9}},
         rotation=90,
         origin={-63,0})));
-  Modelica.Blocks.Interfaces.RealOutput V "Voltage drop" annotation (Placement(
-        transformation(
-        extent={{10,-10},{-10,10}},
-        rotation=180,
-        origin={86,52}), iconTransformation(
-        extent={{8,-8},{-8,8}},
-        rotation=180,
-        origin={80,-22})));
   CustomInterfaces.DistributedHeatPort_A Right(Nx=N, Ny=1) annotation (
       Placement(transformation(
         extent={{-10,-5},{10,5}},
@@ -105,6 +89,12 @@ model PouchCell1D
         extent={{-10,-9},{10,9}},
         rotation=-90,
         origin={13,-20})));
+  Modelica.Electrical.Analog.Interfaces.PositivePin p annotation (Placement(
+        transformation(extent={{-100,-46},{-86,-32}}), iconTransformation(
+          extent={{56,14},{66,24}})));
+  Modelica.Electrical.Analog.Interfaces.NegativePin n annotation (Placement(
+        transformation(extent={{-86,-22},{-100,-8}}), iconTransformation(extent
+          ={{56,-26},{66,-16}})));
 equation
 
   connect(Top,thermal. Top) annotation (Line(points={{50,40},{50.42,40},{50.42,17.36}},
@@ -116,21 +106,11 @@ equation
                                               color={0,0,127}));
   connect(temperatureSensor.T, electrical.T) annotation (Line(points={{-28.8,40},
           {-80,40},{-80,-2.86667},{-66,-2.86667}}, color={0,0,127}));
-  connect(signalCurrent.i, I)
-    annotation (Line(points={{-88.4,-28},{-106,-28}}, color={0,0,127}));
-  connect(signalCurrent.n, electrical.positive1) annotation (Line(points={{-74,-16},
-          {-58.6833,-16},{-58.6833,-15.7},{-57.3667,-15.7}},      color={0,0,
-          255}));
-  connect(signalCurrent.p, electrical.negative1) annotation (Line(points={{-74,-40},
-          {-56.6833,-40},{-56.6833,-39.9667},{-57.3667,-39.9667}},      color={
-          0,0,255}));
   connect(temperatureSensor.port, thermal.Average) annotation (Line(points={{-12,40},
           {40,40},{40,3.55271e-15},{50.42,3.55271e-15}},
                                          color={191,0,0}));
   connect(prescribedHeatFlow.port, thermal.Average) annotation (Line(points={{28,-40},
           {40,-40},{40,0},{50.42,0}},                          color={191,0,0}));
-  connect(electrical.V, V) annotation (Line(points={{-10,1.33333},{-4,1.33333},
-          {-4,52},{86,52}}, color={0,0,127}));
   connect(Left, cross_plane_conduction_left.outlet)
     annotation (Line(points={{5,20},{10.3,20}}, color={191,0,0}));
   connect(Right, cross_plane_conduction_right.outlet)
@@ -140,6 +120,10 @@ equation
   connect(cross_plane_conduction_right.inlet, thermal.Distributed) annotation (
       Line(points={{15.7,-20},{20,-20},{20,0},{26.35,0},{26.35,3.55271e-15}},
         color={191,0,0}));
+  connect(p, electrical.n) annotation (Line(points={{-93,-39},{-94,-39.9667},{
+          -57.3667,-39.9667}}, color={0,0,255}));
+  connect(n, electrical.p) annotation (Line(points={{-93,-15},{-94,-15.7},{
+          -57.3667,-15.7}}, color={0,0,255}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-60},{80,60}}),
                                                       graphics={Bitmap(

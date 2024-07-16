@@ -80,11 +80,6 @@ model RC1 "First order equivalent circuit model"
         rotation=-90,
         origin={0,126}),                  iconTransformation(extent={{-132,70},{
             -108,94}})));
-  Modelica.Blocks.Interfaces.RealOutput V "Voltage drop" annotation (Placement(
-        transformation(
-        extent={{14,-14},{-14,14}},
-        rotation=90,
-        origin={70,-126}), iconTransformation(extent={{108,88},{132,112}})));
   Modelica.Blocks.Math.Gain gain(k=1/1000)
     annotation (Placement(transformation(extent={{64,92},{80,108}})));
   Modelica.Blocks.Interfaces.RealOutput Q "Internal heat generation"
@@ -93,14 +88,12 @@ model RC1 "First order equivalent circuit model"
         rotation=180,
         origin={128,100}), iconTransformation(extent={{108,48},{132,72}})));
 
-  Modelica.Electrical.Analog.Interfaces.PositivePin positive1
-    annotation (Placement(transformation(extent={{-130,-10},{-110,10}}),
-        iconTransformation(extent={{-92,18},{-74,36}})));
-  Modelica.Electrical.Analog.Interfaces.NegativePin negative1
-    annotation (Placement(transformation(extent={{110,-10},{130,10}}),
-        iconTransformation(extent={{-92,-86},{-74,-68}})));
-  Modelica.Electrical.Analog.Basic.Ground ground
-    annotation (Placement(transformation(extent={{-102,-104},{-78,-80}})));
+  Modelica.Electrical.Analog.Interfaces.PositivePin p annotation (Placement(
+        transformation(extent={{-130,-10},{-110,10}}), iconTransformation(
+          extent={{-92,18},{-74,36}})));
+  Modelica.Electrical.Analog.Interfaces.NegativePin n annotation (Placement(
+        transformation(extent={{110,-10},{130,10}}), iconTransformation(extent=
+            {{-92,-86},{-74,-68}})));
 
 equation
   Q = Q_rev + Q_irrev;
@@ -142,24 +135,20 @@ equation
     annotation (Line(points={{0,126},{0,88},{4,88},{4,62}}, color={0,0,127}));
   connect(T, R1_interpolation.u2) annotation (Line(points={{0,126},{0,88},{44,88},
           {44,62}}, color={0,0,127}));
-  connect(voltageSensor.v, V)
-    annotation (Line(points={{70,-51},{70,-126}}, color={0,0,127}));
   connect(stateOfCharge.SoC, Entropic_interpolation.u) annotation (Line(points={{-70,
           -42.24},{-70,-60},{-100,-60},{-100,100},{-82,100}},  color={0,0,127}));
   connect(T, C1_interpolation.u2) annotation (Line(points={{0,126},{0,88},{-4,88},
           {-4,-100},{56,-100},{56,-72}}, color={0,0,127}));
   connect(Entropic_interpolation.y[1], gain.u)
     annotation (Line(points={{-59,100},{62.4,100}}, color={0,0,127}));
-  connect(positive1, currentSensor.p)
+  connect(p, currentSensor.p)
     annotation (Line(points={{-120,0},{-80,0}}, color={0,0,255}));
-  connect(R1.n, negative1) annotation (Line(points={{60,20},{70,20},{70,0},{120,
-          0}}, color={0,0,255}));
-  connect(C1.n, negative1) annotation (Line(points={{60,-20},{70,-20},{70,0},{120,
-          0}}, color={0,0,255}));
-  connect(voltageSensor.n, negative1) annotation (Line(points={{80,-40},{100,-40},
-          {100,0},{120,0}}, color={0,0,255}));
-  connect(ground.p, positive1)
-    annotation (Line(points={{-90,-80},{-90,0},{-120,0}}, color={0,0,255}));
+  connect(R1.n, n) annotation (Line(points={{60,20},{70,20},{70,0},{120,0}},
+        color={0,0,255}));
+  connect(C1.n, n) annotation (Line(points={{60,-20},{70,-20},{70,0},{120,0}},
+        color={0,0,255}));
+  connect(voltageSensor.n, n) annotation (Line(points={{80,-40},{100,-40},{100,
+          0},{120,0}}, color={0,0,255}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-120,-120},
             {120,120}}), graphics={Bitmap(
           extent={{-118,-120},{118,116}},
