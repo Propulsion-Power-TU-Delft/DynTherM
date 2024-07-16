@@ -143,4 +143,41 @@ package Adaptors "Models used to couple two connectors of different type"
 <p><img src=\"modelica://ThermalManagement/ThermalManagement/Figures/ThermalRadiationASHRAE.PNG\"/></p>
 </html>"));
   end flowScaler;
+
+  model InvertDistributedHeatflows "This model flips the position temperature and heat flows across the center row i. 
+  For an array of size Nx*Ny, the port.[i,j] becomes port.[Nx+1-i,j]"
+
+    parameter Integer Nx(min=1) "Number of volumes in x-direction";
+    parameter Integer Ny(min=1) "Number of volumes in y-direction";
+
+    // Define distributed heat ports
+    CustomInterfaces.DistributedHeatPort_A distributedHeatPort_in(Nx=Nx,  Ny=Ny) annotation (
+      Placement(transformation(extent={{-52,16},{54,122}}), iconTransformation(
+          extent={{-52,16},{54,122}})));
+
+    CustomInterfaces.DistributedHeatPort_A distributedHeatPort_out(Nx=Nx, Ny=Ny) annotation (
+      Placement(transformation(extent={{-52,-122},{54,-16}}), iconTransformation(
+          extent={{-52,-122},{54,-16}})));
+
+  equation
+    // Connect heat ports with inverted positions
+    for i in 1:Nx loop
+      for j in 1:Ny loop
+        connect(distributedHeatPort_in.ports[i,j], distributedHeatPort_out.ports[Nx+1-i, j]);
+      end for;
+    end for;
+
+    annotation (
+      Line(points={{-2,26},{-2,-27},{-1,-27}}, color={191,0,0}),
+      Icon(
+        graphics={
+          Rectangle(extent={{-26,58},{-18,-58}}, fillColor={0,0,0}, fillPattern=FillPattern.Solid, pattern=LinePattern.None),
+          Polygon(points={{-26,36},{-26,58},{-50,36},{-26,36}}, pattern=LinePattern.None, fillColor={0,0,0}, fillPattern=FillPattern.Solid),
+          Rectangle(extent={{20,58},{28,-58}}, fillColor={0,0,0}, fillPattern=FillPattern.Solid, pattern=LinePattern.None),
+          Polygon(points={{-18,36},{-18,58},{6,36},{-18,36}}, pattern=LinePattern.None, fillColor={0,0,0}, fillPattern=FillPattern.Solid),
+          Polygon(points={{28,-36},{28,-58},{52,-36},{28,-36}}, pattern=LinePattern.None, fillColor={0,0,0}, fillPattern=FillPattern.Solid),
+          Polygon(points={{20,-36},{20,-58},{-4,-36},{20,-36}}, pattern=LinePattern.None, fillColor={0,0,0}, fillPattern=FillPattern.Solid)}),
+      Icon(coordinateSystem(preserveAspectRatio=false)),
+      Diagram(coordinateSystem(preserveAspectRatio=false)));
+  end InvertDistributedHeatflows;
 end Adaptors;
