@@ -81,7 +81,7 @@ model RC1 "First order equivalent circuit model"
     annotation (Placement(transformation(
         extent={{14,-14},{-14,14}},
         rotation=180,
-        origin={8,-110}),  iconTransformation(extent={{120,-42},{144,-18}})));
+        origin={8,-110}),  iconTransformation(extent={{118,-42},{142,-18}})));
 
   Modelica.Electrical.Analog.Interfaces.PositivePin p annotation (Placement(
         transformation(extent={{-130,-10},{-110,10}}), iconTransformation(
@@ -94,7 +94,7 @@ model RC1 "First order equivalent circuit model"
     annotation (Placement(transformation(extent={{-40,-10},{-20,10}})));
   Modelica.Electrical.Batteries.Interfaces.CellBus bus annotation (Placement(
         transformation(extent={{-52,-76},{-20,-44}}), iconTransformation(extent
-          ={{-58,-44},{-26,-12}})));
+          ={{-56,-44},{-24,-12}})));
 equation
   Q = Q_rev + Q_irrev;
   Q_rev = multiSensor.pc.i*T*gain.y;
