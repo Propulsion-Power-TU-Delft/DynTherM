@@ -1,5 +1,6 @@
 within DynTherM.Components.OneDimensional;
 model ColdPlateCircularChannelCV
+  "Control volume for modelling of heat transfer through a portion of circular channel in a cold plate"
 
   replaceable model Mat = Materials.Aluminium constrainedby
     Materials.Properties "Material choice" annotation (choicesAllMatching=true);
@@ -9,16 +10,17 @@ model ColdPlateCircularChannelCV
   // Options
   parameter Boolean allowFlowReversal=true
     "= true to allow flow reversal, false restricts to design direction";
-  parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
+  parameter Choices.PDropOpt DP_opt
+    "Select the type of pressure drop to impose";
+  parameter Choices.InitOpt initOpt
     "Initialization option" annotation (Dialog(tab="Initialization"));
 
 
   // Geometry
   parameter Integer N=1 "Number of control volumes in parallel";
-  parameter Length L "Length of the control volume" annotation (Dialog(tab="Geometry"));
+  parameter Length L "Length of the control volume, in the flow direction" annotation (Dialog(tab="Geometry"));
   parameter Length t "Thickness of the cold Plate" annotation (Dialog(tab="Geometry"));
-  parameter Length d "Center to center distance between the parallel pipes"
-                                                                           annotation (Dialog(tab="Geometry"));
+  parameter Length d "Center to center distance between the parallel pipes" annotation (Dialog(tab="Geometry"));
   parameter Length R_int "Internal radius of the pipe control volume" annotation (Dialog(tab="Geometry"));
   parameter Length Roughness=0.015*10^(-3) "Pipe roughness" annotation (Dialog(tab="Geometry"));
 
@@ -32,24 +34,31 @@ model ColdPlateCircularChannelCV
   parameter MassFraction X_start[Medium.nX]=Medium.reference_X
     "Mass fractions - start value" annotation (Dialog(tab="Initialization"));
   parameter Medium.ThermodynamicState state_start=
-    Medium.setState_pTX(P_start, T_start_fluid, X_start)
+      Medium.setState_pTX(P_start, T_start_fluid, X_start)
     "Starting thermodynamic state" annotation (Dialog(tab="Initialization"));
   parameter MassFlowRate m_flow_start=1
     "Mass flow rate - start value" annotation (Dialog(tab="Initialization"));
+ parameter Density rho_start=1 "Density - start value" annotation (Dialog(tab="Initialization"));
   parameter Velocity u_start=20 "Flow velocity - start value" annotation (Dialog(tab="Initialization"));
   parameter Pressure dP_start=100 "Pressure drop - start value" annotation (Dialog(tab="Initialization"));
+  parameter ReynoldsNumber Re_start=20e3 "Reynolds number - start value" annotation (Dialog(tab="Initialization"));
+  parameter PrandtlNumber Pr_start=1.5 "Prandtl number - start value" annotation (Dialog(tab="Initialization"));
+
 
   MassTransfer.CircularPipe circularPipe(
     redeclare package Medium = Medium,
     allowFlowReversal=allowFlowReversal,
-    DP_opt=DynTherM.Choices.PDropOpt.correlation,
+    DP_opt=DP_opt,
     m_flow_start=m_flow_start,
     P_start=P_start,
     T_start=T_start_fluid,
     X_start=X_start,
     u_start=u_start,
+    rho_start=rho_start,
     dP_start=dP_start,
     state_start=state_start,
+    Re_start=Re_start,
+    Pr_start=Pr_start,
     N=N,
     L=L,
     D=R_int*2,
@@ -74,39 +83,53 @@ model ColdPlateCircularChannelCV
     Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{40,-10},
             {52,2}},        rotation=0), iconTransformation(extent={{24,-8},{40,
             8}})));
-  HeatTransfer.ConductionPlanoConcave2D PCWest(R=R_int, dz=L, y=d/2)
+  HeatTransfer.ConductionPlanoConcave2D PCWest( R=R_int, dz=L, y=d/2,
+    Tstart=T_start_solid, redeclare model Mat = Mat,
+    initOpt=initOpt)
     annotation (Placement(transformation(extent={{-88,-8},{-44,48}})));
   HeatTransfer.ConductionPlanoConcave2D PCEast(R=R_int,
-    y=d/2,                                              dz=L)
+    y=d/2,     redeclare model Mat = Mat,                     dz=L,
+    Tstart=T_start_solid,
+    initOpt=initOpt)
     annotation (Placement(transformation(extent={{88,-8},{44,48}})));
   HeatTransfer.ConductionPlanoConcave2D PCSouth(R=R_int,
-    y=t/2,                                               dz=L)
-                                                annotation (Placement(
+    y=t/2,                                               dz=L,
+    Tstart=T_start_solid, redeclare model Mat = Mat,
+    initOpt=initOpt)                            annotation (Placement(
         transformation(
         extent={{22,-28},{-22,28}},
         rotation=-90,
         origin={0,-42})));
   HeatTransfer.ConductionPlanoConcave2D PCNorth(R=R_int,
-    y=t/2,                                               dz=L)
-                                                annotation (Placement(
+    y=t/2,                                               dz=L,
+    Tstart=T_start_solid, redeclare model Mat = Mat,
+    initOpt=initOpt)                            annotation (Placement(
         transformation(
         extent={{-22,-28},{22,28}},
         rotation=-90,
         origin={0,64})));
   HeatTransfer.WallConduction2D PlaneNW(
     w=t/2 - R_int/sqrt(2),
-    l=d/2 - R_int/sqrt(2),              dz=L)
+    l=d/2 - R_int/sqrt(2),              dz=L,
+    Tstart=T_start_solid, redeclare model Mat = Mat,
+    initOpt=initOpt)
     annotation (Placement(transformation(extent={{-82,50},{-52,80}})));
   HeatTransfer.WallConduction2D PlaneSW(w=t/2-R_int/sqrt(2),
-    l=d/2 - R_int/sqrt(2),                                   dz=L)
+    l=d/2 - R_int/sqrt(2),                                   dz=L,
+    Tstart=T_start_solid, redeclare model Mat = Mat,
+    initOpt=initOpt)
     annotation (Placement(transformation(extent={{-82,-56},{-52,-26}})));
   HeatTransfer.WallConduction2D PlaneSE(
     w=t/2 - R_int/sqrt(2),
-    l=d/2 - R_int/sqrt(2),              dz=L)
+    l=d/2 - R_int/sqrt(2),              dz=L,
+    Tstart=T_start_solid, redeclare model Mat = Mat,
+    initOpt=initOpt)
     annotation (Placement(transformation(extent={{52,-58},{82,-28}})));
   HeatTransfer.WallConduction2D PlaneNE(
     w=t/2 - R_int/sqrt(2),
-    l=d/2 - R_int/sqrt(2),              dz=L)
+    l=d/2 - R_int/sqrt(2),              dz=L,
+    Tstart=T_start_solid, redeclare model Mat = Mat,
+    initOpt=initOpt)
     annotation (Placement(transformation(extent={{50,50},{80,80}})));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a NorthWestHor annotation (
       Placement(transformation(extent={{-106,56},{-86,76}}), iconTransformation(
@@ -187,9 +210,8 @@ equation
           {-67.15,-66},{0,-66},{0,-80}}, color={191,0,0}));
   connect(PlaneSE.outletS, SouthBottom) annotation (Line(points={{66.85,-53.65},
           {66.85,-66},{0,-66},{0,-80}}, color={191,0,0}));
-  connect(outlet, outlet)
-    annotation (Line(points={{46,-4},{46,-4}}, color={0,0,0}));
-    annotation (Placement(transformation(extent={{-28,-28},{28,28}})),
+    annotation (Line(points={{46,-4},{46,-4}}, color={0,0,0}),
+                Placement(transformation(extent={{-28,-28},{28,28}})),
               Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Ellipse(
           extent={{40,40},{-40,-40}},
