@@ -12,8 +12,9 @@ model CylindricalPack
     annotation (Dialog(tab="Initialization"));
 
   replaceable model CylindricalCell =
-      DynTherM.Components.Battery.Cell18650 constrainedby
-    DynTherM.Components.Battery.CylindricalCell;
+      DynTherM.Components.Electrical.Cell18650
+                                            constrainedby
+    DynTherM.Components.Electrical.CylindricalCell;
 
   CylindricalCell Cell[N_series,N_parallel](
     each SOC=SOC,

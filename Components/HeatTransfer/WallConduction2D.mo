@@ -71,8 +71,7 @@ initial equation
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid,
           textString="Plane
-"),
-        Line(
+"),     Line(
           points={{-2,-34},{-2,36}},
           color={0,0,0},
           arrow={Arrow.None,Arrow.Filled},
