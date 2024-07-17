@@ -11,7 +11,7 @@ model CylindricalCell
         origin={0.5,56})));
   Modelica.Blocks.Sources.Constant constN(k=1)
     annotation (Placement(transformation(extent={{-50,46},{-30,66}})));
-  Components.Battery.Cell18650 cell18650(
+  Components.Electrical.Cell18650 cell18650(
     SOC=100,
     Tstart=293.15,
     initOpt=DynTherM.Choices.InitOpt.fixedState)

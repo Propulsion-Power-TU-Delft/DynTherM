@@ -11,7 +11,7 @@ model RC1 "First order equivalent circuit model"
       Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
-        origin={-70,0})));
+        origin={-30,0})));
   Modelica.Electrical.Analog.Basic.VariableResistor R0
     annotation (Placement(transformation(extent={{0,-10},{20,10}})));
   Modelica.Electrical.Analog.Basic.VariableResistor R1
@@ -41,7 +41,7 @@ model RC1 "First order equivalent circuit model"
     annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=-90,
-        origin={-70,70})));
+        origin={-30,70})));
   Modelica.Blocks.Tables.CombiTable2Ds R1_interpolation(table=[0,283.15,298.15,318.15;
         0,0.001087396,0.001136109,0.000903105; 0.10,0.001012533,0.001027663,0.000897299;
         0.20,0.001057631,0.000909021,0.000790583; 0.30,0.000983819,0.000847077,0.000740259;
@@ -81,7 +81,9 @@ model RC1 "First order equivalent circuit model"
     annotation (Placement(transformation(
         extent={{14,-14},{-14,14}},
         rotation=180,
-        origin={8,-110}),  iconTransformation(extent={{118,-42},{142,-18}})));
+        origin={8,-110}),  iconTransformation(extent={{-12,-12},{12,12}},
+        rotation=-90,
+        origin={20,-100})));
 
   Modelica.Electrical.Analog.Interfaces.PositivePin p annotation (Placement(
         transformation(extent={{-130,-10},{-110,10}}), iconTransformation(
@@ -90,14 +92,19 @@ model RC1 "First order equivalent circuit model"
         transformation(extent={{110,-10},{130,10}}), iconTransformation(extent=
             {{-92,-86},{-74,-68}})));
 
-  Modelica.Electrical.Analog.Sensors.MultiSensor multiSensor
-    annotation (Placement(transformation(extent={{-40,-10},{-20,10}})));
-  Modelica.Electrical.Batteries.Interfaces.CellBus bus annotation (Placement(
-        transformation(extent={{-52,-76},{-20,-44}}), iconTransformation(extent
-          ={{-56,-44},{-24,-12}})));
+  Modelica.Electrical.Analog.Sensors.CurrentSensor currentSensor
+    annotation (Placement(transformation(extent={{-70,-10},{-50,10}})));
+  Modelica.Blocks.Interfaces.RealOutput SoC "State of charge" annotation (
+      Placement(transformation(
+        extent={{-14,-14},{14,14}},
+        rotation=180,
+        origin={-128,-40}), iconTransformation(
+        extent={{-12,-12},{12,12}},
+        rotation=-90,
+        origin={-20,-100})));
 equation
   Q = Q_rev + Q_irrev;
-  Q_rev = multiSensor.pc.i*T*gain.y;
+  Q_rev = currentSensor.p.i*T*gain.y;
   Q_irrev = R0.LossPower + R1.LossPower;
 
   connect(R0.n, R1.p)
@@ -105,16 +112,15 @@ equation
   connect(R0.n, C1.p) annotation (Line(points={{20,0},{40,0},{40,-20},{50,-20}},
         color={0,0,255}));
   connect(OCV_interpolation.y, sourceOCV.v)
-    annotation (Line(points={{-70,59},{-70,12}}, color={0,0,127}));
+    annotation (Line(points={{-30,59},{-30,12}}, color={0,0,127}));
   connect(R0_interpolation.y, R0.R)
     annotation (Line(points={{10,59},{10,12}}, color={0,0,127}));
   connect(R1_interpolation.y, R1.R)
     annotation (Line(points={{60,59},{60,32}}, color={0,0,127}));
   connect(C1_interpolation.y, C1.C)
     annotation (Line(points={{60,-49},{60,-32}}, color={0,0,127}));
-  connect(T, OCV_interpolation.u2) annotation (Line(points={{0,126},{0,100},{
-          -64,100},{-64,82}},
-                         color={0,0,127}));
+  connect(T, OCV_interpolation.u2) annotation (Line(points={{0,126},{0,100},{-24,
+          100},{-24,82}},color={0,0,127}));
   connect(T, R0_interpolation.u2)
     annotation (Line(points={{0,126},{0,100},{16,100},{16,82}},
                                                             color={0,0,127}));
@@ -131,21 +137,8 @@ equation
         color={0,0,255}));
   connect(C1.n, n) annotation (Line(points={{70,-20},{80,-20},{80,0},{120,0}},
         color={0,0,255}));
-  connect(p, sourceOCV.p)
-    annotation (Line(points={{-120,0},{-80,0}}, color={0,0,255}));
-  connect(sourceOCV.n, multiSensor.pc)
-    annotation (Line(points={{-60,0},{-40,0}}, color={0,0,255}));
-  connect(multiSensor.nc, R0.p)
-    annotation (Line(points={{-20,0},{0,0}}, color={0,0,255}));
-  connect(multiSensor.pc, multiSensor.pv)
-    annotation (Line(points={{-40,0},{-40,10},{-30,10}}, color={0,0,255}));
-  connect(multiSensor.nv, n) annotation (Line(points={{-30,-10},{-30,-40},{100,
-          -40},{100,0},{120,0}},
-                            color={0,0,255}));
-  connect(multiSensor.i, stateOfCharge.I)
-    annotation (Line(points={{-36,-11},{-36,-40},{-68,-40}}, color={0,0,127}));
   connect(stateOfCharge.SoC, OCV_interpolation.u1) annotation (Line(points={{-92.24,
-          -40},{-100,-40},{-100,90},{-76,90},{-76,82}}, color={0,0,127}));
+          -40},{-100,-40},{-100,90},{-36,90},{-36,82}}, color={0,0,127}));
   connect(stateOfCharge.SoC, R0_interpolation.u1) annotation (Line(points={{-92.24,
           -40},{-100,-40},{-100,90},{4,90},{4,82}}, color={0,0,127}));
   connect(stateOfCharge.SoC, R1_interpolation.u1) annotation (Line(points={{-92.24,
@@ -154,30 +147,16 @@ equation
           -40},{-100,-40},{-100,-90},{66,-90},{66,-72}}, color={0,0,127}));
   connect(stateOfCharge.SoC, Entropic_interpolation.u) annotation (Line(points={{-92.24,
           -40},{-100,-40},{-100,-110},{-82,-110}},       color={0,0,127}));
-  connect(multiSensor.i, bus.i) annotation (Line(points={{-36,-11},{-36,-59.92},
-          {-35.92,-59.92}}, color={0,0,127}), Text(
-      string="%second",
-      index=1,
-      extent={{-3,-6},{-3,-6}},
-      horizontalAlignment=TextAlignment.Right));
-  connect(multiSensor.power, bus.power) annotation (Line(points={{-41,-6},{-48,
-          -6},{-48,-59.92},{-35.92,-59.92}}, color={0,0,127}), Text(
-      string="%second",
-      index=1,
-      extent={{-6,3},{-6,3}},
-      horizontalAlignment=TextAlignment.Right));
-  connect(multiSensor.v, bus.v) annotation (Line(points={{-24,-11},{-24,-59.92},
-          {-35.92,-59.92}}, color={0,0,127}), Text(
-      string="%second",
-      index=1,
-      extent={{-3,-6},{-3,-6}},
-      horizontalAlignment=TextAlignment.Right));
-  connect(stateOfCharge.SoC, bus.soc) annotation (Line(points={{-92.24,-40},{
-          -100,-40},{-100,-59.92},{-35.92,-59.92}}, color={0,0,127}), Text(
-      string="%second",
-      index=1,
-      extent={{-6,3},{-6,3}},
-      horizontalAlignment=TextAlignment.Right));
+  connect(sourceOCV.n, R0.p)
+    annotation (Line(points={{-20,0},{0,0}}, color={0,0,255}));
+  connect(currentSensor.i, stateOfCharge.I)
+    annotation (Line(points={{-60,-11},{-60,-40},{-68,-40}}, color={0,0,127}));
+  connect(p, currentSensor.p)
+    annotation (Line(points={{-120,0},{-70,0}}, color={0,0,255}));
+  connect(currentSensor.n, sourceOCV.p)
+    annotation (Line(points={{-50,0},{-40,0}}, color={0,0,255}));
+  connect(stateOfCharge.SoC, SoC)
+    annotation (Line(points={{-92.24,-40},{-128,-40}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-120,-120},
             {120,120}}), graphics={Bitmap(
           extent={{-118,-120},{118,116}},

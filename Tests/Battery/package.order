@@ -2,5 +2,6 @@ CylindricalCell
 CylindricalPack
 test
 PouchCellModule
-PouchCellModuleCooling
+PouchCellModuleSeries
+PouchCellModuleParallel
 ColdPlate

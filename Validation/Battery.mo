@@ -2,7 +2,7 @@ within DynTherM.Validation;
 package Battery
   model PouchCellPolestar
     package Water = Modelica.Media.Water.StandardWater;
-    Components.Battery.PouchCell1D pouchCell1D(
+    Components.Electrical.PouchCell1D pouchCell1D(
       H=0.1,
       W=0.35,
       t=0.01,
@@ -13,7 +13,7 @@ package Battery
       annotation (Placement(transformation(extent={{-38,6},{38,56}})));
     Modelica.Blocks.Sources.TimeTable I_charging(table=[0,200; 200,200; 200,200; 500,
           200; 501,120; 700,120; 701,100; 900,100; 901,120; 1000,120; 1001,70; 1200,
-          70]) annotation (Placement(transformation(extent={{78,22},{62,38}})));
+          70]) annotation (Placement(transformation(extent={{98,22},{82,38}})));
     Components.OneDimensional.CircularCV single_channel(
       redeclare model Mat = DynTherM.Materials.Aluminium,
       redeclare package Medium = Water,
@@ -55,7 +55,9 @@ package Battery
           rotation=-90,
           origin={40,30})));
     Modelica.Electrical.Analog.Basic.Ground ground
-      annotation (Placement(transformation(extent={{80,16},{100,36}})));
+      annotation (Placement(transformation(extent={{22,-16},{38,0}})));
+    Modelica.Blocks.Math.Gain gain(k=-1)
+      annotation (Placement(transformation(extent={{72,24},{60,36}})));
   equation
     connect(flow_source.outlet, single_channel.inlet)
       annotation (Line(points={{-46,-40},{-19.2,-40}},color={0,0,0}));
@@ -73,10 +75,12 @@ package Battery
             38.9167},{29.9778,38},{40,38}}, color={0,0,255}));
     connect(pouchCell1D.n, signalCurrent.n) annotation (Line(points={{29.9778,
             22.25},{29.9778,22},{40,22}}, color={0,0,255}));
-    connect(signalCurrent.i, I_charging.y)
-      annotation (Line(points={{49.6,30},{61.2,30}}, color={0,0,127}));
-    connect(pouchCell1D.p, ground.p) annotation (Line(points={{29.9778,38.9167},
-            {29.9778,52},{90,52},{90,36}}, color={0,0,255}));
+    connect(pouchCell1D.n, ground.p) annotation (Line(points={{29.9778,22.25},{
+            30,20},{30,0}}, color={0,0,255}));
+    connect(signalCurrent.i, gain.y)
+      annotation (Line(points={{49.6,30},{59.4,30}}, color={0,0,127}));
+    connect(gain.u, I_charging.y)
+      annotation (Line(points={{73.2,30},{81.2,30}}, color={0,0,127}));
     annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-80},
               {100,80}})),                                         Diagram(
           coordinateSystem(preserveAspectRatio=false, extent={{-100,-80},{100,80}})),

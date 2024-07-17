@@ -52,7 +52,7 @@ model PouchCell1D
     C_nom=C_nom,
     eta=eta,
     SoC_start=SoC_start)
-    annotation (Placement(transformation(extent={{-76,-22},{-18,36}})));
+    annotation (Placement(transformation(extent={{-68,-20},{-14,34}})));
 
   CustomInterfaces.DistributedHeatPort_A Left(Nx=N, Ny=1) annotation (Placement(
         transformation(
@@ -91,14 +91,16 @@ model PouchCell1D
         rotation=-90,
         origin={13,-20})));
   Modelica.Electrical.Analog.Interfaces.PositivePin p annotation (Placement(
-        transformation(extent={{-100,-18},{-86,-4}}),  iconTransformation(
+        transformation(extent={{-100,6},{-86,20}}),    iconTransformation(
           extent={{56,14},{66,24}})));
   Modelica.Electrical.Analog.Interfaces.NegativePin n annotation (Placement(
-        transformation(extent={{-86,6},{-100,20}}),   iconTransformation(extent
+        transformation(extent={{-86,-28},{-100,-14}}),iconTransformation(extent
           ={{56,-26},{66,-16}})));
-  Modelica.Electrical.Batteries.Interfaces.CellBus bus annotation (Placement(
-        transformation(extent={{-70,-54},{-42,-26}}), iconTransformation(extent
-          ={{-22,-12},{2,12}})));
+  Modelica.Electrical.Batteries.Interfaces.CellBus cellBus annotation (
+      Placement(transformation(extent={{-70,-54},{-42,-26}}),
+        iconTransformation(extent={{-22,-12},{2,12}})));
+  Modelica.Electrical.Analog.Sensors.MultiSensor multiSensor
+    annotation (Placement(transformation(extent={{-80,8},{-70,18}})));
 equation
 
   connect(Top,thermal. Top) annotation (Line(points={{50,40},{50.42,40},{50.42,17.36}},
@@ -106,7 +108,7 @@ equation
   connect(Bottom,thermal. Bottom) annotation (Line(points={{50,-40},{50,-18.68},
           {50.42,-18.68},{50.42,-17.36}}, color={191,0,0}));
   connect(temperatureSensor.T, electrical.T) annotation (Line(points={{-26.6,40},
-          {-86,40},{-86,26.8167},{-76,26.8167}},   color={0,0,127}));
+          {-86,40},{-86,25.45},{-68,25.45}},       color={0,0,127}));
   connect(temperatureSensor.port, thermal.Average) annotation (Line(points={{-14,40},
           {40,40},{40,0},{50.42,0}},     color={191,0,0}));
   connect(prescribedHeatFlow.port, thermal.Average) annotation (Line(points={{26,-50},
@@ -120,34 +122,55 @@ equation
   connect(cross_plane_conduction_right.inlet, thermal.Distributed) annotation (
       Line(points={{15.7,-20},{20,-20},{20,0},{26.35,0},{26.35,3.55271e-15}},
         color={191,0,0}));
-  connect(p, electrical.n) annotation (Line(points={{-93,-11},{-93,-11.6083},{
-          -67.0583,-11.6083}}, color={0,0,255}));
-  connect(n, electrical.p) annotation (Line(points={{-93,13},{-94,13},{-94,
-          13.525},{-67.0583,13.525}},
-                            color={0,0,255}));
-  connect(temperatureSensor.T, bus.T) annotation (Line(points={{-26.6,40},{-86,
-          40},{-86,-40},{-60,-40},{-60,-39.93},{-55.93,-39.93}}, color={0,0,127}),
-      Text(
+  connect(temperatureSensor.T, cellBus.T) annotation (Line(points={{-26.6,40},{
+          -86,40},{-86,-40},{-60,-40},{-60,-39.93},{-55.93,-39.93}}, color={0,0,
+          127}), Text(
       string="%second",
       index=1,
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
-  connect(electrical.bus, bus) annotation (Line(
-      points={{-56.6667,0.233333},{-56,0.233333},{-56,-40}},
-      color={255,204,51},
-      thickness=0.5), Text(
+  connect(multiSensor.nc, electrical.p) annotation (Line(points={{-70,13},{-70,
+          13.075},{-59.675,13.075}}, color={0,0,255}));
+  connect(multiSensor.pc, multiSensor.pv)
+    annotation (Line(points={{-80,13},{-80,18},{-75,18}}, color={0,0,255}));
+  connect(multiSensor.v, cellBus.v) annotation (Line(points={{-72,7.5},{-72,
+          -39.93},{-55.93,-39.93}}, color={0,0,127}), Text(
+      string="%second",
+      index=1,
+      extent={{-3,-6},{-3,-6}},
+      horizontalAlignment=TextAlignment.Right));
+  connect(multiSensor.i, cellBus.i) annotation (Line(points={{-78,7.5},{-78,
+          -39.93},{-55.93,-39.93}}, color={0,0,127}), Text(
+      string="%second",
+      index=1,
+      extent={{-3,-6},{-3,-6}},
+      horizontalAlignment=TextAlignment.Right));
+  connect(multiSensor.power, cellBus.power) annotation (Line(points={{-80.5,10},
+          {-82,10},{-82,-39.93},{-55.93,-39.93}}, color={0,0,127}), Text(
       string="%second",
       index=1,
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
-  connect(electrical.Q, bus.lossPower) annotation (Line(points={{-15.5833,-0.25},
-          {-8,-0.25},{-8,-39.93},{-55.93,-39.93}}, color={0,0,127}), Text(
+  connect(electrical.Q, cellBus.lossPower) annotation (Line(points={{-36.5,
+          -15.5},{-36.5,-39.93},{-55.93,-39.93}}, color={0,0,127}), Text(
       string="%second",
       index=1,
-      extent={{6,3},{6,3}},
-      horizontalAlignment=TextAlignment.Left));
+      extent={{-3,-6},{-3,-6}},
+      horizontalAlignment=TextAlignment.Right));
+  connect(electrical.SoC, cellBus.soc) annotation (Line(points={{-45.5,-15.5},{
+          -45.5,-39.93},{-55.93,-39.93}}, color={0,0,127}), Text(
+      string="%second",
+      index=1,
+      extent={{-3,-6},{-3,-6}},
+      horizontalAlignment=TextAlignment.Right));
   connect(electrical.Q, prescribedHeatFlow.Q_flow) annotation (Line(points={{
-          -15.5833,-0.25},{-8,-0.25},{-8,-50},{14,-50}}, color={0,0,127}));
+          -36.5,-15.5},{-36.5,-50},{14,-50}}, color={0,0,127}));
+  connect(p, multiSensor.pc)
+    annotation (Line(points={{-93,13},{-80,13}}, color={0,0,255}));
+  connect(n, electrical.n) annotation (Line(points={{-93,-21},{-59.675,-21},{
+          -59.675,-10.325}}, color={0,0,255}));
+  connect(n, multiSensor.nv)
+    annotation (Line(points={{-93,-21},{-75,-21},{-75,8}}, color={0,0,255}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-60},{80,60}}),
                                                       graphics={Bitmap(
