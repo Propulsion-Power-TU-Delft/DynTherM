@@ -1,6 +1,6 @@
 within DynTherM.Components.HeatTransfer;
-model ConductionPlanoConcave2D
-  "Dynamic model of conduction heat transfer through a Plano-Concave surface"
+model ConductionPlanoConcave2Dim
+  "Dynamic model of conduction heat transfer through a Plano-Concave surface, where the concave side is one-fourth of a circle "
 
   replaceable model Mat=Materials.Aluminium constrainedby Materials.Properties
                          "Material choice" annotation (choicesAllMatching=true);
@@ -80,5 +80,7 @@ initial equation
           lineColor={28,108,200},
           fillColor={215,215,215},
           fillPattern=FillPattern.Backward)}),                   Diagram(
+        coordinateSystem(preserveAspectRatio=false)),
+              Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)));
-end ConductionPlanoConcave2D;
+end ConductionPlanoConcave2Dim;

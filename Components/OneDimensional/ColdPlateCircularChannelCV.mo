@@ -83,17 +83,22 @@ model ColdPlateCircularChannelCV
     Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{40,-10},
             {52,2}},        rotation=0), iconTransformation(extent={{24,-8},{40,
             8}})));
-  HeatTransfer.ConductionPlanoConcave2D PCWest( R=R_int, dz=L, y=d/2,
+  HeatTransfer.ConductionPlanoConcave2D PCWest( R=R_int,
+    p=d/2 - R_int*d/sqrt(d*d + t*t),
+    np=2*R_int*t/sqrt(d*d + t*t),                        dz=L,
     Tstart=T_start_solid, redeclare model Mat = Mat,
     initOpt=initOpt)
     annotation (Placement(transformation(extent={{-88,-8},{-44,48}})));
   HeatTransfer.ConductionPlanoConcave2D PCEast(R=R_int,
-    y=d/2,     redeclare model Mat = Mat,                     dz=L,
+    p=d/2 - R_int*d/sqrt(d*d + t*t),
+    np=2*R_int*t/sqrt(d*d + t*t),
+               redeclare model Mat = Mat,                     dz=L,
     Tstart=T_start_solid,
     initOpt=initOpt)
     annotation (Placement(transformation(extent={{88,-8},{44,48}})));
   HeatTransfer.ConductionPlanoConcave2D PCSouth(R=R_int,
-    y=t/2,                                               dz=L,
+    p=t/2 - R_int*t/sqrt(d*d + t*t),
+    np=2*R_int*d/sqrt(d*d + t*t),                        dz=L,
     Tstart=T_start_solid, redeclare model Mat = Mat,
     initOpt=initOpt)                            annotation (Placement(
         transformation(
@@ -101,7 +106,8 @@ model ColdPlateCircularChannelCV
         rotation=-90,
         origin={0,-42})));
   HeatTransfer.ConductionPlanoConcave2D PCNorth(R=R_int,
-    y=t/2,                                               dz=L,
+    p=t/2 - R_int*t/sqrt(d*d + t*t),
+    np=2*R_int*d/sqrt(d*d + t*t),                        dz=L,
     Tstart=T_start_solid, redeclare model Mat = Mat,
     initOpt=initOpt)                            annotation (Placement(
         transformation(
@@ -109,25 +115,26 @@ model ColdPlateCircularChannelCV
         rotation=-90,
         origin={0,64})));
   HeatTransfer.WallConduction2D PlaneNW(
-    w=t/2 - R_int/sqrt(2),
-    l=d/2 - R_int/sqrt(2),              dz=L,
+    w=t/2 - R_int*t/sqrt(d*d + t*t),
+    l=d/2 - R_int*d/sqrt(d*d + t*t),    dz=L,
     Tstart=T_start_solid, redeclare model Mat = Mat,
     initOpt=initOpt)
     annotation (Placement(transformation(extent={{-82,50},{-52,80}})));
-  HeatTransfer.WallConduction2D PlaneSW(w=t/2-R_int/sqrt(2),
-    l=d/2 - R_int/sqrt(2),                                   dz=L,
+  HeatTransfer.WallConduction2D PlaneSW(
+    w=t/2 - R_int*t/sqrt(d*d + t*t),
+    l=d/2 - R_int*d/sqrt(d*d + t*t),                         dz=L,
     Tstart=T_start_solid, redeclare model Mat = Mat,
     initOpt=initOpt)
     annotation (Placement(transformation(extent={{-82,-56},{-52,-26}})));
   HeatTransfer.WallConduction2D PlaneSE(
-    w=t/2 - R_int/sqrt(2),
-    l=d/2 - R_int/sqrt(2),              dz=L,
+    w=t/2 - R_int*t/sqrt(d*d + t*t),
+    l=d/2 - R_int*d/sqrt(d*d + t*t),    dz=L,
     Tstart=T_start_solid, redeclare model Mat = Mat,
     initOpt=initOpt)
     annotation (Placement(transformation(extent={{52,-58},{82,-28}})));
   HeatTransfer.WallConduction2D PlaneNE(
-    w=t/2 - R_int/sqrt(2),
-    l=d/2 - R_int/sqrt(2),              dz=L,
+    w=t/2 - R_int*t/sqrt(d*d + t*t),
+    l=d/2 - R_int*d/sqrt(d*d + t*t),    dz=L,
     Tstart=T_start_solid, redeclare model Mat = Mat,
     initOpt=initOpt)
     annotation (Placement(transformation(extent={{50,50},{80,80}})));
