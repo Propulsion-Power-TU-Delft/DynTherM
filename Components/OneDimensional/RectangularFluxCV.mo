@@ -192,6 +192,6 @@ equation
           pattern=LinePattern.Dash)}), Diagram(coordinateSystem(
           preserveAspectRatio=false)),
     Documentation(info="<html>
-<p>The model accounts for both mass transfer through the internal fluid control volume and heat transfer through the external solid control volume.</p>
+<p>Same as <span style=\"font-family: Courier New;\">RectangularCV</span> but with <span style=\"font-family: Courier New;\">HeatFluxPort</span> instead of <span style=\"font-family: Courier New;\">HeatPort</span>.</p>
 </html>"));
 end RectangularFluxCV;

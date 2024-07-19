@@ -1,6 +1,5 @@
 within DynTherM.Components.OneDimensional;
-model RectangularCV
-  "Control volume modeling a portion of a rectangular channel"
+model RectangularCV "Control volume modeling a portion of a rectangular channel"
 
   replaceable model Mat = Materials.Aluminium constrainedby
     Materials.Properties "Material choice" annotation (choicesAllMatching=true);
@@ -178,5 +177,6 @@ equation
           preserveAspectRatio=false)),
     Documentation(info="<html>
 <p>The model accounts for both mass transfer through the internal fluid control volume and heat transfer through the external solid control volume.</p>
+<p><br><br><img src=\"modelica://DynTherM/Figures/rectangular_CV.png\"/></p>
 </html>"));
 end RectangularCV;

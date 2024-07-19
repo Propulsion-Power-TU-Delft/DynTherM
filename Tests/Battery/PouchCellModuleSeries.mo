@@ -47,17 +47,17 @@ model PouchCellModuleSeries
         origin={26,-50})));
   Modelica.Electrical.Analog.Sources.SignalCurrent signalCurrentVector
     annotation (Placement(transformation(
-        extent={{-6,-6},{6,6}},
+        extent={{6,-6},{-6,6}},
         rotation=0,
         origin={-40,54})));
   Modelica.Electrical.Analog.Sources.SignalCurrent signalCurrentScalar
     annotation (Placement(transformation(
-        extent={{-6,-6},{6,6}},
+        extent={{6,-6},{-6,6}},
         rotation=0,
         origin={20,-20})));
   Modelica.Electrical.Analog.Basic.Ground ground
     annotation (Placement(transformation(extent={{-88,-36},{-72,-20}})));
-  Systems.Battery.PouchModuleFirewall module(
+  Systems.Battery.PouchModule module(
     W_cell=W_cell,
     H_cell=H_cell,
     t_cell(displayUnit="mm") = t_cell,
@@ -69,10 +69,7 @@ model PouchCellModuleSeries
     Tstart=Tstart,
     N_cv=N_cv,
     Ns=2,
-    Np=1)
-    annotation (Placement(transformation(extent={{-68,-10},{0,56}})));
-  Modelica.Blocks.Math.Gain gain(k=-1)
-    annotation (Placement(transformation(extent={{46,64},{34,76}})));
+    Np=1) annotation (Placement(transformation(extent={{-68,-10},{0,56}})));
 equation
   connect(firewall.inlet, cell_right.Left) annotation (Line(points={{30.2,-50},
           {46.8,-50}},                              color={191,0,0}));
@@ -80,25 +77,22 @@ equation
           2,-50},{21.8,-50}},                       color={191,0,0}));
   connect(cell_left.n, cell_right.p) annotation (Line(points={{8.4,-56.4},{8.4,
           -74},{96.4,-74},{96.4,-57.6}}, color={0,0,255}));
-  connect(cell_left.p, signalCurrentScalar.p) annotation (Line(points={{8.4,
-          -40.4},{8.4,-20},{14,-20}},
-                               color={0,0,255}));
-  connect(signalCurrentScalar.n, cell_right.n) annotation (Line(points={{26,-20},
-          {96,-20},{96,-41.6},{96.4,-41.6}}, color={0,0,255}));
   connect(cell_left.p, ground.p) annotation (Line(points={{8.4,-40.4},{8.4,-20},
           {-80,-20}}, color={0,0,255}));
-  connect(module.p, signalCurrentVector.p) annotation (Line(points={{-54.4,16.4},
-          {-54.4,54},{-46,54}}, color={0,0,255}));
-  connect(signalCurrentVector.n, module.n) annotation (Line(points={{-34,54},{-27.2,
-          54},{-27.2,16.4}}, color={0,0,255}));
   connect(module.p, ground.p) annotation (Line(points={{-54.4,16.4},{-80,16.4},{
           -80,-20}}, color={0,0,255}));
-  connect(gain.y, signalCurrentVector.i)
-    annotation (Line(points={{33.4,70},{-40,70},{-40,61.2}}, color={0,0,127}));
-  connect(signalCurrentScalar.i, gain.y)
-    annotation (Line(points={{20,-12.8},{20,70},{33.4,70}}, color={0,0,127}));
-  connect(gain.u, I_charging.y)
-    annotation (Line(points={{47.2,70},{61.2,70}}, color={0,0,127}));
+  connect(module.p, signalCurrentVector.n) annotation (Line(points={{-54.4,16.4},
+          {-54.4,54},{-46,54}}, color={0,0,255}));
+  connect(signalCurrentVector.p, module.n) annotation (Line(points={{-34,54},{
+          -27.2,54},{-27.2,16.4}}, color={0,0,255}));
+  connect(cell_left.p, signalCurrentScalar.n) annotation (Line(points={{8.4,
+          -40.4},{8.4,-20},{14,-20}}, color={0,0,255}));
+  connect(signalCurrentScalar.p, cell_right.n) annotation (Line(points={{26,-20},
+          {96.4,-20},{96.4,-41.6}}, color={0,0,255}));
+  connect(I_charging.y, signalCurrentVector.i)
+    annotation (Line(points={{61.2,70},{-40,70},{-40,61.2}}, color={0,0,127}));
+  connect(I_charging.y, signalCurrentScalar.i)
+    annotation (Line(points={{61.2,70},{20,70},{20,-12.8}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -80},{120,80}})),                                    Diagram(
         coordinateSystem(preserveAspectRatio=false, extent={{-100,-80},{120,

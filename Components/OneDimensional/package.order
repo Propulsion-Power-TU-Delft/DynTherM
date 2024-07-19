@@ -16,5 +16,3 @@ WallConduction1D
 WallConductionDiscretized2D
 ColdPlateCircularChannelCV
 ColdPlateCircularChannel1D
-ParallelCircularColdPlate
-ParallelRectangularColdPlate

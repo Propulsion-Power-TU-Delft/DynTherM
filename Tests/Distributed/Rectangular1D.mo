@@ -18,6 +18,7 @@ model Rectangular1D
             {78,60}})));
   Components.OneDimensional.RectangularChannelFlux1D channel1D(
     redeclare package Medium = Refrigerant,
+    use_inertia=false,
     L(displayUnit="mm") = 0.4826,
     W(displayUnit="mm") = 0.0559,
     H(displayUnit="mm") = 0.00196,

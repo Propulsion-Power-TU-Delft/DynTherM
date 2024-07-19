@@ -134,5 +134,6 @@ equation
     Documentation(info="<html>
 <p>The model accounts for both mass transfer through the internal fluid control volume and heat transfer through the external solid control volume.</p>
 <p>The heat port is connected to the whole external solid surface.</p>
+<p><br><br><img src=\"modelica://DynTherM/Figures/circular_CV.png\"/></p>
 </html>"));
 end CircularCV;

@@ -1,3 +1,7 @@
 BatteryPackData
 CylindricalPack
-PouchModuleFirewall
+PouchModule
+PouchModuleParallel
+ColdPlateRectangularSeries
+ColdPlateRectangularParallel
+ColdPlateCircularParallel

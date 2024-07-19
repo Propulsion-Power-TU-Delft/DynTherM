@@ -16,6 +16,9 @@ model RectangularChannelFlux1D
     "= true to allow flow reversal, false restricts to design direction";
   parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
     "Initialization option" annotation (Dialog(tab="Initialization"));
+  parameter Boolean use_inertia=true
+    "= true to place small plenum in between two adjacent CVs to improve numerical stability,
+    at the expense of higher computational cost";
 
   // Geometry
   parameter Length L "Channel length" annotation (Dialog(tab="Geometry"));
@@ -82,7 +85,7 @@ model RectangularChannelFlux1D
     each noInitialPressure=true,
     each noInitialTemperature=false,
     each initOpt=initOpt,
-    each allowFlowReversal=allowFlowReversal);
+    each allowFlowReversal=allowFlowReversal) if use_inertia;
 
   Mass m_tot "Total mass";
   Mass m_fluid "Mass of fluid";
@@ -151,8 +154,12 @@ equation
 
   // internal flow connections
   for i in 1:(N_cv-1) loop
-    connect(cv[i].outlet, inertia[i].inlet);
-    connect(inertia[i].outlet, cv[i+1].inlet);
+    if use_inertia then
+      connect(cv[i].outlet, inertia[i].inlet);
+      connect(inertia[i].outlet, cv[i+1].inlet);
+    else
+      connect(cv[i].outlet, cv[i+1].inlet);
+    end if;
   end for;
 
   // boundary flow connections
@@ -189,5 +196,8 @@ equation
           pattern=LinePattern.Dash)}),         Diagram(coordinateSystem(
           preserveAspectRatio=false)),
     Documentation(info="<html>
+<p>Model created by stacking <span style=\"font-family: Courier New;\">RectangularFluXCV</span> in series.</p>
+<p>A small SimplePlenum can be added between two adjacent control volumes to improve solver robustness, at the expense of a higher computational cost.</p>
+<p><br><br><img src=\"modelica://DynTherM/Figures/rectangular_channel1D.png\"/></p>
 </html>"));
 end RectangularChannelFlux1D;

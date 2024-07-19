@@ -1,5 +1,5 @@
 within DynTherM.Systems.Battery;
-model PouchModuleFirewall "Battery module made of pouch cells"
+model PouchModuleParallel "Battery module made of pouch cells"
 
   replaceable model InPlaneCellMat = Materials.PolestarCellInPlane constrainedby
     Materials.Properties "In-plane cell material properties" annotation (choicesAllMatching=true);
@@ -10,8 +10,7 @@ model PouchModuleFirewall "Battery module made of pouch cells"
   replaceable model FirewallMat = Materials.PolyurethaneFoam constrainedby
     Materials.Properties "Firewall material" annotation (choicesAllMatching=true);
 
-  model Cell = Components.Electrical.PouchCell1D
-                                              "Cell";
+  model Cell = Components.Electrical.PouchCell1D "Cell";
   model Firewall = Components.OneDimensional.WallConduction1D "Firewall";
 
   // Geometry
@@ -19,7 +18,6 @@ model PouchModuleFirewall "Battery module made of pouch cells"
   parameter Length H_cell "Cell height" annotation (Dialog(tab="Geometry"));
   parameter Length t_cell "Cell thickness" annotation (Dialog(tab="Geometry"));
   parameter Length t_fw "Firewall thickness between cells in parallel" annotation (Dialog(tab="Geometry"));
-  parameter Length t_gap "Air gap thickness between cells in series" annotation (Dialog(tab="Geometry"));
 
   // Electrical parameters
   parameter Real eta=0.98 "Cell charging/discharging efficiency";
@@ -49,7 +47,7 @@ model PouchModuleFirewall "Battery module made of pouch cells"
     each initOpt=initOpt,
     each N=N_cv);
 
-  Firewall firewall[Ns,Np-1](
+  Firewall firewall[Ns*Np - 1](
     redeclare model Mat=FirewallMat,
     each A=W_cell*H_cell,
     each t=t_fw,
@@ -57,10 +55,9 @@ model PouchModuleFirewall "Battery module made of pouch cells"
     each initOpt=initOpt,
     each N=N_cv);
 
-  Length W_module "Module width";
   Length t_module "Module thickness";
 
-  CustomInterfaces.DistributedHeatPort_A Bottom(Nx=Ns, Ny=Np)     annotation (
+  CustomInterfaces.DistributedHeatPort_A Bottom(Nx=Ns*Np, Ny=1)   annotation (
       Placement(transformation(
         extent={{-12,-12},{12,12}},
         rotation=180,
@@ -68,7 +65,7 @@ model PouchModuleFirewall "Battery module made of pouch cells"
         extent={{-30,-16},{30,16}},
         rotation=0,
         origin={-20,-66})));
-  CustomInterfaces.DistributedHeatPort_A Top(Nx=Ns, Ny=Np)     annotation (Placement(
+  CustomInterfaces.DistributedHeatPort_A Top(Nx=Ns*Np, Ny=1)   annotation (Placement(
         transformation(
         extent={{-12.5,-12.5},{12.5,12.5}},
         rotation=180,
@@ -87,14 +84,10 @@ model PouchModuleFirewall "Battery module made of pouch cells"
     annotation (Placement(transformation(extent={{-60,-10},{-40,10}})));
   Modelica.Electrical.Batteries.Interfaces.CellBus batteryBus
     "Battery bus (average / sum over all cells)" annotation (Placement(
-        transformation(extent={{-68,-70},{-32,-34}}), iconTransformation(extent
-          ={{-40,30},{-20,50}})));
-  Modelica.Electrical.Batteries.Interfaces.StackBus stackBus(Ns=Ns, Np=Np)
-    annotation (Placement(transformation(extent={{-14,-14},{14,14}}),
-        iconTransformation(extent={{0,30},{20,50}})));
+        transformation(extent={{-68,-70},{-32,-34}}), iconTransformation(extent={{-10,30},
+            {10,50}})));
 
-  CustomInterfaces.DistributedHeatPort_A Left(Nx=Ns, Ny=N_cv)
-                                                             annotation (Placement(
+  CustomInterfaces.DistributedHeatPort_A Left(Nx=N_cv, Ny=1) annotation (Placement(
         transformation(
         extent={{-12,-12},{12,12}},
         rotation=90,
@@ -102,8 +95,7 @@ model PouchModuleFirewall "Battery module made of pouch cells"
         extent={{-30,-16},{30,16}},
         rotation=-90,
         origin={-76,-20})));
-  CustomInterfaces.DistributedHeatPort_A Right(Nx=Ns, Ny=N_cv)
-                                                              annotation (
+  CustomInterfaces.DistributedHeatPort_A Right(Nx=N_cv, Ny=1) annotation (
       Placement(transformation(
         extent={{-12,-12},{12,12}},
         rotation=90,
@@ -111,16 +103,10 @@ model PouchModuleFirewall "Battery module made of pouch cells"
         extent={{-30,-16},{30,16}},
         rotation=-90,
         origin={36,-20})));
+
 equation
   // Geometry
-  W_module = Ns*W_cell + (Ns - 1)*t_gap;
-  t_module = Np*t_cell + (Np - 1)*t_fw;
-
-  // Bus connections
-  for ks in 1:Ns loop
-    for kp in 1:Np loop
-    end for;
-  end for;
+  t_module = Np*Ns*t_cell + (Np*Ns - 1)*t_fw;
 
   // External electrical ports connections
   connect(multiSensor.nc, cell[1,1].p);
@@ -143,24 +129,25 @@ equation
   // External thermal ports connections
   for ks in 1:Ns loop
     for kp in 1:Np loop
-      connect(Top.ports[ks,kp], cell[ks,kp].Top);
-      connect(Bottom.ports[ks,kp], cell[ks,kp].Bottom);
+      connect(Top.ports[Np*(ks - 1) + kp,1], cell[ks,kp].Top);
+      connect(Bottom.ports[Np*(ks - 1) + kp,1], cell[ks,kp].Bottom);
     end for;
   end for;
 
-  for ks in 1:Ns loop
-    for j in 1:N_cv loop
-      connect(Left.ports[ks,j], cell[ks,1].Left.ports[j,1]);
-      connect(Right.ports[ks,j], cell[ks,Np].Right.ports[j,1]);
-    end for;
-  end for;
+  connect(Left, cell[1,1].Left);
+  connect(Right, cell[Ns,Np].Right);
 
   // Internal thermal ports connections
   for ks in 1:Ns loop
     for kp in 1:(Np - 1) loop
-      connect(cell[ks,kp].Right, firewall[ks,kp].inlet);
-      connect(firewall[ks,kp].outlet, cell[ks,kp + 1].Left);
+      connect(cell[ks,kp].Right, firewall[Np*(ks - 1) + kp].inlet);
+      connect(firewall[Np*(ks - 1) + kp].outlet, cell[ks,kp + 1].Left);
     end for;
+  end for;
+
+  for ks in 1:(Ns - 1) loop
+    connect(cell[ks,Np].Right, firewall[Np*(ks - 1) + Np].inlet);
+    connect(firewall[Np*(ks - 1) + Np].outlet, cell[ks + 1,1].Left);
   end for;
 
   connect(p, multiSensor.pc)
@@ -228,7 +215,8 @@ equation
                                                                  Diagram(
         coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>
-<p>Pouch cells are physically stacked and electrically connected in series/parallel, see image below.</p>
+<p>Pouch cells are electrically connected in series/parallel, see image below.</p>
+<p>However, they are physically stacked in parallel.</p>
 <p><img src=\"modelica://DynTherM/Figures/pouch_cell_module.png\"/></p>
 </html>"));
-end PouchModuleFirewall;
+end PouchModuleParallel;

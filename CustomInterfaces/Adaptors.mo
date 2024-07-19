@@ -108,6 +108,55 @@ package Adaptors "Models used to couple two connectors of different type"
           coordinateSystem(preserveAspectRatio=false)));
   end heatFlowMultiplier;
 
+  model heatFlowConverter
+    "Model used to convert between distributed heat ports featuring different size"
+    parameter Integer Nx_s1(min=1) "Number of ports in x-direction - side 1";
+    parameter Integer Ny_s1(min=1) "Number of ports in y-direction - side 1";
+    parameter Integer s1_s2_x_ratio(min=1) "Ratio between no. of ports in x direction s1/s2";
+    parameter Integer s1_s2_y_ratio(min=1) "Ratio between no. of ports in y direction s1/s2";
+    final parameter Integer Nx_s2 = integer(Nx_s1/s1_s2_x_ratio) "Number of ports in x-direction - side 2";
+    final parameter Integer Ny_s2 = integer(Ny_s1/s1_s2_y_ratio) "Number of ports in y-direction - side 2";
+
+    CustomInterfaces.DistributedHeatPort_A side1(Nx=Nx_s1, Ny=Ny_s1) annotation (Placement(transformation(extent={{-40,
+              -130},{40,10}}),
+         iconTransformation(extent={{-40,-130},{40,10}})));
+    CustomInterfaces.DistributedHeatPort_A side2(Nx=Nx_s2, Ny=Ny_s2) annotation (Placement(transformation(extent={{-40,-10},{40,130}}),
+         iconTransformation(extent={{-40,-10},{40,130}})));
+
+  equation
+    assert((s1_s2_x_ratio > 1) and (s1_s2_y_ratio > 1), "The convertion only works in one dimension - not in x and y simultaneously");
+
+    if s1_s2_x_ratio > 1 then
+      for j in 1:Ny_s2 loop
+        for i in 1:Nx_s2 loop
+          for k in 1:s1_s2_x_ratio loop
+            connect(side1.ports[k,j], side2.ports[i,j]);
+          end for;
+        end for;
+      end for;
+    end if;
+
+    if s1_s2_y_ratio > 1 then
+      for i in 1:Nx_s2 loop
+        for j in 1:Ny_s2 loop
+          for k in 1:s1_s2_y_ratio loop
+            connect(side1.ports[i,k], side2.ports[i,j]);
+          end for;
+        end for;
+      end for;
+    end if;
+
+    annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
+          Line(points={{0,-34},{0,34}},     color={238,46,47}),
+          Line(points={{0,34},{6,24}},      color={238,46,47}),
+          Line(points={{0,34},{-6,24}},     color={238,46,47})}),  Diagram(
+          coordinateSystem(preserveAspectRatio=false)),
+      Documentation(info="<html>
+<p><img src=\"modelica://ThermalManagement/ThermalManagement/Figures/ThermalRadiationASHRAE.PNG\"/></p></html>"),
+                Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
+          coordinateSystem(preserveAspectRatio=false)));
+  end heatFlowConverter;
+
   model flowScaler
     "Model used to scale up or down the mass flow rate between two fluid ports"
 
