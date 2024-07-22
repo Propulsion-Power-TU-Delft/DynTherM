@@ -180,11 +180,8 @@ model PassengerAircraft "Model of a passenger aircraft"
     omega_nom(displayUnit="rpm") = omega_nom,
     volFlow_nom=volFlow_nom,
     Head_nom=Head_nom,
-    redeclare DynTherM.Components.MassTransfer.FanCharacteristics.Flow.linear
-      Flow,
-    redeclare
-      DynTherM.Components.MassTransfer.FanCharacteristics.Efficiency.fixed
-      Efficiency)
+    redeclare DynTherM.Utilities.FanCharacteristics.Flow.linear Flow,
+    redeclare DynTherM.Utilities.FanCharacteristics.Efficiency.fixed Efficiency)
     annotation (Placement(transformation(
         extent={{14,14},{-14,-14}},
         rotation=0,

@@ -119,8 +119,8 @@ equation
 
   // Non-dimensional numbers
   rho = Medium.density(state);
-  u = inlet.m_flow/(rho*N*geometry.A_cs);
-  Re = rho*u*geometry.Dh/Medium.dynamicViscosity(state);
+  u = G/rho;
+  Re = G*geometry.Dh/Medium.dynamicViscosity(state);
   Pr = Medium.specificHeatCapacityCp(state)*Medium.dynamicViscosity(state)/
     Medium.thermalConductivity(state);
 
@@ -128,14 +128,18 @@ equation
   if DP_opt == Choices.PDropOpt.fixed then
     dP = dP_fixed;
   elseif DP_opt == Choices.PDropOpt.correlation then
-    dP = 0.5*friction.f*rho*u^2/geometry.Dh*geometry.L;
+    dP = 0.5*homotopy(friction.f, 0.01)*rho*u^2/geometry.Dh*geometry.L;
   elseif DP_opt == Choices.PDropOpt.linear then
     dP = Rh*inlet.m_flow;
   else
     dP = 0;
   end if;
 
-  inlet.P - outlet.P = dP;
+  if inlet.m_flow > 0 then
+    inlet.P - outlet.P = dP;
+  else
+    outlet.P - inlet.P = dP;
+  end if;
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
                       Rectangle(

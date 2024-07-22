@@ -26,6 +26,8 @@ model PouchCellModule
     t_cell(displayUnit="mm") = t_cell,
     t_fw(displayUnit="mm") = t_fw,
     t_gap=t_fw,
+    t_resin=t_resin,
+    t_frame=t_frame,
     C_nom(displayUnit="Ah") = C_nom,
     initOpt=environment.initOpt,
     SoC_start=SoC_start,

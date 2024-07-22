@@ -1,6 +1,5 @@
 within DynTherM.Systems.Battery;
 model PouchModuleParallel "Battery module made of pouch cells"
-  // USE WALLCONDUCTION1D FOR RESIN AND FRAME!!!
 
   replaceable model InPlaneCellMat = Materials.PolestarCellInPlane constrainedby
     Materials.Properties "In-plane cell material properties" annotation (choicesAllMatching=true);
@@ -18,9 +17,8 @@ model PouchModuleParallel "Battery module made of pouch cells"
     Materials.Properties "Frame material" annotation (choicesAllMatching=true);
 
   model Cell = Components.Electrical.PouchCell1D "Cell";
-  model Firewall = Components.OneDimensional.WallConduction1D "Firewall in between adjacent cells";
-  model Resin = Components.HeatTransfer.WallConduction "Thermal resin";
-  model Frame = Components.HeatTransfer.WallConduction "Frame/casing";
+  model Firewall = Components.TwoDimensional.WallConductionDiscretized
+    "Firewall in between adjacent cells";
 
   // Geometry
   parameter Length W_cell "Cell width" annotation (Dialog(tab="Geometry"));
@@ -45,8 +43,10 @@ model PouchModuleParallel "Battery module made of pouch cells"
   parameter Integer Ns(min=1) "Number of cells connected in series";
   parameter Integer Np(min=1) "Number of cells connected in parallel";
 
+  Length W_module "Module width";
   Length H_module "Module height";
   Length t_module "Module thickness";
+  Volume V_module "Volume of the battery module";
 
   Cell cell[Ns,Np](
     redeclare model InPlaneMat=InPlaneCellMat,
@@ -67,7 +67,8 @@ model PouchModuleParallel "Battery module made of pouch cells"
     each t=t_fw,
     each Tstart=Tstart,
     each initOpt=initOpt,
-    each N=N_cv);
+    each Nx=N_cv,
+    each Ny=1);
 
   CustomInterfaces.DistributedHeatPort_A Bottom(
     Nx=Ns*Np,
@@ -124,106 +125,118 @@ model PouchModuleParallel "Battery module made of pouch cells"
         extent={{-30,-16},{30,16}},
         rotation=-90,
         origin={36,-20})));
-  Components.OneDimensional.WallConduction1D resin_bottom(
+  Components.TwoDimensional.WallConductionDiscretized resin_bottom(
     redeclare model Mat = ResinMat,
     t=t_resin,
     A=W_cell*(t_cell + t_fw/2),
     Tstart=Tstart,
     initOpt=initOpt,
-    N=Ns*Np)
+    Nx=Ns*Np,
+    Ny=1) "Layer of thermal resin applied on bottom surface"
     annotation (Placement(transformation(extent={{-12,-60},{12,-40}})));
-  Components.OneDimensional.WallConduction1D frame_top(
+  Components.TwoDimensional.WallConductionDiscretized frame_top(
     redeclare model Mat = FrameMat,
     t=t_frame,
     A=W_cell*(t_cell + t_fw/2),
     Tstart=Tstart,
     initOpt=initOpt,
-    N=Ns*Np)
+    Nx=Ns*Np,
+    Ny=1) "Top portion of external frame"
     annotation (Placement(transformation(extent={{-12,76},{12,56}})));
-  Components.OneDimensional.WallConduction1D frame_bottom(
+  Components.TwoDimensional.WallConductionDiscretized frame_bottom(
     redeclare model Mat = FrameMat,
     t=t_frame,
     A=W_cell*(t_cell + t_fw/2),
     Tstart=Tstart,
     initOpt=initOpt,
-    N=Ns*Np)
+    Nx=Ns*Np,
+    Ny=1) "Bottom portion of external frame"
     annotation (Placement(transformation(extent={{-12,-76},{12,-56}})));
-  Components.OneDimensional.WallConduction1D resin_top(
+  Components.TwoDimensional.WallConductionDiscretized resin_top(
     redeclare model Mat = ResinMat,
     t=t_resin,
     A=W_cell*(t_cell + t_fw/2),
     Tstart=Tstart,
     initOpt=initOpt,
-    N=Ns*Np)
+    Nx=Ns*Np,
+    Ny=1) "Layer of thermal resin applied on top surface"
     annotation (Placement(transformation(extent={{-12,60},{12,40}})));
-
-  Components.OneDimensional.WallConduction1D frame_left(
+  Components.TwoDimensional.WallConductionDiscretized frame_left(
     redeclare model Mat = FrameMat,
     t=t_frame,
     A=W_cell*H_cell,
     Tstart=Tstart,
     initOpt=initOpt,
-    N=N_cv) annotation (Placement(transformation(
+    Nx=N_cv,
+    Ny=1) "Left portion of external frame"
+    annotation (Placement(
+        transformation(
         extent={{-12,10},{12,-10}},
         rotation=90,
         origin={-60,40})));
-  Components.OneDimensional.WallConduction1D frame_right(
+  Components.TwoDimensional.WallConductionDiscretized frame_right(
     redeclare model Mat = FrameMat,
     t=t_frame,
     A=W_cell*H_cell,
     Tstart=Tstart,
     initOpt=initOpt,
-    N=N_cv) annotation (Placement(transformation(
+    Nx=N_cv,
+    Ny=1) "Right portion of external frame"
+    annotation (Placement(
+        transformation(
         extent={{-12,-10},{12,10}},
         rotation=90,
         origin={60,40})));
+
 equation
   // Geometry
+  W_module = W_cell + 2*t_frame;
   H_module = H_cell + 2*t_resin + 2*t_frame;
   t_module = Np*Ns*t_cell + (Np*Ns - 1)*t_fw + 2*t_frame;
+  V_module = W_module*H_module*t_module;
 
-  // -------------------------------  ELECTRICAL -------------------------------
-  // External electrical ports connections
+  // ------------------------------- ELECTRICAL --------------------------------
+  // External
   connect(multiSensor.nc, cell[1,1].p);
   connect(cell[Ns,1].n, n);
 
-  // Internal electrical ports connections
+  // Internal
   // Parallel
   for ks in 1:Ns loop
     for kp in 1:(Np - 1) loop
-      connect(cell[ks,kp].p, cell[ks,kp + 1].p);
-      connect(cell[ks,kp].n, cell[ks,kp + 1].n);
+      connect(cell[ks, kp].p, cell[ks, kp + 1].p);
+      connect(cell[ks, kp].n, cell[ks, kp + 1].n);
     end for;
   end for;
 
   // Series
   for ks in 1:(Ns - 1) loop
-    connect(cell[ks,1].n, cell[ks + 1,1].p);
+    connect(cell[ks, 1].n, cell[ks + 1, 1].p);
   end for;
 
-  // --------------------------------  THERMAL ---------------------------------
-  // External thermal ports connections
+  // -------------------------------- THERMAL ----------------------------------
+  // External
   for ks in 1:Ns loop
     for kp in 1:Np loop
-      connect(cell[ks,kp].Top, resin_top.inlet.ports[Np*(ks - 1) + kp,1]);
-      connect(cell[ks,kp].Bottom, resin_bottom.inlet.ports[Np*(ks - 1) + kp,1]);
+      connect(cell[ks, kp].Top, resin_top.inlet.ports[Np*(ks - 1) + kp, 1]);
+      connect(cell[ks, kp].Bottom, resin_bottom.inlet.ports[Np*(ks - 1) + kp, 1]);
     end for;
   end for;
 
-  connect(frame_left.inlet, cell[1,1].Left);
-  connect(frame_right.inlet, cell[Ns,Np].Right);
+  connect(frame_left.inlet, cell[1, 1].Left);
+  connect(frame_right.inlet, cell[Ns, Np].Right);
 
-  // Internal thermal ports connections
+  // Internal
   for ks in 1:Ns loop
     for kp in 1:(Np - 1) loop
-      connect(cell[ks,kp].Right, firewall[Np*(ks - 1) + kp].inlet);
-      connect(firewall[Np*(ks - 1) + kp].outlet, cell[ks,kp + 1].Left);
+      connect(cell[ks, kp].Right, firewall[Np*(ks - 1) + kp].inlet);
+      connect(firewall[Np*(ks - 1) + kp].outlet, cell[ks, kp + 1].Left);
     end for;
   end for;
 
   for ks in 1:(Ns - 1) loop
-    connect(cell[ks,Np].Right, firewall[Np*(ks - 1) + Np].inlet);
-    connect(firewall[Np*(ks - 1) + Np].outlet, cell[ks + 1,1].Left);
+    connect(cell[ks, Np].Right, firewall[Np*(ks - 1) + Np].inlet);
+    connect(firewall[Np*(ks - 1) + Np].outlet, cell[ks + 1, 1].Left);
   end for;
 
   connect(p, multiSensor.pc) annotation (Line(points={{-100,0},{-60,0}}, color={0,0,255}));

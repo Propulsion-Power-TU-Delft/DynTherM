@@ -12,6 +12,3 @@ WindowRadiation
 SphereConduction
 EnclosedAirSpace
 HeatCapacity
-WallConduction2D
-ConductionPlanoConcave2D
-ConductionPlanoConcave2Dim

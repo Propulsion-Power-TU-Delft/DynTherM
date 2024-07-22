@@ -469,23 +469,25 @@ package Electrical
           extent={{-30,-9},{30,9}},
           rotation=90,
           origin={45,0})));
-    OneDimensional.WallConduction1D cross_plane_conduction_left(
+    TwoDimensional.WallConductionDiscretized cross_plane_conduction_left(
       redeclare model Mat = CrossPlaneMat,
       t=t/2,
       A=W*H,
       Tstart=Tstart,
       initOpt=initOpt,
-      N=N) annotation (Placement(transformation(
+      Nx=N,
+      Ny=1) annotation (Placement(transformation(
           extent={{-10,-9},{10,9}},
           rotation=-90,
           origin={13,20})));
-    OneDimensional.WallConduction1D cross_plane_conduction_right(
+    TwoDimensional.WallConductionDiscretized cross_plane_conduction_right(
       redeclare model Mat = CrossPlaneMat,
       t=t/2,
       A=W*H,
       Tstart=Tstart,
       initOpt=initOpt,
-      N=N) annotation (Placement(transformation(
+      Nx=N,
+      Ny=1) annotation (Placement(transformation(
           extent={{-10,-9},{10,9}},
           rotation=-90,
           origin={13,-20})));
@@ -493,8 +495,8 @@ package Electrical
           transformation(extent={{-100,6},{-86,20}}),    iconTransformation(
             extent={{56,14},{66,24}})));
     Modelica.Electrical.Analog.Interfaces.NegativePin n annotation (Placement(
-          transformation(extent={{-86,-28},{-100,-14}}),iconTransformation(extent
-            ={{56,-26},{66,-16}})));
+          transformation(extent={{-86,-28},{-100,-14}}),iconTransformation(extent=
+             {{56,-26},{66,-16}})));
     Modelica.Electrical.Batteries.Interfaces.CellBus cellBus annotation (
         Placement(transformation(extent={{-70,-54},{-42,-26}}),
           iconTransformation(extent={{-22,-12},{2,12}})));

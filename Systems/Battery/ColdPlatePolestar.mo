@@ -1,12 +1,12 @@
-within DynTherM.Components.OneDimensional;
+within DynTherM.Systems.Battery;
 model ColdPlatePolestar
-    "Model for a cold plate heat exchanger used in Polestar 2 battery Module"
+  "Model for a cold plate heat exchanger used in Polestar 2 battery Module"
 
   replaceable model Mat = Materials.Aluminium constrainedby
     Materials.Properties "Material used for the plate" annotation (choicesAllMatching=true);
   replaceable package Medium = Modelica.Media.Water.ConstantPropertyLiquidWater
-    constrainedby
-                Modelica.Media.Interfaces.PartialMedium  "Medium model" annotation(choicesAllMatching = true);
+    constrainedby Modelica.Media.Interfaces.PartialMedium
+                                                         "Medium model" annotation(choicesAllMatching = true);
 
      // Options
   parameter Boolean allowFlowReversal=true
@@ -44,7 +44,7 @@ model ColdPlatePolestar
   parameter Integer Nt=3  "Number of control volumes across the thickness of the cooling plate";
   parameter Integer N_channels(min=1) "Number of channels";
 
-  OneDimensional.ColdPlateCircularChannel1D Channel1(
+  Components.TwoDimensional.ColdPlateCircularChannel1D Channel1(
     redeclare model Mat = Mat,
     redeclare package Medium = Medium,
     V_inertia=V_inertia,
@@ -70,8 +70,8 @@ model ColdPlatePolestar
     N_channels=N_channels)
     annotation (Placement(transformation(extent={{-44,-62},{0,-24}})));
 
-  OneDimensional.ColdPlateCircularChannel1D Channel2(
-  redeclare model Mat = Mat,
+  Components.TwoDimensional.ColdPlateCircularChannel1D Channel2(
+    redeclare model Mat = Mat,
     redeclare package Medium = Medium,
     DP_opt=DP_opt,
     V_inertia=V_inertia,
@@ -95,8 +95,8 @@ model ColdPlatePolestar
     Nt=Nt,
     N_channels=N_channels)
     annotation (Placement(transformation(extent={{42,2},{0,-32}})));
-  OneDimensional.ColdPlateCircularChannel1D Channel3(
-  redeclare model Mat = Mat,
+  Components.TwoDimensional.ColdPlateCircularChannel1D Channel3(
+    redeclare model Mat = Mat,
     redeclare package Medium = Medium,
     DP_opt=DP_opt,
     V_inertia=V_inertia,
@@ -120,8 +120,8 @@ model ColdPlatePolestar
     Nt=Nt,
     N_channels=N_channels)
     annotation (Placement(transformation(extent={{-42,-2},{0,34}})));
-  OneDimensional.ColdPlateCircularChannel1D Channel4(
-  redeclare model Mat = Mat,
+  Components.TwoDimensional.ColdPlateCircularChannel1D Channel4(
+    redeclare model Mat = Mat,
     redeclare package Medium = Medium,
     DP_opt=DP_opt,
     V_inertia=V_inertia,
@@ -145,8 +145,8 @@ model ColdPlatePolestar
     Nt=Nt,
     N_channels=N_channels)
     annotation (Placement(transformation(extent={{44,62},{0,26}})));
-  OneDimensional.ColdPlateCircularChannel1D Channel5(
-  redeclare model Mat = Mat,
+  Components.TwoDimensional.ColdPlateCircularChannel1D Channel5(
+    redeclare model Mat = Mat,
     redeclare package Medium = Medium,
     DP_opt=DP_opt,
     V_inertia=V_inertia,
@@ -170,8 +170,8 @@ model ColdPlatePolestar
     Nt=Nt,
     N_channels=N_channels)
     annotation (Placement(transformation(extent={{-40,52},{0,86}})));
-  OneDimensional.ColdPlateCircularChannel1D Channel6(
-  redeclare model Mat = Mat,
+  Components.TwoDimensional.ColdPlateCircularChannel1D Channel6(
+    redeclare model Mat = Mat,
     redeclare package Medium = Medium,
     DP_opt=DP_opt,
     V_inertia=V_inertia,
@@ -317,8 +317,8 @@ equation
     annotation (Line(points={{24.14,23.94},{32,23.94},{32,35.54},{32.78,35.54}},
         color={28,108,200}));
   connect(Channel5.EastSide, ChannelInvert4_5.distributedHeatPort_out)
-    annotation (Line(points={{-29.4,61.01},{-29.4,51.94},{-20.14,51.94}}, color
-        ={28,108,200}));
+    annotation (Line(points={{-29.4,61.01},{-29.4,51.94},{-20.14,51.94}}, color=
+         {28,108,200}));
   connect(ChannelInvert4_5.distributedHeatPort_in, Channel4.EastSide)
     annotation (Line(points={{-11.86,51.94},{-6,51.94},{-6,56},{32.34,56},{32.34,
           52.46}}, color={28,108,200}));
@@ -380,5 +380,8 @@ equation
 
   annotation (Icon(coordinateSystem(extent={{-140,-100},{140,100}}),
                    graphics={Bitmap(extent={{-86,-62},{72,62}}, fileName="modelica://DynTherM/Figures/Polestar_ColdPlate.png")}),
-      Diagram(coordinateSystem(extent={{-140,-100},{140,100}})));
+      Diagram(coordinateSystem(extent={{-140,-100},{140,100}})),
+    Documentation(info="<html>
+<p><img src=\"modelica://DynTherM/Figures/Polestar_ColdPlate.png\"/></p>
+</html>"));
 end ColdPlatePolestar;

@@ -120,8 +120,8 @@ equation
 
   // Non-dimensional numbers
   rho = Medium.density(state);
-  u = inlet.m_flow/(rho*N*geometry.A_cs);
-  Re = rho*u*geometry.Dh/Medium.dynamicViscosity(state);
+  u = G/rho;
+  Re = G*geometry.Dh/Medium.dynamicViscosity(state);
   Pr = Medium.specificHeatCapacityCp(state)*Medium.dynamicViscosity(state)/
     Medium.thermalConductivity(state);
 
@@ -136,7 +136,11 @@ equation
     dP = 0;
   end if;
 
-  inlet.P - outlet.P = dP;
+  if inlet.m_flow > 0 then
+    inlet.P - outlet.P = dP;
+  else
+    outlet.P - inlet.P = dP;
+  end if;
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
                       Rectangle(

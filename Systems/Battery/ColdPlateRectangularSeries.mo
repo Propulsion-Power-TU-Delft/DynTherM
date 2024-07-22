@@ -129,7 +129,7 @@ equation
   dP = sum(channel.dP);
   Q = sum(channel.Q);
 
-  // Flow connections
+  // --------------------------------- FLUID -----------------------------------
   // Internal
   for i in 1:(N_channels-1) loop
     connect(channel[i].outlet, channel[i+1].inlet);
@@ -139,7 +139,7 @@ equation
   connect(inlet, channel[1].inlet);
   connect(outlet, channel[end].outlet);
 
-  // Thermal connections
+  // -------------------------------- THERMAL ----------------------------------
   // Internal
   connect(channel[1].solid_surface_east, channel[end].solid_surface_east);
 
@@ -151,8 +151,29 @@ equation
   // External
   for i in 1:N_channels loop
     for j in 1:N_cv loop
-      connect(channel[i].solid_surface_north.ports[j, 1], upper_surface.ports[i, j]);
-      connect(channel[i].solid_surface_south.ports[j, 1], lower_surface.ports[i, j]);
+      if i == 1 then
+        connect(channel[i].solid_surface_north.ports[j, 1], upper_surface.ports[1, j]);
+      elseif i == 2 then
+        connect(channel[i].solid_surface_north.ports[j, 1], upper_surface.ports[end, end + 1 - j]);
+      else
+        if mod(i, 2) == 0 then
+          connect(channel[i].solid_surface_north.ports[j, 1], upper_surface.ports[end + 2 - i, end + 1 - j]);
+        else
+          connect(channel[i].solid_surface_north.ports[j, 1], upper_surface.ports[end + 2 - i, j]);
+        end if;
+      end if;
+
+      if i == 1 then
+        connect(channel[i].solid_surface_south.ports[j, 1], lower_surface.ports[1, j]);
+      elseif i == 2 then
+        connect(channel[i].solid_surface_south.ports[j, 1], lower_surface.ports[end, end + 1 - j]);
+      else
+        if mod(i, 2) == 0 then
+          connect(channel[i].solid_surface_south.ports[j, 1], lower_surface.ports[end + 2 - i, end + 1 - j]);
+        else
+          connect(channel[i].solid_surface_south.ports[j, 1], lower_surface.ports[end + 2 - i, j]);
+        end if;
+      end if;
     end for;
   end for;
 
@@ -231,6 +252,6 @@ equation
       __Dymola_Algorithm="Dassl"),
     Documentation(info="<html>
 <p>The number of channels can be freely selected by the user, while the disposition is fixed, see image below.</p>
-<p><img src=\"modelica://TMS/Figures/cold_plate.png\"/></p>
+<p><br><img src=\"modelica://DynTherM/Figures/cold_plate_series.png\"/></p>
 </html>"));
 end ColdPlateRectangularSeries;

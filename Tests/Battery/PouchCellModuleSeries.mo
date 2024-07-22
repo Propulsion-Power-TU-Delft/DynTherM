@@ -6,6 +6,8 @@ model PouchCellModuleSeries
   parameter Length H_cell=0.1;
   parameter Length t_cell=0.01;
   parameter Length t_fw=0.001;
+  parameter Length t_resin=0.0005;
+  parameter Length t_frame=0.005;
   parameter ElectricCharge C_nom=230400;
   parameter Real SoC_start=0.1;
   parameter Temperature Tstart=298.15;
@@ -34,14 +36,14 @@ model PouchCellModuleSeries
     SoC_start=SoC_start,
     Tstart=Tstart,
     N=N_cv) annotation (Placement(transformation(extent={{-56,-72},{16,-24}})));
-  Components.OneDimensional.WallConduction1D firewall(
+  Components.TwoDimensional.WallConductionDiscretized firewall(
     redeclare model Mat = DynTherM.Materials.PolyurethaneFoam,
     t=t_fw,
     A=W_cell*H_cell,
     Tstart=298.15,
     initOpt=environment.initOpt,
-    N=N_cv)                                           annotation (Placement(
-        transformation(
+    Nx=N_cv,
+    Ny=1) annotation (Placement(transformation(
         extent={{-18,-14},{18,14}},
         rotation=-90,
         origin={26,-50})));
@@ -63,6 +65,8 @@ model PouchCellModuleSeries
     t_cell(displayUnit="mm") = t_cell,
     t_fw(displayUnit="mm") = t_fw,
     t_gap=t_fw,
+    t_resin=t_resin,
+    t_frame=t_frame,
     C_nom(displayUnit="Ah") = C_nom,
     initOpt=environment.initOpt,
     SoC_start=SoC_start,
