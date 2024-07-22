@@ -6,6 +6,8 @@ model PouchCellModule
   parameter Length H_cell=0.1;
   parameter Length t_cell=0.01;
   parameter Length t_fw=0.001;
+  parameter Length t_resin=0.0005;
+  parameter Length t_frame=0.005;
   parameter ElectricCharge C_nom=230400;
   parameter Real SoC_start=0.1;
   parameter Temperature Tstart=298.15;
@@ -41,6 +43,8 @@ model PouchCellModule
     H_cell=H_cell,
     t_cell(displayUnit="mm") = t_cell,
     t_fw(displayUnit="mm") = t_fw,
+    t_resin=t_resin,
+    t_frame=t_frame,
     C_nom(displayUnit="Ah") = C_nom,
     initOpt=environment.initOpt,
     SoC_start=SoC_start,

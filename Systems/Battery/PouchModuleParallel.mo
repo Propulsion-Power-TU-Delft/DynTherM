@@ -69,61 +69,25 @@ model PouchModuleParallel "Battery module made of pouch cells"
     each initOpt=initOpt,
     each N=N_cv);
 
-  Resin resin_top[Ns*Np](
-    redeclare model Mat=ResinMat,
-    each A=W_cell*(t_cell + t_fw/2),
-    each t=t_resin,
-    each Tstart=Tstart,
-    each initOpt=initOpt);
-
-  Resin resin_bottom[Ns*Np](
-    redeclare model Mat=ResinMat,
-    each A=W_cell*(t_cell + t_fw/2),
-    each t=t_resin,
-    each Tstart=Tstart,
-    each initOpt=initOpt);
-
-  Frame frame_top[Ns*Np](
-    redeclare model Mat=FrameMat,
-    each A=W_cell*(t_cell + t_fw/2),
-    each t=t_frame,
-    each Tstart=Tstart,
-    each initOpt=initOpt);
-
-  Frame frame_bottom[Ns*Np](
-    redeclare model Mat=FrameMat,
-    each A=W_cell*(t_cell + t_fw/2),
-    each t=t_frame,
-    each Tstart=Tstart,
-    each initOpt=initOpt);
-
-  Frame frame_left[N_cv](
-    redeclare model Mat=FrameMat,
-    each A=W_cell*H_cell,
-    each t=t_frame,
-    each Tstart=Tstart,
-    each initOpt=initOpt);
-
-  Frame frame_right[N_cv](
-    redeclare model Mat=FrameMat,
-    each A=W_cell*H_cell,
-    each t=t_frame,
-    each Tstart=Tstart,
-    each initOpt=initOpt);
-
-  CustomInterfaces.DistributedHeatPort_A Bottom(Nx=Ns*Np, Ny=1)   annotation (
+  CustomInterfaces.DistributedHeatPort_A Bottom(
+    Nx=Ns*Np,
+    Ny=1)
+    annotation (
       Placement(transformation(
         extent={{-12,-12},{12,12}},
         rotation=180,
-        origin={0,-38}), iconTransformation(
+        origin={0,-80}), iconTransformation(
         extent={{-30,-16},{30,16}},
         rotation=0,
         origin={-20,-66})));
-  CustomInterfaces.DistributedHeatPort_A Top(Nx=Ns*Np, Ny=1)   annotation (Placement(
+  CustomInterfaces.DistributedHeatPort_A Top(
+    Nx=Ns*Np,
+    Ny=1)
+    annotation (Placement(
         transformation(
-        extent={{-12.5,-12.5},{12.5,12.5}},
+        extent={{-12,-12},{12,12}},
         rotation=180,
-        origin={0.5,40.5}), iconTransformation(
+        origin={0,80}),     iconTransformation(
         extent={{-30,-16},{30,16}},
         rotation=0,
         origin={-20,26})));
@@ -133,31 +97,86 @@ model PouchModuleParallel "Battery module made of pouch cells"
   Modelica.Electrical.Analog.Interfaces.NegativePin n annotation (Placement(
         transformation(extent={{108,-8},{92,8}}),     iconTransformation(extent={{14,-26},
             {26,-14}})));
-
-  Modelica.Electrical.Analog.Sensors.MultiSensor multiSensor
-    annotation (Placement(transformation(extent={{-60,-10},{-40,10}})));
+  Modelica.Electrical.Analog.Sensors.MultiSensor multiSensor annotation (Placement(transformation(extent={{-60,-10},{-40,10}})));
   Modelica.Electrical.Batteries.Interfaces.CellBus batteryBus
     "Battery bus (average / sum over all cells)" annotation (Placement(
         transformation(extent={{-68,-70},{-32,-34}}), iconTransformation(extent={{-10,30},
             {10,50}})));
-
-  CustomInterfaces.DistributedHeatPort_A Left(Nx=N_cv, Ny=1) annotation (Placement(
+  CustomInterfaces.DistributedHeatPort_A Left(
+    Nx=N_cv,
+    Ny=1)
+    annotation (Placement(
         transformation(
         extent={{-12,-12},{12,12}},
         rotation=90,
-        origin={-40,40}),iconTransformation(
+        origin={-80,40}),iconTransformation(
         extent={{-30,-16},{30,16}},
         rotation=-90,
         origin={-76,-20})));
-  CustomInterfaces.DistributedHeatPort_A Right(Nx=N_cv, Ny=1) annotation (
+  CustomInterfaces.DistributedHeatPort_A Right(
+    Nx=N_cv,
+    Ny=1)
+    annotation (
       Placement(transformation(
         extent={{-12,-12},{12,12}},
         rotation=90,
-        origin={40,40}),iconTransformation(
+        origin={80,40}),iconTransformation(
         extent={{-30,-16},{30,16}},
         rotation=-90,
         origin={36,-20})));
+  Components.OneDimensional.WallConduction1D resin_bottom(
+    redeclare model Mat = ResinMat,
+    t=t_resin,
+    A=W_cell*(t_cell + t_fw/2),
+    Tstart=Tstart,
+    initOpt=initOpt,
+    N=Ns*Np)
+    annotation (Placement(transformation(extent={{-12,-60},{12,-40}})));
+  Components.OneDimensional.WallConduction1D frame_top(
+    redeclare model Mat = FrameMat,
+    t=t_frame,
+    A=W_cell*(t_cell + t_fw/2),
+    Tstart=Tstart,
+    initOpt=initOpt,
+    N=Ns*Np)
+    annotation (Placement(transformation(extent={{-12,76},{12,56}})));
+  Components.OneDimensional.WallConduction1D frame_bottom(
+    redeclare model Mat = FrameMat,
+    t=t_frame,
+    A=W_cell*(t_cell + t_fw/2),
+    Tstart=Tstart,
+    initOpt=initOpt,
+    N=Ns*Np)
+    annotation (Placement(transformation(extent={{-12,-76},{12,-56}})));
+  Components.OneDimensional.WallConduction1D resin_top(
+    redeclare model Mat = ResinMat,
+    t=t_resin,
+    A=W_cell*(t_cell + t_fw/2),
+    Tstart=Tstart,
+    initOpt=initOpt,
+    N=Ns*Np)
+    annotation (Placement(transformation(extent={{-12,60},{12,40}})));
 
+  Components.OneDimensional.WallConduction1D frame_left(
+    redeclare model Mat = FrameMat,
+    t=t_frame,
+    A=W_cell*H_cell,
+    Tstart=Tstart,
+    initOpt=initOpt,
+    N=N_cv) annotation (Placement(transformation(
+        extent={{-12,10},{12,-10}},
+        rotation=90,
+        origin={-60,40})));
+  Components.OneDimensional.WallConduction1D frame_right(
+    redeclare model Mat = FrameMat,
+    t=t_frame,
+    A=W_cell*H_cell,
+    Tstart=Tstart,
+    initOpt=initOpt,
+    N=N_cv) annotation (Placement(transformation(
+        extent={{-12,-10},{12,10}},
+        rotation=90,
+        origin={60,40})));
 equation
   // Geometry
   H_module = H_cell + 2*t_resin + 2*t_frame;
@@ -186,17 +205,13 @@ equation
   // External thermal ports connections
   for ks in 1:Ns loop
     for kp in 1:Np loop
-      connect(cell[ks,kp].Top, resin_top[Np*(ks - 1) + kp].inlet);
-      connect(resin_top[Np*(ks - 1) + kp].outlet, frame_top[Np*(ks - 1) + kp].inlet);
-      connect(frame_top[Np*(ks - 1) + kp].outlet, Top.ports[Np*(ks - 1) + kp,1]);
-      connect(cell[ks,kp].Bottom, resin_bottom[Np*(ks - 1) + kp].inlet);
-      connect(resin_bottom[Np*(ks - 1) + kp].outlet, frame_bottom[Np*(ks - 1) + kp].inlet);
-      connect(frame_bottom[Np*(ks - 1) + kp].outlet, Bottom.ports[Np*(ks - 1) + kp,1]);
+      connect(cell[ks,kp].Top, resin_top.inlet.ports[Np*(ks - 1) + kp,1]);
+      connect(cell[ks,kp].Bottom, resin_bottom.inlet.ports[Np*(ks - 1) + kp,1]);
     end for;
   end for;
 
-  connect(Left, cell[1,1].Left);
-  connect(Right, cell[Ns,Np].Right);
+  connect(frame_left.inlet, cell[1,1].Left);
+  connect(frame_right.inlet, cell[Ns,Np].Right);
 
   // Internal thermal ports connections
   for ks in 1:Ns loop
@@ -211,10 +226,8 @@ equation
     connect(firewall[Np*(ks - 1) + Np].outlet, cell[ks + 1,1].Left);
   end for;
 
-  connect(p, multiSensor.pc)
-    annotation (Line(points={{-100,0},{-60,0}}, color={0,0,255}));
-  connect(multiSensor.pc, multiSensor.pv)
-    annotation (Line(points={{-60,0},{-60,10},{-50,10}}, color={0,0,255}));
+  connect(p, multiSensor.pc) annotation (Line(points={{-100,0},{-60,0}}, color={0,0,255}));
+  connect(multiSensor.pc, multiSensor.pv) annotation (Line(points={{-60,0},{-60,10},{-50,10}}, color={0,0,255}));
   connect(n, multiSensor.nv) annotation (Line(points={{100,0},{100,-20},{-50,
           -20},{-50,-10}},
                       color={0,0,255}));
@@ -236,6 +249,18 @@ equation
       index=1,
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
+  connect(Bottom, frame_bottom.outlet) annotation (Line(points={{0,-80},{0,-74.5},
+          {8.88178e-16,-74.5},{8.88178e-16,-69}}, color={191,0,0}));
+  connect(frame_bottom.inlet, resin_bottom.outlet) annotation (Line(points={{8.88178e-16,
+          -63},{8.88178e-16,-53}}, color={191,0,0}));
+  connect(resin_top.outlet, frame_top.inlet) annotation (Line(points={{8.88178e-16,
+          53},{8.88178e-16,63}}, color={191,0,0}));
+  connect(frame_top.outlet, Top) annotation (Line(points={{8.88178e-16,69},{8.88178e-16,
+          74.5},{0,74.5},{0,80}}, color={191,0,0}));
+  connect(Left, frame_left.outlet)
+    annotation (Line(points={{-80,40},{-63,40}}, color={191,0,0}));
+  connect(frame_right.outlet, Right)
+    annotation (Line(points={{63,40},{80,40}}, color={191,0,0}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Rectangle(
           extent={{-70,20},{-50,-60}},

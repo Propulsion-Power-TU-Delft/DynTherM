@@ -101,8 +101,8 @@ model ColdPlateRectangularSeries
     P(start=P_start),
     h_outflow(start=Medium.specificEnthalpy(state_start)),
     Xi_outflow(start=X_start)) annotation (Placement(
-        transformation(extent={{-106,94},{-94,106}}), iconTransformation(extent
-          ={{-110,42},{-90,62}})));
+        transformation(extent={{-106,94},{-94,106}}), iconTransformation(extent=
+           {{-110,42},{-90,62}})));
   CustomInterfaces.FluidPort_B outlet(
     redeclare package Medium = Medium,
     m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0, start=
