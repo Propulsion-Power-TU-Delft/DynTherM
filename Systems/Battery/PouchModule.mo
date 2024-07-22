@@ -10,8 +10,7 @@ model PouchModule "Battery module made of pouch cells"
   replaceable model FirewallMat = Materials.PolyurethaneFoam constrainedby
     Materials.Properties "Firewall material" annotation (choicesAllMatching=true);
 
-  model Cell = Components.Electrical.PouchCell1D
-                                              "Cell";
+  model Cell = Components.Electrical.PouchCell1D "Cell";
   model Firewall = Components.OneDimensional.WallConduction1D "Firewall";
 
   // Geometry

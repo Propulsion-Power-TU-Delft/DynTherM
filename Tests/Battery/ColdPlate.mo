@@ -5,8 +5,7 @@ model ColdPlate
   parameter Integer N_longitudinal=10;
   parameter Integer N_transversal=15;
 
-  Components.OneDimensional.ParallelRectangularColdPlate
-    parallelRectangularColdPlate(
+  Systems.Battery.ColdPlateRectangularParallel parallelRectangularColdPlate(
     redeclare package Medium = Water,
     L=0.5,
     W_plate=0.35,
@@ -21,7 +20,7 @@ model ColdPlate
     Pr_start=7,
     N_cv=N_longitudinal)
     annotation (Placement(transformation(extent={{-24,-16},{24,-64}})));
-  Components.OneDimensional.ParallelCircularColdPlate parallelCircularColdPlate(
+  Systems.Battery.ColdPlateCircularParallel parallelCircularColdPlate(
     redeclare package Medium = Water,
     L=0.5,
     W_plate=0.35,

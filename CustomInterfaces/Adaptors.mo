@@ -110,12 +110,19 @@ package Adaptors "Models used to couple two connectors of different type"
 
   model heatFlowConverter
     "Model used to convert between distributed heat ports featuring different size"
+
+    model Multiplier = CustomInterfaces.Adaptors.heatFlowMultiplier;
+
     parameter Integer Nx_s1(min=1) "Number of ports in x-direction - side 1";
     parameter Integer Ny_s1(min=1) "Number of ports in y-direction - side 1";
     parameter Integer s1_s2_x_ratio(min=1) "Ratio between no. of ports in x direction s1/s2";
     parameter Integer s1_s2_y_ratio(min=1) "Ratio between no. of ports in y direction s1/s2";
     final parameter Integer Nx_s2 = integer(Nx_s1/s1_s2_x_ratio) "Number of ports in x-direction - side 2";
     final parameter Integer Ny_s2 = integer(Ny_s1/s1_s2_y_ratio) "Number of ports in y-direction - side 2";
+
+    Multiplier multiplier[Nx_s2,Ny_s2](
+      each Nx=s1_s2_x_ratio,
+      each Ny=s1_s2_y_ratio);
 
     CustomInterfaces.DistributedHeatPort_A side1(Nx=Nx_s1, Ny=Ny_s1) annotation (Placement(transformation(extent={{-40,
               -130},{40,10}}),
@@ -124,27 +131,17 @@ package Adaptors "Models used to couple two connectors of different type"
          iconTransformation(extent={{-40,-10},{40,130}})));
 
   equation
-    assert((s1_s2_x_ratio > 1) and (s1_s2_y_ratio > 1), "The convertion only works in one dimension - not in x and y simultaneously");
-
-    if s1_s2_x_ratio > 1 then
+    for i in 1:Nx_s2 loop
       for j in 1:Ny_s2 loop
-        for i in 1:Nx_s2 loop
-          for k in 1:s1_s2_x_ratio loop
-            connect(side1.ports[k,j], side2.ports[i,j]);
+        connect(multiplier[i,j].single, side2.ports[i,j]);
+        for k in 1:s1_s2_x_ratio loop
+          for z in 1:s1_s2_y_ratio loop
+            connect(multiplier[i,j].distributed.ports[k,z],
+              side1.ports[(i - 1)*s1_s2_x_ratio + k,(j - 1)*s1_s2_y_ratio + z]);
           end for;
         end for;
       end for;
-    end if;
-
-    if s1_s2_y_ratio > 1 then
-      for i in 1:Nx_s2 loop
-        for j in 1:Ny_s2 loop
-          for k in 1:s1_s2_y_ratio loop
-            connect(side1.ports[i,k], side2.ports[i,j]);
-          end for;
-        end for;
-      end for;
-    end if;
+    end for;
 
     annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
           Line(points={{0,-34},{0,34}},     color={238,46,47}),

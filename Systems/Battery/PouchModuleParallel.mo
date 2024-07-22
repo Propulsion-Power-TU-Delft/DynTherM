@@ -1,5 +1,6 @@
 within DynTherM.Systems.Battery;
 model PouchModuleParallel "Battery module made of pouch cells"
+  // USE WALLCONDUCTION1D FOR RESIN AND FRAME!!!
 
   replaceable model InPlaneCellMat = Materials.PolestarCellInPlane constrainedby
     Materials.Properties "In-plane cell material properties" annotation (choicesAllMatching=true);
@@ -7,17 +8,27 @@ model PouchModuleParallel "Battery module made of pouch cells"
   replaceable model CrossPlaneCellMat = Materials.PolestarCellCrossPlane constrainedby
     Materials.Properties "Cross-plane cell material properties" annotation (choicesAllMatching=true);
 
-  replaceable model FirewallMat = Materials.PolyurethaneFoam constrainedby
+  replaceable model FirewallMat = Materials.CompressionPadFoam constrainedby
     Materials.Properties "Firewall material" annotation (choicesAllMatching=true);
 
+  replaceable model ResinMat = Materials.ThermalResin constrainedby
+    Materials.Properties "Resin material" annotation (choicesAllMatching=true);
+
+  replaceable model FrameMat = Materials.AluminiumFoil constrainedby
+    Materials.Properties "Frame material" annotation (choicesAllMatching=true);
+
   model Cell = Components.Electrical.PouchCell1D "Cell";
-  model Firewall = Components.OneDimensional.WallConduction1D "Firewall";
+  model Firewall = Components.OneDimensional.WallConduction1D "Firewall in between adjacent cells";
+  model Resin = Components.HeatTransfer.WallConduction "Thermal resin";
+  model Frame = Components.HeatTransfer.WallConduction "Frame/casing";
 
   // Geometry
   parameter Length W_cell "Cell width" annotation (Dialog(tab="Geometry"));
   parameter Length H_cell "Cell height" annotation (Dialog(tab="Geometry"));
   parameter Length t_cell "Cell thickness" annotation (Dialog(tab="Geometry"));
-  parameter Length t_fw "Firewall thickness between cells in parallel" annotation (Dialog(tab="Geometry"));
+  parameter Length t_fw "Thickness of firewall between cells in parallel" annotation (Dialog(tab="Geometry"));
+  parameter Length t_resin "Thickness of resin between cells and frame" annotation (Dialog(tab="Geometry"));
+  parameter Length t_frame "Frame thickness" annotation (Dialog(tab="Geometry"));
 
   // Electrical parameters
   parameter Real eta=0.98 "Cell charging/discharging efficiency";
@@ -33,6 +44,9 @@ model PouchModuleParallel "Battery module made of pouch cells"
   parameter Integer N_cv(min=1)=10 "Number of vertical control volumes in which each cell is discretized";
   parameter Integer Ns(min=1) "Number of cells connected in series";
   parameter Integer Np(min=1) "Number of cells connected in parallel";
+
+  Length H_module "Module height";
+  Length t_module "Module thickness";
 
   Cell cell[Ns,Np](
     redeclare model InPlaneMat=InPlaneCellMat,
@@ -55,13 +69,53 @@ model PouchModuleParallel "Battery module made of pouch cells"
     each initOpt=initOpt,
     each N=N_cv);
 
-  Length t_module "Module thickness";
+  Resin resin_top[Ns*Np](
+    redeclare model Mat=ResinMat,
+    each A=W_cell*(t_cell + t_fw/2),
+    each t=t_resin,
+    each Tstart=Tstart,
+    each initOpt=initOpt);
+
+  Resin resin_bottom[Ns*Np](
+    redeclare model Mat=ResinMat,
+    each A=W_cell*(t_cell + t_fw/2),
+    each t=t_resin,
+    each Tstart=Tstart,
+    each initOpt=initOpt);
+
+  Frame frame_top[Ns*Np](
+    redeclare model Mat=FrameMat,
+    each A=W_cell*(t_cell + t_fw/2),
+    each t=t_frame,
+    each Tstart=Tstart,
+    each initOpt=initOpt);
+
+  Frame frame_bottom[Ns*Np](
+    redeclare model Mat=FrameMat,
+    each A=W_cell*(t_cell + t_fw/2),
+    each t=t_frame,
+    each Tstart=Tstart,
+    each initOpt=initOpt);
+
+  Frame frame_left[N_cv](
+    redeclare model Mat=FrameMat,
+    each A=W_cell*H_cell,
+    each t=t_frame,
+    each Tstart=Tstart,
+    each initOpt=initOpt);
+
+  Frame frame_right[N_cv](
+    redeclare model Mat=FrameMat,
+    each A=W_cell*H_cell,
+    each t=t_frame,
+    each Tstart=Tstart,
+    each initOpt=initOpt);
 
   CustomInterfaces.DistributedHeatPort_A Bottom(Nx=Ns*Np, Ny=1)   annotation (
       Placement(transformation(
         extent={{-12,-12},{12,12}},
         rotation=180,
-        origin={0,-40}), iconTransformation(
+        origin={0,-38}), iconTransformation(
         extent={{-30,-16},{30,16}},
         rotation=0,
         origin={-20,-66})));
@@ -106,8 +160,10 @@ model PouchModuleParallel "Battery module made of pouch cells"
 
 equation
   // Geometry
-  t_module = Np*Ns*t_cell + (Np*Ns - 1)*t_fw;
+  H_module = H_cell + 2*t_resin + 2*t_frame;
+  t_module = Np*Ns*t_cell + (Np*Ns - 1)*t_fw + 2*t_frame;
 
+  // -------------------------------  ELECTRICAL -------------------------------
   // External electrical ports connections
   connect(multiSensor.nc, cell[1,1].p);
   connect(cell[Ns,1].n, n);
@@ -126,11 +182,16 @@ equation
     connect(cell[ks,1].n, cell[ks + 1,1].p);
   end for;
 
+  // --------------------------------  THERMAL ---------------------------------
   // External thermal ports connections
   for ks in 1:Ns loop
     for kp in 1:Np loop
-      connect(Top.ports[Np*(ks - 1) + kp,1], cell[ks,kp].Top);
-      connect(Bottom.ports[Np*(ks - 1) + kp,1], cell[ks,kp].Bottom);
+      connect(cell[ks,kp].Top, resin_top[Np*(ks - 1) + kp].inlet);
+      connect(resin_top[Np*(ks - 1) + kp].outlet, frame_top[Np*(ks - 1) + kp].inlet);
+      connect(frame_top[Np*(ks - 1) + kp].outlet, Top.ports[Np*(ks - 1) + kp,1]);
+      connect(cell[ks,kp].Bottom, resin_bottom[Np*(ks - 1) + kp].inlet);
+      connect(resin_bottom[Np*(ks - 1) + kp].outlet, frame_bottom[Np*(ks - 1) + kp].inlet);
+      connect(frame_bottom[Np*(ks - 1) + kp].outlet, Bottom.ports[Np*(ks - 1) + kp,1]);
     end for;
   end for;
 
