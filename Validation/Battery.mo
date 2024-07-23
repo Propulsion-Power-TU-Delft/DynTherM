@@ -2,6 +2,7 @@ within DynTherM.Validation;
 package Battery
   model PouchCellPolestar
     package Water = Modelica.Media.Water.StandardWater;
+
     Components.Electrical.PouchCell1D pouchCell1D(
       H=0.1,
       W=0.35,
