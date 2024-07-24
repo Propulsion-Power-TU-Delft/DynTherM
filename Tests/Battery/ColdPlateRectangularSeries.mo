@@ -28,7 +28,7 @@ model ColdPlateRectangularSeries
 
     DynTherM.BoundaryConditions.flow_source flow_source(
       redeclare package Medium = Coolant,
-      P_nom=400000,
+    P_nom=400000,
       T_nom=T_fluid,
       massFlow_nom=m_flow,
       allowFlowReversal=environment.allowFlowReversal,

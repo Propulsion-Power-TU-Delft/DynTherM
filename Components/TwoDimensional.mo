@@ -105,7 +105,7 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
     Length t_avg "Equivalent thickness if it was a rectangle";
     Area As "Plane area";
     Angle theeta "Angle subtended by the curved side";
-    Angle beta "Adjacent angle of theeta in the right angle triangle";
+    Angle beta  "Adjacent angle of theeta in the right angle triangle";
 
     Mass m "Mass of the wall";
     Modelica.Units.SI.HeatCapacity Cm "Heat capacity of the wall";
@@ -126,9 +126,9 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
             extent={{12,-10},{32,10}}),  iconTransformation(extent={{12,-10},{32,10}})));
 
   equation
-  //  theta = acos((np*np - 2*R*R) / (2*R*R))      "Law of cosines";
-    np*np = 2*R*R + 2*R*R*cos(theeta)              "Law of cosines";
-    theeta + 2*beta = pi                           "Sum of angles on one side of straight line";
+    theeta  = acos((np*np - 2*R*R) / (2*R*R))      "Law of cosines";
+  //  np*np = 2*R*R + 2*R*R*cos(theeta)              "Law of cosines";
+    theeta + 2*beta = pi                          "Sum of angles on one side of straight line";
     As =  np * ( p + R*sin(beta)) - (theeta*R*R/2) - R*R*sin(beta)*cos(beta)  "Using geometry";
     t_avg = As/np                                  "Using geometry";
 
