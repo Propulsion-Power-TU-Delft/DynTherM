@@ -5,6 +5,7 @@ model ComparisonCircularChannels
 // package Coolant = DynTherM.Media.IncompressibleTableBased.MEG(X=0.1);
 package Coolant = Modelica.Media.Water.ConstantPropertyLiquidWater;
 
+
     parameter Temperature T_fluid=298.15;
     parameter MassFlowRate m_flow=0.04416;
 
