@@ -2,16 +2,15 @@ within DynTherM.Tests.Battery;
 model PolestarValidationWithCooling
   "Validation of Polestar battery module with its cooling system"
 
-package Coolant = DynTherM.Media.IncompressibleTableBased.MEG_Polestar(X=0.1);
-// package Coolant = Modelica.Media.Water.ConstantPropertyLiquidWater;
+  package Coolant = DynTherM.Media.IncompressibleTableBased.MEG_Polestar;
 
-// Cell Properties
+  // Cell Properties
   parameter Length W_cell = 0.35 "Cell width" annotation (Dialog(tab="Geometry"));
   parameter Length H_cell = 0.1 "Cell height" annotation (Dialog(tab="Geometry"));
   parameter Length t_cell = 0.01 "Cell thickness" annotation (Dialog(tab="Geometry"));
   parameter ElectricCharge C_nom = 66.4*3600 "Nominal cell capacity";
 
-// Module
+  // Module
   parameter Integer N_cv = 10 "Number of vertical control volumes in which each cell is discretized";
   parameter Integer Ns = 4 "Number of cells connected in series";
   parameter Integer Np = 3 "Number of cells connected in parallel";
@@ -19,16 +18,16 @@ package Coolant = DynTherM.Media.IncompressibleTableBased.MEG_Polestar(X=0.1);
   parameter Length t_resin = 0.0001 "Thickness of resin between cells and frame";
   parameter Length t_frame = 0.005 "Frame thickness";
 
-// Cold Plate
+  // Cold Plate
   parameter Length L = W_cell "Length of the channel" annotation (Dialog(tab="Geometry"));
   parameter Length t = 2*R_int + 0.002 "Thickness of the cold Plate" annotation (Dialog(tab="Geometry"));
   parameter Length d = 0.01 "Center to center distance between the Channels" annotation (Dialog(tab="Geometry"));
   parameter Length R_int = 0.0025  "Channel internal radius" annotation (Dialog(tab="Geometry"));
 
-    parameter Temperature T_fluid=298.15;
-    parameter MassFlowRate m_flow=0.04416;
+  parameter Temperature T_fluid=298.15;
+  parameter MassFlowRate m_flow=0.04416;
 
-// Initialization
+  // Initialization
 
   Modelica.Electrical.Analog.Sources.SignalCurrent signalCurrent annotation (
       Placement(transformation(
@@ -139,9 +138,12 @@ equation
   connect(wallConduction.outlet, heatFlowMultiplier1.single)
     annotation (Line(points={{-28.58,-26},{-15.4,-26}}, color={191,0,0}));
   connect(coldPlatePolestar.Top, heatFlowMultiplier1.distributed) annotation (
-      Line(points={{12.7429,-49.58},{12.7429,-25.79},{-10.6,-25.79},{-10.6,
-          -26}},
+      Line(points={{12.7429,-49.58},{12.7429,-25.79},{-10.6,-25.79},{-10.6,-26}},
         color={191,0,0}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
-        coordinateSystem(preserveAspectRatio=false)));
+        coordinateSystem(preserveAspectRatio=false)),
+    experiment(
+      StopTime=1200,
+      Interval=1,
+      __Dymola_Algorithm="Dassl"));
 end PolestarValidationWithCooling;

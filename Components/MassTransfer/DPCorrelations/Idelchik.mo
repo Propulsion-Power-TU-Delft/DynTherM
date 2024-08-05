@@ -1,6 +1,6 @@
 within DynTherM.Components.MassTransfer.DPCorrelations;
-model Idelchik_Correlation
-  "Friction factor for smoothly curved tubes and channels"
+model Idelchik "Friction factor for smoothly curved tubes and channels"
+
   input Length Dh "Hydraulic diameter" annotation(Dialog(enable = true));
   input ReynoldsNumber Re "Reynolds number" annotation(Dialog(enable = true));
   input Length R_bend "Radius of curvature of the bend" annotation(Dialog(enable = true));
@@ -9,7 +9,6 @@ model Idelchik_Correlation
   Real K_friction "Loss coefficient due to friction";
   Real lamda "Coefficient dependent of Re and bend to diameter ratio";
   Real Rr "Bend ratio";
-
 
 equation
 
@@ -24,11 +23,8 @@ equation
     lamda = (5/Re^0.45) * Re^0.275;
   end if;
 
-
-
-
   // Sanity check
   assert(not
             ((Re*sqrt(Rr) > 5e3) and (Re*sqrt(Rr) < 50)), "The relation is not applicable for such conditions", AssertionLevel.warning);
 
-end Idelchik_Correlation;
+end Idelchik;
