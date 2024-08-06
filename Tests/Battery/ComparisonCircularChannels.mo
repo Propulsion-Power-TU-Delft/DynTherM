@@ -151,7 +151,21 @@ equation
     annotation (Line(points={{19.6,-10},{34,-10}}, color={191,0,0}));
   connect(heatSensorChannel2D.port_b, FixedTemperature.thermal) annotation (
       Line(points={{54,20},{84,20},{84,4},{83.3333,4}}, color={191,0,0}));
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
+  annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
+        Rectangle(
+          lineColor={200,200,200},
+          fillColor={248,248,248},
+          fillPattern=FillPattern.HorizontalCylinder,
+          extent={{-100,-100},{100,100}},
+          radius=25.0),
+        Polygon(
+          origin={24,16},
+          lineColor={78,138,73},
+          fillColor={78,138,73},
+          pattern=LinePattern.None,
+          fillPattern=FillPattern.Solid,
+          points={{-58.0,46.0},{42.0,-14.0},{-58.0,-74.0},{-58.0,46.0}})}),
+                                                                 Diagram(
         coordinateSystem(preserveAspectRatio=false)),
     experiment(StopTime=1200, __Dymola_Algorithm="Dassl"),
     Documentation(info="<html>

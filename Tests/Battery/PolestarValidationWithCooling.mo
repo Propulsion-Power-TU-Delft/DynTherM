@@ -145,5 +145,15 @@ equation
     experiment(
       StopTime=1200,
       Interval=1,
-      __Dymola_Algorithm="Dassl"));
+      __Dymola_Algorithm="Dassl"),
+    Documentation(info="<html>
+<p>Reproducing the fast charging simulation results for a battery module for the work [1], using the same inputs and the parameters. </p>
+<h4>Comments:</h4>
+<ul>
+<li>The battery temperature results (Average temperature, minnimum temperature and maximum temperature) are in quite good agreement with the work [1].</li>
+<li>The thickness of the resin and frame are not known. So, proceeded with good guesses for their dimensions. Its worth noting that the thickness of the resin will have more effect on the temperature distribution of the cells becuase of its lower thermal conductivity.</li>
+</ul>
+<h4>References</h4>
+<p>[1] I. Gul. &quot;Time efficient simulations for advanced battery cooling concepts&quot;, M.Sc. thesis, Polestar / Universitat Politecnica de Catalunya, 2023.</p>
+</html>"));
 end PolestarValidationWithCooling;

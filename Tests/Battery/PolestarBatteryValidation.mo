@@ -12,7 +12,7 @@ model PolestarBatteryValidation "Validation of Polestar battery module"
   parameter Integer Ns = 4 "Number of cells connected in series";
   parameter Integer Np = 3 "Number of cells connected in parallel";
   parameter Length t_fw = 0.002 "Thickness of firewall between cells in parallel";
-  parameter Length t_resin = 0.002 "Thickness of resin between cells and frame";
+  parameter Length t_resin = 0.0001 "Thickness of resin between cells and frame";
   parameter Length t_frame = 0.005 "Frame thickness";
 
   Modelica.Electrical.Analog.Sources.SignalCurrent signalCurrent annotation (
@@ -41,6 +41,15 @@ model PolestarBatteryValidation "Validation of Polestar battery module"
     annotation (Placement(transformation(extent={{52,-12},{68,4}})));
   Modelica.Blocks.Math.Gain gain(k=-1)
     annotation (Placement(transformation(extent={{42,78},{30,90}})));
+  BoundaryConditions.thermal_distributed thermal_distributed(
+    Nx=Ns*Np,
+    Ny=1,
+    T=(30 + 273.15)*ones(Ns*Np, 1),
+    use_di_Q=false,
+    use_di_T=true,
+    use_in_T=false)
+    annotation (Placement(transformation(extent={{-38,-34},{38,-66}})));
+
 equation
   connect(pouchModuleParallel.p, signalCurrent.p) annotation (Line(points={{-17.6,
           12.8},{-30,12.8},{-30,60},{-8,60}}, color={0,0,255}));
@@ -52,6 +61,26 @@ equation
     annotation (Line(points={{43.2,84},{63.2,84}}, color={0,0,127}));
   connect(gain.y, signalCurrent.i)
     annotation (Line(points={{29.4,84},{0,84},{0,69.6}}, color={0,0,127}));
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
-        coordinateSystem(preserveAspectRatio=false)));
+  connect(thermal_distributed.thermal, pouchModuleParallel.Bottom) annotation (
+      Line(points={{0,-50},{0,-20},{-3.2,-20},{-3.2,-3.76}}, color={191,0,0}));
+  annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
+        Rectangle(
+          lineColor={200,200,200},
+          fillColor={248,248,248},
+          fillPattern=FillPattern.HorizontalCylinder,
+          extent={{-100,-100},{100,100}},
+          radius=25.0),
+        Polygon(
+          origin={24,16},
+          lineColor={78,138,73},
+          fillColor={78,138,73},
+          pattern=LinePattern.None,
+          fillPattern=FillPattern.Solid,
+          points={{-58.0,46.0},{42.0,-14.0},{-58.0,-74.0},{-58.0,46.0}})}),
+                                                                 Diagram(
+        coordinateSystem(preserveAspectRatio=false)),
+    Documentation(info="<html>
+<p>The test validates the electro-thermal model of the battery module, without the implementation of the cooling system. Instead of modelling the cooling system, a constant surface temperature is applied to the side where cooling plate is going to be attached. </p>
+<p>It can be seen that the Moduel behaves thermally the same as in test &quot;PolestarValidationWithCooling&quot; if instead of cooling plate, a constant surface temperature of 30<sup><span style=\"font-size: 6pt;\">0</span></sup>C is applied.</p>
+</html>"));
 end PolestarBatteryValidation;
