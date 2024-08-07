@@ -128,7 +128,7 @@ model PouchModuleParallel "Battery module made of pouch cells"
   Components.TwoDimensional.WallConductionDiscretized resin_bottom(
     redeclare model Mat = ResinMat,
     t=t_resin,
-    A=W_cell*(t_cell + t_fw/2),
+    A=W_module*t_module,
     Tstart=Tstart,
     initOpt=initOpt,
     Nx=Ns*Np,
@@ -137,7 +137,7 @@ model PouchModuleParallel "Battery module made of pouch cells"
   Components.TwoDimensional.WallConductionDiscretized frame_top(
     redeclare model Mat = FrameMat,
     t=t_frame,
-    A=W_cell*(t_cell + t_fw/2),
+    A=W_module*t_module,
     Tstart=Tstart,
     initOpt=initOpt,
     Nx=Ns*Np,
@@ -146,7 +146,7 @@ model PouchModuleParallel "Battery module made of pouch cells"
   Components.TwoDimensional.WallConductionDiscretized frame_bottom(
     redeclare model Mat = FrameMat,
     t=t_frame,
-    A=W_cell*(t_cell + t_fw/2),
+    A=W_module*t_module,
     Tstart=Tstart,
     initOpt=initOpt,
     Nx=Ns*Np,
@@ -155,7 +155,7 @@ model PouchModuleParallel "Battery module made of pouch cells"
   Components.TwoDimensional.WallConductionDiscretized resin_top(
     redeclare model Mat = ResinMat,
     t=t_resin,
-    A=W_cell*(t_cell + t_fw/2),
+    A=W_module*t_module,
     Tstart=Tstart,
     initOpt=initOpt,
     Nx=Ns*Np,
@@ -164,7 +164,7 @@ model PouchModuleParallel "Battery module made of pouch cells"
   Components.TwoDimensional.WallConductionDiscretized frame_left(
     redeclare model Mat = FrameMat,
     t=t_frame,
-    A=W_cell*H_cell,
+    A=W_module*H_module,
     Tstart=Tstart,
     initOpt=initOpt,
     Nx=N_cv,
@@ -177,7 +177,7 @@ model PouchModuleParallel "Battery module made of pouch cells"
   Components.TwoDimensional.WallConductionDiscretized frame_right(
     redeclare model Mat = FrameMat,
     t=t_frame,
-    A=W_cell*H_cell,
+    A=W_module*H_module,
     Tstart=Tstart,
     initOpt=initOpt,
     Nx=N_cv,
