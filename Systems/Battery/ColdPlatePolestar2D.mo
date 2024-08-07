@@ -1,6 +1,6 @@
 within DynTherM.Systems.Battery;
-model ColdPlatePolestar
-  "Model for a cold plate heat exchanger used in Polestar 2 battery Module, with temperature varying only in the direction of fluid flow"
+model ColdPlatePolestar2D
+  "Model for a cold plate heat exchanger used in Polestar 2 battery Module, with 2D temperature distribution on the top and bottom surfaces"
 
   replaceable model Mat = Materials.Aluminium constrainedby
     Materials.Properties "Material used for the plate" annotation (choicesAllMatching=true);
@@ -200,12 +200,12 @@ model ColdPlatePolestar
         extent={{-6,6},{6,-6}},
         rotation=-90,
         origin={-22,-62})));
-  CustomInterfaces.DistributedHeatPort_A Bottom(Nx=N_cv, Ny=1) annotation (
+  CustomInterfaces.DistributedHeatPort_A Bottom(Nx=N_cv, Ny=6) annotation (
       Placement(transformation(
         extent={{-35,-35},{35,35}},
         rotation=90,
         origin={133,1}), iconTransformation(extent={{-30,-62},{26,-6}})));
-  CustomInterfaces.DistributedHeatPort_A Top(Nx=N_cv, Ny=1) annotation (
+  CustomInterfaces.DistributedHeatPort_A Top(Nx=N_cv, Ny=6) annotation (
       Placement(transformation(
         extent={{-35,-35},{35,35}},
         rotation=90,
@@ -328,60 +328,63 @@ equation
                                      color={0,0,0}));
   connect(Channel6.inlet, Channel5.outlet) annotation (Line(points={{42,-75},{42,
           -76},{72,-76},{72,69},{0,69}}, color={0,0,0}));
-  connect(Channel5.TopSurface, Top) annotation (Line(points={{-10.4,76.99},{-10.4,
-          84},{-82,84},{-82,1},{-133,1}}, color={0,140,72}));
-  connect(Channel3.TopSurface, Top) annotation (Line(points={{-10.92,24.46},{
-          -10.92,28},{-82,28},{-82,1},{-133,1}},
-                                          color={0,140,72}));
-  connect(Channel1.TopSurface, Top) annotation (Line(points={{-11.44,-34.07},{-11.44,
-          -26},{-82,-26},{-82,1},{-133,1}}, color={0,140,72}));
-  connect(Channel1.BottomSurface, Bottom) annotation (Line(points={{-11.44,-51.93},
-          {-11.44,-58},{86,-58},{86,1},{133,1}}, color={0,140,72}));
-  connect(Channel3.BottomSurface, Bottom) annotation (Line(points={{-10.92,7.54},
-          {-10.92,1},{133,1}}, color={0,140,72}));
-  connect(Channel5.BottomSurface, Bottom) annotation (Line(points={{-10.4,61.01},
-          {86,61.01},{86,1},{133,1}}, color={0,140,72}));
   connect(Channel6.TopSurface, Channel6ToTopInvert.distributedHeatPort_in)
     annotation (Line(points={{10.92,-82.99},{10.92,-92},{92,-92},{92,-14.06},{99.86,
           -14.06}}, color={0,140,72}));
-  connect(Channel6ToTopInvert.distributedHeatPort_out, Bottom) annotation (Line(
-        points={{108.14,-14.06},{116,-14.06},{116,1},{133,1}}, color={0,140,72}));
-  connect(Channel2ToTopInvert.distributedHeatPort_out, Bottom) annotation (Line(
-        points={{106.14,9.94},{116,9.94},{116,1},{133,1}}, color={0,140,72}));
+
   connect(Channel2.TopSurface, Channel2ToTopInvert.distributedHeatPort_in)
     annotation (Line(points={{10.92,-22.99},{10.92,-40},{66,-40},{66,9.94},{97.86,
           9.94}}, color={0,140,72}));
   connect(Channel4.TopSurface, Channel4ToTopInvert.distributedHeatPort_in)
     annotation (Line(points={{11.44,35.54},{11.44,30},{97.86,30},{97.86,29.94}},
         color={0,140,72}));
-  connect(Channel4ToTopInvert.distributedHeatPort_out, Bottom) annotation (Line(
-        points={{106.14,29.94},{106.14,30},{116,30},{116,1},{133,1}}, color={0,140,72}));
 
   connect(Channel6.BottomSurface, Channel6ToBottomInvert.distributedHeatPort_out)
     annotation (Line(points={{10.92,-67.01},{10.92,-64},{-8,-64},{-8,-70},{-52,
           -70},{-52,-16.06},{-105.86,-16.06}}, color={0,140,72}));
-  connect(Channel6ToBottomInvert.distributedHeatPort_in, Top) annotation (Line(
-        points={{-114.14,-16.06},{-120,-16.06},{-120,1},{-133,1}}, color={0,140,
-          72}));
   connect(Channel2.BottomSurface, Channel2ToBottomInvert.distributedHeatPort_out)
     annotation (Line(points={{10.92,-7.01},{-4,-7.01},{-4,-18},{-46,-18},{-46,
           9.94},{-105.86,9.94}}, color={0,140,72}));
   connect(Channel4.BottomSurface, Channel4ToBottomInvert.distributedHeatPort_out)
     annotation (Line(points={{11.44,52.46},{-4,52.46},{-4,40},{-98,40},{-98,
           29.94},{-105.86,29.94}}, color={0,140,72}));
-  connect(Channel4ToBottomInvert.distributedHeatPort_in, Top) annotation (Line(
-        points={{-114.14,29.94},{-120,29.94},{-120,1},{-133,1}}, color={0,140,
-          72}));
-  connect(Channel2ToBottomInvert.distributedHeatPort_in, Top) annotation (Line(
-        points={{-114.14,9.94},{-120,10},{-120,1},{-133,1}}, color={0,140,72}));
+
+   for i in 1:N_cv loop
+     // Connections for Channel 6
+      connect(Channel6ToBottomInvert.distributedHeatPort_in.ports[i,1], Top.ports[i,1]);
+      connect(Channel6ToTopInvert.distributedHeatPort_out.ports[i,1], Bottom.ports[i,1]);
+
+     // Connections for Channel 1
+      connect(Channel1.BottomSurface.ports[i,1], Bottom.ports[i,2]);
+      connect(Channel1.TopSurface.ports[i,1], Top.ports[i,2]);
+
+     // Connections for Channel 2
+      connect(Channel2ToBottomInvert.distributedHeatPort_in.ports[i,1], Top.ports[i,3]);
+      connect(Channel2ToTopInvert.distributedHeatPort_out.ports[i,1], Bottom.ports[i,3]);
+
+     // Connections for Channel 3
+      connect(Channel3.BottomSurface.ports[i,1], Bottom.ports[i,4]);
+      connect(Channel3.TopSurface.ports[i,1], Top.ports[i,4]);
+
+     // Connections for Channel 4
+      connect(Channel4ToBottomInvert.distributedHeatPort_in.ports[i,1], Top.ports[i,5]);
+      connect(Channel4ToTopInvert.distributedHeatPort_out.ports[i,1], Bottom.ports[i,5]);
+
+     // Connections for Channel 5
+      connect(Channel5.BottomSurface.ports[i,1], Bottom.ports[i,6]);
+      connect(Channel5.TopSurface.ports[i,1], Top.ports[i,6]);
+
+   end for;
 
   // Sanity check
   assert(t >= 2 * R_int, "Thickness of the plate greater than channel diameter", AssertionLevel.warning);
 
-  annotation (Icon(coordinateSystem(extent={{-140,-100},{140,100}}),
+
+
+   annotation (Icon(coordinateSystem(extent={{-140,-100},{140,100}}),
                    graphics={Bitmap(extent={{-86,-62},{72,62}}, fileName="modelica://DynTherM/Figures/Polestar_ColdPlate.png")}),
       Diagram(coordinateSystem(extent={{-140,-100},{140,100}})),
     Documentation(info="<html>
 <p><img src=\"modelica://DynTherM/Figures/Polestar_ColdPlate.png\"/></p>
 </html>"));
-end ColdPlatePolestar;
+end ColdPlatePolestar2D;
