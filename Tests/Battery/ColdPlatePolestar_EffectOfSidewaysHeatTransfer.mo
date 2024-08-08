@@ -56,12 +56,12 @@ model ColdPlatePolestar_EffectOfSidewaysHeatTransfer
     allowFlowReversal=environment.allowFlowReversal,
     use_in_massFlow=false,
     use_in_T=false)
-      annotation (Placement(transformation(extent={{-14,90},{4,72}})));
+      annotation (Placement(transformation(extent={{-8,90},{10,72}})));
     BoundaryConditions.pressure_sink          pressure_sink1(
     redeclare package Medium = Coolant,
     allowFlowReversal=environment.allowFlowReversal,
     use_ambient=false)
-      annotation (Placement(transformation(extent={{-2,52},{-14,64}})));
+      annotation (Placement(transformation(extent={{6,52},{-6,64}})));
   CustomInterfaces.Adaptors.heatFlowMultiplier heatFlowMultiplierColdPlate(Nx=N_cv,
       Ny=1) annotation (Placement(transformation(
         extent={{-13,4},{13,-4}},
@@ -233,11 +233,11 @@ model ColdPlatePolestar_EffectOfSidewaysHeatTransfer
   Modelica.Thermal.HeatTransfer.Sensors.HeatFlowSensor heatSensorColdPlate
     annotation (Placement(transformation(extent={{86,-2},{106,18}})));
 equation
-  connect(flow_source1.outlet,coldPlatePolestar. inlet) annotation (Line(points={{4,81},{
-          4,80},{14,80},{14,74.04},{21.4286,74.04}},
+  connect(flow_source1.outlet,coldPlatePolestar. inlet) annotation (Line(points={{10,81},
+          {10,80},{14,80},{14,74.04},{21.4286,74.04}},
         color={0,0,0}));
   connect(pressure_sink1.inlet,coldPlatePolestar. outlet) annotation (Line(
-        points={{-2,58},{12,58},{12,65.22},{21.4286,65.22}},
+        points={{6,58},{12,58},{12,65.22},{21.4286,65.22}},
         color={0,0,0}));
   connect(heatFlowMultiplierColdPlate.distributed, coldPlatePolestar.Bottom)
     annotation (Line(points={{71,26.4},{71,48},{76,48},{76,47.58},{76.7429,
@@ -299,6 +299,6 @@ equation
     Documentation(info="<html>
 <p>The performance of the cold plate is affected as a result of heat transfer between the channels. This test quantitatively simulate this effect. </p>
 <h4>Results</h4>
-<p>For a surface temperature of 40<sup><span style=\"font-size: 6pt;\">0</span></sup>C, the cooling plate has a heat transfer rate of around 1241W at steady state conditions. Ideally, this would have been around 1294W if there there was not heat transfer between the channels. </p>
+<p>For a surface temperature of 40<sup><span style=\"font-size: 6pt;\">0</span></sup>C, the cooling plate has a heat transfer rate of around 1241W at steady state conditions. Ideally, this would have been around 1294W if there there was no heat transfer between the channels. </p>
 </html>"));
 end ColdPlatePolestar_EffectOfSidewaysHeatTransfer;

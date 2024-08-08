@@ -1,5 +1,5 @@
 within DynTherM.Tests.Battery;
-model PolestarValidationWithCooling
+model PolestarValidationWith2DCooling
   "Validation of Polestar battery module with its cooling system"
 
   package Coolant = DynTherM.Media.IncompressibleTableBased.MEG_Polestar;
@@ -11,6 +11,7 @@ model PolestarValidationWithCooling
   parameter ElectricCharge C_nom = 66.4*3600 "Nominal cell capacity";
 
   // Module
+
   parameter Integer N_cv = 10 "Number of vertical control volumes in which each cell is discretized";
   parameter Integer Ns = 4 "Number of cells connected in series";
   parameter Integer Np = 3 "Number of cells connected in parallel";
@@ -19,6 +20,7 @@ model PolestarValidationWithCooling
   parameter Length t_frame = 0.005 "Frame thickness";
 
   // Cold Plate
+  parameter Integer N_cv_channels = 2 "Number of control Volumes for each channel in the cold plate";
   parameter Length L = W_cell "Length of the channel" annotation (Dialog(tab="Geometry"));
   parameter Length t = 2*R_int + 0.002 "Thickness of the cold Plate" annotation (Dialog(tab="Geometry"));
   parameter Length d = 0.01 "Center to center distance between the Channels" annotation (Dialog(tab="Geometry"));
@@ -61,7 +63,7 @@ model PolestarValidationWithCooling
     annotation (Placement(transformation(extent={{52,-12},{68,4}})));
   Modelica.Blocks.Math.Gain gain(k=-1)
     annotation (Placement(transformation(extent={{-40,82},{-28,94}})));
-  Systems.Battery.ColdPlatePolestar coldPlatePolestar(
+  Systems.Battery.ColdPlatePolestar2D coldPlatePolestar(
     redeclare model Mat = DynTherM.Materials.AluminiumColdPlate,
     redeclare package Medium = Coolant,
     allowFlowReversal=true,
@@ -78,10 +80,10 @@ model PolestarValidationWithCooling
     dP_start=200000000,
     Re_start=3e3,
     Pr_start=25,
-    N_cv=2,
+    N_cv=N_cv_channels,
     Nt=3,
     N_channels=1)
-    annotation (Placement(transformation(extent={{-74,-134},{102,-8}})));
+    annotation (Placement(transformation(extent={{-74,-132},{102,-6}})));
     BoundaryConditions.flow_source          flow_source1(
     redeclare package Medium = Coolant,
     T_nom=T_fluid,
@@ -95,21 +97,15 @@ model PolestarValidationWithCooling
     allowFlowReversal=environment.allowFlowReversal,
     use_ambient=false)
       annotation (Placement(transformation(extent={{-66,-88},{-78,-76}})));
-  Components.HeatTransfer.WallConduction wallConduction(
+  Components.TwoDimensional.WallConductionDiscretized ThermalInterface(
     redeclare model Mat = DynTherM.Materials.AluminiumColdPlate,
     t=0.092,
-    A=W_cell*(t_cell + t_fw)*Ns*Np)
-    annotation (Placement(transformation(extent={{-12,-13},{12,13}},
-        rotation=90,
-        origin={-33,-26})));
-  CustomInterfaces.Adaptors.heatFlowMultiplier heatFlowMultiplier(Nx=12, Ny=1)
-    annotation (Placement(transformation(extent={{-13,-4},{13,4}},
-        rotation=90,
-        origin={-55,-26})));
-  CustomInterfaces.Adaptors.heatFlowMultiplier heatFlowMultiplier1(Nx=2,  Ny=1)
-    annotation (Placement(transformation(extent={{-13,4},{13,-4}},
-        rotation=90,
-        origin={-13,-26})));
+    A=W_cell*(t_cell + t_fw/2)*Ns*Np,
+    Tstart=298.15,
+    Nx=Ns*Np,
+    Ny=1)
+    "Thermal Interface material between cooling plate and frame which adds thermal resistance"
+    annotation (Placement(transformation(extent={{-26,-24},{4,-2}})));
 equation
   connect(pouchModuleParallel.p, signalCurrent.p) annotation (Line(points={{-21.6,
           22.8},{-40,22.8},{-40,68},{-10,68}},color={0,0,255}));
@@ -124,23 +120,25 @@ equation
     annotation (Line(points={{-27.4,88},{-2,88},{-2,77.6}},
                                                          color={0,0,127}));
   connect(flow_source1.outlet, coldPlatePolestar.inlet) annotation (Line(points={{-60,-59},
-          {-60,-60},{-50,-60},{-50,-65.96},{-42.5714,-65.96}},
+          {-60,-60},{-50,-60},{-50,-63.96},{-42.5714,-63.96}},
         color={0,0,0}));
   connect(pressure_sink1.inlet, coldPlatePolestar.outlet) annotation (Line(
-        points={{-66,-82},{-52,-82},{-52,-74.78},{-42.5714,-74.78}},
+        points={{-66,-82},{-52,-82},{-52,-72.78},{-42.5714,-72.78}},
         color={0,0,0}));
-  connect(heatFlowMultiplier.single, wallConduction.inlet)
-    annotation (Line(points={{-52.6,-26},{-37.42,-26}},      color={191,0,0}));
-  connect(heatFlowMultiplier.distributed, pouchModuleParallel.Bottom)
-    annotation (Line(points={{-57.4,-26},{-74,-26},{-74,-4},{-8,-4},{-8,6.24},{-7.2,
-          6.24}},                                                  color={191,0,
-          0}));
-  connect(wallConduction.outlet, heatFlowMultiplier1.single)
-    annotation (Line(points={{-28.58,-26},{-15.4,-26}}, color={191,0,0}));
-  connect(coldPlatePolestar.Top, heatFlowMultiplier1.distributed) annotation (
-      Line(points={{12.7429,-49.58},{12.7429,-25.79},{-10.6,-25.79},{-10.6,-26}},
+  connect(pouchModuleParallel.Bottom, ThermalInterface.inlet)  annotation (Line(
+        points={{-7.2,6.24},{-10,6.24},{-10,-9.7},{-11,-9.7}}, color={191,0,0}));
+  for i in 1:6 loop
+    for j in 1:N_cv_channels loop
+        connect(ThermalInterface.outlet.ports[2*i,1], coldPlatePolestar.Top.ports[N_cv_channels,i]);
+        connect(ThermalInterface.outlet.ports[(2*i)-1,1], coldPlatePolestar.Top.ports[N_cv_channels,i]);
+    end for;
+  end for  annotation (Line(
+        points={{-11,-16.3},{8,-16.3},{8,-38},{12.7429,-38},{12.7429,-47.58}},
         color={191,0,0}));
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
+ annotation (Line(
+        points={{-11,-16.3},{8,-16.3},{8,-38},{12.7429,-38},{12.7429,-47.58}},
+        color={191,0,0}),
+              Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Ellipse(lineColor = {75,138,73},
                 fillColor={255,255,255},
                 fillPattern = FillPattern.Solid,
@@ -150,13 +148,14 @@ equation
                 pattern = LinePattern.None,
                 fillPattern = FillPattern.Solid,
                 points={{-36,60},{64,0},{-36,-60},{-36,60}})}),  Diagram(
-        coordinateSystem(preserveAspectRatio=false)),
+        coordinateSystem(preserveAspectRatio=false), graphics={Line(points={{-10,
+              -16},{-10,-26},{12,-26},{12,-44}}, color={238,46,47})}),
     experiment(
       StopTime=1200,
       Interval=1,
       __Dymola_Algorithm="Dassl"),
     Documentation(info="<html>
-<p>Reproducing the fast charging simulation results for a battery module for the work [1], using the same inputs and the parameters. </p>
+<p>Reproducing the fast charging simulation results for a battery module for the work [1], using the same inputs and the parameters. This also takes into account the temperature variation in the moduel</p>
 <h4>Comments:</h4>
 <ul>
 <li>The battery temperature results (Average temperature, minnimum temperature and maximum temperature) are in quite good agreement with the work [1].</li>
@@ -165,4 +164,4 @@ equation
 <h4>References</h4>
 <p>[1] I. Gul. &quot;Time efficient simulations for advanced battery cooling concepts&quot;, M.Sc. thesis, Polestar / Universitat Politecnica de Catalunya, 2023.</p>
 </html>"));
-end PolestarValidationWithCooling;
+end PolestarValidationWith2DCooling;
