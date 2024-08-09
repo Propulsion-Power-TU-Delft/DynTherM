@@ -382,9 +382,11 @@ equation
 
 
    annotation (Icon(coordinateSystem(extent={{-140,-100},{140,100}}),
-                   graphics={Bitmap(extent={{-86,-62},{72,62}}, fileName="modelica://DynTherM/Figures/Polestar_ColdPlate.png")}),
+                   graphics={Bitmap(extent={{-86,-62},{72,62}}, fileName=
+              "modelica://DynTherM/Figures/Polestar_ColdPlateIcon.png")}),
       Diagram(coordinateSystem(extent={{-140,-100},{140,100}})),
     Documentation(info="<html>
-<p><img src=\"modelica://DynTherM/Figures/Polestar_ColdPlate.png\"/></p>
+<p>Using <i>ColdPlateCircularChannel1D</i> to model heat transfer through cold plate of the configuration shown in the figure below, while also considering the lateral heat transfer between the channels. </p>
+<p><br>There is 2D temperature distribution on the top and bottom surfaces of the cooling plate.</p><p><br><img src=\"modelica://DynTherM/Figures/Polestar_ColdPlate.png\"/></p>
 </html>"));
 end ColdPlatePolestar2D;

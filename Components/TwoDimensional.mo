@@ -77,9 +77,15 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
             arrow={Arrow.None,Arrow.Filled},
             thickness=0.5)}),
       Documentation(info="<html>
-<p>The heat capacity (which is lumped at the center of the wall thickness) is accounted for, as well as the thermal resistance due to the finite heat conduction coefficient. Longitudinal heat conduction is neglected. </p>
-<p>The model can be used to reproduce the heat transfer through many walls in parallel. In that case, the heat flow rate is split equally among the different elements, assuming there is no heat transfer and temperature difference between them.</p>
-<p>Model adapted from ThermoPower library by Francesco Casella.</p>
+<p>Extension of the Model <i>WallConduction</i>, to calculate 2D heat transfer through a rectangular plane. </p>
+<p>For a given rectangular plane of thickness dz and material thermal conductivity k, the heat conduction equation can be written as:</p>
+<p><img src=\"modelica://DynTherM/Figures/Wall Conduction 2D.png\"/></p>
+<h4>Equations</h4>
+<p>For the East surface:</p>
+<p><img src=\"modelica://DynTherM/Resources/Images/equations/equation-wPPkaH7J.png\" alt=\"Qe = k*w*dz*((T_E - T_vol)/(l/2))\"/></p>
+<p>For the North surface:</p>
+<p><img src=\"modelica://DynTherM/Resources/Images/equations/equation-pUp3avFB.png\" alt=\"Q_N = k*l*dz*((T_N - T_vol)/(w
+/2))\"/></p>
 </html>", revisions="<html>
 </html>"));
   end WallConduction2D;
@@ -162,7 +168,21 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
             lineColor={28,108,200},
             fillColor={215,215,215},
             fillPattern=FillPattern.Backward)}),                   Diagram(
-          coordinateSystem(preserveAspectRatio=false)));
+          coordinateSystem(preserveAspectRatio=false)),
+      Documentation(info="<html>
+<p>This model is further extension of <i>WallConduction2D </i>to calculate heat transfer through a plano-concave surface. </p>
+<h4>Modelling assumptions: </h4>
+<ul>
+<li>The temperature of each side is assumed to be constant, denoted by nodal point T<sub>E</sub>, T<sub>W</sub>, T<sub>N</sub> and T<sub>s</sub>.</li>
+<li>The heat capacity of surface of temperature T<sub>vol</sub> is lumped at a single point, located at the centroid of rectangle with the same surface area A<sub>s</sub> and height h.</li>
+</ul>
+<p><img src=\"modelica://DynTherM/Figures/Conduction_Plano_Concave.png\"/></p>
+<h4>Equations</h4>
+<p>The average thickness t<sub>avg, </sub>is the thickness of a rectangle having similar surface area A<sub>s</sub> and height h.</p>
+<p>	<img src=\"modelica://DynTherM/Resources/Images/equations/equation-srCCxBop.png\" alt=\"t_avg = A_s/h\"/></p>
+<p>	<img src=\"modelica://DynTherM/Resources/Images/equations/equation-YGItPSny.png\" alt=\"Q_E = k*h*dz*((T_E - T_vol)/(t_avg/2))\"/></p>
+<p>	<img src=\"modelica://DynTherM/Resources/Images/equations/equation-qtcHdckv.png\" alt=\"Q_N = k*y*dz*((T_N - T_vol)/(h/2))\"/></p>
+</html>"));
   end ConductionPlanoConcave2D;
 
   model WallConductionDiscretized
@@ -267,7 +287,7 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
   end WallConductionDiscretized;
 
   model WallConductionDiscretized2D
-    "Dynamic model of conduction in a planar surface implementing 1D discretization in vertical direction"
+    "This model needs to be corrected!!"
 
     replaceable model Mat = Materials.Aluminium constrainedby
       Materials.Properties "Material choice" annotation (choicesAllMatching=true);
@@ -389,7 +409,7 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
   end WallConductionDiscretized2D;
 
   model ColdPlateCircularChannelCV
-    "Control volume for modelling of heat transfer through a portion of circular channel in a cold plate"
+    "Model of heat transfer and mass transfer through circular channel, in a rectangular solid surface"
 
     replaceable model Mat = Materials.Aluminium constrainedby
       Materials.Properties "Material choice" annotation (choicesAllMatching=true);
@@ -677,7 +697,11 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
             lineColor={0,0,0},
             fillColor={215,215,215},
             fillPattern=FillPattern.Solid)}), Diagram(coordinateSystem(
-            preserveAspectRatio=false)));
+            preserveAspectRatio=false)),
+      Documentation(info="<html>
+<p><br>The model accounts for heat transfer through a circular channel, encapsulated in a rectangular solid material, and the heat transfer through its outer solid surface, accounting for heat transfer in over all the surfaces. </p>
+<p><br><img src=\"modelica://DynTherM/Figures/CircularPipeCV.png\"/></p>
+</html>"));
   end ColdPlateCircularChannelCV;
 
   model ColdPlateCircularChannel1D
@@ -862,7 +886,7 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
             pattern=LinePattern.Dash)}),         Diagram(coordinateSystem(
             preserveAspectRatio=false)),
       Documentation(info="<html>
-<p><span style=\"font-family: Courier New;\">Model created by stacking CircularCV in series and adding SimplePlenum in between to improve solver robustness.</span></p>
+<p><span style=\"font-family: Courier New;\">Model created by stacking ColdPlateCircularChannelCV in series and adding SimplePlenum in between to improve solver robustness.</span></p>
 </html>"));
   end ColdPlateCircularChannel1D;
   annotation (Icon(graphics={
