@@ -379,7 +379,8 @@ equation
   assert(t >= 2 * R_int, "Thickness of the plate greater than channel diameter", AssertionLevel.warning);
 
   annotation (Icon(coordinateSystem(extent={{-140,-100},{140,100}}),
-                   graphics={Bitmap(extent={{-86,-62},{72,62}}, fileName="modelica://DynTherM/Figures/Polestar_ColdPlate.png")}),
+                   graphics={Bitmap(extent={{-86,-62},{72,62}}, fileName=
+              "modelica://DynTherM/Figures/Polestar_ColdPlateIcon.png")}),
       Diagram(coordinateSystem(extent={{-140,-100},{140,100}})),
     Documentation(info="<html>
 <p>Using ColdPlateCircularChannel1D to model heat transfer through cold plate of the configuration shown in the figure below, while also considering the lateral heat transfer between the channels. </p>

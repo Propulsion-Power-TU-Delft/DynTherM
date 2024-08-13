@@ -21,7 +21,7 @@ model PolestarValidationWithCooling
   // Cold Plate
   parameter Length L = W_cell "Length of the channel" annotation (Dialog(tab="Geometry"));
   parameter Length t = 2*R_int + 0.002 "Thickness of the cold Plate" annotation (Dialog(tab="Geometry"));
-  parameter Length d = 0.01 "Center to center distance between the Channels" annotation (Dialog(tab="Geometry"));
+  parameter Length d = (Ns*Np*t_cell)/6 "Center to center distance between the Channels" annotation (Dialog(tab="Geometry"));
   parameter Length R_int = 0.0025  "Channel internal radius" annotation (Dialog(tab="Geometry"));
 
   parameter Temperature T_fluid=298.15;
@@ -78,7 +78,7 @@ model PolestarValidationWithCooling
     dP_start=200000000,
     Re_start=3e3,
     Pr_start=25,
-    N_cv=2,
+    N_cv=3,
     Nt=3,
     N_channels=1)
     annotation (Placement(transformation(extent={{-74,-134},{102,-8}})));
@@ -106,7 +106,7 @@ model PolestarValidationWithCooling
     annotation (Placement(transformation(extent={{-13,-4},{13,4}},
         rotation=90,
         origin={-55,-26})));
-  CustomInterfaces.Adaptors.heatFlowMultiplier heatFlowMultiplier1(Nx=2,  Ny=1)
+  CustomInterfaces.Adaptors.heatFlowMultiplier heatFlowMultiplier1(Nx=3,  Ny=1)
     annotation (Placement(transformation(extent={{-13,4},{13,-4}},
         rotation=90,
         origin={-13,-26})));
@@ -162,7 +162,16 @@ equation
 <li>The battery temperature results (Average temperature, minnimum temperature and maximum temperature) are in quite good agreement with the work [1].</li>
 <li>The thickness of the resin and frame are not known. So, proceeded with good guesses for their dimensions. Its worth noting that the thickness of the resin will have more effect on the temperature distribution of the cells becuase of its lower thermal conductivity.</li>
 </ul>
-<h4>References</h4>
+<h4>Results:</h4>
+<ol>
+<li>Cell Temperatures</li>
+<p><img src=\"modelica://DynTherM/Figures/Results_Cell_Temperatures.png\"/></p>
+<li>Cell Internal heat generation rate</li>
+<p><img src=\"modelica://DynTherM/Figures/Cell_Internal heatGeneration Rate.PNG\"/></p>
+<li>Coolant Temperatures</li>
+</ol>
+<p><img src=\"modelica://DynTherM/Figures/Results CoolantTemperatures.png\"/></p>
+<p><br><h4>References</h4></p>
 <p>[1] I. Gul. &quot;Time efficient simulations for advanced battery cooling concepts&quot;, M.Sc. thesis, Polestar / Universitat Politecnica de Catalunya, 2023.</p>
 </html>"));
 end PolestarValidationWithCooling;

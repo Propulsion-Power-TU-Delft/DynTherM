@@ -23,7 +23,7 @@ model PolestarValidationWith2DCooling
   parameter Integer N_cv_channels = 2 "Number of control Volumes for each channel in the cold plate";
   parameter Length L = W_cell "Length of the channel" annotation (Dialog(tab="Geometry"));
   parameter Length t = 2*R_int + 0.002 "Thickness of the cold Plate" annotation (Dialog(tab="Geometry"));
-  parameter Length d = 0.01 "Center to center distance between the Channels" annotation (Dialog(tab="Geometry"));
+  parameter Length d = (Ns*Np*t_cell)/6  "Center to center distance between the Channels" annotation (Dialog(tab="Geometry"));
   parameter Length R_int = 0.0025  "Channel internal radius" annotation (Dialog(tab="Geometry"));
 
   parameter Temperature T_fluid=298.15;
@@ -153,7 +153,7 @@ equation
     experiment(
       StopTime=1200,
       Interval=1,
-      __Dymola_Algorithm="Dassl"),
+      __Dymola_Algorithm="Esdirk45a"),
     Documentation(info="<html>
 <p>Reproducing the fast charging simulation results for a battery module for the work [1], using the same inputs and the parameters. This also takes into account the temperature variation in the moduel</p>
 <h4>Comments:</h4>
