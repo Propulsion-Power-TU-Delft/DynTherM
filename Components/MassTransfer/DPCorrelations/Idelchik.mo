@@ -27,4 +27,8 @@ equation
   assert(not
             ((Re*sqrt(Rr) > 5e3) and (Re*sqrt(Rr) < 50)), "The relation is not applicable for such conditions", AssertionLevel.warning);
 
+  annotation (Documentation(info="<html>
+<h4>Reference:</h4>
+<p><span style=\"font-family: Times New Roman; font-size: 12pt;\">Idelchik, I. E. (2008). <i>Handbook of Hydraulic Resistance</i> (4th ed.). Begell House, pp. 426.</span></p>
+</html>"));
 end Idelchik;
