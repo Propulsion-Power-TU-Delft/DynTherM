@@ -20,7 +20,7 @@ model PolestarValidationWith2DCooling
   parameter Length t_frame = 0.005 "Frame thickness";
 
   // Cold Plate
-  parameter Integer N_cv_channels = 2 "Number of control Volumes for each channel in the cold plate";
+  parameter Integer N_cv_channels = 1 "Number of control Volumes for each channel in the cold plate";
   parameter Length L = W_cell "Length of the channel" annotation (Dialog(tab="Geometry"));
   parameter Length t = 2*R_int + 0.002 "Thickness of the cold Plate" annotation (Dialog(tab="Geometry"));
   parameter Length d = (Ns*Np*t_cell)/6  "Center to center distance between the Channels" annotation (Dialog(tab="Geometry"));
@@ -77,7 +77,7 @@ model PolestarValidationWith2DCooling
     m_flow_start=0.04416,
     rho_start(displayUnit="kg/m3") = 1e3,
     u_start=2,
-    dP_start=200000000,
+    dP_start=8000,
     Re_start=3e3,
     Pr_start=25,
     N_cv=N_cv_channels,

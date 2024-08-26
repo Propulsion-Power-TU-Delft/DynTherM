@@ -11,7 +11,7 @@ model PolestarValidationWith2PlateCooling
   parameter ElectricCharge C_nom = 66.4*3600 "Nominal cell capacity";
 
   // Module
-  parameter Integer N_cv = 20 "Number of vertical control volumes in which each cell is discretized";
+  parameter Integer N_cv = 10 "Number of vertical control volumes in which each cell is discretized";
   parameter Integer Ns = 4 "Number of cells connected in series";
   parameter Integer Np = 3 "Number of cells connected in parallel";
   parameter Length t_fw = 0.002 "Thickness of firewall between cells in parallel";
@@ -75,7 +75,7 @@ model PolestarValidationWith2PlateCooling
     m_flow_start=0.04416,
     rho_start(displayUnit="kg/m3") = 1e3,
     u_start=2,
-    dP_start=200000000,
+    dP_start=8000,
     Re_start=3e3,
     Pr_start=25,
     N_cv=1,
@@ -124,7 +124,7 @@ model PolestarValidationWith2PlateCooling
     m_flow_start=0.04416,
     rho_start(displayUnit="kg/m3") = 1e3,
     u_start=2,
-    dP_start=200000000,
+    dP_start=8000,
     Re_start=3e3,
     Pr_start=25,
     N_cv=1,
@@ -138,7 +138,7 @@ model PolestarValidationWith2PlateCooling
     allowFlowReversal=environment.allowFlowReversal,
     use_in_massFlow=false,
     use_in_T=false)
-      annotation (Placement(transformation(extent={{-90,-42},{-78,-54}})));
+      annotation (Placement(transformation(extent={{-90,-40},{-78,-52}})));
     BoundaryConditions.pressure_sink          pressure_sink2(
     redeclare package Medium = Coolant,
     allowFlowReversal=environment.allowFlowReversal,
@@ -189,7 +189,8 @@ equation
       Line(points={{63.3429,-45.78},{63.3429,-42},{64,-42},{64,-30},{29.4,-30}},
         color={191,0,0}));
   connect(flow_source2.outlet, coldPlatePolestar1.inlet) annotation (Line(
-        points={{-78,-48},{-60,-48},{-60,-54.36},{-59.5714,-54.36}}, color={0,0,
+        points={{-78,-46},{-72,-46},{-72,-50},{-66,-50},{-66,-54.36},{-59.5714,
+          -54.36}},                                                  color={0,0,
           0}));
   connect(pressure_sink2.inlet, coldPlatePolestar1.outlet) annotation (Line(
         points={{-76,-64},{-70,-64},{-70,-58},{-64,-58},{-64,-58.98},{-59.5714,

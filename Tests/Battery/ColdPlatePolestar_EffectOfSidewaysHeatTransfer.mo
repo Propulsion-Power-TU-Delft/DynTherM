@@ -21,7 +21,7 @@ model ColdPlatePolestar_EffectOfSidewaysHeatTransfer
     parameter MassFlowRate m_flow_start=0.04416;
     parameter Velocity u_start=2;
     parameter Density rho_start=1e3;
-    parameter Pressure dP_start=2e3;
+    parameter Pressure dP_start=8e3;
     parameter ReynoldsNumber Re_start=3e3;
     parameter PrandtlNumber Pr_start=30;
 
@@ -42,9 +42,9 @@ model ColdPlatePolestar_EffectOfSidewaysHeatTransfer
     m_flow_start=0.04416,
     rho_start(displayUnit="kg/m3") = 1e3,
     u_start=2,
-    dP_start=200000000,
+    dP_start=8000,
     Re_start=3e3,
-    Pr_start=25,
+    Pr_start=30,
     N_cv=N_cv,
     Nt=3,
     N_channels=1)

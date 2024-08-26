@@ -75,10 +75,10 @@ model PolestarValidationWithCooling
     m_flow_start=0.04416,
     rho_start(displayUnit="kg/m3") = 1e3,
     u_start=2,
-    dP_start=200000000,
+    dP_start=8000,
     Re_start=3e3,
     Pr_start=25,
-    N_cv=3,
+    N_cv=1,
     Nt=3,
     N_channels=1)
     annotation (Placement(transformation(extent={{-74,-134},{102,-8}})));
@@ -106,7 +106,7 @@ model PolestarValidationWithCooling
     annotation (Placement(transformation(extent={{-13,-4},{13,4}},
         rotation=90,
         origin={-55,-26})));
-  CustomInterfaces.Adaptors.heatFlowMultiplier heatFlowMultiplier1(Nx=3,  Ny=1)
+  CustomInterfaces.Adaptors.heatFlowMultiplier heatFlowMultiplier1(Nx=1,  Ny=1)
     annotation (Placement(transformation(extent={{-13,4},{13,-4}},
         rotation=90,
         origin={-13,-26})));

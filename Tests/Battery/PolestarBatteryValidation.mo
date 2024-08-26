@@ -12,7 +12,7 @@ model PolestarBatteryValidation "Validation of Polestar battery module"
   parameter Integer Ns = 4 "Number of cells connected in series";
   parameter Integer Np = 3 "Number of cells connected in parallel";
   parameter Length t_fw = 0.002 "Thickness of firewall between cells in parallel";
-  parameter Length t_resin = 0.0001 "Thickness of resin between cells and frame";
+  parameter Length t_resin = 0.0025 "Thickness of resin between cells and frame";
   parameter Length t_frame = 0.005 "Frame thickness";
 
   Modelica.Electrical.Analog.Sources.SignalCurrent signalCurrent annotation (
@@ -44,12 +44,20 @@ model PolestarBatteryValidation "Validation of Polestar battery module"
   BoundaryConditions.thermal_distributed thermal_distributed(
     Nx=Ns*Np,
     Ny=1,
-    T=(30 + 273.15)*ones(Ns*Np, 1),
+    T=(11 + 273.15)*ones(Ns*Np, 1),
     use_di_Q=false,
     use_di_T=true,
     use_in_T=false)
     annotation (Placement(transformation(extent={{-38,-34},{38,-66}})));
 
+  BoundaryConditions.thermal_distributed thermal_distributed1(
+    Nx=Ns*Np,
+    Ny=1,
+    T=(11 + 273.15)*ones(Ns*Np, 1),
+    use_di_Q=false,
+    use_di_T=true,
+    use_in_T=false)
+    annotation (Placement(transformation(extent={{-116,46},{-40,14}})));
 equation
   connect(pouchModuleParallel.p, signalCurrent.p) annotation (Line(points={{-17.6,
           12.8},{-30,12.8},{-30,60},{-8,60}}, color={0,0,255}));
@@ -63,6 +71,9 @@ equation
     annotation (Line(points={{29.4,84},{0,84},{0,69.6}}, color={0,0,127}));
   connect(thermal_distributed.thermal, pouchModuleParallel.Bottom) annotation (
       Line(points={{0,-50},{0,-20},{-3.2,-20},{-3.2,-3.76}}, color={191,0,0}));
+  connect(thermal_distributed1.thermal, pouchModuleParallel.Top) annotation (
+      Line(points={{-78,30},{-78,48},{-4,48},{-4,29.36},{-3.2,29.36}},
+                                                       color={191,0,0}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Rectangle(
           lineColor={200,200,200},

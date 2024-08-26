@@ -26,7 +26,7 @@ equation
   Nu = ht*Dh/Medium.thermalConductivity(state);
 
   // Sanity check
-  assert(Re >= 5e6, "The Gnielinski's correlation is strictly valid for Reynolds numbers greater than 5e6", AssertionLevel.warning);
+  assert(Re >= 5e6, "The Gnielinski's correlation is strictly valid for Reynolds numbers less than 5e6", AssertionLevel.warning);
   assert(Re <= 3e3, "The Gnielinski's correlation is strictly valid for Reynolds numbers greater than 3e3", AssertionLevel.warning);
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(

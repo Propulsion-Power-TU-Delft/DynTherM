@@ -38,12 +38,12 @@ model CircularPipeBend180
 
   // Pressure drop
   model DPC =
-    DynTherM.Components.MassTransfer.DPCorrelations.Idelchik_Correlation (
+    DynTherM.Components.MassTransfer.DPCorrelations.Idelchik (
       Dh=geometry.Dh,
       R_bend=R_bend,
       Re=Re,
       theeta=theeta) annotation (choicesAllMatching=true);
-//      redeclare package Medium=Medium,
+//
 
   DPC friction;
   GEO geometry;

@@ -11,3 +11,5 @@ RectangularPipe
 CircularPipeBend
 ActuatorDisk
 PipeGeometry
+CircularPipeGnielinski
+CircularPipeBend180
