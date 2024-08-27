@@ -73,6 +73,13 @@ model ColdPlateCircularParallel2D
     each DP_opt=DP_opt,
     each allowFlowReversal=allowFlowReversal);
 
+  // For Results
+  Pressure PressureDropColdplate "Total pressure drop in the cold plate";
+  Volume V_plate "Total Volume of the plate";
+  Volume V_fluid "Total Volume of the fluid";
+  Mass m_fluid "Total mass of the fluid";
+  Mass m_solid "Total mass of the solid";
+
 
   CustomInterfaces.DistributedHeatPort_A Top(Nx=N_cv, Ny=N_channels)
     annotation (Placement(transformation(extent={{-16,44},{16,76}}),
@@ -104,8 +111,15 @@ model ColdPlateCircularParallel2D
 
 equation
 
-  // boundary thermal connections
+  PressureDropColdplate = inlet.P - outlet.P;
+  V_plate= L*W_plate*t_plate;
+  V_fluid = (pi*R_int*R_int) * L * N_channels;
+  m_solid = Mat.rho*(V_plate-V_fluid);
+  m_fluid = (channel[1].cv[1].circularPipe.rho + channel[end].cv[end].circularPipe.rho)*V_fluid/2;
+
   for j in 1:N_channels loop
+
+  // boundary thermal connections
     for i in 1:N_cv loop
       connect(Top.ports[i, j], channel[j].cv[i].SouthBottom);
       connect(Bottom.ports[i, j], channel[j].cv[i].NorthTop);

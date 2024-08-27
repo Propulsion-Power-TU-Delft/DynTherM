@@ -29,11 +29,9 @@ package ComparisonCoolingPlate
     parameter Integer N_cv_ch = 2 "Number of control volumes in which each channel is discretized";
     parameter Integer N_channels = 6 "Number of channels in the cold plate";
 
-
-
-
     parameter Temperature T_fluid=298.15;
     parameter MassFlowRate m_flow=5.4*0.04416;
+
 
     Systems.Battery.ColdPlateCircularParallel2D coldPlateCircularParallel2D(
       redeclare model Mat = DynTherM.Materials.AluminiumColdPlate,
@@ -136,7 +134,7 @@ package ComparisonCoolingPlate
           connect(ThermalInterface.outlet.ports[2*i,1], coldPlateCircularParallel2D.Top.ports[N_cv_ch,i]);
           connect(ThermalInterface.outlet.ports[(2*i)-1,1], coldPlateCircularParallel2D.Top.ports[N_cv_ch,i]);
       end for;
-    end for
+    end for;
     annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
           Rectangle(
             lineColor={200,200,200},
@@ -155,10 +153,7 @@ package ComparisonCoolingPlate
           coordinateSystem(preserveAspectRatio=false), graphics={Line(points={{2,-14},
                 {2,-24},{24,-24},{24,-42}},        color={238,46,47})}),
       Documentation(info="<html>
-<p>The test validates the electro-thermal model of the battery module, without the implementation of the cooling system. Instead of modelling the cooling system, a constant surface temperature is applied to the side where cooling plate is going to be attached. </p>
-<p>It can be seen that the Moduel behaves thermally the same as in test &quot;PolestarValidationWithCooling&quot; if instead of cooling plate, a constant surface temperature of 30<sup><span style=\"font-size: 6pt;\">0</span></sup>C is applied.</p>
-</html>"));
-    annotation (Diagram(graphics={                               Line(points={{4,-16},
+</html>"),      Diagram(graphics={                               Line(points={{4,-16},
                 {4,-26},{4,-26},{4,-42}},          color={238,46,47})}));
   end Parallel;
 end ComparisonCoolingPlate;

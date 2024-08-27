@@ -46,6 +46,11 @@ model ColdPlatePolestar2D
 
    // For Results
   Pressure PressureDropColdplate "Total pressure drop in the cold plate";
+  Volume V_plate "Total Volume of the plate";
+  Volume V_fluid "Total Volume of the fluid";
+  Mass m_fluid "Total mass of the fluid";
+  Mass m_solid "Total mass of the solid";
+
 
   Components.TwoDimensional.ColdPlateCircularChannel1D Channel1(
     redeclare model Mat = Mat,
@@ -383,6 +388,10 @@ model ColdPlatePolestar2D
         origin={78,-28})));
 equation
   PressureDropColdplate = Channel1.inlet.P - Channel6.outlet.P;
+  V_plate = (6*d)*L*t;
+  V_fluid = (pi*R_int*R_int) * L * 6;
+  m_fluid = (Channel6.cv[end].circularPipe.rho +Channel1.cv[1].circularPipe.rho)*V_fluid/2;
+  m_solid = Mat.rho*(V_plate-V_fluid);
 
   connect(Channel1.inlet, inlet) annotation (Line(points={{-44,-43},{-44,-44},{
           -64,-44},{-64,-58},{-82,-58}},
