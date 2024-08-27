@@ -106,7 +106,9 @@ model PolestarValidationWith2DCooling
     Ny=1)
     "Thermal Interface material between cooling plate and frame which adds thermal resistance"
     annotation (Placement(transformation(extent={{-26,-24},{4,-2}})));
+
 equation
+
   connect(pouchModuleParallel.p, signalCurrent.p) annotation (Line(points={{-21.6,
           22.8},{-40,22.8},{-40,68},{-10,68}},color={0,0,255}));
   connect(pouchModuleParallel.n, signalCurrent.n) annotation (Line(points={{7.2,
@@ -127,6 +129,7 @@ equation
         color={0,0,0}));
   connect(pouchModuleParallel.Bottom, ThermalInterface.inlet)  annotation (Line(
         points={{-7.2,6.24},{-10,6.24},{-10,-9.7},{-11,-9.7}}, color={191,0,0}));
+
   for i in 1:6 loop
     for j in 1:N_cv_channels loop
         connect(ThermalInterface.outlet.ports[2*i,1], coldPlatePolestar.Top.ports[N_cv_channels,i]);

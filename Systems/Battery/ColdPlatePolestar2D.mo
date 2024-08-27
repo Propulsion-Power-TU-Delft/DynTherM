@@ -44,6 +44,9 @@ model ColdPlatePolestar2D
   parameter Integer Nt=3  "Number of control volumes across the thickness of the cooling plate";
   parameter Integer N_channels(min=1) "Number of channels";
 
+   // For Results
+  Pressure PressureDropColdplate "Total pressure drop in the cold plate";
+
   Components.TwoDimensional.ColdPlateCircularChannel1D Channel1(
     redeclare model Mat = Mat,
     redeclare package Medium = Medium,
@@ -278,17 +281,109 @@ model ColdPlatePolestar2D
         extent={{-6,6},{6,-6}},
         rotation=-90,
         origin={-110,30})));
+  Components.MassTransfer.CircularPipeBend180 bend1_2(
+    redeclare package Medium = Medium,
+    m_flow_start=m_flow_start,
+    P_start=P_start,
+    T_start=T_start_fluid,
+    u_start=u_start,
+    rho_start=rho_start,
+    dP_start=dP_start,
+    state_start=state_start,
+    Re_start=Re_start,
+    Pr_start=Pr_start,
+    N=1,
+    L=pi*d/2,
+    D=2*R_int,
+    R_bend=d/2,
+    theeta(displayUnit="deg") = 3.1415926535898) annotation (Placement(
+        transformation(
+        extent={{10,-10},{-10,10}},
+        rotation=-90,
+        origin={54,-28})));
+  Components.MassTransfer.CircularPipeBend180 bend3_4(
+    redeclare package Medium = Medium,
+    m_flow_start=m_flow_start,
+    P_start=P_start,
+    T_start=T_start_fluid,
+    u_start=u_start,
+    rho_start=rho_start,
+    dP_start=dP_start,
+    state_start=state_start,
+    Re_start=Re_start,
+    Pr_start=Pr_start,
+    N=1,
+    L=pi*d/2,
+    D=2*R_int,
+    R_bend=d/2,
+    theeta(displayUnit="deg") = 3.1415926535898) annotation (Placement(
+        transformation(
+        extent={{10,-10},{-10,10}},
+        rotation=-90,
+        origin={58,30})));
+  Components.MassTransfer.CircularPipeBend180 bend2_3(
+    redeclare package Medium = Medium,
+    m_flow_start=m_flow_start,
+    P_start=P_start,
+    T_start=T_start_fluid,
+    u_start=u_start,
+    rho_start=rho_start,
+    dP_start=dP_start,
+    state_start=state_start,
+    Re_start=Re_start,
+    Pr_start=Pr_start,
+    N=1,
+    L=pi*d/2,
+    D=2*R_int,
+    R_bend=d/2,
+    theeta(displayUnit="deg") = 3.1415926535898) annotation (Placement(
+        transformation(
+        extent={{10,10},{-10,-10}},
+        rotation=-90,
+        origin={-70,2})));
+  Components.MassTransfer.CircularPipeBend180 bend4_5(
+    redeclare package Medium = Medium,
+    m_flow_start=m_flow_start,
+    P_start=P_start,
+    T_start=T_start_fluid,
+    u_start=u_start,
+    rho_start=rho_start,
+    dP_start=dP_start,
+    state_start=state_start,
+    Re_start=Re_start,
+    Pr_start=Pr_start,
+    N=1,
+    L=pi*d/2,
+    D=2*R_int,
+    R_bend=d/2,
+    theeta(displayUnit="deg") = 3.1415926535898) annotation (Placement(
+        transformation(
+        extent={{10,10},{-10,-10}},
+        rotation=-90,
+        origin={-68,56})));
+  Components.MassTransfer.CircularPipeBend180 bend3_1(
+    redeclare package Medium = Medium,
+    m_flow_start=m_flow_start,
+    P_start=P_start,
+    T_start=T_start_fluid,
+    u_start=u_start,
+    rho_start=rho_start,
+    dP_start=dP_start,
+    state_start=state_start,
+    Re_start=Re_start,
+    Pr_start=Pr_start,
+    N=1,
+    L=pi*d/2,
+    D=2*R_int,
+    R_bend=d/2,
+    theeta(displayUnit="deg") = 3.1415926535898) annotation (Placement(
+        transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=-90,
+        origin={78,-28})));
 equation
-  connect(Channel2.inlet, Channel1.outlet) annotation (Line(points={{42,-15},{42,
-          -14},{60,-14},{60,-43},{0,-43}}, color={0,0,0}));
-  connect(Channel2.outlet, Channel3.inlet) annotation (Line(points={{0,-15},{0,-14},
-          {-58,-14},{-58,16},{-42,16}},
-                                      color={0,0,0}));
-  connect(Channel3.outlet, Channel4.inlet)
-    annotation (Line(points={{0,16},{54,16},{54,44},{44,44}},
-                                                            color={0,0,0}));
-  connect(Channel4.outlet, Channel5.inlet) annotation (Line(points={{0,44},{-54,
-          44},{-54,70},{-40,70},{-40,69}}, color={0,0,0}));
+  PressureDropColdplate = Channel1.inlet.P - Channel6.outlet.P;
+
   connect(Channel1.inlet, inlet) annotation (Line(points={{-44,-43},{-44,-44},{
           -64,-44},{-64,-58},{-82,-58}},
                                      color={0,0,0}));
@@ -326,8 +421,6 @@ equation
   connect(Channel6.outlet, outlet) annotation (Line(points={{0,-75},{0,-76},{
           -12,-76},{-12,-88},{-28,-88}},
                                      color={0,0,0}));
-  connect(Channel6.inlet, Channel5.outlet) annotation (Line(points={{42,-75},{42,
-          -76},{72,-76},{72,69},{0,69}}, color={0,0,0}));
   connect(Channel6.TopSurface, Channel6ToTopInvert.distributedHeatPort_in)
     annotation (Line(points={{10.92,-82.99},{10.92,-92},{92,-92},{92,-14.06},{99.86,
           -14.06}}, color={0,140,72}));
@@ -381,6 +474,26 @@ equation
 
 
 
+  connect(Channel2.outlet, bend2_3.inlet)
+    annotation (Line(points={{0,-15},{-70,-15},{-70,-8}}, color={0,0,0}));
+  connect(Channel3.inlet, bend2_3.outlet)
+    annotation (Line(points={{-42,16},{-70,16},{-70,12}}, color={0,0,0}));
+  connect(bend4_5.inlet, Channel4.outlet)
+    annotation (Line(points={{-68,46},{-68,44},{0,44}}, color={0,0,0}));
+  connect(bend4_5.outlet, Channel5.inlet)
+    annotation (Line(points={{-68,66},{-68,69},{-40,69}}, color={0,0,0}));
+  connect(Channel1.outlet, bend1_2.inlet) annotation (Line(points={{0,-43},{0,-44},
+          {54,-44},{54,-38}}, color={0,0,0}));
+  connect(bend1_2.outlet, Channel2.inlet)
+    annotation (Line(points={{54,-18},{54,-15},{42,-15}}, color={0,0,0}));
+  connect(Channel3.outlet, bend3_4.inlet)
+    annotation (Line(points={{0,16},{58,16},{58,20}}, color={0,0,0}));
+  connect(bend3_4.outlet, Channel4.inlet)
+    annotation (Line(points={{58,40},{58,44},{44,44}}, color={0,0,0}));
+  connect(bend3_1.inlet, Channel5.outlet)
+    annotation (Line(points={{78,-18},{78,69},{0,69}}, color={0,0,0}));
+  connect(bend3_1.outlet, Channel6.inlet)
+    annotation (Line(points={{78,-38},{78,-75},{42,-75}}, color={0,0,0}));
    annotation (Icon(coordinateSystem(extent={{-140,-100},{140,100}}),
                    graphics={Bitmap(extent={{-86,-62},{72,62}}, fileName=
               "modelica://DynTherM/Figures/Polestar_ColdPlateIcon.png")}),
