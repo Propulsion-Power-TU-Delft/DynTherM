@@ -20,7 +20,7 @@ model PolestarValidationWith2DCooling
   parameter Length t_frame = 0.005 "Frame thickness";
 
   // Cold Plate
-  parameter Integer N_cv_channels = 1 "Number of control Volumes for each channel in the cold plate";
+  parameter Integer N_cv_channels = 2 "Number of control Volumes for each channel in the cold plate";
   parameter Length L = W_cell "Length of the channel" annotation (Dialog(tab="Geometry"));
   parameter Length t = 2*R_int + 0.002 "Thickness of the cold Plate" annotation (Dialog(tab="Geometry"));
   parameter Length d = (Ns*Np*t_cell)/6  "Center to center distance between the Channels" annotation (Dialog(tab="Geometry"));
@@ -29,7 +29,10 @@ model PolestarValidationWith2DCooling
   parameter Temperature T_fluid=298.15;
   parameter MassFlowRate m_flow=0.04416;
 
-  // Initialization
+  // Result
+  HeatFlowRate Q_gained "Total heat absorption rate";
+  HeatFlowRate Q_Top "Total heat absorption rate";
+  HeatFlowRate Q_Bottom "Total heat absorption rate";
 
   Modelica.Electrical.Analog.Sources.SignalCurrent signalCurrent annotation (
       Placement(transformation(
@@ -108,6 +111,9 @@ model PolestarValidationWith2DCooling
     annotation (Placement(transformation(extent={{-26,-24},{4,-2}})));
 
 equation
+  Q_gained = m_flow*(coldPlatePolestar.outlet.h_outflow - coldPlatePolestar.inlet.h_outflow);
+  Q_Top = sum(ThermalInterface.outlet.ports.Q_flow);
+  Q_Bottom = sum(ThermalInterface.inlet.ports.Q_flow);
 
   connect(pouchModuleParallel.p, signalCurrent.p) annotation (Line(points={{-21.6,
           22.8},{-40,22.8},{-40,68},{-10,68}},color={0,0,255}));

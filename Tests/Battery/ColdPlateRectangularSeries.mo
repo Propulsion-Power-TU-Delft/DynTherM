@@ -203,7 +203,7 @@ model ColdPlateRectangularSeries
     redeclare package Medium = Coolant,
     allowFlowReversal=environment.allowFlowReversal,
     initOpt=environment.initOpt,
-    use_inertia=false,
+    use_inertia=true,
     L=L,
     W=W_channel,
     H=H_channel,

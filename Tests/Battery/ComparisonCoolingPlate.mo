@@ -30,7 +30,12 @@ package ComparisonCoolingPlate
     parameter Integer N_channels = 6 "Number of channels in the cold plate";
 
     parameter Temperature T_fluid=298.15;
-    parameter MassFlowRate m_flow=5.4*0.04416;
+    parameter MassFlowRate m_flow=4.5*0.04416;
+
+    // Result
+    HeatFlowRate Q_gained "Total heat absorption rate";
+    HeatFlowRate Q_Top "Total heat absorption rate";
+    HeatFlowRate Q_Bottom "Total heat absorption rate";
 
 
     Systems.Battery.ColdPlateCircularParallel2D coldPlateCircularParallel2D(
@@ -61,7 +66,7 @@ package ComparisonCoolingPlate
       allowFlowReversal=environment.allowFlowReversal,
       use_in_massFlow=false,
       use_in_T=false)
-        annotation (Placement(transformation(extent={{-94,-54},{-68,-80}})));
+        annotation (Placement(transformation(extent={{-98,-52},{-72,-78}})));
       BoundaryConditions.pressure_sink          pressure_sink1(
       redeclare package Medium = Coolant,
       allowFlowReversal=environment.allowFlowReversal,
@@ -108,11 +113,15 @@ package ComparisonCoolingPlate
       "Thermal Interface material between cooling plate and frame which adds thermal resistance"
       annotation (Placement(transformation(extent={{-14,-22},{16,0}})));
   equation
+    Q_gained = m_flow * (coldPlateCircularParallel2D.outlet.h_outflow - coldPlateCircularParallel2D.inlet.h_outflow);
+    Q_Top = sum(ThermalInterface.outlet.ports.Q_flow);
+    Q_Bottom = sum(ThermalInterface.inlet.ports.Q_flow);
+
     connect(coldPlateCircularParallel2D.outlet, pressure_sink1.inlet)
       annotation (Line(points={{58,-64},{72,-64},{72,-66},{84,-66}},
                                                    color={0,0,0}));
     connect(flow_source1.outlet, coldPlateCircularParallel2D.inlet) annotation (
-        Line(points={{-68,-67},{-68,-68},{-52,-68},{-52,-64},{-50,-64}},
+        Line(points={{-72,-65},{-72,-68},{-52,-68},{-52,-64},{-50,-64}},
                                                                      color={0,0,0}));
     connect(pouchModuleParallel.p,signalCurrent. p) annotation (Line(points={{-9.6,
             24.8},{-28,24.8},{-28,70},{2,70}},  color={0,0,255}));
@@ -151,7 +160,7 @@ package ComparisonCoolingPlate
             points={{-58.0,46.0},{42.0,-14.0},{-58.0,-74.0},{-58.0,46.0}})}),
                                                                    Diagram(
           coordinateSystem(preserveAspectRatio=false), graphics={Line(points={{2,-14},
-                {2,-24},{24,-24},{24,-42}},        color={238,46,47})}),
+                {2,-24},{4,-24},{4,-42}},          color={238,46,47})}),
       Documentation(info="<html>
 </html>"),      Diagram(graphics={                               Line(points={{4,-16},
                 {4,-26},{4,-26},{4,-42}},          color={238,46,47})}));

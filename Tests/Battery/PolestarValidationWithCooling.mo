@@ -78,7 +78,7 @@ model PolestarValidationWithCooling
     dP_start=8000,
     Re_start=3e3,
     Pr_start=25,
-    N_cv=1,
+    N_cv=2,
     Nt=3,
     N_channels=1)
     annotation (Placement(transformation(extent={{-74,-134},{102,-8}})));
@@ -98,7 +98,8 @@ model PolestarValidationWithCooling
   Components.HeatTransfer.WallConduction wallConduction(
     redeclare model Mat = DynTherM.Materials.AluminiumColdPlate,
     t=0.092,
-    A=W_cell*(t_cell + t_fw)*Ns*Np)
+    A=W_cell*(t_cell + t_fw)*Ns*Np,
+    Tstart=298.15)
     annotation (Placement(transformation(extent={{-12,-13},{12,13}},
         rotation=90,
         origin={-33,-26})));
@@ -106,7 +107,7 @@ model PolestarValidationWithCooling
     annotation (Placement(transformation(extent={{-13,-4},{13,4}},
         rotation=90,
         origin={-55,-26})));
-  CustomInterfaces.Adaptors.heatFlowMultiplier heatFlowMultiplier1(Nx=1,  Ny=1)
+  CustomInterfaces.Adaptors.heatFlowMultiplier heatFlowMultiplier1(Nx=2,  Ny=1)
     annotation (Placement(transformation(extent={{-13,4},{13,-4}},
         rotation=90,
         origin={-13,-26})));

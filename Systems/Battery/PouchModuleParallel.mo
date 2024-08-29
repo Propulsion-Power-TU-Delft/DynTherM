@@ -47,6 +47,7 @@ model PouchModuleParallel "Battery module made of pouch cells"
   Length H_module "Module height";
   Length t_module "Module thickness";
   Volume V_module "Volume of the battery module";
+  Temperature T_avg "Average temperature of the moduel";
 
   Cell cell[Ns,Np](
     redeclare model InPlaneMat=InPlaneCellMat,
@@ -189,6 +190,9 @@ model PouchModuleParallel "Battery module made of pouch cells"
         origin={60,40})));
 
 equation
+
+  T_avg = (sum(cell.thermal.Average.T))/(Ns*Np);
+
   // Geometry
   W_module = W_cell + 2*t_frame;
   H_module = H_cell + 2*t_resin + 2*t_frame;
