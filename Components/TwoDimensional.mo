@@ -212,6 +212,8 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
       each Tstart=Tstart,
       each initOpt=initOpt);
 
+    Mass m "Mass";
+
     CustomInterfaces.DistributedHeatPort_B outlet(Nx=Nx, Ny=Ny)
                                                               annotation (
         Placement(transformation(
@@ -233,6 +235,8 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
           origin={7.10543e-15,30})));
 
   equation
+    m = sum(cv.m);
+
     for i in 1:Nx loop
       for j in 1:Ny loop
         connect(outlet.ports[i,j], cv[i,j].outlet);

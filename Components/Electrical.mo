@@ -244,12 +244,9 @@ package Electrical
           extent={{-10,-10},{10,10}},
           rotation=0,
           origin={-30,0})));
-    Modelica.Electrical.Analog.Basic.VariableResistor R0
-      annotation (Placement(transformation(extent={{0,-10},{20,10}})));
-    Modelica.Electrical.Analog.Basic.VariableResistor R1
-      annotation (Placement(transformation(extent={{50,10},{70,30}})));
-    Modelica.Electrical.Analog.Basic.VariableCapacitor C1
-      annotation (Placement(transformation(extent={{50,-10},{70,-30}})));
+    Modelica.Electrical.Analog.Basic.VariableResistor R0 annotation (Placement(transformation(extent={{0,-10},{20,10}})));
+    Modelica.Electrical.Analog.Basic.VariableResistor R1 annotation (Placement(transformation(extent={{50,10},{70,30}})));
+    Modelica.Electrical.Analog.Basic.VariableCapacitor C1 annotation (Placement(transformation(extent={{50,-10},{70,-30}})));
     Modelica.Blocks.Tables.CombiTable1Ds Entropic_interpolation(table=[0,-0.22; 0.10,
           -0.3; 0.20,-0.1; 0.30,-0.05; 0.40,0.11; 0.50,0.12; 0.60,0.06; 0.70,-0.02;
           0.80,-0.02; 0.90,0.015; 1.00,0.025])
@@ -296,9 +293,11 @@ package Electrical
           extent={{-10,10},{10,-10}},
           rotation=90,
           origin={60,-60})));
-    Utilities.StateOfCharge stateOfCharge(C_nom=C_nom,
-      eta=eta,                                         SoC_start=SoC_start)
-                                          annotation (Placement(transformation(
+    Utilities.StateOfCharge stateOfCharge(
+      C_nom=C_nom,
+      eta=eta,
+      SoC_start=SoC_start)
+      annotation (Placement(transformation(
           extent={{-12,12},{12,-12}},
           rotation=180,
           origin={-80,-40})));
@@ -307,25 +306,20 @@ package Electrical
           rotation=-90,
           origin={0,126}),                  iconTransformation(extent={{-132,70},{
               -108,94}})));
-    Modelica.Blocks.Math.Gain gain(k=1/1000)
-      annotation (Placement(transformation(extent={{-38,-118},{-22,-102}})));
-    Modelica.Blocks.Interfaces.RealOutput Q "Internal heat generation"
-      annotation (Placement(transformation(
+    Modelica.Blocks.Math.Gain gain(k=1/1000) annotation (Placement(transformation(extent={{-38,-118},{-22,-102}})));
+    Modelica.Blocks.Interfaces.RealOutput Q "Internal heat generation" annotation (Placement(transformation(
           extent={{14,-14},{-14,14}},
           rotation=180,
           origin={8,-110}),  iconTransformation(extent={{-12,-12},{12,12}},
           rotation=-90,
           origin={20,-100})));
-
     Modelica.Electrical.Analog.Interfaces.PositivePin p annotation (Placement(
           transformation(extent={{-130,-10},{-110,10}}), iconTransformation(
             extent={{-92,18},{-74,36}})));
     Modelica.Electrical.Analog.Interfaces.NegativePin n annotation (Placement(
           transformation(extent={{110,-10},{130,10}}), iconTransformation(extent=
               {{-92,-86},{-74,-68}})));
-
-    Modelica.Electrical.Analog.Sensors.CurrentSensor currentSensor
-      annotation (Placement(transformation(extent={{-70,-10},{-50,10}})));
+    Modelica.Electrical.Analog.Sensors.CurrentSensor currentSensor annotation (Placement(transformation(extent={{-70,-10},{-50,10}})));
     Modelica.Blocks.Interfaces.RealOutput SoC "State of charge" annotation (
         Placement(transformation(
           extent={{-14,-14},{14,14}},
@@ -334,6 +328,7 @@ package Electrical
           extent={{-12,-12},{12,12}},
           rotation=-90,
           origin={-20,-100})));
+
   equation
     Q = Q_rev + Q_irrev;
     Q_rev = currentSensor.p.i*T*gain.y;
@@ -402,12 +397,10 @@ package Electrical
     "Electro-thermal model of a pouch cell featuring 1D discretization"
 
     replaceable model InPlaneMat = Materials.PolestarCellInPlane constrainedby
-      Materials.Properties "In-plane material properties"
-      annotation (choicesAllMatching=true);
+      Materials.Properties "In-plane material properties" annotation (choicesAllMatching=true);
 
     replaceable model CrossPlaneMat = Materials.PolestarCellCrossPlane constrainedby
-      Materials.Properties "Cross-plane material properties"
-      annotation (choicesAllMatching=true);
+      Materials.Properties "Cross-plane material properties" annotation (choicesAllMatching=true);
 
     // Geometry
     parameter Length W "Width" annotation (Dialog(tab="Geometry"));
@@ -417,6 +410,7 @@ package Electrical
     // Electrical parameters
     parameter Real eta=0.98 "Charging/discharging efficiency";
     parameter ElectricCharge C_nom "Nominal capacity";
+    parameter Voltage v_nom=3.6 "Nominal voltage";
 
     // Initialization
     parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
@@ -426,6 +420,12 @@ package Electrical
 
     // Discretization
     parameter Integer N(min=1)=10 "Number of vertical sections in which the cell is discretized";
+
+    Mass m "Cell mass";
+    Volume V "Cell volume";
+    Energy E_nom "Nominal energy stored in the battery at 100% SoC";
+    CustomUnits.VolumetricEnergyDensity E_density_vol "Volumetric energy density";
+    CustomUnits.GravimetricEnergyDensity E_density_mass "Gravimetric energy density";
 
     Modelica.Thermal.HeatTransfer.Sensors.TemperatureSensor temperatureSensor annotation (Placement(transformation(extent={{-14,34},
               {-26,46}})));
@@ -502,7 +502,13 @@ package Electrical
           iconTransformation(extent={{-22,-12},{2,12}})));
     Modelica.Electrical.Analog.Sensors.MultiSensor multiSensor
       annotation (Placement(transformation(extent={{-80,8},{-70,18}})));
+
   equation
+    V = W*H*t;
+    m = sum(thermal.cv.m);
+    E_nom = C_nom*v_nom;
+    E_density_vol = E_nom/V;
+    E_density_mass = E_nom/m;
 
     connect(Top,thermal. Top) annotation (Line(points={{50,40},{50.42,40},{50.42,17.36}},
                      color={191,0,0}));

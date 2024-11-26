@@ -2,3 +2,5 @@ HydraulicConductance
 HydraulicResistance
 VolumetricHeatFlowRate
 MassFlux
+VolumetricEnergyDensity
+GravimetricEnergyDensity

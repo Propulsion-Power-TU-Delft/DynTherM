@@ -9,8 +9,10 @@ model StateOfCharge
     annotation (Placement(transformation(extent={{20,-10},{40,10}})));
   Modelica.Blocks.Sources.Constant full_charge(k=1)
     annotation (Placement(transformation(extent={{-60,20},{-40,40}})));
-  DepthOfDischarge DoD(C_nom=C_nom,
-    eta=eta,                        DoD_start=1 - SoC_start)
+  DepthOfDischarge DoD(
+    C_nom=C_nom,
+    eta=eta,
+    DoD_start=1 - SoC_start)
     annotation (Placement(transformation(extent={{-60,-50},{-20,-10}})));
   Modelica.Blocks.Interfaces.RealInput I annotation (Placement(transformation(
           extent={{-114,-14},{-86,14}}), iconTransformation(extent={{-114,-14},{

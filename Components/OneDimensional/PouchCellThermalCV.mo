@@ -30,8 +30,8 @@ model PouchCellThermalCV
         origin={-40,34})));
 
 equation
-  m=Mat.rho*A*H;
-  Cm=m*Mat.cm;
+  m = Mat.rho*A*H;
+  Cm = m*Mat.cm;
 
   Cm*der(T_vol) = inlet.Q_flow + outlet.Q_flow + Q_gen "Energy balance";
   inlet.Q_flow = (Mat.lambda*A*(inlet.T - T_vol))/(H/2)

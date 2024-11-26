@@ -5,26 +5,18 @@ model DepthOfDischarge
   parameter Real eta "Charging/discharging efficiency";
   parameter Real DoD_start(start=0) "Depth of discharge - start value" annotation (Dialog(tab="Initialization"));
 
-  Modelica.Blocks.Continuous.Integrator integrator(k=-1) "Used Energy"
-    annotation (Placement(transformation(extent={{-60,30},{-40,50}})));
-  Modelica.Blocks.Math.Add add
-    annotation (Placement(transformation(extent={{10,10},{30,30}})));
-  Modelica.Blocks.Math.Division division
-    annotation (Placement(transformation(extent={{50,-10},{70,10}})));
-  Modelica.Blocks.Math.Gain gain(final k=DoD_start) "Inital value of DOD"
-    annotation (Placement(transformation(extent={{-58,-48},{-42,-32}})));
-
-  Modelica.Blocks.Interfaces.RealOutput DoD "Depth of discharge"
-    annotation (Placement(transformation(extent={{88,-14},{116,14}}),
+  Modelica.Blocks.Continuous.Integrator integrator(k=-1) "Used Energy" annotation (Placement(transformation(extent={{-60,30},{-40,50}})));
+  Modelica.Blocks.Math.Add add annotation (Placement(transformation(extent={{10,10},{30,30}})));
+  Modelica.Blocks.Math.Division division annotation (Placement(transformation(extent={{50,-10},{70,10}})));
+  Modelica.Blocks.Math.Gain gain(final k=DoD_start) "Inital value of DOD" annotation (Placement(transformation(extent={{-58,-48},{-42,-32}})));
+  Modelica.Blocks.Interfaces.RealOutput DoD "Depth of discharge" annotation (Placement(transformation(extent={{88,-14},{116,14}}),
         iconTransformation(extent={{88,-14},{116,14}})));
   Modelica.Blocks.Sources.Constant nominalCapacity(k=C_nom) annotation (Placement(transformation(extent={{-100,-80},{-80,-60}})));
   Modelica.Blocks.Interfaces.RealInput I annotation (Placement(transformation(
           extent={{-114,-14},{-86,14}}), iconTransformation(extent={{-114,-14},{
             -86,14}})));
+  Modelica.Blocks.Math.Gain efficiency(final k=eta) "Charge/discharge efficiency" annotation (Placement(transformation(extent={{-28,32},{-12,48}})));
 
-  Modelica.Blocks.Math.Gain efficiency(final k=eta)
-    "Charge/discharge efficiency"
-    annotation (Placement(transformation(extent={{-28,32},{-12,48}})));
 equation
   assert(DoD > 1, "SoC < 0 detected", level=AssertionLevel.warning);
   assert(DoD < 0, "SoC > 1 detected", level=AssertionLevel.warning);

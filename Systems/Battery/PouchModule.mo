@@ -42,12 +42,15 @@ model PouchModule "Battery module made of pouch cells"
   // Discretization
   parameter Integer N_cv(min=1)=10 "Number of vertical control volumes in which each cell is discretized";
   parameter Integer Ns(min=1) "Number of cells connected in series";
-  parameter Integer Np(min=1) "Number of cells connected in parallel";
+  parameter Integer Np(min=2) "Number of cells connected in parallel";
 
   Length W_module "Module width";
   Length H_module "Module height";
   Length t_module "Module thickness";
   Volume V_module "Volume of the battery module";
+  Mass m_module "Mass of the battery module";
+  Real V_overhead "Volume overhead [%]";
+  Real m_overhead "Mass overhead [%]";
 
   Cell cell[Ns,Np](
     redeclare model InPlaneMat=InPlaneCellMat,
@@ -184,6 +187,11 @@ equation
   H_module = H_cell + 2*t_resin + 2*t_frame;
   t_module = Np*t_cell + (Np - 1)*t_fw + 2*t_frame;
   V_module = W_module*H_module*t_module;
+  m_module = sum(cell.m) + sum(firewall.m) +
+    resin_top.m + resin_bottom.m + frame_top.m + frame_bottom.m +
+    frame_left.m + frame_right.m;
+  V_overhead = (V_module/sum(cell.V) - 1)*100;
+  m_overhead = (m_module/sum(cell.m) - 1)*100;
 
   // ------------------------------- ELECTRICAL --------------------------------
   // External
