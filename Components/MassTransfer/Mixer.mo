@@ -26,22 +26,19 @@ model Mixer "Mixer of two streams with heat and mass transfer"
   Medium.ThermodynamicState state "Thermodynamic state";
   Time Tr "Residence Time";
 
-  CustomInterfaces.FluidPort_A inlet1(redeclare package Medium =
-        Medium,                                m_flow(min=if allowFlowReversal
-           then -Modelica.Constants.inf else 0)) annotation (Placement(
-        transformation(extent={{-120,-60},{-80,-20}}, rotation=0),
-        iconTransformation(extent={{-90,-50},{-70,-30}})));
-  CustomInterfaces.FluidPort_B outlet(redeclare package Medium =
-        Medium,                                m_flow(max=if allowFlowReversal
-           then +Modelica.Constants.inf else 0)) annotation (Placement(
-        transformation(extent={{80,-20},{120,20}}, rotation=0),
-        iconTransformation(extent={{90,-10},{110,10}})));
+  CustomInterfaces.ZeroDimensional.FluidPort_A inlet1(redeclare package Medium =
+        Medium, m_flow(min=if allowFlowReversal then -Modelica.Constants.inf
+           else 0)) annotation (Placement(transformation(extent={{-120,-60},{-80,
+            -20}}, rotation=0), iconTransformation(extent={{-90,-50},{-70,-30}})));
+  CustomInterfaces.ZeroDimensional.FluidPort_B outlet(redeclare package Medium =
+        Medium, m_flow(max=if allowFlowReversal then +Modelica.Constants.inf
+           else 0)) annotation (Placement(transformation(extent={{80,-20},{120,
+            20}}, rotation=0), iconTransformation(extent={{90,-10},{110,10}})));
 
-  CustomInterfaces.FluidPort_A inlet2(redeclare package Medium = Medium,
-                                      m_flow(min=if allowFlowReversal then -
-          Modelica.Constants.inf else 0)) annotation (Placement(
-        transformation(extent={{-120,20},{-80,60}}, rotation=0),
-        iconTransformation(extent={{-90,30},{-70,50}})));
+  CustomInterfaces.ZeroDimensional.FluidPort_A inlet2(redeclare package Medium =
+        Medium, m_flow(min=if allowFlowReversal then -Modelica.Constants.inf
+           else 0)) annotation (Placement(transformation(extent={{-120,20},{-80,
+            60}}, rotation=0), iconTransformation(extent={{-90,30},{-70,50}})));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a thermalPort annotation (Placement(transformation(extent={{-18,62},
             {18,98}}),
         iconTransformation(extent={{-10,80},{10,100}})));

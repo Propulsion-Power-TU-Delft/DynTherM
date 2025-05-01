@@ -1,54 +1,62 @@
 within DynTherM.Components;
 package TwoDimensional "Package collecting the components modeling coupled heat and mass transfer and featuring a 2D spatial discretization"
 
-  model WallConduction2D "Dynamic model of conduction in a planar surface"
-    replaceable model Mat=Materials.Aluminium constrainedby
-      Materials.Properties "Material choice" annotation (choicesAllMatching=true);
+  model WallConductionCV2D "Control volume dynamic model of 2D heat conduction in a planar surface"
+    replaceable model MatX=Materials.Aluminium constrainedby
+      Materials.Properties
+      "Material properties along x direction" annotation (choicesAllMatching=true);
+    replaceable model MatY=Materials.Aluminium constrainedby
+      Materials.Properties
+      "Material properties along y direction" annotation (choicesAllMatching=true);
 
-    input Real N=1 "Number of walls in parallel" annotation (Dialog(enable=true));
-    input Length w "Width of the Plane, sides facing east and west"  annotation (Dialog(enable=true));
-    input Length l "Length of the plane,sides facing north and south" annotation (Dialog(enable=true));
-    input Length dz "Thickness of the slice, out of plane" annotation (Dialog(enable=true));
+    input Length x "Distance between east and west ports" annotation (Dialog(enable=true));
+    input Length y "Distance between north and south ports" annotation (Dialog(enable=true));
+    input Length z "Thickness, out of plane" annotation (Dialog(enable=true));
+    input Mass dm(start=0) "Mass variation over time" annotation (Dialog(enable=true));
 
     // Initialization
-    parameter Temperature Tstart=300
-      "Temperature start value" annotation (Dialog(tab="Initialization"));
+    parameter Temperature Tstart=300 "Temperature start value" annotation (Dialog(tab="Initialization"));
     parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
       "Initialization option" annotation (Dialog(tab="Initialization"));
 
-    Mass m "Mass of the volume";
-    Modelica.Units.SI.HeatCapacity Cm "Heat capacity of the volume";
-    Temperature T_vol "Average temperature of the volume";
+    Mass m "Mass";
+    Volume V "Volume";
+    HeatCapacity Cm "Heat capacity";
+    Temperature T_vol "Average temperature";
 
-    Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a inletN annotation (
-        Placement(transformation(extent={{-10,60},{12,82}}), iconTransformation(
-            extent={{-10,60},{12,82}})));
-    Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b outletW
-      annotation (Placement(transformation(extent={{-100,-10},{-80,10}}),
+    Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a North annotation (
+        Placement(transformation(extent={{-10,60},{10,80}}), iconTransformation(
+            extent={{-10,60},{10,80}})));
+    Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b West annotation (
+        Placement(transformation(extent={{-100,-10},{-80,10}}),
           iconTransformation(extent={{-100,-10},{-80,10}})));
-    Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b outletS
-      annotation (Placement(transformation(extent={{-12,-82},{10,-60}}),
-          iconTransformation(extent={{-12,-82},{10,-60}})));
-
-    Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a inletE
-      annotation (Placement(transformation(extent={{80,-10},{100,10}}),
-          iconTransformation(extent={{80,-10},{100,10}})));
+    Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b South annotation (
+        Placement(transformation(extent={{-10,-80},{10,-60}}), iconTransformation(
+            extent={{-10,-80},{10,-60}})));
+    Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a East annotation (
+        Placement(transformation(extent={{80,-10},{100,10}}), iconTransformation(
+            extent={{80,-10},{100,10}})));
+    Modelica.Blocks.Interfaces.RealInput Q_int annotation (Placement(
+          transformation(extent={{-68,36},{-28,76}}), iconTransformation(
+          extent={{-10,-10},{10,10}},
+          rotation=-90,
+          origin={-40,70})));
 
   equation
+    V = x*y*z;
+    m = MatX.rho*V - dm;
+    Cm = MatX.cm*m;
 
-    m=Mat.rho*w*l*dz;
-    Cm=m*Mat.cm;
+    Cm*der(T_vol) = North.Q_flow + South.Q_flow + East.Q_flow + West.Q_flow +
+      Q_int "Energy balance";
 
-    N*Cm*der(T_vol) =inletN.Q_flow +outletS.Q_flow  +inletE.Q_flow  +outletW.Q_flow         "Energy balance";
+    North.Q_flow = (MatY.lambda*x*z*(North.T - T_vol))/(y/2) "Heat conduction through northern side";
+    South.Q_flow = (MatY.lambda*x*z*(South.T - T_vol))/(y/2) "Heat conduction through the southern side";
+    East.Q_flow = (MatX.lambda*y*z*(East.T - T_vol))/(x/2) "Heat conduction through the eastern side";
+    West.Q_flow = (MatX.lambda*y*z*(West.T - T_vol))/(x/2) "Heat conduction through the western side";
 
-    inletN.Q_flow = (Mat.lambda*N*w*dz*(inletN.T - T_vol))/(l/2)
-      "Heat conduction through north side";
-    outletS.Q_flow = (Mat.lambda*N*w*dz*(outletS.T - T_vol))/(l/2)
-      "Heat conduction through the southern side";
-    inletE.Q_flow = (Mat.lambda*N*l*dz*(inletE.T - T_vol))/(w/2)
-      "Heat conduction through the eastern side";
-    outletW.Q_flow = (Mat.lambda*N*l*dz*(outletW.T - T_vol))/(w/2)
-      "Heat conduction through the Western side";
+    assert(MatX.rho == MatY.rho, "The density of the material must be equal in x and y direction");
+    assert(MatX.cm == MatY.cm, "The specific heat capacity of the material must be equal in x and y direction");
 
   initial equation
     if initOpt == Choices.InitOpt.steadyState then
@@ -64,31 +72,19 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
             lineColor={0,0,0},
             fillColor={175,175,175},
             fillPattern=FillPattern.Backward),
-          Text(
-            extent={{-32,20},{32,-44}},
-            lineColor={255,255,255},
-            lineThickness=0.5,
-            fillColor={255,255,255},
-            fillPattern=FillPattern.Solid,
-            textString="Plane
-"),       Line(
-            points={{-2,-34},{-2,36}},
-            color={0,0,0},
-            arrow={Arrow.None,Arrow.Filled},
-            thickness=0.5)}),
+          Ellipse(
+            extent={{20,-22},{-24,22}},
+            lineColor={0,0,0},
+            fillColor={238,46,47},
+            fillPattern=FillPattern.Sphere)}),
       Documentation(info="<html>
-<p>Extension of the Model <i>WallConduction</i>, to calculate 2D heat transfer through a rectangular plane. </p>
-<p>For a given rectangular plane of thickness dz and material thermal conductivity k, the heat conduction equation can be written as:</p>
-<p><img src=\"modelica://DynTherM/Figures/Wall Conduction 2D.png\"/></p>
-<h4>Equations</h4>
-<p>For the East surface:</p>
-<p><img src=\"modelica://DynTherM/Resources/Images/equations/equation-wPPkaH7J.png\" alt=\"Qe = k*w*dz*((T_E - T_vol)/(l/2))\"/></p>
-<p>For the North surface:</p>
-<p><img src=\"modelica://DynTherM/Resources/Images/equations/equation-pUp3avFB.png\" alt=\"Q_N = k*l*dz*((T_N - T_vol)/(w
-/2))\"/></p>
+<p>Extension of the <i>WallConduction </i>model to calculate two-dimensional heat transfer through a planar surface.</p>
+<p>The model accounts for anisotropic thermal conductivity in x and y directions. The remaining material properties must be isotropic.</p>
+<p>The model accounts for internal heat generation within the control volume, if any.</p>
+<p><br><img src=\"modelica://DynTherM/Figures/Wall Conduction 2D.png\"/></p>
 </html>", revisions="<html>
 </html>"));
-  end WallConduction2D;
+  end WallConductionCV2D;
 
   model ConductionPlanoConcave2D
     "Dynamic model of conduction heat transfer through a Plano-Concave surface"
@@ -185,68 +181,91 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
 </html>"));
   end ConductionPlanoConcave2D;
 
-  model WallConductionDiscretized
-    "Dynamic model of conduction in a planar surface implementing 1D discretization"
+  model WallConductionHorizontal2D "Dynamic model of 2D heat conduction in a planar surface discretised along the horizontal direction"
 
-    replaceable model Mat = Materials.Aluminium constrainedby
-      Materials.Properties "Material choice" annotation (choicesAllMatching=true);
-    model CV = Components.HeatTransfer.WallConduction "Control volume";
+    replaceable model MatX=Materials.Aluminium constrainedby Materials.Properties
+      "Material properties along x direction" annotation (choicesAllMatching=true);
+    replaceable model MatY=Materials.Aluminium constrainedby Materials.Properties
+      "Material properties along y direction" annotation (choicesAllMatching=true);
+    model CV = DynTherM.Components.TwoDimensional.WallConductionCV2D
+      "Control volume";
 
     // Geometry
-    input Length t "Wall thickness" annotation (Dialog(enable=true));
-    input Area A "Wall surface" annotation (Dialog(enable=true));
+    input Length x "Distance between east and west ports" annotation (Dialog(enable=true));
+    input Length y "Distance between north and south ports" annotation (Dialog(enable=true));
+    input Length z "Thickness, out of plane" annotation (Dialog(enable=true));
 
     // Initialization
-    parameter Temperature Tstart "Temperature start value" annotation (Dialog(tab="Initialization"));
-    parameter DynTherM.Choices.InitOpt initOpt=Choices.InitOpt.fixedState
+    parameter Temperature Tstart=300 "Temperature start value" annotation (Dialog(tab="Initialization"));
+    parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
       "Initialization option" annotation (Dialog(tab="Initialization"));
 
     // Discretization
-    parameter Integer Nx(min=1) "Number of wall sections in x-direction";
-    parameter Integer Ny(min=1) "Number of wall sections in y-direction";
+    parameter Integer N(min=1) "Number of horizontal sections in which the wall is discretized";
 
-    CV cv[Nx,Ny](
-      redeclare model Mat=Mat,
-      each t=t,
-      each A=A/(Nx*Ny),
+    CV cv[N](
+      redeclare model MatX=MatX,
+      redeclare model MatY=MatY,
+      each x=x/N,
+      each y=y,
+      each z=z,
+      each dm=0,
       each Tstart=Tstart,
       each initOpt=initOpt);
 
     Mass m "Mass";
+    Volume V "Volume";
+    Area A "Main heat transfer area";
 
-    CustomInterfaces.DistributedHeatPort_B outlet(Nx=Nx, Ny=Ny)
-                                                              annotation (
+    CustomInterfaces.OneDimensional.HeatPort1D_B South(Nx=N) annotation (
         Placement(transformation(
           extent={{-20,-10},{20,10}},
           rotation=-90,
-          origin={20,3.55271e-15}),iconTransformation(
+          origin={20,3.55271e-15}), iconTransformation(
           extent={{-60,-48},{60,48}},
           rotation=180,
           origin={7.10543e-15,-30})));
-    CustomInterfaces.DistributedHeatPort_A inlet(Nx=Nx, Ny=Ny)
-                                                             annotation (
+    CustomInterfaces.OneDimensional.HeatPort1D_A North(Nx=N) annotation (
         Placement(transformation(
           extent={{-20,-10},{20,10}},
           rotation=-90,
-          origin={-20,3.55271e-15}),
-                                   iconTransformation(
+          origin={-20,3.55271e-15}), iconTransformation(
           extent={{-60,-48},{60,48}},
           rotation=180,
           origin={7.10543e-15,30})));
+    Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b West annotation (
+        Placement(transformation(extent={{-100,-10},{-80,10}}),
+          iconTransformation(extent={{-100,-10},{-80,10}})));
+    Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a East annotation (
+        Placement(transformation(extent={{80,-10},{100,10}}), iconTransformation(
+            extent={{80,-10},{100,10}})));
 
   equation
     m = sum(cv.m);
+    A = x*z;
+    V = x*y*z;
 
-    for i in 1:Nx loop
-      for j in 1:Ny loop
-        connect(outlet.ports[i,j], cv[i,j].outlet);
-        connect(inlet.ports[i,j], cv[i,j].inlet);
-      end for;
+    for i in 1:N loop
+      cv[i].Q_int = 0;
+    end for;
+
+    // External connections
+    connect(West, cv[1].West);
+    connect(East, cv[end].East);
+
+    for i in 1:N loop
+      connect(South.ports[i], cv[i].South);
+      connect(North.ports[i], cv[i].North);
+    end for;
+
+    // Internal connections
+    for i in 1:(N - 1) loop
+      connect(cv[i].East, cv[i + 1].West);
     end for;
 
     annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
                         Rectangle(
-            extent={{-100,20},{98,-20}},
+            extent={{-80,20},{80,-20}},
             lineColor={0,0,0},
             fillColor={175,175,175},
             fillPattern=FillPattern.Backward),
@@ -254,141 +273,147 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
             points={{2,-42},{-38,-42}},
             color={0,0,0},
             pattern=LinePattern.Dash,
-            origin={-22,18},
+            origin={-24,18},
             rotation=90),
           Line(
             points={{-20,44},{-60,44}},
             color={0,0,0},
             pattern=LinePattern.Dash,
-            origin={24,40},
+            origin={26,40},
             rotation=90),
           Line(
             points={{-40,4},{-2.28848e-17,4}},
             color={0,0,0},
             pattern=LinePattern.Dash,
-            origin={-56,20},
+            origin={-46,20},
             rotation=90),
           Text(
-            extent={{-32,32},{32,-32}},
+            extent={{-30,32},{34,-32}},
             lineColor={255,255,255},
             lineThickness=0.5,
             fillColor={255,255,255},
             fillPattern=FillPattern.Solid,
             textString="WALL"),
           Line(
-            points={{-40,4},{-2.28848e-17,4}},
+            points={{-40,4},{0,4}},
             color={0,0,0},
             pattern=LinePattern.Dash,
-            origin={64,20},
+            origin={54,20},
             rotation=90)}),                      Diagram(coordinateSystem(
             preserveAspectRatio=false)),
                 Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
           coordinateSystem(preserveAspectRatio=false)),
       Documentation(info="<html>
-<p>Heat transfer is modelled only in transversal direction, i.e., through the wall thickness.</p>
-<p>Heat transfer among adjacent wall control volumes is neglected.</p>
+<p>Heat transfer is modelled in the transversal, i.e., through the wall thickness, and horizontal, i.e., through adjacent control volumes, directions.</p>
+<p>The model accounts for anisotropic thermal conductivity in x and y directions. The remaining material properties must be isotropic.</p>
 </html>"));
-  end WallConductionDiscretized;
+  end WallConductionHorizontal2D;
 
-  model WallConductionDiscretized2D
-    "This model needs to be corrected!!"
+  model WallConductionVertical2D "Dynamic model of 2D heat conduction in a planar surface discretised along the vertical direction"
 
-    replaceable model Mat = Materials.Aluminium constrainedby
-      Materials.Properties "Material choice" annotation (choicesAllMatching=true);
-    model CV = DynTherM.Components.TwoDimensional.WallConduction2D
-                                                                 "Control volume";
+    replaceable model MatX=Materials.Aluminium constrainedby Materials.Properties
+      "Material properties along x direction" annotation (choicesAllMatching=true);
+    replaceable model MatY=Materials.Aluminium constrainedby Materials.Properties
+      "Material properties along y direction" annotation (choicesAllMatching=true);
+    model CV = DynTherM.Components.TwoDimensional.WallConductionCV2D
+      "Control volume";
 
     // Geometry
-    input Length t "Wall thickness" annotation (Dialog(enable=true));
-    input Length h "Wall height, dimension perpendicular to thickness along heat transfer" annotation (Dialog(enable=true));
-    input Area A "Wall surface" annotation (Dialog(enable=true));
+    input Length x "Distance between east and west ports" annotation (Dialog(enable=true));
+    input Length y "Distance between north and south ports" annotation (Dialog(enable=true));
+    input Length z "Thickness, out of plane" annotation (Dialog(enable=true));
 
     // Initialization
-    parameter Temperature Tstart "Temperature start value" annotation (Dialog(tab="Initialization"));
-    parameter DynTherM.Choices.InitOpt initOpt=Choices.InitOpt.fixedState
+    parameter Temperature Tstart=300 "Temperature start value" annotation (Dialog(tab="Initialization"));
+    parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
       "Initialization option" annotation (Dialog(tab="Initialization"));
 
     // Discretization
-    parameter Integer N(min=1) "Number of vertical sections in which the wall is discretized";
+    parameter Integer N(min=1) "Number of horizontal sections in which the wall is discretized";
 
     CV cv[N](
-      redeclare model Mat=Mat,
-      each t=t,
-      each h=h,
-      each A=A/N,
+      redeclare model MatX=MatX,
+      redeclare model MatY=MatY,
+      each x=x,
+      each y=y/N,
+      each z=z,
+      each dm=0,
       each Tstart=Tstart,
       each initOpt=initOpt);
 
-    CustomInterfaces.DistributedHeatPort_B outlet(Nx=N, Ny=1) annotation (
-        Placement(transformation(
-          extent={{-20,-10},{20,10}},
-          rotation=-90,
-          origin={20,3.55271e-15}),iconTransformation(
-          extent={{-60,-48},{60,48}},
-          rotation=180,
-          origin={7.10543e-15,-30})));
-    CustomInterfaces.DistributedHeatPort_A inlet(Nx=N, Ny=1) annotation (
-        Placement(transformation(
-          extent={{-20,-10},{20,10}},
-          rotation=-90,
-          origin={-20,3.55271e-15}),
-                                   iconTransformation(
-          extent={{-60,-48},{60,48}},
-          rotation=180,
-          origin={7.10543e-15,30})));
+    Mass m "Mass";
+    Volume V "Volume";
+    Area A "Main heat transfer area";
 
-    CustomInterfaces.DistributedHeatPort_B outletH(Nx=N, Ny=1)
-                                                              annotation (
+    CustomInterfaces.OneDimensional.HeatPort1D_B West(Nx=N) annotation (
         Placement(transformation(
           extent={{-20,-10},{20,10}},
           rotation=-90,
-          origin={20,3.55271e-15}),iconTransformation(
-          extent={{-20,-20},{20,20}},
+          origin={20,3.55271e-15}), iconTransformation(
+          extent={{-60,-48},{60,48}},
           rotation=90,
-          origin={-96,0})));
-    CustomInterfaces.DistributedHeatPort_A inletH(Nx=N, Ny=1)
-                                                             annotation (
+          origin={-30,0})));
+    CustomInterfaces.OneDimensional.HeatPort1D_A East(Nx=N) annotation (
         Placement(transformation(
           extent={{-20,-10},{20,10}},
           rotation=-90,
-          origin={-20,3.55271e-15}),
-                                   iconTransformation(
-          extent={{-20,-20},{20,20}},
+          origin={-20,3.55271e-15}), iconTransformation(
+          extent={{-60,-48},{60,48}},
           rotation=90,
-          origin={96,0})));
+          origin={30,0})));
+    Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b South annotation (
+        Placement(transformation(extent={{-10,-100},{10,-80}}),
+          iconTransformation(extent={{-10,-100},{10,-80}})));
+    Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a North annotation (
+        Placement(transformation(extent={{-10,80},{10,100}}), iconTransformation(
+            extent={{-10,80},{10,100}})));
+
   equation
+    m = sum(cv.m);
+    A = y*z;
+    V = x*y*z;
+
     for i in 1:N loop
-      connect(outlet.ports[i,1], cv[i].outlet);
-      connect(inlet.ports[i,1], cv[i].inlet);
+      cv[i].Q_int = 0;
     end for;
+
+    // External connections
+    connect(South, cv[1].South);
+    connect(North, cv[end].North);
+
     for i in 1:N loop
-      connect(outletH.ports[i,1], cv[i].outletH);
-      connect(inletH.ports[i,1], cv[i].inletH);
+      connect(West.ports[i], cv[i].West);
+      connect(East.ports[i], cv[i].East);
+    end for;
+
+    // Internal connections
+    for i in 1:(N - 1) loop
+      connect(cv[i].North, cv[i + 1].South);
     end for;
 
     annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
                         Rectangle(
-            extent={{-100,20},{98,-20}},
+            extent={{-20,80},{20,-80}},
             lineColor={0,0,0},
             fillColor={175,175,175},
             fillPattern=FillPattern.Backward),
           Line(
-            points={{2,-42},{-38,-42}},
+            points={{2,-42},{2,-82}},
             color={0,0,0},
             pattern=LinePattern.Dash,
-            origin={-22,18},
+            origin={-62,38},
             rotation=90),
           Line(
-            points={{-20,44},{-60,44}},
+            points={{-20,44},{-20,4}},
             color={0,0,0},
             pattern=LinePattern.Dash,
-            origin={24,40},
+            origin={24,20},
             rotation=90),
           Line(
-            points={{-40,4},{-2.28848e-17,4}},
+            points={{0,-36},{0,4}},
             color={0,0,0},
             pattern=LinePattern.Dash,
-            origin={-56,20},
+            origin={-16,-40},
             rotation=90),
           Text(
             extent={{-32,32},{32,-32}},
@@ -396,21 +421,16 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
             lineThickness=0.5,
             fillColor={255,255,255},
             fillPattern=FillPattern.Solid,
-            textString="WALL"),
-          Line(
-            points={{-40,4},{-2.28848e-17,4}},
-            color={0,0,0},
-            pattern=LinePattern.Dash,
-            origin={64,20},
-            rotation=90)}),                      Diagram(coordinateSystem(
+            textString="WALL",
+            rotation=-90)}),                     Diagram(coordinateSystem(
             preserveAspectRatio=false)),
                 Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
           coordinateSystem(preserveAspectRatio=false)),
       Documentation(info="<html>
-<p>Heat transfer is modelled only in transversal direction, i.e., through the wall thickness.</p>
-<p>Heat transfer in vertical direction, i.e., among adjacent wall control volumes, is neglected.</p>
+<p>Heat transfer is modelled in the transversal, i.e., through the wall thickness, and vertical, i.e., through adjacent control volumes, directions.</p>
+<p>The model accounts for anisotropic thermal conductivity in x and y directions. The remaining material properties must be isotropic.</p>
 </html>"));
-  end WallConductionDiscretized2D;
+  end WallConductionVertical2D;
 
   model ColdPlateCircularChannelCV
     "Model of heat transfer and mass transfer through circular channel, in a rectangular solid surface"
@@ -429,7 +449,6 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
       "Initialization option" annotation (Dialog(tab="Initialization"));
 
     // Geometry
-    parameter Integer N=1 "Number of control volumes in parallel";
     parameter Length L "Length of the control volume, in the flow direction" annotation (Dialog(tab="Geometry"));
     parameter Length t "Thickness of the cold Plate" annotation (Dialog(tab="Geometry"));
     parameter Length d "Center to center distance between the parallel pipes" annotation (Dialog(tab="Geometry"));
@@ -470,30 +489,29 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
       state_start=state_start,
       Re_start=Re_start,
       Pr_start=Pr_start,
-      N=N,
+      N=1,
       L=L,
       D=R_int*2,
       Roughness=Roughness)
       annotation (Placement(transformation(extent={{-40,-44},{40,36}})));
 
-    CustomInterfaces.FluidPort_A          inlet(
+    CustomInterfaces.ZeroDimensional.FluidPort_A inlet(
       redeclare package Medium = Medium,
       m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0, start=
             m_flow_start),
       P(start=P_start),
       h_outflow(start=Medium.specificEnthalpy(state_start)),
-      Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{-52,-10},
-              {-40,2}},       rotation=0), iconTransformation(extent={{-40,-8},{-26,
+      Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{-52,
+              -10},{-40,2}}, rotation=0), iconTransformation(extent={{-40,-8},{-26,
               6}})));
-    CustomInterfaces.FluidPort_B          outlet(
+    CustomInterfaces.ZeroDimensional.FluidPort_B outlet(
       redeclare package Medium = Medium,
       m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0, start=-
             m_flow_start),
       P(start=P_start),
       h_outflow(start=Medium.specificEnthalpy(state_start)),
-      Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{40,-10},
-              {52,2}},        rotation=0), iconTransformation(extent={{24,-8},{40,
-              8}})));
+      Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{40,
+              -10},{52,2}}, rotation=0), iconTransformation(extent={{24,-8},{40,8}})));
     ConductionPlanoConcave2D PCWest(
       R=R_int,
       p=d/2 - R_int*d/sqrt(d*d + t*t),
@@ -534,36 +552,48 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
           extent={{-22,-28},{22,28}},
           rotation=-90,
           origin={0,64})));
-    WallConduction2D PlaneNW(
-      w=t/2 - R_int*t/sqrt(d*d + t*t),
-      l=d/2 - R_int*d/sqrt(d*d + t*t),
-      dz=L,
+    WallConductionCV2D PlaneNW(
+      y=t/2 - R_int*t/sqrt(d*d + t*t),
+      x=d/2 - R_int*d/sqrt(d*d + t*t),
+      z=L,
+      dm=0,
+      Q_int=0,
       Tstart=T_start_solid,
-      redeclare model Mat = Mat,
+      redeclare model MatX = Mat,
+      redeclare model MatY = Mat,
       initOpt=initOpt)
       annotation (Placement(transformation(extent={{-82,50},{-52,80}})));
-    WallConduction2D PlaneSW(
-      w=t/2 - R_int*t/sqrt(d*d + t*t),
-      l=d/2 - R_int*d/sqrt(d*d + t*t),
-      dz=L,
+    WallConductionCV2D PlaneSW(
+      y=t/2 - R_int*t/sqrt(d*d + t*t),
+      x=d/2 - R_int*d/sqrt(d*d + t*t),
+      z=L,
+      dm=0,
+      Q_int=0,
       Tstart=T_start_solid,
-      redeclare model Mat = Mat,
+      redeclare model MatX = Mat,
+      redeclare model MatY = Mat,
       initOpt=initOpt)
       annotation (Placement(transformation(extent={{-82,-56},{-52,-26}})));
-    WallConduction2D PlaneSE(
-      w=t/2 - R_int*t/sqrt(d*d + t*t),
-      l=d/2 - R_int*d/sqrt(d*d + t*t),
-      dz=L,
+    WallConductionCV2D PlaneSE(
+      y=t/2 - R_int*t/sqrt(d*d + t*t),
+      x=d/2 - R_int*d/sqrt(d*d + t*t),
+      z=L,
+      dm=0,
+      Q_int=0,
       Tstart=T_start_solid,
-      redeclare model Mat = Mat,
+      redeclare model MatX = Mat,
+      redeclare model MatY = Mat,
       initOpt=initOpt)
       annotation (Placement(transformation(extent={{52,-58},{82,-28}})));
-    WallConduction2D PlaneNE(
-      w=t/2 - R_int*t/sqrt(d*d + t*t),
-      l=d/2 - R_int*d/sqrt(d*d + t*t),
-      dz=L,
+    WallConductionCV2D PlaneNE(
+      y=t/2 - R_int*t/sqrt(d*d + t*t),
+      x=d/2 - R_int*d/sqrt(d*d + t*t),
+      z=L,
+      dm=0,
+      Q_int=0,
       Tstart=T_start_solid,
-      redeclare model Mat = Mat,
+      redeclare model MatX = Mat,
+      redeclare model MatY = Mat,
       initOpt=initOpt)
       annotation (Placement(transformation(extent={{50,50},{80,80}})));
     Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a NorthWestHor annotation (
@@ -575,13 +605,13 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
     Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a SouthWestHor annotation (
         Placement(transformation(extent={{-106,-50},{-86,-30}}),
           iconTransformation(extent={{-72,-50},{-60,-38}})));
-    Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a SouthBottom annotation (
+    Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b SouthBottom annotation (
         Placement(transformation(extent={{-10,-90},{10,-70}}), iconTransformation(
             extent={{-6,-72},{6,-60}})));
     Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b SouthEastHor annotation (
         Placement(transformation(extent={{86,-52},{106,-32}}), iconTransformation(
             extent={{60,-50},{72,-38}})));
-    Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a East annotation (
+    Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b East annotation (
         Placement(transformation(extent={{86,10},{106,30}}), iconTransformation(
             extent={{60,-6},{72,6}})));
     Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b NorthEastHor annotation (
@@ -590,6 +620,7 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
     Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a NorthTop annotation (
         Placement(transformation(extent={{-10,86},{10,106}}), iconTransformation(
             extent={{-6,60},{6,72}})));
+
   equation
     connect(inlet, circularPipe.inlet)
       annotation (Line(points={{-46,-4},{-40,-4}},
@@ -605,46 +636,46 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
       annotation (Line(points={{61.16,20},{0,20},{0,11.2}},  color={191,0,0}));
     connect(PCSouth.InletConcave, circularPipe.thermalPort)
       annotation (Line(points={{0,-37.16},{0,11.2}},  color={191,0,0}));
-    connect(PCWest.inletPlanar, PlaneNW.outletS) annotation (Line(points={{-66,45.2},
-            {-66,46},{-67.15,46},{-67.15,54.35}}, color={191,0,0}));
-    connect(PlaneNW.inletE, PCNorth.outletPlanar) annotation (Line(points={{-53.5,
+    connect(PCWest.inletPlanar, PlaneNW.South) annotation (Line(points={{-66,45.2},
+            {-66,46},{-67,46},{-67,54.5}},              color={191,0,0}));
+    connect(PlaneNW.East, PCNorth.outletPlanar) annotation (Line(points={{-53.5,
             65},{-34,65},{-34,64},{-25.2,64}}, color={191,0,0}));
-    connect(PlaneSW.inletE, PCSouth.outletPlanar) annotation (Line(points={{-53.5,
+    connect(PlaneSW.East, PCSouth.outletPlanar) annotation (Line(points={{-53.5,
             -41},{-53.5,-42},{-25.2,-42}}, color={191,0,0}));
-    connect(PlaneSW.inletN, PCWest.outletPlanar) annotation (Line(points={{-66.85,
-            -30.35},{-66,-28},{-66,-5.2}}, color={191,0,0}));
-    connect(PCSouth.inletPlanar, PlaneSE.outletW) annotation (Line(points={{25.2,-42},
+    connect(PlaneSW.North, PCWest.outletPlanar) annotation (Line(points={{-67,-30.5},
+            {-66,-28},{-66,-5.2}},         color={191,0,0}));
+    connect(PCSouth.inletPlanar, PlaneSE.West) annotation (Line(points={{25.2,-42},
             {48,-42},{48,-43},{53.5,-43}}, color={191,0,0}));
-    connect(PlaneSE.inletN, PCEast.outletPlanar) annotation (Line(points={{67.15,-32.35},
-            {67.15,-14},{66,-14},{66,-5.2}}, color={191,0,0}));
-    connect(PCEast.inletPlanar, PlaneNE.outletS) annotation (Line(points={{66,45.2},
-            {66,46},{64.85,46},{64.85,54.35}}, color={191,0,0}));
-    connect(PCNorth.inletPlanar, PlaneNE.outletW) annotation (Line(points={{25.2,64},
-            {46,64},{46,65},{51.5,65}}, color={191,0,0}));
-    connect(PlaneNW.outletW, NorthWestHor) annotation (Line(points={{-80.5,65},{-80.5,
+    connect(PlaneSE.North, PCEast.outletPlanar) annotation (Line(points={{67,-32.5},
+            {67,-14},{66,-14},{66,-5.2}},            color={191,0,0}));
+    connect(PCEast.inletPlanar, PlaneNE.South) annotation (Line(points={{66,45.2},
+            {66,46},{65,46},{65,54.5}},              color={191,0,0}));
+    connect(PCNorth.inletPlanar, PlaneNE.West) annotation (Line(points={{25.2,
+            64},{46,64},{46,65},{51.5,65}}, color={191,0,0}));
+    connect(PlaneNW.West, NorthWestHor) annotation (Line(points={{-80.5,65},{-80.5,
             66},{-96,66}}, color={191,0,0}));
-    connect(PlaneSW.outletW, SouthWestHor) annotation (Line(points={{-80.5,-41},{-80.5,
+    connect(PlaneSW.West, SouthWestHor) annotation (Line(points={{-80.5,-41},{-80.5,
             -40},{-96,-40}}, color={191,0,0}));
     connect(PCSouth.OutletOppoCon, SouthBottom)
       annotation (Line(points={{0,-53},{0,-80}}, color={191,0,0}));
-    connect(PlaneSE.inletE, SouthEastHor) annotation (Line(points={{80.5,-43},{80.5,
-            -42},{96,-42}}, color={191,0,0}));
+    connect(PlaneSE.East, SouthEastHor) annotation (Line(points={{80.5,-43},{
+            80.5,-42},{96,-42}}, color={191,0,0}));
     connect(PCEast.OutletOppoCon, East)
       annotation (Line(points={{77,20},{96,20}}, color={191,0,0}));
     connect(West, PCWest.OutletOppoCon)
       annotation (Line(points={{-96,20},{-77,20}}, color={191,0,0}));
-    connect(PlaneNE.inletE, NorthEastHor)
+    connect(PlaneNE.East, NorthEastHor)
       annotation (Line(points={{78.5,65},{80,66},{96,66}}, color={191,0,0}));
     connect(PCNorth.OutletOppoCon, NorthTop)
       annotation (Line(points={{0,75},{0,96}}, color={191,0,0}));
-    connect(PlaneNW.inletN, NorthTop) annotation (Line(points={{-66.85,75.65},{
-            -68,75.65},{-68,84},{0,84},{0,96}}, color={191,0,0}));
-    connect(PlaneNE.inletN, NorthTop) annotation (Line(points={{65.15,75.65},{
-            65.15,84},{0,84},{0,96}}, color={191,0,0}));
-    connect(PlaneSW.outletS, SouthBottom) annotation (Line(points={{-67.15,-51.65},
-            {-67.15,-66},{0,-66},{0,-80}}, color={191,0,0}));
-    connect(PlaneSE.outletS, SouthBottom) annotation (Line(points={{66.85,-53.65},
-            {66.85,-66},{0,-66},{0,-80}}, color={191,0,0}));
+    connect(PlaneNW.North, NorthTop) annotation (Line(points={{-67,75.5},{-68,75.5},
+            {-68,84},{0,84},{0,96}},        color={191,0,0}));
+    connect(PlaneNE.North, NorthTop) annotation (Line(points={{65,75.5},{65,84},{0,
+            84},{0,96}},              color={191,0,0}));
+    connect(PlaneSW.South, SouthBottom) annotation (Line(points={{-67,-51.5},{-67,
+            -66},{0,-66},{0,-80}},         color={191,0,0}));
+    connect(PlaneSE.South, SouthBottom) annotation (Line(points={{67,-53.5},{67,-66},
+            {0,-66},{0,-80}},             color={191,0,0}));
       annotation (Line(points={{46,-4},{46,-4}}, color={0,0,0}),
                   Placement(transformation(extent={{-28,-28},{28,28}})),
                 Icon(coordinateSystem(preserveAspectRatio=false), graphics={
@@ -716,8 +747,7 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
     replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
       Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
 
-    model CV = TwoDimensional.ColdPlateCircularChannelCV
-                                          "Control volume";
+    model CV = TwoDimensional.ColdPlateCircularChannelCV "Control volume";
     model I = DynTherM.Components.MassTransfer.PlenumSimple
       "Inertia between two adjacent control volumes";
 
@@ -756,13 +786,10 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
 
     // Discretization
     parameter Integer N_cv(min=1) "Number of control volumes in which the cooling channels are discretized";
-    parameter Integer Nt=3  "Number of control volumes across the thickness of the cooling plate";
-    parameter Integer N_channels(min=1) "Number of channels";
 
     CV cv[N_cv](
       redeclare model Mat = Mat,
       redeclare package Medium = Medium,
-      each N=N_channels,
       each L=L/N_cv,
       each t=t,
       each d=d,
@@ -796,46 +823,44 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
       each initOpt=initOpt,
       each allowFlowReversal=allowFlowReversal);
 
-    DynTherM.CustomInterfaces.FluidPort_A inlet(
+    DynTherM.CustomInterfaces.ZeroDimensional.FluidPort_A inlet(
       redeclare package Medium = Medium,
       m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0, start=
             m_flow_start),
       P(start=P_start),
       h_outflow(start=Medium.specificEnthalpy(state_start)),
-      Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{-106,-6},
-              {-94,6}},       rotation=0), iconTransformation(extent={{-110,-10},{
-              -90,10}})));
-    DynTherM.CustomInterfaces.FluidPort_B outlet(
+      Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{-106,
+              -6},{-94,6}}, rotation=0), iconTransformation(extent={{-110,-10},{-90,
+              10}})));
+    DynTherM.CustomInterfaces.ZeroDimensional.FluidPort_B outlet(
       redeclare package Medium = Medium,
-      m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0, start=
-            -m_flow_start),
+      m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0, start=-
+            m_flow_start),
       P(start=P_start),
       h_outflow(start=Medium.specificEnthalpy(state_start)),
-      Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{94,-6},
-              {106,6}},       rotation=0), iconTransformation(extent={{90,-10},{110,
+      Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{94,
+              -6},{106,6}}, rotation=0), iconTransformation(extent={{90,-10},{110,
               10}})));
 
-    CustomInterfaces.DistributedHeatPort_B TopSurface(Nx=N_cv, Ny=1) annotation (
-        Placement(transformation(extent={{8,14},{88,80}}), iconTransformation(
-            extent={{8,14},{88,80}})));
-
-    CustomInterfaces.DistributedHeatPort_B BottomSurface(Nx=N_cv, Ny=1)
+    CustomInterfaces.OneDimensional.HeatPort1D_B TopSurface(Nx=N_cv)
+      annotation (Placement(transformation(extent={{8,14},{88,80}}),
+          iconTransformation(extent={{8,14},{88,80}})));
+    CustomInterfaces.OneDimensional.HeatPort1D_B BottomSurface(Nx=N_cv)
       annotation (Placement(transformation(extent={{8,-80},{88,-14}}),
           iconTransformation(extent={{8,-80},{88,-14}})));
-    CustomInterfaces.DistributedHeatPort_A EastSide(Nx=N_cv, Ny=Nt)
-      annotation (
-        Placement(transformation(extent={{-82,-82},{-12,-12}}),
+    CustomInterfaces.TwoDimensional.HeatPort2D_A EastSide(Nx=N_cv, Ny=3)
+      annotation (Placement(transformation(extent={{-82,-82},{-12,-12}}),
           iconTransformation(extent={{-82,-82},{-12,-12}})));
-    CustomInterfaces.DistributedHeatPort_A WestSide(Nx=N_cv, Ny=Nt)
-      annotation (
-        Placement(transformation(extent={{-82,12},{-12,82}}), iconTransformation(
-            extent={{-84,12},{-14,82}})));
+    CustomInterfaces.TwoDimensional.HeatPort2D_A WestSide(Nx=N_cv, Ny=3)
+      annotation (Placement(transformation(extent={{-82,12},{-12,82}}),
+          iconTransformation(extent={{-84,12},{-14,82}})));
+
   equation
 
     // thermal connections (Top,N and Bottom,S)
     for i in 1:N_cv loop
-      connect(TopSurface.ports[i, 1], cv[i].NorthTop);
-      connect(BottomSurface.ports[i, 1], cv[i].SouthBottom);
+      connect(TopSurface.ports[i], cv[i].NorthTop);
+      connect(BottomSurface.ports[i], cv[i].SouthBottom);
     end for;
     // thermal connections (Side ways, West side)
     for i in 1:N_cv loop
@@ -893,6 +918,120 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
 <p><span style=\"font-family: Courier New;\">Model created by stacking ColdPlateCircularChannelCV in series and adding SimplePlenum in between to improve solver robustness.</span></p>
 </html>"));
   end ColdPlateCircularChannel1D;
+
+  model PouchCellThermal2D "Thermal model of a pouch cell"
+
+    replaceable model InPlaneMat = Materials.PolestarCellInPlane constrainedby
+      Materials.Properties "In-plane material properties" annotation (choicesAllMatching=true);
+
+    replaceable model CrossPlaneMat = Materials.PolestarCellCrossPlane constrainedby
+      Materials.Properties "Cross-plane material properties" annotation (choicesAllMatching=true);
+
+    model CV = WallConductionCV2D "Control volume";
+
+    // Geometry
+    parameter Length W "Width" annotation (Dialog(tab="Geometry"));
+    parameter Length H "Height" annotation (Dialog(tab="Geometry"));
+    parameter Length t "Thickness" annotation (Dialog(tab="Geometry"));
+    input Mass dm(start=0) "Mass variation over time" annotation (Dialog(enable=true));
+
+    // Initialization
+    parameter Temperature Tstart "Temperature start value" annotation (Dialog(tab="Initialization"));
+    parameter DynTherM.Choices.InitOpt initOpt  "Initialization option" annotation (Dialog(tab="Initialization"));
+
+    // Discretization
+    parameter Integer N(min=1) "Number of vertical sections in which the cell is discretized";
+
+    CV cv[N](
+      redeclare model MatX=CrossPlaneMat,
+      redeclare model MatY=InPlaneMat,
+      each x=t,
+      each y=H/N,
+      each z=W,
+      each dm=dm/N,
+      each Tstart=Tstart,
+      each initOpt=initOpt);
+
+    Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b Top annotation (Placement(
+          transformation(extent={{-10,70},{10,90}}),iconTransformation(extent={{-10,
+              54},{6,70}})));
+    Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b Bottom annotation (
+        Placement(transformation(extent={{-10,-90},{10,-70}}),
+                                                             iconTransformation(
+            extent={{-10,-70},{6,-54}})));
+    CustomInterfaces.OneDimensional.HeatPort1D_B Left(Nx=N) annotation (
+        Placement(transformation(
+          extent={{-10,-5},{10,5}},
+          rotation=90,
+          origin={-41,0}), iconTransformation(
+          extent={{-40,-13},{40,13}},
+          rotation=90,
+          origin={-83,0})));
+    CustomInterfaces.OneDimensional.HeatPort1D_B Right(Nx=N) annotation (
+        Placement(transformation(
+          extent={{-10,-5},{10,5}},
+          rotation=90,
+          origin={41,0}), iconTransformation(
+          extent={{-40,-13},{40,13}},
+          rotation=90,
+          origin={59,0})));
+    Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a Average annotation (
+        Placement(transformation(extent={{-10,-8},{6,8}}), iconTransformation(
+            extent={{-10,-8},{6,8}})));
+
+  equation
+    sum(cv.T_vol)/N = Average.T;
+
+    // Port connections
+    for i in 1:N loop
+      connect(cv[i].West, Left.ports[i]);
+      connect(cv[i].East, Right.ports[i]);
+      cv[i].Q_int = Average.Q_flow/N;
+    end for;
+
+    // Internal connections
+    for i in 1:(N-1) loop
+      connect(cv[i].North, cv[i+1].South);
+    end for;
+
+    // Boundary connections
+    connect(cv[1].South, Bottom);
+    connect(cv[end].North, Top);
+
+    annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
+          Bitmap(
+            extent={{-88,-88},{88,88}},
+            fileName="modelica://DynTherM/Figures/PouchCell.PNG",
+            origin={6,0},
+            rotation=-90),
+          Line(
+            points={{0,24},{0,-100}},
+            color={0,0,0},
+            pattern=LinePattern.Dash,
+            origin={-52,-26},
+            rotation=90),
+          Line(
+            points={{0,24},{0,-100}},
+            color={0,0,0},
+            pattern=LinePattern.Dash,
+            origin={-52,0},
+            rotation=90),
+          Line(
+            points={{0,24},{0,-100}},
+            color={0,0,0},
+            pattern=LinePattern.Dash,
+            origin={-52,26},
+            rotation=90)}),                      Diagram(coordinateSystem(
+            preserveAspectRatio=false)),
+                Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
+          coordinateSystem(preserveAspectRatio=false)),
+      Documentation(info="<html>
+<p>Heat generation is assumed uniform over the vertical control volumes.</p>
+<p>Heat conduction is modelled across the cell height (in-plane) with 1D discretization and thickness (cross-plane) with 0D discretization.</p>
+<p>Heat conduction across the cell width is disregarded.</p>
+<p><br><img src=\"modelica://DynTherM/Figures/PouchCellThermal2D.png\"/></p>
+</html>"));
+  end PouchCellThermal2D;
   annotation (Icon(graphics={
         Rectangle(
           lineColor={200,200,200},

@@ -38,7 +38,8 @@ model SolarRadiation
   Irradiance E_tr "Ground reflected component of the clear-sky solar irradiance";
   Irradiance E "Total clear-sky irradiance";
 
-  CustomInterfaces.IrradiancePort inlet annotation (Placement(transformation(extent={{-10,52},{10,72}})));
+  CustomInterfaces.ZeroDimensional.IrradiancePort inlet
+    annotation (Placement(transformation(extent={{-10,52},{10,72}})));
 
 protected
   Real Gamma;

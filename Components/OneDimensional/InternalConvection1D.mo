@@ -19,24 +19,17 @@ model InternalConvection1D
     redeclare model HTC = HTC,
     redeclare package Medium = Medium);
 
-  CustomInterfaces.DistributedHeatFluxPort_A inlet(
-    Nx=N,
-    Ny=1)
-    annotation (
-      Placement(transformation(extent={{-60,-20},{60,80}}), iconTransformation(
-          extent={{-60,-20},{60,80}})));
-
-  CustomInterfaces.DistributedHeatFluxPort_B outlet(
-    Nx=N,
-    Ny=1)
-    annotation (
-      Placement(transformation(extent={{-60,-20},{60,80}}), iconTransformation(
-          extent={{-60,-80},{60,20}})));
+  CustomInterfaces.OneDimensional.HeatFluxPort1D_A inlet(Nx=N)
+    annotation (Placement(transformation(extent={{-60,-20},{60,80}}),
+        iconTransformation(extent={{-60,-20},{60,80}})));
+  CustomInterfaces.OneDimensional.HeatFluxPort1D_B outlet(Nx=N)
+    annotation (Placement(transformation(extent={{-60,-20},{60,80}}),
+        iconTransformation(extent={{-60,-80},{60,20}})));
 
 equation
   for i in 1:N loop
-    connect(outlet.ports[i,1], cv[i].inlet);
-    connect(inlet.ports[i,1], cv[i].outlet);
+    connect(outlet.ports[i], cv[i].inlet);
+    connect(inlet.ports[i], cv[i].outlet);
   end for;
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={

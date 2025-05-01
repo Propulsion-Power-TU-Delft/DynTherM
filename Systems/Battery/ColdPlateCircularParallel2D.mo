@@ -51,7 +51,6 @@ model ColdPlateCircularParallel2D
     redeclare model Mat = Mat,
     redeclare package Medium = Medium,
     each N_cv=N_cv,
-    each N_channels=1,
     each L=L,
     each d=W_plate/N_channels,
     each t=t_plate,
@@ -81,33 +80,30 @@ model ColdPlateCircularParallel2D
   Mass m_solid "Total mass of the solid";
 
 
-  CustomInterfaces.DistributedHeatPort_A Top(Nx=N_cv, Ny=N_channels)
+  CustomInterfaces.TwoDimensional.HeatPort2D_A Top(Nx=N_cv, Ny=N_channels)
     annotation (Placement(transformation(extent={{-16,44},{16,76}}),
         iconTransformation(extent={{-30,6},{30,66}})));
-  CustomInterfaces.DistributedHeatPort_A Bottom(Nx=N_cv, Ny=N_channels)
+  CustomInterfaces.TwoDimensional.HeatPort2D_A Bottom(Nx=N_cv, Ny=N_channels)
     annotation (Placement(transformation(extent={{-16,-76},{16,-44}}),
         iconTransformation(extent={{-30,-70},{30,-10}})));
-
-  CustomInterfaces.FluidPort_B outlet(
+  CustomInterfaces.ZeroDimensional.FluidPort_B outlet(
     redeclare package Medium = Medium,
-    m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0, start=-
-          m_flow_start),
+    m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0, start=
+          -m_flow_start),
     P(start=P_start),
     h_outflow(start=Medium.specificEnthalpy(state_start)),
-    Xi_outflow(start=X_start))
-    annotation (Placement(transformation(extent={{80,-20},{120,20}},
-                            rotation=0), iconTransformation(extent={{90,-10},{
+    Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{80,
+            -20},{120,20}}, rotation=0), iconTransformation(extent={{90,-10},{
             110,10}})));
-  CustomInterfaces.FluidPort_A inlet(
+  CustomInterfaces.ZeroDimensional.FluidPort_A inlet(
     redeclare package Medium = Medium,
     m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0, start=
           m_flow_start),
     P(start=P_start),
     h_outflow(start=Medium.specificEnthalpy(state_start)),
-    Xi_outflow(start=X_start))
-    annotation (Placement(transformation(extent={{-120,-20},{-80,20}},
-                            rotation=0), iconTransformation(extent={{-110,-10},{
-            -90,10}})));
+    Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{-120,
+            -20},{-80,20}}, rotation=0), iconTransformation(extent={{-110,-10},
+            {-90,10}})));
 
 equation
 

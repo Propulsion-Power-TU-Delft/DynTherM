@@ -5,7 +5,7 @@ model ActuatorDisk "Test of actuator disk model"
     W_fixed(displayUnit="kW") = 1000*(13004/8),
     R_disk=3.72)
     annotation (Placement(transformation(extent={{-40,-40},{40,40}})));
-  BoundaryConditions.pressure_sink outlet
+  BoundaryConditions.ZeroDimensional.pressure_sink outlet
     annotation (Placement(transformation(extent={{68,-12},{92,12}})));
   inner Components.Environment environment(phi_amb=0.1,
     V_inf_di=75,

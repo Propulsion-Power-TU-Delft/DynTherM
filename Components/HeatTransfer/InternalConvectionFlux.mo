@@ -12,8 +12,10 @@ model InternalConvectionFlux "Model of internal convection per unit area"
 
   HTC ht_correlation;
 
-  DynTherM.CustomInterfaces.HeatFluxPort_A inlet annotation (Placement(transformation(extent={{-14,20},{14,48}})));
-  DynTherM.CustomInterfaces.HeatFluxPort_B outlet annotation (Placement(transformation(extent={{-14,-48},{14,-20}})));
+  DynTherM.CustomInterfaces.ZeroDimensional.HeatFluxPort_A inlet
+    annotation (Placement(transformation(extent={{-14,20},{14,48}})));
+  DynTherM.CustomInterfaces.ZeroDimensional.HeatFluxPort_B outlet
+    annotation (Placement(transformation(extent={{-14,-48},{14,-20}})));
 
 equation
   inlet.phi = ht_correlation.ht*(inlet.T - outlet.T);

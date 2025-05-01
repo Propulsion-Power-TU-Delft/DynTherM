@@ -14,7 +14,7 @@ model ExternalConvectionFlux "Model of external convection per unit area"
 
   HTC ht_correlation;
 
-  DynTherM.CustomInterfaces.HeatFluxPort_A inlet
+  DynTherM.CustomInterfaces.ZeroDimensional.HeatFluxPort_A inlet
     annotation (Placement(transformation(extent={{-14,20},{14,48}})));
 
 equation

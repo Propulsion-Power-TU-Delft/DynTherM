@@ -222,11 +222,12 @@ model Tank
         extent={{-20,20},{20,-20}},
         rotation=-90,
         origin={-84,0})));
-  CustomInterfaces.ExtFluidPort_A LH2_port(redeclare package Medium = Medium) annotation (Placement(transformation(
-          extent={{-108,-42},{-92,-26}}), iconTransformation(extent={{-142,-84},
-            {-126,-68}})));
-  CustomInterfaces.ExtFluidPort_A VH2_port(redeclare package Medium = Medium) annotation (Placement(transformation(
-          extent={{92,32},{108,48}}), iconTransformation(extent={{34,76},{50,92}})));
+  CustomInterfaces.ZeroDimensional.ExtFluidPort_A LH2_port(redeclare package
+      Medium = Medium) annotation (Placement(transformation(extent={{-108,-42},
+            {-92,-26}}), iconTransformation(extent={{-142,-84},{-126,-68}})));
+  CustomInterfaces.ZeroDimensional.ExtFluidPort_A VH2_port(redeclare package
+      Medium = Medium) annotation (Placement(transformation(extent={{92,32},{
+            108,48}}), iconTransformation(extent={{34,76},{50,92}})));
     Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a heat_port annotation (
       Placement(transformation(extent={{90,-50},{110,-30}},rotation=0),
         iconTransformation(extent={{64,-42},{82,-24}})));

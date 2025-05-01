@@ -3,15 +3,15 @@ model CircularCV
   package Refrigerant = DynTherM.Media.IncompressibleTableBased.MEG(X=0.1)
     "Refrigerant";
 
-  BoundaryConditions.flow_source ECSFlow(
+  BoundaryConditions.ZeroDimensional.flow_source ECSFlow(
     redeclare package Medium = Refrigerant,
     use_in_massFlow=true,
     use_in_T=true) annotation (Placement(transformation(
         extent={{14,14},{-14,-14}},
         rotation=180,
         origin={-60,0})));
-  BoundaryConditions.pressure_sink pressureSink(redeclare package Medium =
-        Refrigerant)
+  BoundaryConditions.ZeroDimensional.pressure_sink pressureSink(redeclare
+      package Medium = Refrigerant)
     annotation (Placement(transformation(extent={{68,-12},{92,12}})));
   inner Components.Environment environment(
     allowFlowReversal=false,
@@ -25,7 +25,7 @@ model CircularCV
     T_start_fluid=323.15)
     annotation (Placement(transformation(extent={{-30,-30},{30,30}})));
 
-  BoundaryConditions.thermal thermal(Q(displayUnit="kW") = -10000)
+  BoundaryConditions.ZeroDimensional.thermal thermal(Q(displayUnit="kW") = -10000)
     annotation (Placement(transformation(extent={{-16,52},{8,68}})));
   Modelica.Blocks.Sources.Constant m(k=0.3)
     annotation (Placement(transformation(extent={{-100,20},{-80,40}})));

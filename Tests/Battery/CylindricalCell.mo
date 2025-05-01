@@ -1,8 +1,9 @@
 within DynTherM.Tests.Battery;
 model CylindricalCell
-  BoundaryConditions.thermal N(
+  BoundaryConditions.ZeroDimensional.thermal N(
     T=273.15,
-    use_Q=false,                         use_T=true)
+    use_Q=false,
+    use_T=true)
     annotation (Placement(transformation(extent={{-12,94},{6,106}})));
   Modelica.Thermal.HeatTransfer.Components.Convection northConvection
     annotation (Placement(transformation(
@@ -31,18 +32,20 @@ model CylindricalCell
         extent={{-16,-15.5},{16,15.5}},
         rotation=180,
         origin={-55.5,0})));
-  BoundaryConditions.thermal W(
+  BoundaryConditions.ZeroDimensional.thermal W(
     T=273.15,
-    use_Q=false,                         use_T=true)
+    use_Q=false,
+    use_T=true)
     annotation (Placement(transformation(extent={{-112,-6},{-94,6}})));
-  BoundaryConditions.thermal S(
+  BoundaryConditions.ZeroDimensional.thermal S(
     T=273.15,
-    use_Q=false,                         use_T=true)
+    use_Q=false,
+    use_T=true)
     annotation (Placement(transformation(extent={{-12,-106},{6,-94}})));
-  BoundaryConditions.thermal E(
+  BoundaryConditions.ZeroDimensional.thermal E(
     T=273.15,
-    use_Q=false,                         use_T=true)
-    annotation (Placement(transformation(extent={{88,-6},{106,6}})));
+    use_Q=false,
+    use_T=true) annotation (Placement(transformation(extent={{88,-6},{106,6}})));
   Modelica.Blocks.Sources.Constant constW(k=4)
     annotation (Placement(transformation(extent={{-90,-50},{-70,-30}})));
   Modelica.Blocks.Sources.Constant constE(k=2)

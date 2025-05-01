@@ -4,3 +4,4 @@ VolumetricHeatFlowRate
 MassFlux
 VolumetricEnergyDensity
 GravimetricEnergyDensity
+ResistanceTemperatureScaling

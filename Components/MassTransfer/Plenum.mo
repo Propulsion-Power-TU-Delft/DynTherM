@@ -59,7 +59,7 @@ model Plenum
   HeatFlowRate Q_lat[3]
     "Latent heat flow rate from occupants";
 
-  DynTherM.CustomInterfaces.FluidPort_A inlet(
+  DynTherM.CustomInterfaces.ZeroDimensional.FluidPort_A inlet(
     redeclare package Medium = Medium,
     m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0, start=
           m_flow_start),
@@ -68,7 +68,7 @@ model Plenum
     Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{-120,
             -20},{-80,20}}, rotation=0), iconTransformation(extent={{-110,-10},
             {-90,10}})));
-  DynTherM.CustomInterfaces.FluidPort_B outlet(
+  DynTherM.CustomInterfaces.ZeroDimensional.FluidPort_B outlet(
     redeclare package Medium = Medium,
     m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0, start=
           -m_flow_start),

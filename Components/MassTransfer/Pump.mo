@@ -40,19 +40,21 @@ model Pump "Model of a pump"
     volFlow=volFlow,
     eta_nom=eta_is) annotation (choicesAllMatching=true);
 
-  CustomInterfaces.Shaft_A shaft annotation (Placement(transformation(extent={{-10,90},{10,110}}), iconTransformation(extent={{-10,90},{10,110}})));
-  CustomInterfaces.FluidPort_A inlet(
+  CustomInterfaces.ZeroDimensional.Shaft_A shaft annotation (Placement(
+        transformation(extent={{-10,90},{10,110}}), iconTransformation(extent={
+            {-10,90},{10,110}})));
+  CustomInterfaces.ZeroDimensional.FluidPort_A inlet(
     redeclare package Medium = Medium,
     h_outflow(start=h_start),
-    m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0)) annotation (Placement(transformation(
-           extent={{-110,-10},{-90,10}}), iconTransformation(extent={{-110,-10},{
-             -90,10}})));
-  CustomInterfaces.FluidPort_B outlet(
+    m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0))
+    annotation (Placement(transformation(extent={{-110,-10},{-90,10}}),
+        iconTransformation(extent={{-110,-10},{-90,10}})));
+  CustomInterfaces.ZeroDimensional.FluidPort_B outlet(
     redeclare package Medium = Medium,
     h_outflow(start=h_start),
-    m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0)) annotation (Placement(transformation(
-           extent={{90,-10},{110,10}}), iconTransformation(extent={{90,-10},{110,
-             10}})));
+    m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0))
+    annotation (Placement(transformation(extent={{90,-10},{110,10}}),
+        iconTransformation(extent={{90,-10},{110,10}})));
 
 equation
   state_in = Medium.setState_phX(inlet.P, inStream(inlet.h_outflow), inStream(inlet.Xi_outflow));

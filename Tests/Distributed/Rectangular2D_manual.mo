@@ -24,7 +24,7 @@ model Rectangular2D_manual
   parameter Refrigerant.ThermodynamicState state_start = Refrigerant.setState_pTX(P_start, T_start_fluid, X_start)
     "Starting thermodynamic state" annotation (Dialog(tab="Initialization"));
 
-  BoundaryConditions.flow_source west_flow(
+  BoundaryConditions.ZeroDimensional.flow_source west_flow(
     redeclare package Medium = Refrigerant,
     use_in_massFlow=true,
     use_in_T=true) annotation (Placement(transformation(
@@ -37,8 +37,8 @@ model Rectangular2D_manual
   Modelica.Blocks.Interfaces.RealInput m annotation (Placement(transformation(
           extent={{-130,-50},{-90,-10}}), iconTransformation(extent={{-106,-70},
             {-86,-50}})));
-  BoundaryConditions.pressure_sink pressureSink(redeclare package Medium =
-        Refrigerant)
+  BoundaryConditions.ZeroDimensional.pressure_sink pressureSink(redeclare
+      package Medium = Refrigerant)
     annotation (Placement(transformation(extent={{68,-12},{92,12}})));
   inner Components.Environment environment(
     allowFlowReversal=false,
@@ -62,7 +62,7 @@ model Rectangular2D_manual
     N_channels=1)
          annotation (Placement(transformation(extent={{-20,-90},{40,-30}})));
 
-  BoundaryConditions.thermal_flux_distributed thermal_distributed(
+  BoundaryConditions.TwoDimensional.thermal_flux2D thermal_distributed(
     Nx=N_cv,
     Ny=1,
     phi=phi*ones(N_cv, 1))
@@ -103,14 +103,14 @@ model Rectangular2D_manual
     N_cv=N_cv,
     N_channels=1)
          annotation (Placement(transformation(extent={{-20,30},{40,90}})));
-  BoundaryConditions.flow_source internal_flow(
+  BoundaryConditions.ZeroDimensional.flow_source internal_flow(
     redeclare package Medium = Refrigerant,
     use_in_massFlow=true,
     use_in_T=true) annotation (Placement(transformation(
         extent={{14,14},{-14,-14}},
         rotation=180,
         origin={-70,0})));
-  BoundaryConditions.flow_source east_flow(
+  BoundaryConditions.ZeroDimensional.flow_source east_flow(
     redeclare package Medium = Refrigerant,
     use_in_massFlow=true,
     use_in_T=true) annotation (Placement(transformation(

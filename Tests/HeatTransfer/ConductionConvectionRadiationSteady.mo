@@ -2,9 +2,8 @@ within DynTherM.Tests.HeatTransfer;
 model ConductionConvectionRadiationSteady
   "Validation test case of steady-state conduction (tube) + convection + radiation"
 
-  constant Real pi=Modelica.Constants.pi;
-  final parameter Modelica.Units.SI.Area A_int=Panel.coeff*2*pi*Panel.L*Panel.R_int "Internal area";
-  final parameter Modelica.Units.SI.Area A_ext=Insulation.coeff*2*pi*Insulation.L*Insulation.R_ext "External area";
+  Area A_int "Internal area";
+  Area A_ext "External area";
 
   Components.HeatTransfer.TubeConduction Panel(
     L(displayUnit="m") = 1,
@@ -31,7 +30,7 @@ model ConductionConvectionRadiationSteady
     V_inf_di=0,
     ISA_plus=5)
     annotation (Placement(transformation(extent={{60,60},{100,100}})));
-  BoundaryConditions.thermal thermal(
+  BoundaryConditions.ZeroDimensional.thermal thermal(
     T=673.15,
     use_Q=false,
     use_T=true,
@@ -50,6 +49,8 @@ model ConductionConvectionRadiationSteady
   Components.HeatTransfer.SolarRadiation solarRadiation(csi=0)
     annotation (Placement(transformation(extent={{-62,98},{-18,54}})));
 equation
+  A_int = Panel.coeff*2*pi*Panel.L*Panel.R_int;
+  A_ext = Insulation.coeff*2*pi*Insulation.L*Insulation.R_ext;
 
   connect(Panel.outlet, Insulation.inlet) annotation (Line(points={{
           4.44089e-16,-21.86},{4.44089e-16,-4.14}},        color={191,0,0}));

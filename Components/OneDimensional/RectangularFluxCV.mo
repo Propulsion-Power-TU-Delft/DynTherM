@@ -50,23 +50,23 @@ model RectangularFluxCV
   Mass m_solid "Mass of solid walls";
   HeatFlowRate Q "Heat flow rate - positive entering";
 
-  DynTherM.CustomInterfaces.FluidPort_A inlet(
+  DynTherM.CustomInterfaces.ZeroDimensional.FluidPort_A inlet(
     redeclare package Medium = Medium,
     m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0, start=
           m_flow_start),
     P(start=P_start),
     h_outflow(start=Medium.specificEnthalpy(state_start)),
-    Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{-106,-6},
-            {-94,6}},       rotation=0), iconTransformation(extent={{-90,-10},{-70,
+    Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{-106,
+            -6},{-94,6}}, rotation=0), iconTransformation(extent={{-90,-10},{-70,
             10}})));
-  DynTherM.CustomInterfaces.FluidPort_B outlet(
+  DynTherM.CustomInterfaces.ZeroDimensional.FluidPort_B outlet(
     redeclare package Medium = Medium,
     m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0, start=
           -m_flow_start),
     P(start=P_start),
     h_outflow(start=Medium.specificEnthalpy(state_start)),
-    Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{94,-6},
-            {106,6}},       rotation=0), iconTransformation(extent={{70,-10},{90,
+    Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{94,
+            -6},{106,6}}, rotation=0), iconTransformation(extent={{70,-10},{90,
             10}})));
   MassTransfer.RectangularPipe fluid(
     redeclare package Medium = Medium,
@@ -86,16 +86,16 @@ model RectangularFluxCV
     W=W,
     H=H)
     annotation (Placement(transformation(extent={{-40,-40},{40,40}})));
-  CustomInterfaces.HeatFluxPort_A solid_surface_north
+  CustomInterfaces.ZeroDimensional.HeatFluxPort_A solid_surface_north
     annotation (Placement(transformation(extent={{-84,92},{-76,100}}),
         iconTransformation(extent={{-70,60},{-50,80}})));
-  CustomInterfaces.HeatFluxPort_A solid_surface_south
+  CustomInterfaces.ZeroDimensional.HeatFluxPort_A solid_surface_south
     annotation (Placement(transformation(extent={{26,92},{34,100}}),
         iconTransformation(extent={{10,60},{30,80}})));
-  CustomInterfaces.HeatFluxPort_A solid_surface_west
+  CustomInterfaces.ZeroDimensional.HeatFluxPort_A solid_surface_west
     annotation (Placement(transformation(extent={{76,92},{84,100}}),
         iconTransformation(extent={{48,60},{68,80}})));
-  CustomInterfaces.HeatFluxPort_A solid_surface_east
+  CustomInterfaces.ZeroDimensional.HeatFluxPort_A solid_surface_east
     annotation (Placement(transformation(extent={{-34,92},{-26,100}}),
         iconTransformation(extent={{-30,60},{-10,80}})));
   HeatTransfer.WallConduction solid_north(

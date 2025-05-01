@@ -21,7 +21,7 @@ model RectangularCV
   parameter Refrigerant.ThermodynamicState state_start = Refrigerant.setState_pTX(P_start, T_start_fluid, X_start)
     "Starting thermodynamic state" annotation (Dialog(tab="Initialization"));
 
-  BoundaryConditions.flow_source ECSFlow(
+  BoundaryConditions.ZeroDimensional.flow_source ECSFlow(
     redeclare package Medium = Refrigerant,
     use_in_massFlow=true,
     use_in_T=true) annotation (Placement(transformation(
@@ -34,8 +34,8 @@ model RectangularCV
   Modelica.Blocks.Interfaces.RealInput m_fromMix annotation (Placement(
         transformation(extent={{-130,0},{-90,40}}),  iconTransformation(
           extent={{-106,-70},{-86,-50}})));
-  BoundaryConditions.pressure_sink pressureSink(redeclare package Medium =
-        Refrigerant)
+  BoundaryConditions.ZeroDimensional.pressure_sink pressureSink(redeclare
+      package Medium = Refrigerant)
     annotation (Placement(transformation(extent={{68,-12},{92,12}})));
   inner Components.Environment environment(
     allowFlowReversal=false,
@@ -57,7 +57,7 @@ model RectangularCV
     m_flow_start=m_flow_start)
     annotation (Placement(transformation(extent={{-30,-30},{30,30}})));
 
-  BoundaryConditions.thermal_flux thermal(phi=phi)
+  BoundaryConditions.ZeroDimensional.thermal_flux thermal(phi=phi)
     annotation (Placement(transformation(extent={{-16,52},{8,68}})));
 equation
 

@@ -4,7 +4,8 @@ model PressureSensor "Absolute pressure sensor"
   replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
   Modelica.Blocks.Interfaces.RealOutput y annotation (Placement(transformation(extent={{100,-10},{120,10}})));
-  CustomInterfaces.FluidPort_A port(redeclare package Medium = Medium)
+  CustomInterfaces.ZeroDimensional.FluidPort_A port(redeclare package Medium =
+        Medium)
     annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
 equation
   port.m_flow = 0;

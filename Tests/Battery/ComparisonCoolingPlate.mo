@@ -58,7 +58,7 @@ package ComparisonCoolingPlate
       N_cv=N_cv_ch,
       N_channels=N_channels)
       annotation (Placement(transformation(extent={{-50,-118},{58,-10}})));
-      BoundaryConditions.flow_source          flow_source1(
+    BoundaryConditions.ZeroDimensional.flow_source flow_source1(
       redeclare package Medium = Coolant,
       P_nom=300000,
       T_nom=T_fluid,
@@ -66,12 +66,12 @@ package ComparisonCoolingPlate
       allowFlowReversal=environment.allowFlowReversal,
       use_in_massFlow=false,
       use_in_T=false)
-        annotation (Placement(transformation(extent={{-98,-52},{-72,-78}})));
-      BoundaryConditions.pressure_sink          pressure_sink1(
+      annotation (Placement(transformation(extent={{-98,-52},{-72,-78}})));
+    BoundaryConditions.ZeroDimensional.pressure_sink pressure_sink1(
       redeclare package Medium = Coolant,
       allowFlowReversal=environment.allowFlowReversal,
       use_ambient=true)
-        annotation (Placement(transformation(extent={{84,-74},{100,-58}})));
+      annotation (Placement(transformation(extent={{84,-74},{100,-58}})));
     Modelica.Electrical.Analog.Sources.SignalCurrent signalCurrent annotation (
         Placement(transformation(
           extent={{-8,-8},{8,8}},

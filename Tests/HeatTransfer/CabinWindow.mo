@@ -14,13 +14,13 @@ model CabinWindow
     L_window=0.23,
     Tstart=283.15)
     annotation (Placement(transformation(extent={{-46,-48},{46,32}})));
-  BoundaryConditions.thermal int(
+  BoundaryConditions.ZeroDimensional.thermal int(
     T=297.15,
     use_Q=false,
     use_T=true,
     use_in_T=false)
     annotation (Placement(transformation(extent={{0,-90},{30,-70}})));
-  BoundaryConditions.thermal int1(
+  BoundaryConditions.ZeroDimensional.thermal int1(
     T=297.15,
     use_Q=false,
     use_T=true,

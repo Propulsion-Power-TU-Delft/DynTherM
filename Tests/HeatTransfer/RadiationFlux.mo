@@ -15,7 +15,7 @@ model RadiationFlux
 
   Components.HeatTransfer.WallRadiationFlux wallRadiationFlux(csi=0)
     annotation (Placement(transformation(extent={{-26,28},{26,-24}})));
-  BoundaryConditions.thermal_flux thermal_flux(
+  BoundaryConditions.ZeroDimensional.thermal_flux thermal_flux(
     T=293.15,
     use_phi=false,
     use_T=true)

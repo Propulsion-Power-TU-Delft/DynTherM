@@ -2,15 +2,15 @@ within DynTherM.Tests.Distributed;
 model Rectangular1D
   //package Refrigerant = Modelica.Media.Water.ConstantPropertyLiquidWater;
   package Refrigerant = DynTherM.Media.IncompressibleTableBased.MEG(X=0.1);
-  BoundaryConditions.flow_source flow_source_distributed(
+  BoundaryConditions.ZeroDimensional.flow_source flow_source_distributed(
     redeclare package Medium = Refrigerant,
     use_in_massFlow=true,
     use_in_T=true) annotation (Placement(transformation(
         extent={{14,-14},{-14,14}},
         rotation=180,
         origin={-80,80})));
-  BoundaryConditions.pressure_sink pressureSink_distributed(redeclare package
-      Medium = Refrigerant)
+  BoundaryConditions.ZeroDimensional.pressure_sink pressureSink_distributed(
+      redeclare package Medium = Refrigerant)
     annotation (Placement(transformation(extent={{68,68},{92,92}})));
   inner Components.Environment environment(
     allowFlowReversal=false, initOpt=DynTherM.Choices.InitOpt.steadyState)
@@ -33,7 +33,7 @@ model Rectangular1D
     N_channels=1)
     annotation (Placement(transformation(extent={{-28,52},{28,108}})));
 
-  BoundaryConditions.thermal_flux_distributed thermal_distributed(
+  BoundaryConditions.TwoDimensional.thermal_flux2D thermal_distributed(
     Nx=3,
     Ny=1,
     phi=-1e6*ones(3, 1))
@@ -74,10 +74,10 @@ model Rectangular1D
     T_start_solid=323.15,
     T_start_fluid=323.15)
     annotation (Placement(transformation(extent={{20,-120},{60,-80}})));
-  BoundaryConditions.pressure_sink pressureSink_multiple(redeclare package
-      Medium = Refrigerant)
+  BoundaryConditions.ZeroDimensional.pressure_sink pressureSink_multiple(
+      redeclare package Medium = Refrigerant)
     annotation (Placement(transformation(extent={{68,-112},{92,-88}})));
-  BoundaryConditions.flow_source flow_source_multiple(
+  BoundaryConditions.ZeroDimensional.flow_source flow_source_multiple(
     redeclare package Medium = Refrigerant,
     use_in_massFlow=true,
     use_in_T=true) annotation (Placement(transformation(
@@ -88,11 +88,11 @@ model Rectangular1D
     annotation (Placement(transformation(extent={{-50,-50},{-70,-30}})));
   Modelica.Blocks.Sources.Constant T(k=273.15 + 50)
     annotation (Placement(transformation(extent={{-50,40},{-70,60}})));
-  BoundaryConditions.thermal_flux thermal_1(phi=-1e6)
+  BoundaryConditions.ZeroDimensional.thermal_flux thermal_1(phi=-1e6)
     annotation (Placement(transformation(extent={{-64,-76},{-46,-64}})));
-  BoundaryConditions.thermal_flux thermal_3(phi=-1e6)
+  BoundaryConditions.ZeroDimensional.thermal_flux thermal_3(phi=-1e6)
     annotation (Placement(transformation(extent={{16,-76},{34,-64}})));
-  BoundaryConditions.thermal_flux thermal_2(phi=-1e6)
+  BoundaryConditions.ZeroDimensional.thermal_flux thermal_2(phi=-1e6)
     annotation (Placement(transformation(extent={{-24,-76},{-6,-64}})));
   Components.OneDimensional.RectangularFluxCV cv(
     redeclare package Medium = Refrigerant,
@@ -106,17 +106,17 @@ model Rectangular1D
     T_start_solid=323.15,
     T_start_fluid=323.15)
     annotation (Placement(transformation(extent={{-20,-20},{20,20}})));
-  BoundaryConditions.flow_source flow_source_single(
+  BoundaryConditions.ZeroDimensional.flow_source flow_source_single(
     redeclare package Medium = Refrigerant,
     use_in_massFlow=true,
     use_in_T=true) annotation (Placement(transformation(
         extent={{14,14},{-14,-14}},
         rotation=180,
         origin={-60,0})));
-  BoundaryConditions.pressure_sink pressureSink_single(
-    redeclare package Medium = Refrigerant)
+  BoundaryConditions.ZeroDimensional.pressure_sink pressureSink_single(
+      redeclare package Medium = Refrigerant)
     annotation (Placement(transformation(extent={{68,-12},{92,12}})));
-  BoundaryConditions.thermal_flux thermal(phi=-1e6)
+  BoundaryConditions.ZeroDimensional.thermal_flux thermal(phi=-1e6)
     annotation (Placement(transformation(extent={{-24,24},{-6,36}})));
 equation
 

@@ -81,12 +81,12 @@ model Cockpit "Upper section of the fuselage: cockpit section"
     noInitialTemperature=noInitialTemperature,
     fixed_Q=false)
     annotation (Placement(transformation(extent={{20,-80},{-20,-40}})));
-  CustomInterfaces.FluidPort_A cockpitInflow annotation (Placement(
-        transformation(extent={{94,-86},{106,-74}}), iconTransformation(extent=
-            {{50,50},{70,70}})));
-  CustomInterfaces.FluidPort_B cockpitToCargo annotation (Placement(
-        transformation(extent={{-106,-86},{-94,-74}}), iconTransformation(
-          extent={{50,-70},{70,-50}})));
+  CustomInterfaces.ZeroDimensional.FluidPort_A cockpitInflow annotation (
+      Placement(transformation(extent={{94,-86},{106,-74}}), iconTransformation(
+          extent={{50,50},{70,70}})));
+  CustomInterfaces.ZeroDimensional.FluidPort_B cockpitToCargo annotation (
+      Placement(transformation(extent={{-106,-86},{-94,-74}}),
+        iconTransformation(extent={{50,-70},{70,-50}})));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a cockpitToCabin
     annotation (Placement(transformation(extent={{-10,-110},{10,-90}}),
         iconTransformation(extent={{90,-10},{110,10}})));

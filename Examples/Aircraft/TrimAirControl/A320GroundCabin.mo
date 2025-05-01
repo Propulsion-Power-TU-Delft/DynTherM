@@ -42,10 +42,10 @@ model A320GroundCabin "Aircraft on ground, two temperature zones"
         Components.HeatTransfer.HTCorrelations.InternalConvection.Cylinder,
     redeclare model HTC_ext_upper =
         Components.HeatTransfer.HTCorrelations.ExternalConvection.AircraftOnGroundFree
-        (R_ext=A320.R_fuselage),
+        (R_ext=A320.R_cabin),
     redeclare model HTC_ext_lower =
         Components.HeatTransfer.HTCorrelations.ExternalConvection.AircraftOnGroundFree
-        (R_ext=A320.R_fuselage),
+        (R_ext=A320.R_cabin),
     N_pax=196,
     N_crew=6,
     N_pilots=3,
@@ -122,8 +122,8 @@ equation
   connect(A320.T_trim, T_trim.y) annotation (Line(points={{-3.57143,25.25},{
           -4,25.25},{-4,90},{-9,90}},
                         color={0,0,127}));
-  connect(PID_m_rec.y, A320.fanSpeed) annotation (Line(points={{30,39},{30,
-          25.125},{29.5714,25.125},{29.5714,25.25}},
+  connect(PID_m_rec.y, A320.fanSpeed) annotation (Line(points={{30,39},{30,25.125},
+          {29.5714,25.125},{29.5714,25.25}},
                                         color={0,0,127}));
   connect(add_m_rec.u1, target_m_rec.y)
     annotation (Line(points={{68,76},{79,76}}, color={0,0,127}));
@@ -132,12 +132,12 @@ equation
           127}));
   connect(PID_T_fd.u_s, T_target.y) annotation (Line(points={{30,-60},{30,-72},
           {90,-72},{90,-79}}, color={0,0,127}));
-  connect(A320.T_ECS, PID_T_cab.y) annotation (Line(points={{37.8571,6.5},{
-          40.4286,6.5},{40.4286,6},{59,6}}, color={0,0,127}));
+  connect(A320.T_ECS, PID_T_cab.y) annotation (Line(points={{37.8571,6.5},{40.4286,
+          6.5},{40.4286,6},{59,6}},         color={0,0,127}));
   connect(T_target.y, PID_T_cab.u_s)
     annotation (Line(points={{90,-79},{90,6},{82,6}}, color={0,0,127}));
-  connect(A320.outflowValveOpening, PID_P_cab.y) annotation (Line(points={{
-          -28.4286,25.25},{-28.4286,26.125},{-28,26.125},{-28,39}}, color={0,
+  connect(A320.outflowValveOpening, PID_P_cab.y) annotation (Line(points={{-28.4286,
+          25.25},{-28.4286,26.125},{-28,26.125},{-28,39}},          color={0,
           0,127}));
   connect(add_P_cab.y, PID_P_cab.u)
     annotation (Line(points={{-45,70},{-28,70},{-28,62}}, color={0,0,127}));

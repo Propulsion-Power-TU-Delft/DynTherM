@@ -16,8 +16,8 @@ model PouchModuleParallel "Battery module made of pouch cells"
   replaceable model FrameMat = Materials.AluminiumFoil constrainedby
     Materials.Properties "Frame material" annotation (choicesAllMatching=true);
 
-  model Cell = Components.Electrical.PouchCell1D "Cell";
-  model Firewall = Components.TwoDimensional.WallConductionDiscretized
+  model Cell = Components.Electrical.PouchCell "Cell";
+  model Firewall = Components.TwoDimensional.WallConductionVertical2D
     "Firewall in between adjacent cells";
 
   // Geometry
@@ -66,33 +66,26 @@ model PouchModuleParallel "Battery module made of pouch cells"
     each N=N_cv);
 
   Firewall firewall[Ns*Np - 1](
-    redeclare model Mat=FirewallMat,
-    each A=W_cell*H_cell,
-    each t=t_fw,
+    redeclare model MatX=FirewallMat,
+    redeclare model MatY=FirewallMat,
+    each x=t_fw,
+    each y=H_cell,
+    each z=W_cell,
     each Tstart=Tstart,
     each initOpt=initOpt,
-    each Nx=N_cv,
-    each Ny=1);
+    each N=N_cv);
 
-  CustomInterfaces.DistributedHeatPort_A Bottom(
-    Nx=Ns*Np,
-    Ny=1)
-    annotation (
-      Placement(transformation(
+  CustomInterfaces.OneDimensional.HeatPort1D_A Bottom(Nx=Ns*Np) annotation (Placement(transformation(
         extent={{-12,-12},{12,12}},
         rotation=180,
         origin={0,-80}), iconTransformation(
         extent={{-30,-16},{30,16}},
         rotation=0,
         origin={-20,-66})));
-  CustomInterfaces.DistributedHeatPort_A Top(
-    Nx=Ns*Np,
-    Ny=1)
-    annotation (Placement(
-        transformation(
+  CustomInterfaces.OneDimensional.HeatPort1D_A Top(Nx=Ns*Np) annotation (Placement(transformation(
         extent={{-12,-12},{12,12}},
         rotation=180,
-        origin={0,80}),     iconTransformation(
+        origin={0,80}), iconTransformation(
         extent={{-30,-16},{30,16}},
         rotation=0,
         origin={-20,26})));
@@ -107,89 +100,87 @@ model PouchModuleParallel "Battery module made of pouch cells"
     "Battery bus (average / sum over all cells)" annotation (Placement(
         transformation(extent={{-68,-70},{-32,-34}}), iconTransformation(extent={{-10,30},
             {10,50}})));
-  CustomInterfaces.DistributedHeatPort_A Left(
-    Nx=N_cv,
-    Ny=1)
-    annotation (Placement(
-        transformation(
+  CustomInterfaces.OneDimensional.HeatPort1D_A Left(Nx=N_cv) annotation (Placement(transformation(
         extent={{-12,-12},{12,12}},
         rotation=90,
-        origin={-80,40}),iconTransformation(
+        origin={-80,40}), iconTransformation(
         extent={{-30,-16},{30,16}},
         rotation=-90,
         origin={-76,-20})));
-  CustomInterfaces.DistributedHeatPort_A Right(
-    Nx=N_cv,
-    Ny=1)
-    annotation (
-      Placement(transformation(
+  CustomInterfaces.OneDimensional.HeatPort1D_A Right(Nx=N_cv) annotation (Placement(transformation(
         extent={{-12,-12},{12,12}},
         rotation=90,
-        origin={80,40}),iconTransformation(
+        origin={80,40}), iconTransformation(
         extent={{-30,-16},{30,16}},
         rotation=-90,
         origin={36,-20})));
-  Components.TwoDimensional.WallConductionDiscretized resin_bottom(
-    redeclare model Mat = ResinMat,
-    t=t_resin,
-    A=W_module*t_module,
+  Components.TwoDimensional.WallConductionHorizontal2D resin_bottom(
+    redeclare model MatX = ResinMat,
+    redeclare model MatY = ResinMat,
+    x=t_module,
+    y=t_resin,
+    z=W_module,
     Tstart=Tstart,
     initOpt=initOpt,
-    Nx=Ns*Np,
-    Ny=1) "Layer of thermal resin applied on bottom surface"
-    annotation (Placement(transformation(extent={{-12,-60},{12,-40}})));
-  Components.TwoDimensional.WallConductionDiscretized frame_top(
-    redeclare model Mat = FrameMat,
-    t=t_frame,
-    A=W_module*t_module,
+    N=Ns*Np) "Layer of thermal resin applied on bottom surface"
+    annotation (Placement(transformation(extent={{-14,-54},{14,-26}})));
+  Components.TwoDimensional.WallConductionHorizontal2D frame_top(
+    redeclare model MatX = FrameMat,
+    redeclare model MatY = FrameMat,
+    x=t_module,
+    y=t_frame,
+    z=W_module,
     Tstart=Tstart,
     initOpt=initOpt,
-    Nx=Ns*Np,
-    Ny=1) "Top portion of external frame"
-    annotation (Placement(transformation(extent={{-12,76},{12,56}})));
-  Components.TwoDimensional.WallConductionDiscretized frame_bottom(
-    redeclare model Mat = FrameMat,
-    t=t_frame,
-    A=W_module*t_module,
+    N=Ns*Np) "Top portion of external frame"
+    annotation (Placement(transformation(extent={{-14,46},{14,74}})));
+  Components.TwoDimensional.WallConductionHorizontal2D frame_bottom(
+    redeclare model MatX = FrameMat,
+    redeclare model MatY = FrameMat,
+    x=t_module,
+    y=t_frame,
+    z=W_module,
     Tstart=Tstart,
     initOpt=initOpt,
-    Nx=Ns*Np,
-    Ny=1) "Bottom portion of external frame"
-    annotation (Placement(transformation(extent={{-12,-76},{12,-56}})));
-  Components.TwoDimensional.WallConductionDiscretized resin_top(
-    redeclare model Mat = ResinMat,
-    t=t_resin,
-    A=W_module*t_module,
+    N=Ns*Np) "Bottom portion of external frame"
+    annotation (Placement(transformation(extent={{-14,-74},{14,-46}})));
+  Components.TwoDimensional.WallConductionHorizontal2D resin_top(
+    redeclare model MatX = ResinMat,
+    redeclare model MatY = ResinMat,
+    x=t_module,
+    y=t_resin,
+    z=W_module,
     Tstart=Tstart,
     initOpt=initOpt,
-    Nx=Ns*Np,
-    Ny=1) "Layer of thermal resin applied on top surface"
-    annotation (Placement(transformation(extent={{-12,60},{12,40}})));
-  Components.TwoDimensional.WallConductionDiscretized frame_left(
-    redeclare model Mat = FrameMat,
-    t=t_frame,
-    A=W_module*H_module,
+    N=Ns*Np) "Layer of thermal resin applied on top surface"
+    annotation (Placement(transformation(extent={{-14,26},{14,54}})));
+  Components.TwoDimensional.WallConductionVertical2D frame_left(
+    redeclare model MatX=FrameMat,
+    redeclare model MatY=FrameMat,
+    x=t_frame,
+    y=H_module,
+    z=W_module,
     Tstart=Tstart,
     initOpt=initOpt,
-    Nx=N_cv,
-    Ny=1) "Left portion of external frame"
+    N=N_cv) "Left portion of external frame"
     annotation (Placement(
         transformation(
-        extent={{-12,10},{12,-10}},
-        rotation=90,
+        extent={{14,14},{-14,-14}},
+        rotation=180,
         origin={-60,40})));
-  Components.TwoDimensional.WallConductionDiscretized frame_right(
-    redeclare model Mat = FrameMat,
-    t=t_frame,
-    A=W_module*H_module,
+  Components.TwoDimensional.WallConductionVertical2D frame_right(
+    redeclare model MatX=FrameMat,
+    redeclare model MatY=FrameMat,
+    x=t_frame,
+    y=H_module,
+    z=W_module,
     Tstart=Tstart,
     initOpt=initOpt,
-    Nx=N_cv,
-    Ny=1) "Right portion of external frame"
+    N=N_cv) "Right portion of external frame"
     annotation (Placement(
         transformation(
-        extent={{-12,-10},{12,10}},
-        rotation=90,
+        extent={{14,-14},{-14,14}},
+        rotation=180,
         origin={60,40})));
 
 equation
@@ -230,25 +221,25 @@ equation
   // External
   for ks in 1:Ns loop
     for kp in 1:Np loop
-      connect(cell[ks, kp].Top, resin_top.inlet.ports[Np*(ks - 1) + kp, 1]);
-      connect(cell[ks, kp].Bottom, resin_bottom.inlet.ports[Np*(ks - 1) + kp, 1]);
+      connect(cell[ks, kp].Top, resin_top.South.ports[Np*(ks - 1) + kp]);
+      connect(cell[ks, kp].Bottom, resin_bottom.North.ports[Np*(ks - 1) + kp]);
     end for;
   end for;
 
-  connect(frame_left.inlet, cell[1, 1].Left);
-  connect(frame_right.inlet, cell[Ns, Np].Right);
+  connect(frame_left.East, cell[1, 1].Left);
+  connect(frame_right.West, cell[Ns, Np].Right);
 
   // Internal
   for ks in 1:Ns loop
     for kp in 1:(Np - 1) loop
-      connect(cell[ks, kp].Right, firewall[Np*(ks - 1) + kp].inlet);
-      connect(firewall[Np*(ks - 1) + kp].outlet, cell[ks, kp + 1].Left);
+      connect(cell[ks, kp].Right, firewall[Np*(ks - 1) + kp].West);
+      connect(firewall[Np*(ks - 1) + kp].East, cell[ks, kp + 1].Left);
     end for;
   end for;
 
   for ks in 1:(Ns - 1) loop
-    connect(cell[ks, Np].Right, firewall[Np*(ks - 1) + Np].inlet);
-    connect(firewall[Np*(ks - 1) + Np].outlet, cell[ks + 1, 1].Left);
+    connect(cell[ks, Np].Right, firewall[Np*(ks - 1) + Np].West);
+    connect(firewall[Np*(ks - 1) + Np].East, cell[ks + 1, 1].Left);
   end for;
 
   connect(p, multiSensor.pc) annotation (Line(points={{-100,0},{-60,0}}, color={0,0,255}));
@@ -274,18 +265,18 @@ equation
       index=1,
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
-  connect(Bottom, frame_bottom.outlet) annotation (Line(points={{0,-80},{0,-74.5},
-          {8.88178e-16,-74.5},{8.88178e-16,-69}}, color={191,0,0}));
-  connect(frame_bottom.inlet, resin_bottom.outlet) annotation (Line(points={{8.88178e-16,
-          -63},{8.88178e-16,-53}}, color={191,0,0}));
-  connect(resin_top.outlet, frame_top.inlet) annotation (Line(points={{8.88178e-16,
-          53},{8.88178e-16,63}}, color={191,0,0}));
-  connect(frame_top.outlet, Top) annotation (Line(points={{8.88178e-16,69},{8.88178e-16,
-          74.5},{0,74.5},{0,80}}, color={191,0,0}));
-  connect(Left, frame_left.outlet)
-    annotation (Line(points={{-80,40},{-63,40}}, color={191,0,0}));
-  connect(frame_right.outlet, Right)
-    annotation (Line(points={{63,40},{80,40}}, color={191,0,0}));
+  connect(Top, frame_top.North)
+    annotation (Line(points={{0,80},{0,64.2}}, color={191,0,0}));
+  connect(frame_top.South, resin_top.North)
+    annotation (Line(points={{0,55.8},{0,44.2}}, color={191,0,0}));
+  connect(resin_bottom.South, frame_bottom.North)
+    annotation (Line(points={{0,-44.2},{0,-55.8}}, color={191,0,0}));
+  connect(frame_bottom.South, Bottom)
+    annotation (Line(points={{0,-64.2},{0,-80}}, color={191,0,0}));
+  connect(Left, frame_left.West)
+    annotation (Line(points={{-80,40},{-64.2,40}}, color={191,0,0}));
+  connect(frame_right.East, Right)
+    annotation (Line(points={{64.2,40},{80,40}}, color={191,0,0}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Rectangle(
           extent={{-70,20},{-50,-60}},

@@ -84,28 +84,28 @@ model CircularChannel1D "Circular channel implementing 1D spatial discretization
   Pressure dP "Pressure drop";
   HeatFlowRate Q "Heat flow rate - positive entering";
 
-  DynTherM.CustomInterfaces.FluidPort_A inlet(
+  DynTherM.CustomInterfaces.ZeroDimensional.FluidPort_A inlet(
     redeclare package Medium = Medium,
     m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0, start=
           m_flow_start),
     P(start=P_start),
     h_outflow(start=Medium.specificEnthalpy(state_start)),
-    Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{-106,-6},
-            {-94,6}},       rotation=0), iconTransformation(extent={{-110,-10},{
-            -90,10}})));
-  DynTherM.CustomInterfaces.FluidPort_B outlet(
+    Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{-106,
+            -6},{-94,6}}, rotation=0), iconTransformation(extent={{-110,-10},{-90,
+            10}})));
+  DynTherM.CustomInterfaces.ZeroDimensional.FluidPort_B outlet(
     redeclare package Medium = Medium,
-    m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0, start=
-          -m_flow_start),
+    m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0, start=-
+          m_flow_start),
     P(start=P_start),
     h_outflow(start=Medium.specificEnthalpy(state_start)),
-    Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{94,-6},
-            {106,6}},       rotation=0), iconTransformation(extent={{90,-10},{110,
+    Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{94,
+            -6},{106,6}}, rotation=0), iconTransformation(extent={{90,-10},{110,
             10}})));
 
-  CustomInterfaces.DistributedHeatPort_B solid_surface(Nx=N_cv, Ny=1) annotation (
-      Placement(transformation(extent={{-40,14},{40,80}}), iconTransformation(
-          extent={{-40,14},{40,80}})));
+  CustomInterfaces.OneDimensional.HeatPort1D_B solid_surface(Nx=N_cv)
+    annotation (Placement(transformation(extent={{-40,14},{40,80}}),
+        iconTransformation(extent={{-40,14},{40,80}})));
 
 equation
   m_tot = sum(cv.m_tot);
@@ -116,7 +116,7 @@ equation
 
   // thermal connections
   for i in 1:N_cv loop
-    connect(solid_surface.ports[i,1], cv[i].solid_surface);
+    connect(solid_surface.ports[i], cv[i].solid_surface);
   end for;
 
   // internal flow connections

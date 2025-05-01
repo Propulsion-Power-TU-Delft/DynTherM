@@ -91,36 +91,32 @@ model CircularAsymmetricChannel1D
   Pressure dP "Pressure drop";
   HeatFlowRate Q "Heat flow rate - positive entering";
 
-  DynTherM.CustomInterfaces.FluidPort_A inlet(
+  DynTherM.CustomInterfaces.ZeroDimensional.FluidPort_A inlet(
     redeclare package Medium = Medium,
     m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0, start=
           m_flow_start),
     P(start=P_start),
     h_outflow(start=Medium.specificEnthalpy(state_start)),
-    Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{-106,-6},
-            {-94,6}},       rotation=0), iconTransformation(extent={{-110,-10},{
-            -90,10}})));
-  DynTherM.CustomInterfaces.FluidPort_B outlet(
+    Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{-106,
+            -6},{-94,6}}, rotation=0), iconTransformation(extent={{-110,-10},{-90,
+            10}})));
+  DynTherM.CustomInterfaces.ZeroDimensional.FluidPort_B outlet(
     redeclare package Medium = Medium,
-    m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0, start=
-          -m_flow_start),
+    m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0, start=-
+          m_flow_start),
     P(start=P_start),
     h_outflow(start=Medium.specificEnthalpy(state_start)),
-    Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{94,-6},
-            {106,6}},       rotation=0), iconTransformation(extent={{90,-10},{110,
+    Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{94,
+            -6},{106,6}}, rotation=0), iconTransformation(extent={{90,-10},{110,
             10}})));
 
-  CustomInterfaces.DistributedHeatPort_B solid_surface_north(Nx=N_cv, Ny=1)
-    annotation (Placement(transformation(extent={{-40,16},{-10,76}}),
+  CustomInterfaces.OneDimensional.HeatPort1D_B solid_surface_north(Nx=N_cv) annotation (Placement(transformation(extent={{-40,16},{-10,76}}),
         iconTransformation(extent={{-90,16},{-60,76}})));
-  CustomInterfaces.DistributedHeatPort_B solid_surface_east(Nx=N_cv, Ny=1)
-    annotation (Placement(transformation(extent={{60,16},{90,76}}),
+  CustomInterfaces.OneDimensional.HeatPort1D_B solid_surface_east(Nx=N_cv) annotation (Placement(transformation(extent={{60,16},{90,76}}),
         iconTransformation(extent={{-40,16},{-10,76}})));
-  CustomInterfaces.DistributedHeatPort_B solid_surface_south(Nx=N_cv, Ny=1)
-    annotation (Placement(transformation(extent={{6,16},{40,76}}),
+  CustomInterfaces.OneDimensional.HeatPort1D_B solid_surface_south(Nx=N_cv) annotation (Placement(transformation(extent={{6,16},{40,76}}),
         iconTransformation(extent={{10,16},{40,76}})));
-  CustomInterfaces.DistributedHeatPort_B solid_surface_west(Nx=N_cv, Ny=1)
-    annotation (Placement(transformation(extent={{-90,16},{-60,76}}),
+  CustomInterfaces.OneDimensional.HeatPort1D_B solid_surface_west(Nx=N_cv) annotation (Placement(transformation(extent={{-90,16},{-60,76}}),
         iconTransformation(extent={{60,16},{90,76}})));
 
 equation
@@ -133,16 +129,16 @@ equation
   // thermal connections
   for i in 1:N_cv loop
     // north
-    connect(solid_surface_north.ports[i,1], cv[i].solid_surface_north);
+    connect(solid_surface_north.ports[i], cv[i].solid_surface_north);
 
     // east
-    connect(solid_surface_east.ports[i,1], cv[i].solid_surface_east);
+    connect(solid_surface_east.ports[i], cv[i].solid_surface_east);
 
     // south
-    connect(solid_surface_south.ports[i,1], cv[i].solid_surface_south);
+    connect(solid_surface_south.ports[i], cv[i].solid_surface_south);
 
     // west
-    connect(solid_surface_west.ports[i,1], cv[i].solid_surface_west);
+    connect(solid_surface_west.ports[i], cv[i].solid_surface_west);
 
   end for;
 

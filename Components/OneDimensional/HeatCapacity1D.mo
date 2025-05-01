@@ -19,13 +19,13 @@ model HeatCapacity1D
     each initOpt=initOpt,
     each noInitialTemperature=noInitialTemperature);
 
-  CustomInterfaces.DistributedHeatPort_A thermal(Nx=N_cv, Ny=1) annotation (
-      Placement(transformation(extent={{-40,-132},{40,-52}}),
+  CustomInterfaces.OneDimensional.HeatPort1D_A thermal(Nx=N_cv)
+    annotation (Placement(transformation(extent={{-40,-132},{40,-52}}),
         iconTransformation(extent={{-40,-132},{40,-52}})));
 
 equation
   for i in 1:N_cv loop
-    connect(thermal.ports[i,1], cv[i].port);
+    connect(thermal.ports[i], cv[i].port);
   end for;
 
   annotation (

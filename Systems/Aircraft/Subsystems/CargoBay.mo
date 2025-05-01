@@ -65,11 +65,11 @@ model CargoBay "Lower section of the fuselage: cargo bay"
     noInitialTemperature=noInitialTemperature,
     fixed_Q=false)
     annotation (Placement(transformation(extent={{-22,42},{22,-2}})));
-  CustomInterfaces.FluidPort_A cargoToCabin annotation (Placement(
-        transformation(extent={{-106,14},{-94,26}}), iconTransformation(extent={{50,70},
-            {70,90}})));
-  CustomInterfaces.FluidPort_B cargoOutflow annotation (Placement(
-        transformation(extent={{94,14},{106,26}}),     iconTransformation(
+  CustomInterfaces.ZeroDimensional.FluidPort_A cargoToCabin annotation (
+      Placement(transformation(extent={{-106,14},{-94,26}}), iconTransformation(
+          extent={{50,70},{70,90}})));
+  CustomInterfaces.ZeroDimensional.FluidPort_B cargoOutflow annotation (
+      Placement(transformation(extent={{94,14},{106,26}}), iconTransformation(
           extent={{-10,-110},{10,-90}})));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b cargoToFloor
     annotation (Placement(transformation(extent={{-10,90},{10,110}}),

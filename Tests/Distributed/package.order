@@ -5,3 +5,5 @@ Circular1D
 Rectangular1D
 Rectangular2D_manual
 Radiation1D
+WallConduction2D
+WallConduction3D

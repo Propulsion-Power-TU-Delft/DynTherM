@@ -7,11 +7,11 @@ model WallConduction
     annotation (Placement(transformation(extent={{-34,-24},{34,24}})));
   CustomInterfaces.Adaptors.heatFluxToHeatFlow heatFluxToHeatFlow(A=1)
     annotation (Placement(transformation(extent={{-28,76},{28,20}})));
-  BoundaryConditions.thermal_flux thermal_flux(phi=-13800)
+  BoundaryConditions.ZeroDimensional.thermal_flux thermal_flux(phi=-13800)
     annotation (Placement(transformation(extent={{-24,78},{12,102}})));
   CustomInterfaces.Adaptors.heatFluxToHeatFlow heatFluxToHeatFlow1(A=1)
     annotation (Placement(transformation(extent={{-28,-76},{28,-20}})));
-  BoundaryConditions.thermal_flux thermal_flux1(
+  BoundaryConditions.ZeroDimensional.thermal_flux thermal_flux1(
     T=323.15,
     phi=-13800,
     use_phi=false,

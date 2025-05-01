@@ -6,15 +6,15 @@ model RectangularPipe "Simple test of component pipe"
     allowFlowReversal=false,
     initOpt=DynTherM.Choices.InitOpt.fixedState)
     annotation (Placement(transformation(extent={{60,60},{100,100}})));
-  BoundaryConditions.flow_source ECSFlow(
+  BoundaryConditions.ZeroDimensional.flow_source ECSFlow(
     redeclare package Medium = Refrigerant,
     use_in_massFlow=true,
     use_in_T=true) annotation (Placement(transformation(
         extent={{14,14},{-14,-14}},
         rotation=180,
         origin={-60,-30})));
-  BoundaryConditions.pressure_sink pressureSink(redeclare package Medium =
-        Refrigerant)
+  BoundaryConditions.ZeroDimensional.pressure_sink pressureSink(redeclare
+      package Medium = Refrigerant)
     annotation (Placement(transformation(extent={{76,-42},{100,-18}})));
   Components.MassTransfer.RectangularPipe pipe(
     redeclare package Medium = Refrigerant,

@@ -193,23 +193,23 @@ model A320PullDown "Aircraft on ground, pull down test case"
         extent={{14,14},{-14,-14}},
         rotation=0,
         origin={-114,-78})));
-  BoundaryConditions.mechanical mechanical(
+  DynTherM.BoundaryConditions.ZeroDimensional.mechanical mechanical(
     omega(displayUnit="rpm"),
     use_omega=false,
-    use_in_omega=true)
-    annotation (Placement(transformation(extent={{-9,-6},{9,6}},
+    use_in_omega=true) annotation (Placement(transformation(
+        extent={{-9,-6},{9,6}},
         rotation=180,
         origin={-111,-100})));
   Components.MassTransfer.ValveLin outflowValve(Kv=Kv)
     annotation (Placement(transformation(extent={{30,-68},{50,-88}})));
-  BoundaryConditions.pressure_sink pressureSink
+  DynTherM.BoundaryConditions.ZeroDimensional.pressure_sink pressureSink
     annotation (Placement(transformation(extent={{70,-88},{90,-68}})));
   Components.MassTransfer.PressureDrop HEPAFilter(option=DynTherM.Choices.PDropOpt.linear, R=R_HEPA)
              annotation (Placement(transformation(
         extent={{12,10},{-12,-10}},
         rotation=0,
         origin={-50,-78})));
-  DynTherM.BoundaryConditions.flow_source packFlow(
+  DynTherM.BoundaryConditions.ZeroDimensional.flow_source packFlow(
     T_nom=258.15,
     X_nom={0,1},
     massFlow_nom=1,
@@ -389,14 +389,14 @@ model A320PullDown "Aircraft on ground, pull down test case"
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={60,-108})));
-  DynTherM.BoundaryConditions.flow_source cockpitTrimFlow(
+  DynTherM.BoundaryConditions.ZeroDimensional.flow_source cockpitTrimFlow(
     T_nom=373.15,
     use_in_massFlow=false,
     use_in_T=false) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=180,
         origin={-40,100})));
-  DynTherM.BoundaryConditions.flow_source cabinTrimFlow(
+  DynTherM.BoundaryConditions.ZeroDimensional.flow_source cabinTrimFlow(
     T_nom=373.15,
     use_in_massFlow=false,
     use_in_T=false) annotation (Placement(transformation(

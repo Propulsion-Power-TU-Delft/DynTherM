@@ -15,12 +15,11 @@ model System1
     V=186,
     noInitialPressure=false)
     annotation (Placement(transformation(extent={{-24,-44},{4,-16}})));
-  BoundaryConditions.flow_source ECSFlow(
+  BoundaryConditions.ZeroDimensional.flow_source ECSFlow(
     use_in_massFlow=true,
     use_in_T=true,
     use_di_X=true,
-    X_di={0.001,1 - 0.001})
-                   annotation (Placement(transformation(
+    X_di={0.001,1 - 0.001}) annotation (Placement(transformation(
         extent={{16,16},{-16,-16}},
         rotation=180,
         origin={-64,-30})));
@@ -29,7 +28,7 @@ model System1
         extent={{-14,-14},{14,14}},
         rotation=0,
         origin={34,-30})));
-  BoundaryConditions.pressure_sink pressureSink
+  BoundaryConditions.ZeroDimensional.pressure_sink pressureSink
     annotation (Placement(transformation(extent={{66,-44},{94,-16}})));
   Modelica.Blocks.Sources.Constant m_input(k=1)
     annotation (Placement(transformation(extent={{-120,10},{-100,30}})));

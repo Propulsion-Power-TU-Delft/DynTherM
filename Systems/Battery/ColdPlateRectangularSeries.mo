@@ -79,39 +79,36 @@ model ColdPlateRectangularSeries
     each allowFlowReversal=allowFlowReversal,
     each initOpt=initOpt);
 
-  CustomInterfaces.DistributedHeatPort_A upper_surface(
+  CustomInterfaces.TwoDimensional.HeatPort2D_A upper_surface(
     Nx=N_channels,
     Ny=N_cv)
     annotation (Placement(transformation(
         extent={{-20,-14},{20,14}},
         rotation=-90,
         origin={-100,0}), iconTransformation(extent={{-30,-98},{30,-38}})));
-  CustomInterfaces.DistributedHeatPort_A lower_surface(
+  CustomInterfaces.TwoDimensional.HeatPort2D_A lower_surface(
     Nx=N_channels,
     Ny=N_cv)
-    annotation (
-      Placement(transformation(
+    annotation (Placement(transformation(
         extent={{-20,-14},{20,14}},
         rotation=90,
         origin={100,0}), iconTransformation(extent={{-30,38},{30,98}})));
-  CustomInterfaces.FluidPort_A inlet(
+  CustomInterfaces.ZeroDimensional.FluidPort_A inlet(
     redeclare package Medium = Medium,
     m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0, start=
           m_flow_start),
     P(start=P_start),
     h_outflow(start=Medium.specificEnthalpy(state_start)),
-    Xi_outflow(start=X_start)) annotation (Placement(
-        transformation(extent={{-106,94},{-94,106}}), iconTransformation(extent=
-           {{-110,42},{-90,62}})));
-  CustomInterfaces.FluidPort_B outlet(
+    Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{-106,
+            94},{-94,106}}), iconTransformation(extent={{-110,42},{-90,62}})));
+  CustomInterfaces.ZeroDimensional.FluidPort_B outlet(
     redeclare package Medium = Medium,
     m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0, start=
           -m_flow_start),
     P(start=P_start),
     h_outflow(start=Medium.specificEnthalpy(state_start)),
-    Xi_outflow(start=X_start)) annotation (Placement(
-        transformation(extent={{-106,54},{-94,66}}), iconTransformation(extent={
-            {-110,18},{-90,38}})));
+    Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{-106,
+            54},{-94,66}}), iconTransformation(extent={{-110,18},{-90,38}})));
 
   Mass m_tot "Total mass";
   Mass m_fluid "Mass of fluid";
@@ -152,26 +149,26 @@ equation
   for i in 1:N_channels loop
     for j in 1:N_cv loop
       if i == 1 then
-        connect(channel[i].solid_surface_north.ports[j, 1], upper_surface.ports[1, j]);
+        connect(channel[i].solid_surface_north.ports[j], upper_surface.ports[1, j]);
       elseif i == 2 then
-        connect(channel[i].solid_surface_north.ports[j, 1], upper_surface.ports[end, end + 1 - j]);
+        connect(channel[i].solid_surface_north.ports[j], upper_surface.ports[end, end + 1 - j]);
       else
         if mod(i, 2) == 0 then
-          connect(channel[i].solid_surface_north.ports[j, 1], upper_surface.ports[end + 2 - i, end + 1 - j]);
+          connect(channel[i].solid_surface_north.ports[j], upper_surface.ports[end + 2 - i, end + 1 - j]);
         else
-          connect(channel[i].solid_surface_north.ports[j, 1], upper_surface.ports[end + 2 - i, j]);
+          connect(channel[i].solid_surface_north.ports[j], upper_surface.ports[end + 2 - i, j]);
         end if;
       end if;
 
       if i == 1 then
-        connect(channel[i].solid_surface_south.ports[j, 1], lower_surface.ports[1, j]);
+        connect(channel[i].solid_surface_south.ports[j], lower_surface.ports[1, j]);
       elseif i == 2 then
-        connect(channel[i].solid_surface_south.ports[j, 1], lower_surface.ports[end, end + 1 - j]);
+        connect(channel[i].solid_surface_south.ports[j], lower_surface.ports[end, end + 1 - j]);
       else
         if mod(i, 2) == 0 then
-          connect(channel[i].solid_surface_south.ports[j, 1], lower_surface.ports[end + 2 - i, end + 1 - j]);
+          connect(channel[i].solid_surface_south.ports[j], lower_surface.ports[end + 2 - i, end + 1 - j]);
         else
-          connect(channel[i].solid_surface_south.ports[j, 1], lower_surface.ports[end + 2 - i, j]);
+          connect(channel[i].solid_surface_south.ports[j], lower_surface.ports[end + 2 - i, j]);
         end if;
       end if;
     end for;

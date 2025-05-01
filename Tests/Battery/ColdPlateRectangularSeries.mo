@@ -2,7 +2,7 @@ within DynTherM.Tests.Battery;
 model ColdPlateRectangularSeries
     package Coolant = DynTherM.Media.IncompressibleTableBased.MEG(X=0.1);
 
-    parameter Integer N_cv=1;
+    parameter Integer N_cv=2;
 
     // Geometry
     parameter Length L=0.35;
@@ -26,26 +26,26 @@ model ColdPlateRectangularSeries
     parameter ReynoldsNumber Re_start=5e3;
     parameter PrandtlNumber Pr_start=7;
 
-    DynTherM.BoundaryConditions.flow_source flow_source(
-      redeclare package Medium = Coolant,
+  DynTherM.BoundaryConditions.ZeroDimensional.flow_source flow_source(
+    redeclare package Medium = Coolant,
     P_nom=400000,
-      T_nom=T_fluid,
-      massFlow_nom=m_flow,
-      allowFlowReversal=environment.allowFlowReversal,
-      use_in_massFlow=false,
-      use_in_T=false,
-      P_start=P_start,
-      T_start=T_start_fluid)
-      annotation (Placement(transformation(extent={{-124,112},{-100,88}})));
-    DynTherM.BoundaryConditions.pressure_sink pressure_sink(
-      redeclare package Medium = Coolant,
-      allowFlowReversal=environment.allowFlowReversal,
-      use_ambient=false,
+    T_nom=T_fluid,
+    massFlow_nom=m_flow,
+    allowFlowReversal=environment.allowFlowReversal,
+    use_in_massFlow=false,
+    use_in_T=false,
+    P_start=P_start,
+    T_start=T_start_fluid)
+    annotation (Placement(transformation(extent={{-124,112},{-100,88}})));
+  DynTherM.BoundaryConditions.ZeroDimensional.pressure_sink pressure_sink(
+    redeclare package Medium = Coolant,
+    allowFlowReversal=environment.allowFlowReversal,
+    use_ambient=false,
     P_di=150000,
     T_di=T_fluid,
     P_start=P_start,
     T_start=T_start_fluid)
-      annotation (Placement(transformation(extent={{-100,50},{-120,70}})));
+    annotation (Placement(transformation(extent={{-100,50},{-120,70}})));
     inner DynTherM.Components.Environment environment(allowFlowReversal=false,
       initOpt=DynTherM.Choices.InitOpt.fixedState)
       annotation (Placement(transformation(extent={{78,78},{116,116}})));
@@ -221,7 +221,7 @@ model ColdPlateRectangularSeries
     N_channels=6,
     N_cv=N_cv)
     annotation (Placement(transformation(extent={{40,-44},{120,50}})));
-    DynTherM.BoundaryConditions.flow_source flow_source1(
+  DynTherM.BoundaryConditions.ZeroDimensional.flow_source flow_source1(
     redeclare package Medium = Coolant,
     P_nom=400000,
     T_nom=T_fluid,
@@ -231,8 +231,8 @@ model ColdPlateRectangularSeries
     use_in_T=false,
     P_start=P_start,
     T_start=T_start_fluid)
-      annotation (Placement(transformation(extent={{8,72},{32,48}})));
-    DynTherM.BoundaryConditions.pressure_sink pressure_sink1(
+    annotation (Placement(transformation(extent={{8,72},{32,48}})));
+  DynTherM.BoundaryConditions.ZeroDimensional.pressure_sink pressure_sink1(
     redeclare package Medium = Coolant,
     allowFlowReversal=environment.allowFlowReversal,
     use_ambient=false,
@@ -240,8 +240,8 @@ model ColdPlateRectangularSeries
     T_di=T_fluid,
     P_start=P_start,
     T_start=T_start_fluid)
-      annotation (Placement(transformation(extent={{30,-50},{10,-30}})));
-  DynTherM.BoundaryConditions.thermal_distributed BC(
+    annotation (Placement(transformation(extent={{30,-50},{10,-30}})));
+  DynTherM.BoundaryConditions.TwoDimensional.thermal2D BC(
     Nx=cold_plate.N_channels,
     Ny=cold_plate.N_cv,
     use_di_Q=false,
@@ -252,49 +252,43 @@ model ColdPlateRectangularSeries
     offset=80*12,
     startTime=500)
     annotation (Placement(transformation(extent={{120,-100},{100,-80}})));
-  DynTherM.BoundaryConditions.thermal_distributed BC1(
+  DynTherM.BoundaryConditions.OneDimensional.thermal1D BC1(
     Nx=N_cv,
-    Ny=1,
     use_di_Q=false,
     use_in_Q=true) annotation (Placement(transformation(
         extent={{-6.5,-6.5},{6.5,6.5}},
         rotation=0,
         origin={-75.5,114.5}), iconTransformation(extent={{-30,-98},{30,-38}})));
-  DynTherM.BoundaryConditions.thermal_distributed BC6(
+  DynTherM.BoundaryConditions.OneDimensional.thermal1D BC6(
     Nx=N_cv,
-    Ny=1,
     use_di_Q=false,
     use_in_Q=true) annotation (Placement(transformation(
         extent={{-6.5,-6.5},{6.5,6.5}},
         rotation=0,
         origin={-45.5,74.5}), iconTransformation(extent={{-30,-98},{30,-38}})));
-  DynTherM.BoundaryConditions.thermal_distributed BC5(
+  DynTherM.BoundaryConditions.OneDimensional.thermal1D BC5(
     Nx=N_cv,
-    Ny=1,
     use_di_Q=false,
     use_in_Q=true) annotation (Placement(transformation(
         extent={{-6.5,-6.5},{6.5,6.5}},
         rotation=0,
         origin={-75.5,34.5}), iconTransformation(extent={{-30,-98},{30,-38}})));
-  DynTherM.BoundaryConditions.thermal_distributed BC4(
+  DynTherM.BoundaryConditions.OneDimensional.thermal1D BC4(
     Nx=N_cv,
-    Ny=1,
     use_di_Q=false,
     use_in_Q=true) annotation (Placement(transformation(
         extent={{-6.5,-6.5},{6.5,6.5}},
         rotation=0,
         origin={-45.5,-5.5}), iconTransformation(extent={{-30,-98},{30,-38}})));
-  DynTherM.BoundaryConditions.thermal_distributed BC3(
+  DynTherM.BoundaryConditions.OneDimensional.thermal1D BC3(
     Nx=N_cv,
-    Ny=1,
     use_di_Q=false,
     use_in_Q=true) annotation (Placement(transformation(
         extent={{-6.5,-6.5},{6.5,6.5}},
         rotation=0,
         origin={-75.5,-45.5}), iconTransformation(extent={{-30,-98},{30,-38}})));
-  DynTherM.BoundaryConditions.thermal_distributed BC2(
+  DynTherM.BoundaryConditions.OneDimensional.thermal1D BC2(
     Nx=N_cv,
-    Ny=1,
     use_di_Q=false,
     use_in_Q=true) annotation (Placement(transformation(
         extent={{-6.5,-6.5},{6.5,6.5}},

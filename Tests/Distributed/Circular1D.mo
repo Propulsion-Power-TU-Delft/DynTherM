@@ -2,15 +2,15 @@ within DynTherM.Tests.Distributed;
 model Circular1D
   package Refrigerant = Modelica.Media.Water.ConstantPropertyLiquidWater;
   //package Refrigerant = DynTherM.Media.IncompressibleTableBased.MEG(X=0.1);
-  BoundaryConditions.flow_source flow_source_distributed(
+  BoundaryConditions.ZeroDimensional.flow_source flow_source_distributed(
     redeclare package Medium = Refrigerant,
     use_in_massFlow=true,
     use_in_T=true) annotation (Placement(transformation(
         extent={{14,-14},{-14,14}},
         rotation=180,
         origin={-80,80})));
-  BoundaryConditions.pressure_sink pressureSink_distributed(redeclare package
-      Medium = Refrigerant)
+  BoundaryConditions.ZeroDimensional.pressure_sink pressureSink_distributed(
+      redeclare package Medium = Refrigerant)
     annotation (Placement(transformation(extent={{68,68},{92,92}})));
   inner Components.Environment environment(
     allowFlowReversal=false, initOpt=DynTherM.Choices.InitOpt.steadyState)
@@ -28,7 +28,7 @@ model Circular1D
     N_channels=1)
          annotation (Placement(transformation(extent={{-28,52},{28,108}})));
 
-  BoundaryConditions.thermal_distributed thermal_distributed(
+  BoundaryConditions.ThreeDimensional.thermal3D thermal_distributed(
     Nx=3,
     Ny=1,
     Q(displayUnit="W") = -3e3*ones(3, 1))
@@ -57,10 +57,10 @@ model Circular1D
     T_start_solid=323.15,
     T_start_fluid=323.15)
     annotation (Placement(transformation(extent={{20,-120},{60,-80}})));
-  BoundaryConditions.pressure_sink pressureSink_multiple(redeclare package
-      Medium = Refrigerant)
+  BoundaryConditions.ZeroDimensional.pressure_sink pressureSink_multiple(
+      redeclare package Medium = Refrigerant)
     annotation (Placement(transformation(extent={{68,-112},{92,-88}})));
-  BoundaryConditions.flow_source flow_source_multiple(
+  BoundaryConditions.ZeroDimensional.flow_source flow_source_multiple(
     redeclare package Medium = Refrigerant,
     use_in_massFlow=true,
     use_in_T=true) annotation (Placement(transformation(
@@ -71,11 +71,11 @@ model Circular1D
     annotation (Placement(transformation(extent={{-50,-50},{-70,-30}})));
   Modelica.Blocks.Sources.Constant T(k=273.15 + 50)
     annotation (Placement(transformation(extent={{-50,40},{-70,60}})));
-  BoundaryConditions.thermal thermal_1(Q(displayUnit="kW") = -3000)
+  BoundaryConditions.ZeroDimensional.thermal thermal_1(Q(displayUnit="kW") = -3000)
     annotation (Placement(transformation(extent={{-52,-66},{-34,-54}})));
-  BoundaryConditions.thermal thermal_3(Q(displayUnit="kW") = -3000)
+  BoundaryConditions.ZeroDimensional.thermal thermal_3(Q(displayUnit="kW") = -3000)
     annotation (Placement(transformation(extent={{28,-66},{46,-54}})));
-  BoundaryConditions.thermal thermal_2(Q(displayUnit="kW") = -3000)
+  BoundaryConditions.ZeroDimensional.thermal thermal_2(Q(displayUnit="kW") = -3000)
     annotation (Placement(transformation(extent={{-12,-66},{6,-54}})));
   Components.OneDimensional.CircularCV cv(
     redeclare package Medium = Refrigerant,
@@ -85,18 +85,18 @@ model Circular1D
     T_start_solid=323.15,
     T_start_fluid=323.15)
     annotation (Placement(transformation(extent={{-20,-20},{20,20}})));
-  BoundaryConditions.flow_source flow_source_single(
+  BoundaryConditions.ZeroDimensional.flow_source flow_source_single(
     redeclare package Medium = Refrigerant,
     use_in_massFlow=true,
     use_in_T=true) annotation (Placement(transformation(
         extent={{14,14},{-14,-14}},
         rotation=180,
         origin={-60,0})));
-  BoundaryConditions.pressure_sink pressureSink_single(redeclare package Medium =
-        Refrigerant)
+  BoundaryConditions.ZeroDimensional.pressure_sink pressureSink_single(
+      redeclare package Medium = Refrigerant)
     annotation (Placement(transformation(extent={{68,-12},{92,12}})));
-  BoundaryConditions.thermal thermal(Q(displayUnit="kW") = 1000*(-3*3))
-    annotation (Placement(transformation(extent={{-12,34},{6,46}})));
+  BoundaryConditions.ZeroDimensional.thermal thermal(Q(displayUnit="kW") = 1000
+      *(-3*3)) annotation (Placement(transformation(extent={{-12,34},{6,46}})));
 equation
 
   connect(flow_source_distributed.outlet, channel1D.inlet)

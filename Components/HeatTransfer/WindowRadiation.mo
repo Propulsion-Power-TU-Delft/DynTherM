@@ -19,11 +19,11 @@ model WindowRadiation
   Irradiance E_reflected "Irradiance reflected by the window";
   Irradiance E_absorbed "Irradiance absorbed by the window";
 
-  CustomInterfaces.IrradiancePort outlet
+  CustomInterfaces.ZeroDimensional.IrradiancePort outlet
     annotation (Placement(transformation(extent={{-14,-28},{14,0}})));
-  CustomInterfaces.IrradiancePort inlet_transmitted annotation (Placement(
-        transformation(extent={{-48,20},{-20,48}}), iconTransformation(extent={{
-            -48,20},{-20,48}})));
+  CustomInterfaces.ZeroDimensional.IrradiancePort inlet_transmitted annotation (
+     Placement(transformation(extent={{-48,20},{-20,48}}), iconTransformation(
+          extent={{-48,20},{-20,48}})));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a inlet_absorbed
     annotation (Placement(transformation(extent={{20,20},{48,48}}),
         iconTransformation(extent={{20,20},{48,48}})));

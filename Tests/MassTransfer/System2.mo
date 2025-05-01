@@ -15,12 +15,11 @@ model System2
     V=186,
     noInitialPressure=false)
     annotation (Placement(transformation(extent={{-54,-44},{-26,-16}})));
-  BoundaryConditions.flow_source ECSFlow(
+  BoundaryConditions.ZeroDimensional.flow_source ECSFlow(
     use_in_massFlow=true,
     use_in_T=true,
     use_di_X=true,
-    X_di={0.001,1 - 0.001})
-                   annotation (Placement(transformation(
+    X_di={0.001,1 - 0.001}) annotation (Placement(transformation(
         extent={{16,16},{-16,-16}},
         rotation=180,
         origin={-80,-30})));
@@ -29,7 +28,7 @@ model System2
         extent={{-14,-14},{14,14}},
         rotation=0,
         origin={40,-30})));
-  BoundaryConditions.pressure_sink pressureSink
+  BoundaryConditions.ZeroDimensional.pressure_sink pressureSink
     annotation (Placement(transformation(extent={{66,-44},{94,-16}})));
   Modelica.Blocks.Sources.Constant m_input(k=1)
     annotation (Placement(transformation(extent={{-120,10},{-100,30}})));
@@ -49,11 +48,11 @@ model System2
     redeclare DynTherM.Utilities.FanCharacteristics.Flow.linear Flow,
     redeclare DynTherM.Utilities.FanCharacteristics.Efficiency.fixed Efficiency)
     annotation (Placement(transformation(extent={{-16,-46},{16,-14}})));
-  BoundaryConditions.mechanical mechanical(
+  BoundaryConditions.ZeroDimensional.mechanical mechanical(
     omega(displayUnit="rpm"),
     use_omega=false,
-    use_in_omega=true)
-    annotation (Placement(transformation(extent={{-12,-8},{12,8}},
+    use_in_omega=true) annotation (Placement(transformation(
+        extent={{-12,-8},{12,8}},
         rotation=-90,
         origin={0,22})));
   Modelica.Blocks.Sources.Ramp valveOpening(

@@ -7,7 +7,7 @@ model CircularPipeBend "Simple test of circular pipe bend"
     allowFlowReversal=false,
     initOpt=DynTherM.Choices.InitOpt.fixedState)
     annotation (Placement(transformation(extent={{60,60},{100,100}})));
-  BoundaryConditions.flow_source source_Rr_1(
+  BoundaryConditions.ZeroDimensional.flow_source source_Rr_1(
     redeclare package Medium = Refrigerant,
     P_nom=200000,
     T_nom=298.15,
@@ -18,8 +18,8 @@ model CircularPipeBend "Simple test of circular pipe bend"
         extent={{14,14},{-14,-14}},
         rotation=180,
         origin={-60,-40})));
-  BoundaryConditions.pressure_sink sink_Rr1(redeclare package Medium =
-        Refrigerant)
+  BoundaryConditions.ZeroDimensional.pressure_sink sink_Rr1(redeclare package
+      Medium = Refrigerant)
     annotation (Placement(transformation(extent={{68,-52},{92,-28}})));
   Components.MassTransfer.CircularPipeBend bend_Rr1(
     redeclare package Medium = Refrigerant,
@@ -32,7 +32,7 @@ model CircularPipeBend "Simple test of circular pipe bend"
     Roughness(displayUnit="m") = 0.2e-06)
     annotation (Placement(transformation(extent={{-8,-64},{40,-16}})));
 
-  BoundaryConditions.flow_source source_Rr5(
+  BoundaryConditions.ZeroDimensional.flow_source source_Rr5(
     redeclare package Medium = Refrigerant,
     P_nom=200000,
     T_nom=298.15,
@@ -43,8 +43,8 @@ model CircularPipeBend "Simple test of circular pipe bend"
         extent={{14,14},{-14,-14}},
         rotation=180,
         origin={-60,0})));
-  BoundaryConditions.pressure_sink sink_Rr5(redeclare package Medium =
-        Refrigerant)
+  BoundaryConditions.ZeroDimensional.pressure_sink sink_Rr5(redeclare package
+      Medium = Refrigerant)
     annotation (Placement(transformation(extent={{68,-12},{92,12}})));
   Components.MassTransfer.CircularPipeBend bend_Rr5(
     redeclare package Medium = Refrigerant,
@@ -56,7 +56,7 @@ model CircularPipeBend "Simple test of circular pipe bend"
     R_bend(displayUnit="mm") = 0.0635,
     Roughness(displayUnit="m") = 0.2e-06)
     annotation (Placement(transformation(extent={{-8,-24},{40,24}})));
-  BoundaryConditions.flow_source source_Rr20(
+  BoundaryConditions.ZeroDimensional.flow_source source_Rr20(
     redeclare package Medium = Refrigerant,
     P_nom=200000,
     T_nom=298.15,
@@ -67,8 +67,8 @@ model CircularPipeBend "Simple test of circular pipe bend"
         extent={{14,14},{-14,-14}},
         rotation=180,
         origin={-60,40})));
-  BoundaryConditions.pressure_sink sink_Rr20(redeclare package Medium =
-        Refrigerant)
+  BoundaryConditions.ZeroDimensional.pressure_sink sink_Rr20(redeclare package
+      Medium = Refrigerant)
     annotation (Placement(transformation(extent={{68,28},{92,52}})));
   Components.MassTransfer.CircularPipeBend bend_Rr20(
     redeclare package Medium = Refrigerant,

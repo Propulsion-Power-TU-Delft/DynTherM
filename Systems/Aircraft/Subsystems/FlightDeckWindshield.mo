@@ -40,10 +40,9 @@ model FlightDeckWindshield
       Placement(transformation(extent={{30,120},{50,140}}),
                                                           iconTransformation(
           extent={{10,40},{30,60}})));
-  CustomInterfaces.IrradiancePort irradianceExt annotation (Placement(
-        transformation(extent={{-36,126},{-26,136}}),
-                                                    iconTransformation(extent={{
-            -30,40},{-10,60}})));
+  CustomInterfaces.ZeroDimensional.IrradiancePort irradianceExt annotation (
+      Placement(transformation(extent={{-36,126},{-26,136}}),
+        iconTransformation(extent={{-30,40},{-10,60}})));
   CustomInterfaces.Adaptors.irradianceToHeatFlow irradianceToHeatFlow(
     A=A_windshield)
     annotation (Placement(transformation(extent={{-92,-30},{-28,-94}})));

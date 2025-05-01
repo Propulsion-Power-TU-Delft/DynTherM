@@ -3,9 +3,12 @@ CellProperties
 Aluminium
 AluminiumFoil
 Aluminium7075T6
+AluminiumCable
 AluminiumColdPlate
 CarbonPhenolic
 CarbonEpoxyLamina
+CompressionPadFoam
+CopperCable
 Corkboard
 GlassPhenolic
 GlassFibre
@@ -23,6 +26,9 @@ NCA18650
 PolestarCellInPlane
 PolestarCellCrossPlane
 PolyurethaneFoam
-CompressionPadFoam
+PTFECable
+PFACable
+PICable
+XLPECable
 ThermalResin
 Paints

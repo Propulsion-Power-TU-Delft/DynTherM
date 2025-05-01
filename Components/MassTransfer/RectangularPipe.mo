@@ -69,7 +69,7 @@ model RectangularPipe "Model of pipe with rectangular cross-section"
   Medium.ThermodynamicState state_inlet "Inlet state";
   Medium.ThermodynamicState state_outlet "Outlet state";
 
-  CustomInterfaces.FluidPort_A inlet(
+  CustomInterfaces.ZeroDimensional.FluidPort_A inlet(
     redeclare package Medium = Medium,
     m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0, start=
           m_flow_start),
@@ -78,7 +78,7 @@ model RectangularPipe "Model of pipe with rectangular cross-section"
     Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{-120,
             -20},{-80,20}}, rotation=0), iconTransformation(extent={{-110,-10},
             {-90,10}})));
-  CustomInterfaces.FluidPort_B outlet(
+  CustomInterfaces.ZeroDimensional.FluidPort_B outlet(
     redeclare package Medium = Medium,
     m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0, start=
           -m_flow_start),

@@ -48,25 +48,25 @@ model ColdPlatePolestar_EffectOfSidewaysHeatTransfer
     N_cv=N_cv,
     Nt=3,
     N_channels=1)
-    annotation (Placement(transformation(extent={{-10,6},{166,132}})));
-    BoundaryConditions.flow_source          flow_source1(
+    annotation (Placement(transformation(extent={{22,20},{160,118}})));
+  BoundaryConditions.ZeroDimensional.flow_source flow_source1(
     redeclare package Medium = Coolant,
     T_nom=T_fluid,
     massFlow_nom=m_flow,
     allowFlowReversal=environment.allowFlowReversal,
     use_in_massFlow=false,
     use_in_T=false)
-      annotation (Placement(transformation(extent={{-8,90},{10,72}})));
-    BoundaryConditions.pressure_sink          pressure_sink1(
+    annotation (Placement(transformation(extent={{-8,88},{8,72}})));
+  BoundaryConditions.ZeroDimensional.pressure_sink pressure_sink1(
     redeclare package Medium = Coolant,
     allowFlowReversal=environment.allowFlowReversal,
     use_ambient=false)
-      annotation (Placement(transformation(extent={{6,52},{-6,64}})));
-  CustomInterfaces.Adaptors.heatFlowMultiplier heatFlowMultiplierColdPlate(Nx=N_cv,
-      Ny=1) annotation (Placement(transformation(
-        extent={{-13,4},{13,-4}},
+    annotation (Placement(transformation(extent={{6,54},{-6,66}})));
+  CustomInterfaces.Adaptors.heatFlowMultiplier1D heatFlowMultiplierColdPlate(
+    Nx=N_cv) annotation (Placement(transformation(
+        extent={{-14,5},{14,-5}},
         rotation=180,
-        origin={71,24})));
+        origin={90,37})));
   Components.TwoDimensional.ColdPlateCircularChannel1D Channel5(
     redeclare package Medium = Coolant,
     allowFlowReversal=true,
@@ -205,43 +205,42 @@ model ColdPlatePolestar_EffectOfSidewaysHeatTransfer
         extent={{-21.5,-22.5},{21.5,22.5}},
         rotation=180,
         origin={-59.5,-81.5})));
-    BoundaryConditions.flow_source          flow_source2(
+  BoundaryConditions.ZeroDimensional.flow_source flow_source2(
     redeclare package Medium = Coolant,
     T_nom=T_fluid,
     massFlow_nom=m_flow,
     allowFlowReversal=environment.allowFlowReversal,
     use_in_massFlow=false,
     use_in_T=false)
-      annotation (Placement(transformation(extent={{-138,-38},{-120,-56}})));
-    BoundaryConditions.pressure_sink          pressure_sink2(
+    annotation (Placement(transformation(extent={{-138,-38},{-120,-56}})));
+  BoundaryConditions.ZeroDimensional.pressure_sink pressure_sink2(
     redeclare package Medium = Coolant,
     allowFlowReversal=environment.allowFlowReversal,
     use_ambient=false)
-      annotation (Placement(transformation(extent={{-98,-88},{-110,-76}})));
-  CustomInterfaces.Adaptors.heatFlowMultiplier heatFlowMultiplierChannels(Nx=N_cv,
-      Ny=1) annotation (Placement(transformation(
+    annotation (Placement(transformation(extent={{-98,-88},{-110,-76}})));
+  CustomInterfaces.Adaptors.heatFlowMultiplier1D heatFlowMultiplierChannels(
+    Nx=N_cv) annotation (Placement(transformation(
         extent={{-13,4},{13,-4}},
         rotation=270,
-        origin={51,-22})));
-  BoundaryConditions.thermal FixedTemperature(
+        origin={51,-20})));
+  BoundaryConditions.ZeroDimensional.thermal FixedTemperature(
     T=313.15,
     use_Q=false,
     use_T=true)
-    annotation (Placement(transformation(extent={{108,-64},{128,48}})));
+    annotation (Placement(transformation(extent={{108,-62},{128,50}})));
   Modelica.Thermal.HeatTransfer.Sensors.HeatFlowSensor heatSensorChannels
-    annotation (Placement(transformation(extent={{70,-32},{90,-12}})));
+    annotation (Placement(transformation(extent={{80,-30},{100,-10}})));
   Modelica.Thermal.HeatTransfer.Sensors.HeatFlowSensor heatSensorColdPlate
-    annotation (Placement(transformation(extent={{86,-2},{106,18}})));
+    annotation (Placement(transformation(extent={{90,-2},{110,18}})));
 equation
-  connect(flow_source1.outlet,coldPlatePolestar. inlet) annotation (Line(points={{10,81},
-          {10,80},{14,80},{14,74.04},{21.4286,74.04}},
+  connect(flow_source1.outlet,coldPlatePolestar. inlet) annotation (Line(points={{8,80},{
+          20,80},{20,72.92},{46.6429,72.92}},
         color={0,0,0}));
   connect(pressure_sink1.inlet,coldPlatePolestar. outlet) annotation (Line(
-        points={{6,58},{12,58},{12,65.22},{21.4286,65.22}},
+        points={{6,60},{20,60},{20,66.06},{46.6429,66.06}},
         color={0,0,0}));
   connect(heatFlowMultiplierColdPlate.distributed, coldPlatePolestar.Bottom)
-    annotation (Line(points={{71,26.4},{71,48},{76,48},{76,47.58},{76.7429,
-          47.58}},
+    annotation (Line(points={{90,40},{90.0143,40},{90.0143,52.34}},
         color={191,0,0}));
   connect(Channel1.outlet, Channel2.inlet) annotation (Line(points={{-70,-47.5},
           {-36,-47.5},{-36,-15.5},{-44,-15.5}}, color={0,0,0}));
@@ -259,31 +258,31 @@ equation
   connect(Channel6.outlet, pressure_sink2.inlet)
     annotation (Line(points={{-81,-81.5},{-82,-82},{-98,-82}}, color={0,0,0}));
   connect(Channel6.TopSurface, heatFlowMultiplierChannels.distributed)
-    annotation (Line(points={{-69.82,-92.075},{-69.82,-96},{26,-96},{26,-22},{48.6,
-          -22}},      color={102,44,145}));
+    annotation (Line(points={{-69.82,-92.075},{-69.82,-96},{26,-96},{26,-20},{48.6,
+          -20}},      color={102,44,145}));
   connect(Channel2.TopSurface, heatFlowMultiplierChannels.distributed)
     annotation (Line(points={{-75.82,-26.075},{-76,-26.075},{-76,-32},{26,-32},{
-          26,-22},{48.6,-22}}, color={102,44,145}));
+          26,-20},{48.6,-20}}, color={102,44,145}));
   connect(Channel3.TopSurface, heatFlowMultiplierChannels.distributed)
-    annotation (Line(points={{-81.18,7.925},{26,7.925},{26,-22},{48.6,-22}},
+    annotation (Line(points={{-81.18,7.925},{26,7.925},{26,-20},{48.6,-20}},
         color={102,44,145}));
   connect(Channel4.TopSurface, heatFlowMultiplierChannels.distributed)
-    annotation (Line(points={{-71.82,39.925},{-66,39.925},{-66,32},{26,32},{26,-22},
-          {48.6,-22}}, color={102,44,145}));
+    annotation (Line(points={{-71.82,39.925},{-66,39.925},{-66,32},{26,32},{26,-20},
+          {48.6,-20}}, color={102,44,145}));
   connect(Channel5.TopSurface, heatFlowMultiplierChannels.distributed)
-    annotation (Line(points={{-81.18,73.925},{-16,73.925},{-16,32},{26,32},{26,-22},
-          {48.6,-22}}, color={102,44,145}));
+    annotation (Line(points={{-81.18,73.925},{-16,73.925},{-16,32},{26,32},{26,-20},
+          {48.6,-20}}, color={102,44,145}));
   connect(Channel1.TopSurface, heatFlowMultiplierChannels.distributed)
-    annotation (Line(points={{-81.18,-58.075},{26,-58.075},{26,-22},{48.6,-22}},
+    annotation (Line(points={{-81.18,-58.075},{26,-58.075},{26,-20},{48.6,-20}},
         color={102,44,145}));
   connect(heatFlowMultiplierChannels.single, heatSensorChannels.port_a)
-    annotation (Line(points={{53.4,-22},{70,-22}}, color={191,0,0}));
+    annotation (Line(points={{53.4,-20},{80,-20}}, color={191,0,0}));
   connect(heatSensorChannels.port_b, FixedTemperature.thermal) annotation (Line(
-        points={{90,-22},{121.333,-22},{121.333,-8}}, color={191,0,0}));
+        points={{100,-20},{121.333,-20},{121.333,-6}},color={191,0,0}));
   connect(heatFlowMultiplierColdPlate.single, heatSensorColdPlate.port_a)
-    annotation (Line(points={{71,21.6},{71,8},{86,8}}, color={191,0,0}));
+    annotation (Line(points={{90,34},{90,8}},          color={191,0,0}));
   connect(heatSensorColdPlate.port_b, FixedTemperature.thermal) annotation (
-      Line(points={{106,8},{122,8},{122,-8},{121.333,-8}}, color={191,0,0}));
+      Line(points={{110,8},{122,8},{122,-6},{121.333,-6}}, color={191,0,0}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-140,-100},
             {140,100}}), graphics={
         Ellipse(lineColor = {75,138,73},

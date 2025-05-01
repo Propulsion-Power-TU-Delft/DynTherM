@@ -78,11 +78,11 @@ model TankControlled
     y=totalHeatToLiquidVapour.y/446592) annotation (Placement(transformation(extent={{-50,-100},{-30,-80}})));
   Modelica.Blocks.Sources.RealExpression theoreticalBoillOffFactor(
     y=(theoreticalBoillOff.y + 1e-9)/(boilOffHydrogen.y + 1e-9)) annotation (Placement(transformation(extent={{12,-100},{32,-80}})));
-  CustomInterfaces.ExtFluidPort_B extFluidPort_B(redeclare package Medium =
-        Medium)
+  CustomInterfaces.ZeroDimensional.ExtFluidPort_B extFluidPort_B(redeclare
+      package Medium = Medium)
     annotation (Placement(transformation(extent={{-130,-70},{-110,-50}})));
-  CustomInterfaces.ExtFluidPort_B extFluidPort_B1(redeclare package Medium =
-        Medium)
+  CustomInterfaces.ZeroDimensional.ExtFluidPort_B extFluidPort_B1(redeclare
+      package Medium = Medium)
     annotation (Placement(transformation(extent={{150,50},{170,70}})));
   Modelica.Blocks.Interfaces.RealOutput Pressure_LH2 annotation (Placement(
         transformation(extent={{-116,-42},{-140,-18}}), iconTransformation(
@@ -90,11 +90,12 @@ model TankControlled
   Modelica.Blocks.Interfaces.RealOutput Pressure_VH2 annotation (Placement(
         transformation(extent={{156,68},{180,92}}),iconTransformation(extent={{-116,8},
             {-140,32}})));
-  BoundaryConditions.flow_source_ext VentingMassFlow(
+  BoundaryConditions.ZeroDimensional.flow_source_ext VentingMassFlow(
     redeclare package Medium = DynTherM.Media.ExtMedia.CoolProp.Hydrogen,
-    T_nom(displayUnit="K") = 20.268,   use_in_massFlow=true)
-    "Imposed mass flow rate for venting"
-    annotation (Placement(transformation(extent={{12,-12},{-12,12}},
+    T_nom(displayUnit="K") = 20.268,
+    use_in_massFlow=true) "Imposed mass flow rate for venting" annotation (
+      Placement(transformation(
+        extent={{12,-12},{-12,12}},
         rotation=-90,
         origin={80,0})));
   Subsystems.TankPressureController pressure_Controller(P_vent=P_vent, f_vent_max=f_vent_max)

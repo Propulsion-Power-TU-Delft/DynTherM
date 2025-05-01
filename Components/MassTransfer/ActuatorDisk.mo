@@ -32,12 +32,12 @@ model ActuatorDisk "Simple actuator disk model"
   Density rho_amb "Ambient density";
   SpecificEnthalpy h_amb "Ambient enthalpy";
 
-  CustomInterfaces.FluidPort_B outlet(
+  CustomInterfaces.ZeroDimensional.FluidPort_B outlet(
     redeclare package Medium = Medium,
     P(start=P_start),
     h_outflow(start=Medium.specificEnthalpy(state_start)),
-    Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{80,-20},
-            {120,20}},      rotation=0), iconTransformation(extent={{90,-10},{
+    Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{80,
+            -20},{120,20}}, rotation=0), iconTransformation(extent={{90,-10},{
             110,10}})));
 
 equation

@@ -1,11 +1,4 @@
-mechanical
-thermal
-thermal_flux
-radiation
-thermal_distributed
-thermal_flux_distributed
-flow_source
-flow_source_distributed
-pressure_sink
-pressure_sink_distributed
-flow_source_ext
+ZeroDimensional
+OneDimensional
+TwoDimensional
+ThreeDimensional

@@ -6,13 +6,13 @@ model EnclosedAirSpace
     l=0.23,
     delta=1.553343034275)
     annotation (Placement(transformation(extent={{-36,-36},{36,36}})));
-  BoundaryConditions.thermal int(
+  BoundaryConditions.ZeroDimensional.thermal int(
     T=253.15,
     use_Q=false,
     use_T=true,
     use_in_T=false)
     annotation (Placement(transformation(extent={{-20,50},{10,70}})));
-  BoundaryConditions.thermal int1(
+  BoundaryConditions.ZeroDimensional.thermal int1(
     T=293.15,
     use_Q=false,
     use_T=true,

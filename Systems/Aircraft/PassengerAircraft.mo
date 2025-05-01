@@ -52,9 +52,9 @@ model PassengerAircraft "Model of a passenger aircraft"
     "Target ratio among the recirculated airflow and the total airflow";
 
   // Geometry
-  parameter Length R_fuselage "External radius of the fuselage" annotation (Dialog(tab="Geometry"));
-  parameter Length R_cockpit "External radius of the cockpit" annotation (Dialog(tab="Geometry"));
-  parameter Length L_fuselage "Length of the fuselage" annotation (Dialog(tab="Geometry"));
+  parameter Length R_cabin "External radius of the fuselage in the cabin section" annotation (Dialog(tab="Geometry"));
+  parameter Length R_cockpit "External radius of the fuselage in th cockpit section" annotation (Dialog(tab="Geometry"));
+  parameter Length L_cabin "Length of the cabin" annotation (Dialog(tab="Geometry"));
   parameter Length L_cockpit "Length of the cockpit" annotation (Dialog(tab="Geometry"));
   parameter Length L_cargo "Length of cargo bay: fwd + aft" annotation (Dialog(tab="Geometry"));
   parameter Length L_EEbay "Length of electronics bay" annotation (Dialog(tab="Geometry"));
@@ -186,18 +186,18 @@ model PassengerAircraft "Model of a passenger aircraft"
         extent={{14,14},{-14,-14}},
         rotation=0,
         origin={-106,-98})));
-  BoundaryConditions.mechanical mechanical(
+  BoundaryConditions.ZeroDimensional.mechanical mechanical(
     omega(displayUnit="rpm"),
     use_omega=false,
-    use_in_omega=true)
-    annotation (Placement(transformation(extent={{-9,-6},{9,6}},
+    use_in_omega=true) annotation (Placement(transformation(
+        extent={{-9,-6},{9,6}},
         rotation=180,
         origin={-103,-120})));
   Components.MassTransfer.ValveLin outflowValve(Kv=Kv, allowFlowReversal=
         allowFlowReversal)
     annotation (Placement(transformation(extent={{50,-70},{70,-90}})));
-  BoundaryConditions.pressure_sink pressureSink(allowFlowReversal=
-        allowFlowReversal)
+  BoundaryConditions.ZeroDimensional.pressure_sink pressureSink(
+      allowFlowReversal=allowFlowReversal)
     annotation (Placement(transformation(extent={{82,-90},{102,-70}})));
   Modelica.Blocks.Interfaces.RealInput outflowValveOpening annotation (
       Placement(transformation(
@@ -221,7 +221,7 @@ model PassengerAircraft "Model of a passenger aircraft"
         extent={{12,10},{-12,-10}},
         rotation=0,
         origin={-70,-98})));
-  BoundaryConditions.flow_source packFlow(
+  BoundaryConditions.ZeroDimensional.flow_source packFlow(
     X_nom=X_ECS,
     allowFlowReversal=allowFlowReversal,
     use_in_massFlow=true,
@@ -250,7 +250,7 @@ model PassengerAircraft "Model of a passenger aircraft"
     redeclare model HTC_int=HTC_int_lower,
     redeclare model HTC_ext=HTC_ext_lower,
     Q_int=0,
-    R_ext=R_fuselage,
+    R_ext=R_cabin,
     L_cargo=L_cargo,
     V_cargo=V_cargo,
     t_cargo=t_lower,
@@ -355,7 +355,7 @@ model PassengerAircraft "Model of a passenger aircraft"
         extent={{10,-10},{-10,10}},
         rotation=90,
         origin={90,-64})));
-  BoundaryConditions.flow_source cockpitTrimFlow(
+  BoundaryConditions.ZeroDimensional.flow_source cockpitTrimFlow(
     X_nom=X_ECS,
     allowFlowReversal=allowFlowReversal,
     use_in_massFlow=true,
@@ -387,7 +387,7 @@ model PassengerAircraft "Model of a passenger aircraft"
     redeclare model HTC_int = HTC_int_lower,
     redeclare model HTC_ext = HTC_ext_lower,
     Q_int=Q_avionics,
-    R_ext=R_fuselage,
+    R_ext=R_cabin,
     L_cargo=L_EEbay,
     V_cargo=V_EEbay,
     t_cargo=t_lower,
@@ -408,7 +408,7 @@ model PassengerAircraft "Model of a passenger aircraft"
     initOpt=initOpt,                                  Tstart=
         Tstart_floor, A=A_floor_cockpit)
     annotation (Placement(transformation(extent={{-116,-4},{-82,18}})));
-  BoundaryConditions.flow_source cabinTrimFlow(
+  BoundaryConditions.ZeroDimensional.flow_source cabinTrimFlow(
     X_nom=X_ECS,
     allowFlowReversal=allowFlowReversal,
     use_in_massFlow=true,
@@ -454,8 +454,8 @@ model PassengerAircraft "Model of a passenger aircraft"
     redeclare model HTC_ext = HTC_ext_upper,
     N_occupants={N_pax,N_crew,0},
     Q_int=Q_utilities,
-    L_fuselage=L_fuselage,
-    R_ext=R_fuselage,
+    L_cabin=L_cabin,
+    R_ext=R_cabin,
     V_cabin=V_cabin,
     c_cabin=c_cabin,
     m_cabin=m_cabin,
@@ -522,11 +522,11 @@ equation
   phi_mix = Medium.relativeHumidity(mixingManifold.state);
 
   // Geometry
-  A_floor = cabin.W_fl*L_fuselage;
+  A_floor = cabin.W_fl*L_cabin;
   A_floor_cargo = cabin.W_fl*L_cargo;
   A_floor_cockpit = cockpit.W_fl*L_EEbay;
-  A_wall = alpha/2*R_fuselage^2 + cabin.W_fl*(R_fuselage - H_fl)/2;
-  alpha = atan((R_fuselage - H_fl)/R_fuselage);
+  A_wall = alpha/2*R_cabin^2 + cabin.W_fl*(R_cabin - H_fl)/2;
+  alpha = atan((R_cabin - H_fl)/R_cabin);
 
   connect(outflowValve.outlet, pressureSink.inlet)
     annotation (Line(points={{70,-80},{82,-80}}, color={0,0,0}));

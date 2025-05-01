@@ -1,7 +1,7 @@
 within DynTherM.Tests.HeatTransfer;
 model ConductionWallSteady
   "Validation test case of steady-state conduction (wall). Reference: es.8, pag.92 fisica tecnica"
-  BoundaryConditions.thermal cold_side(
+  BoundaryConditions.ZeroDimensional.thermal cold_side(
     T=273.15,
     use_Q=false,
     use_T=true,
@@ -19,7 +19,7 @@ model ConductionWallSteady
     A=0.4,
     initOpt=DynTherM.Choices.InitOpt.steadyState)
     annotation (Placement(transformation(extent={{-20,-6},{20,-44}})));
-  BoundaryConditions.thermal hot_side(
+  BoundaryConditions.ZeroDimensional.thermal hot_side(
     T=373.15,
     use_Q=false,
     use_T=true,

@@ -26,7 +26,7 @@ model WallRadiation "Model of incident and emitted thermal radiation for a plana
 
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a inlet
     annotation (Placement(transformation(extent={{-14,20},{14,48}})));
-  CustomInterfaces.IrradiancePort outlet
+  CustomInterfaces.ZeroDimensional.IrradiancePort outlet
     annotation (Placement(transformation(extent={{-14,-28},{14,0}})));
 
 equation

@@ -21,7 +21,7 @@ model PassengerCabin "Upper section of the fuselage: cabin section"
 
   parameter Real N_occupants[3] "Number of: passengers, cabin crew, pilots inside the cabin";
   input HeatFlowRate Q_int "Internal heat load" annotation (Dialog(enable=true));
-  parameter Length L_fuselage "Length of the fuselage cylindrical section";
+  parameter Length L_cabin "Length of the fuselage cylindrical section";
   parameter Length R_ext "External radius of the fuselage";
   parameter Volume V_cabin "Passenger cabin internal volume";
   parameter SpecificHeatCapacity c_cabin "Specific heat capacity of cabin interior";
@@ -73,12 +73,12 @@ model PassengerCabin "Upper section of the fuselage: cabin section"
     noInitialTemperature=noInitialTemperature,
     fixed_Q=false)
     annotation (Placement(transformation(extent={{20,-80},{-20,-40}})));
-  CustomInterfaces.FluidPort_A cabinInflow annotation (Placement(transformation(
-          extent={{94,-86},{106,-74}}), iconTransformation(extent={{-10,90},{10,
-            110}})));
-  CustomInterfaces.FluidPort_B cabinToCargo annotation (Placement(
-        transformation(extent={{-106,-86},{-94,-74}}), iconTransformation(
-          extent={{-10,-110},{10,-90}})));
+  CustomInterfaces.ZeroDimensional.FluidPort_A cabinInflow annotation (
+      Placement(transformation(extent={{94,-86},{106,-74}}), iconTransformation(
+          extent={{-10,90},{10,110}})));
+  CustomInterfaces.ZeroDimensional.FluidPort_B cabinToCargo annotation (
+      Placement(transformation(extent={{-106,-86},{-94,-74}}),
+        iconTransformation(extent={{-10,-110},{10,-90}})));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a cabinToFloor annotation (
       Placement(transformation(extent={{-10,-110},{10,-90}}),
         iconTransformation(extent={{-110,-20},{-90,0}})));
@@ -94,7 +94,7 @@ model PassengerCabin "Upper section of the fuselage: cabin section"
     redeclare model HTC_ext = HTC_ext,
     initOpt=initOpt,
     coeff=1/8,
-    L_fuselage=L_fuselage,
+    L_fuselage=L_cabin,
     R_ext=R_ext,
     t_fuselage=t_cabin,
     rho_g=rho_g,
@@ -113,7 +113,7 @@ model PassengerCabin "Upper section of the fuselage: cabin section"
     redeclare model HTC_ext = HTC_ext,
     initOpt=initOpt,
     coeff=1/8,
-    L_fuselage=L_fuselage,
+    L_fuselage=L_cabin,
     R_ext=R_ext,
     t_fuselage=t_cabin,
     rho_g=rho_g,
@@ -131,7 +131,7 @@ model PassengerCabin "Upper section of the fuselage: cabin section"
     redeclare model HTC_ext = HTC_ext,
     initOpt=initOpt,
     coeff=1/8,
-    L_fuselage=L_fuselage,
+    L_fuselage=L_cabin,
     R_ext=R_ext,
     t_fuselage=t_cabin,
     rho_g=rho_g,
@@ -149,7 +149,7 @@ model PassengerCabin "Upper section of the fuselage: cabin section"
     redeclare model HTC_ext = HTC_ext,
     initOpt=initOpt,
     coeff=1/8,
-    L_fuselage=L_fuselage,
+    L_fuselage=L_cabin,
     R_ext=R_ext,
     t_fuselage=t_cabin,
     rho_g=rho_g,
@@ -172,7 +172,7 @@ model PassengerCabin "Upper section of the fuselage: cabin section"
     redeclare model HTC_ext = HTC_ext,
     initOpt=initOpt,
     coeff=1/8,
-    L_fuselage=L_fuselage,
+    L_fuselage=L_cabin,
     R_ext=R_ext,
     t_fuselage=t_cabin,
     rho_g=rho_g,

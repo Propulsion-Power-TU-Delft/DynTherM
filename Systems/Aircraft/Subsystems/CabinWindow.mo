@@ -48,9 +48,9 @@ model CabinWindow
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b heatExt annotation (
       Placement(transformation(extent={{30,78},{50,98}}), iconTransformation(
           extent={{10,40},{30,60}})));
-  CustomInterfaces.IrradiancePort irradianceExt annotation (Placement(
-        transformation(extent={{-36,84},{-26,94}}), iconTransformation(extent={{
-            -30,40},{-10,60}})));
+  CustomInterfaces.ZeroDimensional.IrradiancePort irradianceExt annotation (
+      Placement(transformation(extent={{-36,84},{-26,94}}), iconTransformation(
+          extent={{-30,40},{-10,60}})));
   CustomInterfaces.Adaptors.irradianceToHeatFlow irradianceToHeatFlow(A=
         A_window)
     annotation (Placement(transformation(extent={{-82,-16},{-18,-80}})));

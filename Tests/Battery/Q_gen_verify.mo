@@ -5,19 +5,18 @@ model Q_gen_verify
     C_nom=66.4*3600,
     eta=0.98,
     SoC_start=0.1)
-    annotation (Placement(transformation(extent={{0,-38},{72,42}})));
-  Modelica.Electrical.Analog.Sources.SignalCurrent signalCurrent1
-                                                                 annotation (
+    annotation (Placement(transformation(extent={{-28,-36},{60,52}})));
+  Modelica.Electrical.Analog.Sources.SignalCurrent signalCurrent annotation (
       Placement(transformation(
-        extent={{-8,-8},{8,8}},
+        extent={{-10,-10},{10,10}},
         rotation=90,
-        origin={-28,-16})));
-  Modelica.Blocks.Sources.TimeTable I_charging1(table=[0,200; 200,200; 200,200;
+        origin={-40,0})));
+  Modelica.Blocks.Sources.TimeTable I_charging(table=[0,200; 200,200; 200,200;
         500,200; 501,120; 700,120; 701,100; 900,100; 901,120; 1000,120; 1001,70;
         1200,70])
-             annotation (Placement(transformation(extent={{-80,-26},{-64,-10}})));
-  Modelica.Electrical.Analog.Basic.Ground ground1
-    annotation (Placement(transformation(extent={{-16,-50},{0,-34}})));
+    annotation (Placement(transformation(extent={{-100,-10},{-80,10}})));
+  Modelica.Electrical.Analog.Basic.Ground ground
+    annotation (Placement(transformation(extent={{-40,-80},{-20,-60}})));
   Modelica.Blocks.Sources.TimeTable Ref_Qtotal(table=[0,31.2031163; 0.6,
         31.61323244; 0.9,32.0191848; 1.2,32.42101675; 1.5,32.8187712; 1.8,
         33.21249064; 2.1,33.60221713; 2.4,33.98799229; 2.7,34.36985733; 3,
@@ -1141,7 +1140,7 @@ model Q_gen_verify
         7.960955133; 1198.8,7.962880381; 1199.1,7.964808472; 1199.4,7.966739396;
         1199.7,7.968673143; 1200,7.970609705])
     "Polestar Master thesis data for reference"
-    annotation (Placement(transformation(extent={{-84,-80},{-68,-64}})));
+    annotation (Placement(transformation(extent={{30,70},{50,90}})));
   Modelica.Blocks.Sources.TimeTable T_avg(table=[0,298.15; 31.13772455,
         298.9204467; 75.4491018,300.3205425; 131.7365269,302.0707145;
         196.4071856,303.7514989; 238.3233533,304.8020763; 288.6227545,
@@ -1152,7 +1151,7 @@ model Q_gen_verify
         311.8257076; 919.760479,311.8992097; 976.0479042,312.1121146;
         1028.742515,312.115183; 1081.437126,311.7688725; 1142.51497,311.5628017;
         1197.60479,311.3563823])
-    annotation (Placement(transformation(extent={{-48,38},{-32,54}})));
+    annotation (Placement(transformation(extent={{-80,28},{-60,48}})));
   Modelica.Blocks.Sources.TimeTable Ref_Qrev(table=[0,49.07543039; 0.6,
         49.46865317; 0.9,49.85750592; 1.2,50.24203317; 1.5,50.62227902; 1.8,
         50.99828712; 2.1,51.37010069; 2.4,51.73776252; 2.7,52.10131497; 3,
@@ -2274,18 +2273,19 @@ model Q_gen_verify
         8.130537605; 1198.2,8.129807438; 1198.5,8.12907595; 1198.8,8.12834314;
         1199.1,8.127609005; 1199.4,8.126873542; 1199.7,8.126136748; 1200,
         8.125398621]) "Polestar Master thesis data for reference"
-    annotation (Placement(transformation(extent={{-44,-80},{-28,-64}})));
+    annotation (Placement(transformation(extent={{60,70},{80,90}})));
 equation
-  connect(signalCurrent1.p, electrical.n) annotation (Line(points={{-28,-24},{
-          -28,-28},{-8,-28},{-8,-23.6667},{11.1,-23.6667}}, color={0,0,255}));
-  connect(signalCurrent1.n, electrical.p)
-    annotation (Line(points={{-28,-8},{-28,11},{11.1,11}}, color={0,0,255}));
-  connect(I_charging1.y, signalCurrent1.i) annotation (Line(points={{-63.2,-18},
-          {-42,-18},{-42,-16},{-37.6,-16}}, color={0,0,127}));
-  connect(electrical.n, ground1.p) annotation (Line(points={{11.1,-23.6667},{-8,
-          -23.6667},{-8,-34}}, color={0,0,255}));
-  connect(T_avg.y, electrical.T) annotation (Line(points={{-31.2,46},{-10,46},{
-          -10,29.3333},{0,29.3333}}, color={0,0,127}));
+  connect(signalCurrent.p, electrical.n) annotation (Line(points={{-40,-10},{
+          -40,-20.2333},{-14.4333,-20.2333}}, color={0,0,255}));
+  connect(signalCurrent.n, electrical.p) annotation (Line(points={{-40,10},{-40,
+          17.9},{-14.4333,17.9}}, color={0,0,255}));
+  connect(I_charging.y, signalCurrent.i)
+    annotation (Line(points={{-79,0},{-52,0}}, color={0,0,127}));
+  connect(electrical.n, ground.p) annotation (Line(points={{-14.4333,-20.2333},
+          {-30,-20.2333},{-30,-60}}, color={0,0,255}));
+  connect(T_avg.y, electrical.T) annotation (Line(points={{-59,38},{-36,38},{
+          -36,38.0667},{-28,38.0667}},
+                                     color={0,0,127}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false)),
     Diagram(coordinateSystem(preserveAspectRatio=false)),

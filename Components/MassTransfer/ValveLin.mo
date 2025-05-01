@@ -10,18 +10,14 @@ model ValveLin "Valve with linear pressure drop"
 
   MassFlowRate massFlow "Mass flowrate";
 
-  DynTherM.CustomInterfaces.FluidPort_A inlet(
-    redeclare package Medium = Medium,
-    m_flow(min=if allowFlowReversal then -Modelica.Constants.inf
-      else 0)) annotation (Placement(
-        transformation(extent={{-120,-20},{-80,20}}, rotation=0),
-        iconTransformation(extent={{-110,-10},{-90,10}})));
-  DynTherM.CustomInterfaces.FluidPort_B outlet(
-    redeclare package Medium =Medium,
-    m_flow(max=if allowFlowReversal then +Modelica.Constants.inf
-      else 0)) annotation (Placement(
-        transformation(extent={{80,-20},{120,20}}, rotation=0),
-        iconTransformation(extent={{90,-10},{110,10}})));
+  DynTherM.CustomInterfaces.ZeroDimensional.FluidPort_A inlet(redeclare package
+      Medium = Medium, m_flow(min=if allowFlowReversal then -Modelica.Constants.inf
+           else 0)) annotation (Placement(transformation(extent={{-120,-20},{-80,
+            20}}, rotation=0), iconTransformation(extent={{-110,-10},{-90,10}})));
+  DynTherM.CustomInterfaces.ZeroDimensional.FluidPort_B outlet(redeclare
+      package Medium = Medium, m_flow(max=if allowFlowReversal then +Modelica.Constants.inf
+           else 0)) annotation (Placement(transformation(extent={{80,-20},{120,
+            20}}, rotation=0), iconTransformation(extent={{90,-10},{110,10}})));
   Modelica.Blocks.Interfaces.RealInput opening annotation (Placement(
         transformation(
         origin={0,70},

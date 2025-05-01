@@ -23,8 +23,8 @@ model WallConduction "Dynamic model of conduction in a planar surface"
     annotation (Placement(transformation(extent={{-14,-48},{14,-20}})));
 
 equation
-  m=Mat.rho*A*t;
-  Cm=m*Mat.cm;
+  m = Mat.rho*A*t;
+  Cm = m*Mat.cm;
 
   N*Cm*der(T_vol) = inlet.Q_flow + outlet.Q_flow "Energy balance";
   inlet.Q_flow = (Mat.lambda*N*A*(inlet.T - T_vol))/(t/2)

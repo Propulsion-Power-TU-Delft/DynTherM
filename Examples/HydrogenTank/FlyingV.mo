@@ -33,12 +33,12 @@ model FlyingV
     annotation (Placement(transformation(extent={{32,50},{80,98}})));
   Modelica.Blocks.Sources.Constant const(k=0)
     annotation (Placement(transformation(extent={{-90,40},{-70,60}})));
-  BoundaryConditions.flow_source_ext flow_source_ext(
+  BoundaryConditions.ZeroDimensional.flow_source_ext flow_source_ext(
     P_nom=175000,
     T_nom(displayUnit="K") = 20.268,
     massFlow_nom=-0.39399/2)
     annotation (Placement(transformation(extent={{-90,-24},{-70,-4}})));
-  BoundaryConditions.flow_source_ext flow_source_ext1(
+  BoundaryConditions.ZeroDimensional.flow_source_ext flow_source_ext1(
     P_nom=175000,
     T_nom(displayUnit="K") = 23,
     massFlow_nom=0)

@@ -7,13 +7,13 @@ model ConductionSphereUnsteady
     R_int=0.1,
     initOpt=DynTherM.Choices.InitOpt.steadyState)
     annotation (Placement(transformation(extent={{-40,24},{40,-24}})));
-  BoundaryConditions.thermal cold_side(
+  BoundaryConditions.ZeroDimensional.thermal cold_side(
     T=283.15,
     use_Q=false,
     use_T=true,
     use_in_T=false)
     annotation (Placement(transformation(extent={{-20,-68},{10,-50}})));
-  BoundaryConditions.thermal hot_side(
+  BoundaryConditions.ZeroDimensional.thermal hot_side(
     T=373.15,
     use_Q=false,
     use_T=false,

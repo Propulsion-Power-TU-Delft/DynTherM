@@ -160,24 +160,27 @@ model TankInternal "Internal part of the tank (no heat transfer through walls)"
   CoefficientOfHeatTransfer h_tot_l_dome[2] "Total internal heat transfer coefficient for the liquid at the dome";
   CoefficientOfHeatTransfer h_tot_v_dome[2] "Total internal heat transfer of the vapor at the dome";
 
-    CustomInterfaces.ExtFluidPort_B LH2_outlet(redeclare package Medium = Medium,
-      m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0)) annotation (Placement(transformation(extent={{-154,
-            -82},{-132,-60}},
-              rotation=0), iconTransformation(extent={{-154,-82},{-132,-60}})));
-    CustomInterfaces.ExtFluidPort_B VH2_outlet(redeclare package Medium = Medium,
-      m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0)) annotation (Placement(transformation(extent={{22,80},
-            {40,98}},                                                                                                                      rotation=0),
-            iconTransformation(extent={{22,80},{40,98}})));
-    CustomInterfaces.DistributedHeatPort_A wall(Nx=8, Ny=1) annotation (Placement(transformation(extent={{-48,42},
-            {-8,82}},            rotation=0), iconTransformation(extent={{-20,-20},
-            {20,20}},
+  CustomInterfaces.ZeroDimensional.ExtFluidPort_B LH2_outlet(redeclare package
+      Medium = Medium, m_flow(max=if allowFlowReversal then +Modelica.Constants.inf
+           else 0)) annotation (Placement(transformation(extent={{-154,-82},{-132,
+            -60}}, rotation=0), iconTransformation(extent={{-154,-82},{-132,-60}})));
+  CustomInterfaces.ZeroDimensional.ExtFluidPort_B VH2_outlet(redeclare package
+      Medium = Medium, m_flow(max=if allowFlowReversal then +Modelica.Constants.inf
+           else 0)) annotation (Placement(transformation(extent={{22,80},{40,98}},
+          rotation=0), iconTransformation(extent={{22,80},{40,98}})));
+  CustomInterfaces.ThreeDimensional.HeatPort3D_A wall(Nx=8, Ny=1) annotation (
+      Placement(transformation(extent={{-48,42},{-8,82}}, rotation=0),
+        iconTransformation(
+        extent={{-20,-20},{20,20}},
         rotation=0,
         origin={-28,62})));
     Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a heat_port annotation (
       Placement(transformation(extent={{10,-72},{48,-34}}, rotation=0),
         iconTransformation(extent={{48,-44},{66,-26}})));
-    CustomInterfaces.DistributedHeatPort_A dome(Nx=2, Ny=1) annotation (Placement(transformation(extent={{-116,66},{-90,92}},  rotation=0), iconTransformation(extent={{-22,-22},
-            {22,22}},
+  CustomInterfaces.ThreeDimensional.HeatPort3D_A dome(Nx=2, Ny=1) annotation (
+      Placement(transformation(extent={{-116,66},{-90,92}}, rotation=0),
+        iconTransformation(
+        extent={{-22,-22},{22,22}},
         rotation=90,
         origin={104,-40})));
 

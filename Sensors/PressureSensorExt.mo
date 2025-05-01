@@ -5,7 +5,8 @@ model PressureSensorExt
   replaceable package Medium = Media.ExtMedia.CoolProp.Hydrogen constrainedby
     ExternalMedia.Media.BaseClasses.ExternalTwoPhaseMedium "Medium model" annotation(choicesAllMatching = true);
   Modelica.Blocks.Interfaces.RealOutput y annotation (Placement(transformation(extent={{100,-10},{120,10}})));
-  CustomInterfaces.ExtFluidPort_A port(redeclare package Medium = Medium)
+  CustomInterfaces.ZeroDimensional.ExtFluidPort_A port(redeclare package Medium =
+        Medium)
     annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
 equation
   port.m_flow = 0;

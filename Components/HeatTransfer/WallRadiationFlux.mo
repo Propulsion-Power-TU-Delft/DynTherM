@@ -22,9 +22,11 @@ model WallRadiationFlux "Model of incident and emitted thermal radiation per uni
   HeatFlux phi_emitted
     "Heat flux emitted by the object to the surrounding environment";
 
-  CustomInterfaces.IrradiancePort outlet annotation (Placement(transformation(extent={{-14,-28},{14,0}})));
-  CustomInterfaces.HeatFluxPort_A inlet annotation (Placement(transformation(
-          extent={{-14,20},{14,48}}), iconTransformation(extent={{-14,20},{14,48}})));
+  CustomInterfaces.ZeroDimensional.IrradiancePort outlet
+    annotation (Placement(transformation(extent={{-14,-28},{14,0}})));
+  CustomInterfaces.ZeroDimensional.HeatFluxPort_A inlet annotation (Placement(
+        transformation(extent={{-14,20},{14,48}}), iconTransformation(extent={{
+            -14,20},{14,48}})));
 
 equation
   // Solar irradiative heat flux

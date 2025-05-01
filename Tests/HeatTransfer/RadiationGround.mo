@@ -3,7 +3,7 @@ model RadiationGround
   "Validation test case for thermal radiation. Reference: example 8, pag. 298, ASHRAE Handbook – Fundamentals, chapter 14, 2013."
   Components.HeatTransfer.SolarRadiation thermalRadiation1(csi=0)
     annotation (Placement(transformation(extent={{-16,98},{16,66}})));
-  BoundaryConditions.thermal int1(
+  BoundaryConditions.ZeroDimensional.thermal int1(
     T=293.15,
     use_Q=false,
     use_T=true,
@@ -24,7 +24,7 @@ model RadiationGround
   Components.HeatTransfer.SolarRadiation thermalRadiation2(csi=
         0.78539816339745)
     annotation (Placement(transformation(extent={{-56,98},{-24,66}})));
-  BoundaryConditions.thermal int2(
+  BoundaryConditions.ZeroDimensional.thermal int2(
     T=293.15,
     use_Q=false,
     use_T=true,
@@ -36,7 +36,7 @@ model RadiationGround
   Components.HeatTransfer.SolarRadiation thermalRadiation8(csi=
         5.4977871437821)
              annotation (Placement(transformation(extent={{24,98},{56,66}})));
-  BoundaryConditions.thermal int8(
+  BoundaryConditions.ZeroDimensional.thermal int8(
     T=293.15,
     use_Q=false,
     use_T=true,
@@ -48,7 +48,7 @@ model RadiationGround
   Components.HeatTransfer.SolarRadiation thermalRadiation5(csi=
         3.1415926535898)
     annotation (Placement(transformation(extent={{-16,-98},{16,-66}})));
-  BoundaryConditions.thermal int5(
+  BoundaryConditions.ZeroDimensional.thermal int5(
     T=293.15,
     use_Q=false,
     use_T=true,
@@ -60,7 +60,7 @@ model RadiationGround
   Components.HeatTransfer.SolarRadiation thermalRadiation6(csi=
         3.9269908169872)
     annotation (Placement(transformation(extent={{24,-98},{56,-66}})));
-  BoundaryConditions.thermal int6(
+  BoundaryConditions.ZeroDimensional.thermal int6(
     T=293.15,
     use_Q=false,
     use_T=true,
@@ -72,7 +72,7 @@ model RadiationGround
   Components.HeatTransfer.SolarRadiation thermalRadiation4(csi=
         2.3561944901923)
     annotation (Placement(transformation(extent={{-56,-98},{-24,-66}})));
-  BoundaryConditions.thermal int4(
+  BoundaryConditions.ZeroDimensional.thermal int4(
     T=293.15,
     use_Q=false,
     use_T=true,
@@ -86,7 +86,7 @@ model RadiationGround
         extent={{-16,-16},{16,16}},
         rotation=-90,
         origin={-82,0})));
-  BoundaryConditions.thermal int3(
+  BoundaryConditions.ZeroDimensional.thermal int3(
     T=293.15,
     use_Q=false,
     use_T=true,
@@ -103,7 +103,7 @@ model RadiationGround
         rotation=-90,
         origin={82,0})));
 
-  BoundaryConditions.thermal int7(
+  BoundaryConditions.ZeroDimensional.thermal int7(
     T=293.15,
     use_Q=false,
     use_T=true,
