@@ -8,15 +8,15 @@ model Cockpit "Upper section of the fuselage: cockpit section"
     constrainedby Materials.Paints.BasePaint "Surface paint material" annotation (choicesAllMatching=true);
 
   replaceable model HTC_int =
-    Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    Components.HeatTransfer.HTCorrelations.BaseClasses.BaseClassInternal
     constrainedby
-    Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    Components.HeatTransfer.HTCorrelations.BaseClasses.BaseClassInternal
     "Internal convection correlation" annotation (choicesAllMatching=true);
 
   replaceable model HTC_ext =
-    Components.HeatTransfer.HTCorrelations.BaseClassExternal
+    Components.HeatTransfer.HTCorrelations.BaseClasses.BaseClassExternal
     constrainedby
-    Components.HeatTransfer.HTCorrelations.BaseClassExternal
+    Components.HeatTransfer.HTCorrelations.BaseClasses.BaseClassExternal
     "External convection correlation" annotation (choicesAllMatching=true);
 
   parameter Real N_occupants[3] "Number of: passengers, cabin crew, pilots inside the cockpit";

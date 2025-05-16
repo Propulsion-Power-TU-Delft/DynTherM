@@ -9,9 +9,9 @@ model Tank
     ExternalMedia.Media.BaseClasses.ExternalTwoPhaseMedium "Medium model" annotation(choicesAllMatching = true);
 
   replaceable model HTC_ext =
-    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClasses.BaseClassExternal
     constrainedby
-    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClasses.BaseClassExternal
     "External convection correlation" annotation (choicesAllMatching=true);
 
   parameter Boolean allowFlowReversal

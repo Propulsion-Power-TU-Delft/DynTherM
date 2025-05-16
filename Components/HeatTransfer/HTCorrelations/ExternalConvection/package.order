@@ -9,3 +9,6 @@ HelicopterFlyingAircraft
 WingTakeOff
 WingFlying
 Wing
+FreeConvectionVerticalSurface
+FreeConvectionHorizontalSurface
+ForcedConvectionFlatPlate

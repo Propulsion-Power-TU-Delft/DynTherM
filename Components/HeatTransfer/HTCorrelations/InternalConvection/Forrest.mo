@@ -1,7 +1,7 @@
 within DynTherM.Components.HeatTransfer.HTCorrelations.InternalConvection;
 model Forrest
   "Internal convection for rectangular mini-channels"
-  extends BaseClassInternal;
+  extends BaseClasses.BaseClassInternal;
 
   input Length Dh "Hydraulic diameter" annotation(Dialog(enable = true));
   input Real phi_star "Geometrical correction" annotation(Dialog(enable = true));

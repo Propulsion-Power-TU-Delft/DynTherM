@@ -7,10 +7,10 @@ model InternalConvectionFlux "Model of internal convection per unit area"
   replaceable model HTC =
     Components.HeatTransfer.HTCorrelations.InternalConvection.FixedValue
     constrainedby
-    Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    HTCorrelations.BaseClasses.BaseClassInternal
     annotation (choicesAllMatching=true);
 
-  HTC ht_correlation;
+  HTC ht;
 
   DynTherM.CustomInterfaces.ZeroDimensional.HeatFluxPort_A inlet
     annotation (Placement(transformation(extent={{-14,20},{14,48}})));
@@ -18,7 +18,7 @@ model InternalConvectionFlux "Model of internal convection per unit area"
     annotation (Placement(transformation(extent={{-14,-48},{14,-20}})));
 
 equation
-  inlet.phi = ht_correlation.ht*(inlet.T - outlet.T);
+  inlet.phi = ht.ht*(inlet.T - outlet.T);
   inlet.phi + outlet.phi = 0;
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={

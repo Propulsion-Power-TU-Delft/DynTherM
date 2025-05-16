@@ -4,9 +4,9 @@ model DomeHeatTransfer
   outer DynTherM.Components.Environment environment "Environmental properties";
 
   replaceable model HTC_ext =
-    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClasses.BaseClassExternal
     constrainedby
-    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClassExternal
+    DynTherM.Components.HeatTransfer.HTCorrelations.BaseClasses.BaseClassExternal
     "External convection correlation" annotation (choicesAllMatching=true);
 
   parameter Real coeff "Fraction of cylinder with active heat transfer";

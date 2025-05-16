@@ -8,15 +8,15 @@ model CargoBay "Lower section of the fuselage: cargo bay"
     constrainedby Materials.Paints.BasePaint "Surface paint material" annotation (choicesAllMatching=true);
 
   replaceable model HTC_int =
-    Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    Components.HeatTransfer.HTCorrelations.BaseClasses.BaseClassInternal
     constrainedby
-    Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    Components.HeatTransfer.HTCorrelations.BaseClasses.BaseClassInternal
     "Internal convection correlation" annotation (choicesAllMatching=true);
 
   replaceable model HTC_ext =
-    Components.HeatTransfer.HTCorrelations.BaseClassExternal
+    Components.HeatTransfer.HTCorrelations.BaseClasses.BaseClassExternal
     constrainedby
-    Components.HeatTransfer.HTCorrelations.BaseClassExternal
+    Components.HeatTransfer.HTCorrelations.BaseClasses.BaseClassExternal
     "External convection correlation" annotation (choicesAllMatching=true);
 
   parameter HeatFlowRate Q_int "Internal heat load";

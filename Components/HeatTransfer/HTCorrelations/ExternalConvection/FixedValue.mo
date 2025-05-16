@@ -1,6 +1,6 @@
 within DynTherM.Components.HeatTransfer.HTCorrelations.ExternalConvection;
 model FixedValue "Fixed ht value"
-  extends BaseClassExternal;
+  extends BaseClasses.BaseClassExternal;
   parameter CoefficientOfHeatTransfer ht_fixed=1 "Heat transfer coefficient - fixed value";
 
 equation

@@ -11,24 +11,28 @@ model PassengerAircraft "Model of a passenger aircraft"
     constrainedby Materials.Paints.BasePaint "Surface paint material" annotation (choicesAllMatching=true);
 
   replaceable model HTC_int_upper =
-    Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    Components.HeatTransfer.HTCorrelations.BaseClasses.BaseClassInternal
     constrainedby
-    Components.HeatTransfer.HTCorrelations.BaseClassInternal annotation (choicesAllMatching=true);
+    Components.HeatTransfer.HTCorrelations.BaseClasses.BaseClassInternal
+    annotation (choicesAllMatching=true);
 
   replaceable model HTC_int_lower =
-    Components.HeatTransfer.HTCorrelations.BaseClassInternal
+    Components.HeatTransfer.HTCorrelations.BaseClasses.BaseClassInternal
     constrainedby
-    Components.HeatTransfer.HTCorrelations.BaseClassInternal annotation (choicesAllMatching=true);
+    Components.HeatTransfer.HTCorrelations.BaseClasses.BaseClassInternal
+    annotation (choicesAllMatching=true);
 
   replaceable model HTC_ext_upper =
-    Components.HeatTransfer.HTCorrelations.BaseClassExternal
+    Components.HeatTransfer.HTCorrelations.BaseClasses.BaseClassExternal
     constrainedby
-    Components.HeatTransfer.HTCorrelations.BaseClassExternal annotation (choicesAllMatching=true);
+    Components.HeatTransfer.HTCorrelations.BaseClasses.BaseClassExternal
+    annotation (choicesAllMatching=true);
 
   replaceable model HTC_ext_lower =
-    Components.HeatTransfer.HTCorrelations.BaseClassExternal
+    Components.HeatTransfer.HTCorrelations.BaseClasses.BaseClassExternal
     constrainedby
-    Components.HeatTransfer.HTCorrelations.BaseClassExternal annotation (choicesAllMatching=true);
+    Components.HeatTransfer.HTCorrelations.BaseClasses.BaseClassExternal
+    annotation (choicesAllMatching=true);
 
   // Options
   parameter Boolean allowFlowReversal=true

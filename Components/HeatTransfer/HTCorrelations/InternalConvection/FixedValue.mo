@@ -1,7 +1,7 @@
 within DynTherM.Components.HeatTransfer.HTCorrelations.InternalConvection;
 model FixedValue
   "Fixed heat transfer coefficient"
-  extends BaseClassInternal;
+  extends BaseClasses.BaseClassInternal;
   parameter CoefficientOfHeatTransfer ht_fixed=1 "Heat transfer coefficient - fixed value";
 
 equation

@@ -6,4 +6,8 @@ Rectangular1D
 Rectangular2D_manual
 Radiation1D
 WallConduction2D
+WallConductionCV3D
 WallConduction3D
+ExternalConvection
+WallHorizontal3D
+WallVertical3D

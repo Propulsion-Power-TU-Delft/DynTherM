@@ -3,7 +3,7 @@ model A320GroundCockpit "Aircraft on ground, two temperature zones"
   // Pack discharge temperature determined by cockpit cooling requirement
   // Trim air flow determined by cabin temperature set point
 
-  Modelica.Units.SI.MassFlowRate m_fresh_min
+  MassFlowRate m_fresh_min
     "Minimum mass flow rate of fresh air that must be provided by the ECS - fixed by standard CFR 25.831";
   Modelica.Blocks.Sources.Constant m_ECS(k=1.0)
     annotation (Placement(transformation(extent={{30,80},{10,100}})));

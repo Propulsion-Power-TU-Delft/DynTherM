@@ -1,27 +1,10 @@
 within DynTherM.Components.HeatTransfer.HTCorrelations.ExternalConvection;
 model WingTakeOff
   "Forced convection along a wing section placed in the slipstream of a propeller (distributed propulsion) at take-off conditions"
-  extends BaseClassExternal;
-
-  input Length c "Airfoil chord" annotation(Dialog(enable=true));
-
-  PrandtlNumber Pr "Prandtl number";
-  ReynoldsNumber Re "Reynolds number";
-  NusseltNumber Nu "Nusselt number";
-
-protected
-  Medium.ThermodynamicState state_f;
-  Temperature Tf "Film temperature";
+  extends BaseClasses.BaseClassForcedConvectionExternal;
 
 equation
-  state_f = Medium.setState_pTX(environment.P_amb, Tf, environment.X_amb);
-  Tf = (T_skin + environment.T_amb)/2;
-
-  Pr = Medium.specificHeatCapacityCp(state_f)*Medium.dynamicViscosity(state_f)/
-    Medium.thermalConductivity(state_f);
-  Re = Medium.density(state_f)*environment.V_inf*c/Medium.dynamicViscosity(state_f);
-  Nu = 0.176*Re^0.827*Pr^6.453*(environment.T_amb/T_skin)^(-0.022);
-  Nu = ht*c/Medium.thermalConductivity(state_f);
+  Nu = 0.176*(Re^0.827)*(Pr^6.453)*(environment.T_amb/T_surf)^(-0.022);
   T_out = environment.T_amb;
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(

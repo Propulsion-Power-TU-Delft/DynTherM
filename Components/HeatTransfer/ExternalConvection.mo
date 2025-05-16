@@ -10,9 +10,8 @@ model ExternalConvection "Model of external convection"
   replaceable model HTC =
     Components.HeatTransfer.HTCorrelations.ExternalConvection.FixedValue
     constrainedby
-    Components.HeatTransfer.HTCorrelations.BaseClassExternal(
-      T_skin=inlet.T,
-      ht_fixed=1) annotation (choicesAllMatching=true);
+    HTCorrelations.BaseClasses.BaseClassExternal(T_surf=inlet.T)
+    annotation (choicesAllMatching=true);
 
   HTC ht_correlation;
 

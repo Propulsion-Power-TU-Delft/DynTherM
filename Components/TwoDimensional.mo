@@ -15,7 +15,7 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
     input Mass dm(start=0) "Mass variation over time" annotation (Dialog(enable=true));
 
     // Initialization
-    parameter Temperature Tstart=300 "Temperature start value" annotation (Dialog(tab="Initialization"));
+    parameter Temperature Tstart=298.15 "Temperature start value" annotation (Dialog(tab="Initialization"));
     parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
       "Initialization option" annotation (Dialog(tab="Initialization"));
 
@@ -99,7 +99,7 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
     input Length dz "Thickness of the slice, out of plane" annotation (Dialog(enable=true));
 
     // Initialization
-    parameter Temperature Tstart=300
+    parameter Temperature Tstart=298.15
       "Temperature start value" annotation (Dialog(tab="Initialization"));
     parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
       "Initialization option" annotation (Dialog(tab="Initialization"));
@@ -175,9 +175,9 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
 <p><img src=\"modelica://DynTherM/Figures/Conduction_Plano_Concave.png\"/></p>
 <h4>Equations</h4>
 <p>The average thickness t<sub>avg, </sub>is the thickness of a rectangle having similar surface area A<sub>s</sub> and height h.</p>
-<p>	<img src=\"modelica://DynTherM/Resources/Images/equations/equation-srCCxBop.png\" alt=\"t_avg = A_s/h\"/></p>
-<p>	<img src=\"modelica://DynTherM/Resources/Images/equations/equation-YGItPSny.png\" alt=\"Q_E = k*h*dz*((T_E - T_vol)/(t_avg/2))\"/></p>
-<p>	<img src=\"modelica://DynTherM/Resources/Images/equations/equation-qtcHdckv.png\" alt=\"Q_N = k*y*dz*((T_N - T_vol)/(h/2))\"/></p>
+<p>        <img src=\"modelica://DynTherM/Resources/Images/equations/equation-srCCxBop.png\" alt=\"t_avg = A_s/h\"/></p>
+<p>        <img src=\"modelica://DynTherM/Resources/Images/equations/equation-YGItPSny.png\" alt=\"Q_E = k*h*dz*((T_E - T_vol)/(t_avg/2))\"/></p>
+<p>        <img src=\"modelica://DynTherM/Resources/Images/equations/equation-qtcHdckv.png\" alt=\"Q_N = k*y*dz*((T_N - T_vol)/(h/2))\"/></p>
 </html>"));
   end ConductionPlanoConcave2D;
 
@@ -196,7 +196,7 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
     input Length z "Thickness, out of plane" annotation (Dialog(enable=true));
 
     // Initialization
-    parameter Temperature Tstart=300 "Temperature start value" annotation (Dialog(tab="Initialization"));
+    parameter Temperature Tstart=298.15 "Temperature start value" annotation (Dialog(tab="Initialization"));
     parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
       "Initialization option" annotation (Dialog(tab="Initialization"));
 
@@ -324,7 +324,7 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
     input Length z "Thickness, out of plane" annotation (Dialog(enable=true));
 
     // Initialization
-    parameter Temperature Tstart=300 "Temperature start value" annotation (Dialog(tab="Initialization"));
+    parameter Temperature Tstart=298.15 "Temperature start value" annotation (Dialog(tab="Initialization"));
     parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
       "Initialization option" annotation (Dialog(tab="Initialization"));
 
@@ -493,7 +493,7 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
       L=L,
       D=R_int*2,
       Roughness=Roughness)
-      annotation (Placement(transformation(extent={{-40,-44},{40,36}})));
+      annotation (Placement(transformation(extent={{-28,-28},{28,28}})));
 
     CustomInterfaces.ZeroDimensional.FluidPort_A inlet(
       redeclare package Medium = Medium,
@@ -501,8 +501,8 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
             m_flow_start),
       P(start=P_start),
       h_outflow(start=Medium.specificEnthalpy(state_start)),
-      Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{-52,
-              -10},{-40,2}}, rotation=0), iconTransformation(extent={{-40,-8},{-26,
+      Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{-44,-4},
+              {-36,4}},      rotation=0), iconTransformation(extent={{-40,-8},{-26,
               6}})));
     CustomInterfaces.ZeroDimensional.FluidPort_B outlet(
       redeclare package Medium = Medium,
@@ -510,8 +510,8 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
             m_flow_start),
       P(start=P_start),
       h_outflow(start=Medium.specificEnthalpy(state_start)),
-      Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{40,
-              -10},{52,2}}, rotation=0), iconTransformation(extent={{24,-8},{40,8}})));
+      Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{36,-4},
+              {44,4}},      rotation=0), iconTransformation(extent={{24,-8},{40,8}})));
     ConductionPlanoConcave2D PCWest(
       R=R_int,
       p=d/2 - R_int*d/sqrt(d*d + t*t),
@@ -520,7 +520,7 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
       Tstart=T_start_solid,
       redeclare model Mat = Mat,
       initOpt=initOpt)
-      annotation (Placement(transformation(extent={{-88,-8},{-44,48}})));
+      annotation (Placement(transformation(extent={{-82,-22},{-38,22}})));
     ConductionPlanoConcave2D PCEast(
       R=R_int,
       p=d/2 - R_int*d/sqrt(d*d + t*t),
@@ -529,7 +529,7 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
       dz=L,
       Tstart=T_start_solid,
       initOpt=initOpt)
-      annotation (Placement(transformation(extent={{88,-8},{44,48}})));
+      annotation (Placement(transformation(extent={{82,-22},{38,22}})));
     ConductionPlanoConcave2D PCSouth(
       R=R_int,
       p=t/2 - R_int*t/sqrt(d*d + t*t),
@@ -538,9 +538,9 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
       Tstart=T_start_solid,
       redeclare model Mat = Mat,
       initOpt=initOpt) annotation (Placement(transformation(
-          extent={{22,-28},{-22,28}},
+          extent={{22,-26},{-22,26}},
           rotation=-90,
-          origin={0,-42})));
+          origin={0,-60})));
     ConductionPlanoConcave2D PCNorth(
       R=R_int,
       p=t/2 - R_int*t/sqrt(d*d + t*t),
@@ -549,9 +549,9 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
       Tstart=T_start_solid,
       redeclare model Mat = Mat,
       initOpt=initOpt) annotation (Placement(transformation(
-          extent={{-22,-28},{22,28}},
+          extent={{-20,-26},{20,26}},
           rotation=-90,
-          origin={0,64})));
+          origin={0,60})));
     WallConductionCV2D PlaneNW(
       y=t/2 - R_int*t/sqrt(d*d + t*t),
       x=d/2 - R_int*d/sqrt(d*d + t*t),
@@ -562,7 +562,7 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
       redeclare model MatX = Mat,
       redeclare model MatY = Mat,
       initOpt=initOpt)
-      annotation (Placement(transformation(extent={{-82,50},{-52,80}})));
+      annotation (Placement(transformation(extent={{-76,44},{-44,76}})));
     WallConductionCV2D PlaneSW(
       y=t/2 - R_int*t/sqrt(d*d + t*t),
       x=d/2 - R_int*d/sqrt(d*d + t*t),
@@ -573,7 +573,7 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
       redeclare model MatX = Mat,
       redeclare model MatY = Mat,
       initOpt=initOpt)
-      annotation (Placement(transformation(extent={{-82,-56},{-52,-26}})));
+      annotation (Placement(transformation(extent={{-76,-76},{-44,-44}})));
     WallConductionCV2D PlaneSE(
       y=t/2 - R_int*t/sqrt(d*d + t*t),
       x=d/2 - R_int*d/sqrt(d*d + t*t),
@@ -584,7 +584,7 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
       redeclare model MatX = Mat,
       redeclare model MatY = Mat,
       initOpt=initOpt)
-      annotation (Placement(transformation(extent={{52,-58},{82,-28}})));
+      annotation (Placement(transformation(extent={{44,-76},{76,-44}})));
     WallConductionCV2D PlaneNE(
       y=t/2 - R_int*t/sqrt(d*d + t*t),
       x=d/2 - R_int*d/sqrt(d*d + t*t),
@@ -595,87 +595,87 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
       redeclare model MatX = Mat,
       redeclare model MatY = Mat,
       initOpt=initOpt)
-      annotation (Placement(transformation(extent={{50,50},{80,80}})));
-    Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a NorthWestHor annotation (
-        Placement(transformation(extent={{-106,56},{-86,76}}), iconTransformation(
-            extent={{-72,40},{-60,52}})));
+      annotation (Placement(transformation(extent={{44,44},{76,76}})));
+    Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a NorthWest annotation (
+        Placement(transformation(extent={{-110,50},{-90,70}}),
+          iconTransformation(extent={{-72,40},{-60,52}})));
     Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a West annotation (
-        Placement(transformation(extent={{-106,10},{-86,30}}), iconTransformation(
+        Placement(transformation(extent={{-110,-10},{-90,10}}),iconTransformation(
             extent={{-72,-6},{-60,6}})));
-    Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a SouthWestHor annotation (
-        Placement(transformation(extent={{-106,-50},{-86,-30}}),
+    Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a SouthWest annotation (
+        Placement(transformation(extent={{-110,-70},{-90,-50}}),
           iconTransformation(extent={{-72,-50},{-60,-38}})));
-    Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b SouthBottom annotation (
-        Placement(transformation(extent={{-10,-90},{10,-70}}), iconTransformation(
-            extent={{-6,-72},{6,-60}})));
-    Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b SouthEastHor annotation (
-        Placement(transformation(extent={{86,-52},{106,-32}}), iconTransformation(
-            extent={{60,-50},{72,-38}})));
+    Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b South annotation (
+        Placement(transformation(extent={{-10,-110},{10,-90}}),
+          iconTransformation(extent={{-6,-72},{6,-60}})));
+    Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b SouthEast annotation (
+        Placement(transformation(extent={{90,-70},{110,-50}}),
+          iconTransformation(extent={{60,-50},{72,-38}})));
     Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b East annotation (
-        Placement(transformation(extent={{86,10},{106,30}}), iconTransformation(
+        Placement(transformation(extent={{90,-10},{110,10}}),iconTransformation(
             extent={{60,-6},{72,6}})));
-    Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b NorthEastHor annotation (
-        Placement(transformation(extent={{86,56},{106,76}}), iconTransformation(
+    Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b NorthEast annotation (
+        Placement(transformation(extent={{90,50},{110,70}}), iconTransformation(
             extent={{60,38},{72,50}})));
-    Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a NorthTop annotation (
-        Placement(transformation(extent={{-10,86},{10,106}}), iconTransformation(
-            extent={{-6,60},{6,72}})));
+    Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a North annotation (
+        Placement(transformation(extent={{-10,90},{10,110}}),
+          iconTransformation(extent={{-6,60},{6,72}})));
 
   equation
     connect(inlet, circularPipe.inlet)
-      annotation (Line(points={{-46,-4},{-40,-4}},
-                                                 color={0,0,0}));
+      annotation (Line(points={{-40,0},{-28,0}}, color={0,0,0}));
     connect(circularPipe.outlet, outlet)
-      annotation (Line(points={{40,-4},{46,-4}},
-                                               color={0,0,0}));
+      annotation (Line(points={{28,0},{40,0}}, color={0,0,0}));
     connect(PCWest.InletConcave, circularPipe.thermalPort)
-      annotation (Line(points={{-61.16,20},{0,20},{0,11.2}},  color={191,0,0}));
+      annotation (Line(points={{-55.16,0},{-54,0},{-54,20},{0,20},{0,10.64}},
+                                                              color={191,0,0}));
     connect(PCNorth.InletConcave, circularPipe.thermalPort)
-      annotation (Line(points={{0,59.16},{0,11.2}},  color={191,0,0}));
+      annotation (Line(points={{0,55.6},{0,10.64}},  color={191,0,0}));
     connect(PCEast.InletConcave, circularPipe.thermalPort)
-      annotation (Line(points={{61.16,20},{0,20},{0,11.2}},  color={191,0,0}));
-    connect(PCSouth.InletConcave, circularPipe.thermalPort)
-      annotation (Line(points={{0,-37.16},{0,11.2}},  color={191,0,0}));
-    connect(PCWest.inletPlanar, PlaneNW.South) annotation (Line(points={{-66,45.2},
-            {-66,46},{-67,46},{-67,54.5}},              color={191,0,0}));
-    connect(PlaneNW.East, PCNorth.outletPlanar) annotation (Line(points={{-53.5,
-            65},{-34,65},{-34,64},{-25.2,64}}, color={191,0,0}));
-    connect(PlaneSW.East, PCSouth.outletPlanar) annotation (Line(points={{-53.5,
-            -41},{-53.5,-42},{-25.2,-42}}, color={191,0,0}));
-    connect(PlaneSW.North, PCWest.outletPlanar) annotation (Line(points={{-67,-30.5},
-            {-66,-28},{-66,-5.2}},         color={191,0,0}));
-    connect(PCSouth.inletPlanar, PlaneSE.West) annotation (Line(points={{25.2,-42},
-            {48,-42},{48,-43},{53.5,-43}}, color={191,0,0}));
-    connect(PlaneSE.North, PCEast.outletPlanar) annotation (Line(points={{67,-32.5},
-            {67,-14},{66,-14},{66,-5.2}},            color={191,0,0}));
-    connect(PCEast.inletPlanar, PlaneNE.South) annotation (Line(points={{66,45.2},
-            {66,46},{65,46},{65,54.5}},              color={191,0,0}));
-    connect(PCNorth.inletPlanar, PlaneNE.West) annotation (Line(points={{25.2,
-            64},{46,64},{46,65},{51.5,65}}, color={191,0,0}));
-    connect(PlaneNW.West, NorthWestHor) annotation (Line(points={{-80.5,65},{-80.5,
-            66},{-96,66}}, color={191,0,0}));
-    connect(PlaneSW.West, SouthWestHor) annotation (Line(points={{-80.5,-41},{-80.5,
-            -40},{-96,-40}}, color={191,0,0}));
-    connect(PCSouth.OutletOppoCon, SouthBottom)
-      annotation (Line(points={{0,-53},{0,-80}}, color={191,0,0}));
-    connect(PlaneSE.East, SouthEastHor) annotation (Line(points={{80.5,-43},{
-            80.5,-42},{96,-42}}, color={191,0,0}));
+      annotation (Line(points={{55.16,0},{55.16,20},{0,20},{0,10.64}},
+                                                             color={191,0,0}));
+    connect(PCWest.inletPlanar, PlaneNW.South) annotation (Line(points={{-60,
+            19.8},{-60,48.8}},                          color={191,0,0}));
+    connect(PlaneNW.East, PCNorth.outletPlanar) annotation (Line(points={{-45.6,
+            60},{-23.4,60}},                   color={191,0,0}));
+    connect(PlaneSW.East, PCSouth.outletPlanar) annotation (Line(points={{-45.6,
+            -60},{-23.4,-60}},             color={191,0,0}));
+    connect(PlaneSW.North, PCWest.outletPlanar) annotation (Line(points={{-60,
+            -48.8},{-60,-19.8}},           color={191,0,0}));
+    connect(PCSouth.inletPlanar, PlaneSE.West) annotation (Line(points={{23.4,
+            -60},{45.6,-60}},              color={191,0,0}));
+    connect(PlaneSE.North, PCEast.outletPlanar) annotation (Line(points={{60,
+            -48.8},{60,-19.8}},                      color={191,0,0}));
+    connect(PCEast.inletPlanar, PlaneNE.South) annotation (Line(points={{60,19.8},
+            {60,48.8}},                              color={191,0,0}));
+    connect(PCNorth.inletPlanar, PlaneNE.West) annotation (Line(points={{23.4,60},
+            {45.6,60}},                     color={191,0,0}));
+    connect(PlaneNW.West, NorthWest)
+      annotation (Line(points={{-74.4,60},{-100,60}}, color={191,0,0}));
+    connect(PlaneSW.West, SouthWest)
+      annotation (Line(points={{-74.4,-60},{-100,-60}}, color={191,0,0}));
+    connect(PCSouth.OutletOppoCon, South)
+      annotation (Line(points={{0,-71},{0,-100}}, color={191,0,0}));
+    connect(PlaneSE.East, SouthEast)
+      annotation (Line(points={{74.4,-60},{100,-60}}, color={191,0,0}));
     connect(PCEast.OutletOppoCon, East)
-      annotation (Line(points={{77,20},{96,20}}, color={191,0,0}));
+      annotation (Line(points={{71,0},{100,0}},  color={191,0,0}));
     connect(West, PCWest.OutletOppoCon)
-      annotation (Line(points={{-96,20},{-77,20}}, color={191,0,0}));
-    connect(PlaneNE.East, NorthEastHor)
-      annotation (Line(points={{78.5,65},{80,66},{96,66}}, color={191,0,0}));
-    connect(PCNorth.OutletOppoCon, NorthTop)
-      annotation (Line(points={{0,75},{0,96}}, color={191,0,0}));
-    connect(PlaneNW.North, NorthTop) annotation (Line(points={{-67,75.5},{-68,75.5},
-            {-68,84},{0,84},{0,96}},        color={191,0,0}));
-    connect(PlaneNE.North, NorthTop) annotation (Line(points={{65,75.5},{65,84},{0,
-            84},{0,96}},              color={191,0,0}));
-    connect(PlaneSW.South, SouthBottom) annotation (Line(points={{-67,-51.5},{-67,
-            -66},{0,-66},{0,-80}},         color={191,0,0}));
-    connect(PlaneSE.South, SouthBottom) annotation (Line(points={{67,-53.5},{67,-66},
-            {0,-66},{0,-80}},             color={191,0,0}));
+      annotation (Line(points={{-100,0},{-71,0}},  color={191,0,0}));
+    connect(PlaneNE.East, NorthEast)
+      annotation (Line(points={{74.4,60},{100,60}}, color={191,0,0}));
+    connect(PCNorth.OutletOppoCon, North)
+      annotation (Line(points={{0,70},{0,100}}, color={191,0,0}));
+    connect(PlaneNW.North, North) annotation (Line(points={{-60,71.2},{-60,84},
+            {0,84},{0,100}}, color={191,0,0}));
+    connect(PlaneNE.North, North) annotation (Line(points={{60,71.2},{60,84},{0,
+            84},{0,100}}, color={191,0,0}));
+    connect(PlaneSW.South, South) annotation (Line(points={{-60,-71.2},{-60,-86},
+            {0,-86},{0,-100}}, color={191,0,0}));
+    connect(PlaneSE.South, South) annotation (Line(points={{60,-71.2},{60,-86},
+            {0,-86},{0,-100}}, color={191,0,0}));
+    connect(PCSouth.InletConcave, circularPipe.thermalPort)
+      annotation (Line(points={{0,-55.16},{0,10.64}}, color={191,0,0}));
       annotation (Line(points={{46,-4},{46,-4}}, color={0,0,0}),
                   Placement(transformation(extent={{-28,-28},{28,28}})),
                 Icon(coordinateSystem(preserveAspectRatio=false), graphics={
@@ -1032,6 +1032,61 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
 <p><br><img src=\"modelica://DynTherM/Figures/PouchCellThermal2D.png\"/></p>
 </html>"));
   end PouchCellThermal2D;
+
+  model ExternalConvection2D
+    "External convection model implementing 2D spatial discretization"
+
+    outer Components.Environment environment "Environmental properties";
+    replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
+      Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
+    model CV = DynTherM.Components.HeatTransfer.ExternalConvection "Control volume";
+
+    replaceable model HTC =
+      DynTherM.Components.HeatTransfer.HTCorrelations.ExternalConvection.FixedValue
+      constrainedby
+      DynTherM.Components.HeatTransfer.HTCorrelations.BaseClasses.BaseClassExternal
+      annotation (choicesAllMatching=true);
+
+    input Area A "Heat transfer area (total)" annotation (Dialog(enable=true));
+
+    // Discretization
+    parameter Integer Nx(min=1) "Number of control volumes in x-direction";
+    parameter Integer Ny(min=1) "Number of control volumes in y-direction";
+
+    CV cv[Nx,Ny](
+      redeclare model HTC = HTC,
+      redeclare package Medium = Medium,
+      each A=A_cv);
+
+    Area A_cv "Heat transfer area associated with one control volume";
+
+    CustomInterfaces.TwoDimensional.HeatPort2D_A inlet(Nx=Nx, Ny=Ny)
+      annotation (Placement(transformation(extent={{-60,-20},{60,80}}),
+          iconTransformation(extent={{-60,-20},{60,80}})));
+
+  equation
+    A_cv = A/(Nx*Ny);
+
+    for i in 1:Nx loop
+      for j in 1:Ny loop
+        connect(cv[i,j].inlet, inlet.ports[i,j]);
+      end for;
+    end for;
+
+    annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
+          Rectangle(
+            extent={{-100,20},{100,0}},
+            fillColor={192,192,192},
+            fillPattern=FillPattern.Backward),
+          Line(points={{90,-10},{-90,-10}}, color={0,127,255}),
+          Line(points={{78,-16},{90,-10}},   color={0,127,255}),
+          Line(points={{90,-30},{-90,-30}}, color={0,127,255}),
+          Line(points={{78,-4},{90,-10}},    color={0,127,255}),
+          Line(points={{78,-36},{90,-30}},   color={0,127,255}),
+          Line(points={{78,-24},{90,-30}},   color={0,127,255})}),
+                                                 Diagram(coordinateSystem(
+            preserveAspectRatio=false)));
+  end ExternalConvection2D;
   annotation (Icon(graphics={
         Rectangle(
           lineColor={200,200,200},

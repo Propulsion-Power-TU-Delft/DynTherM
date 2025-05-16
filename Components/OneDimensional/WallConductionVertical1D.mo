@@ -12,7 +12,7 @@ model WallConductionVertical1D
   input Length z "Thickness, out of plane" annotation (Dialog(enable=true));
 
   // Initialization
-  parameter Temperature Tstart=300 "Temperature start value" annotation (Dialog(tab="Initialization"));
+  parameter Temperature Tstart=298.15 "Temperature start value" annotation (Dialog(tab="Initialization"));
   parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
     "Initialization option" annotation (Dialog(tab="Initialization"));
 

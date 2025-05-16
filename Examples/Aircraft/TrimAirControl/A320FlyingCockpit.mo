@@ -3,7 +3,7 @@ model A320FlyingCockpit "Aircraft is flying, two temperature zones"
   // Pack discharge temperature determined by cockpit cooling requirement
   // Trim air flow determined by cabin temperature set point
 
-  Modelica.Units.SI.MassFlowRate m_fresh_min
+  MassFlowRate m_fresh_min
     "Minimum mass flow rate of fresh air that must be provided by the ECS - fixed by standard CFR 25.831";
   Modelica.Blocks.Sources.Constant m_ECS(k=1.0)
     annotation (Placement(transformation(extent={{30,80},{10,100}})));
@@ -43,13 +43,13 @@ model A320FlyingCockpit "Aircraft is flying, two temperature zones"
     redeclare model HTC_ext_upper =
         DynTherM.Components.HeatTransfer.HTCorrelations.ExternalConvection.AircraftFlying
         (
-        L=A320.L_fuselage,
+        L=A320.L_cabin,
         R_ext=A320.R_cabin,
         L_nose=A320.R_cabin/2),
     redeclare model HTC_ext_lower =
         DynTherM.Components.HeatTransfer.HTCorrelations.ExternalConvection.AircraftFlying
         (
-        L=A320.L_fuselage,
+        L=A320.L_cabin,
         R_ext=A320.R_cabin,
         L_nose=A320.R_cabin/2),
     N_pax=196,

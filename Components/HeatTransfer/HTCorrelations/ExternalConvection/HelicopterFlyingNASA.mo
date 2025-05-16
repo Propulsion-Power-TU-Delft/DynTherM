@@ -2,7 +2,7 @@ within DynTherM.Components.HeatTransfer.HTCorrelations.ExternalConvection;
 model HelicopterFlyingNASA
   "Convection during low forward speed (helicopter) for rotor-induced surfaces using wake-based induced velocity"
 
-  extends BaseClassExternal;
+  extends BaseClasses.BaseClassExternal;
 
   parameter Length R_rotor "Main rotor radius";
   parameter Velocity V_wind

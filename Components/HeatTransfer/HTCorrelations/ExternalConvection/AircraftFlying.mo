@@ -1,7 +1,7 @@
 within DynTherM.Components.HeatTransfer.HTCorrelations.ExternalConvection;
 model AircraftFlying
   "Convection along the fuselage during flight (aircraft)"
-  extends BaseClassExternal;
+  extends BaseClasses.BaseClassExternal;
 
   parameter Real Cp=0 "Pressure coefficient: approximately zero for passenger section around the fuselage";
   parameter Real coeff=1 "Fraction of cylinder with active heat transfer";

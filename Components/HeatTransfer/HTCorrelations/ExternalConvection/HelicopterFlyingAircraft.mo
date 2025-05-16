@@ -2,7 +2,7 @@ within DynTherM.Components.HeatTransfer.HTCorrelations.ExternalConvection;
 model HelicopterFlyingAircraft
   "Convection during low forward speed (aircraft) used for comparison to helicopters"
 
-  extends BaseClassExternal;
+  extends BaseClasses.BaseClassExternal;
 
   parameter Length R_rotor "Main rotor radius";
   parameter Velocity V_wind

@@ -2,7 +2,7 @@ within DynTherM.Components.HeatTransfer.HTCorrelations.ExternalConvection;
 model HelicopterFlyingComplex
   "Convection during low forward speed (helicopter) for rotor-induced surfaces using rotor based pressure distribution"
 
-  extends BaseClassExternal;
+  extends BaseClasses.BaseClassExternal;
 
   parameter Length R_rotor "Main rotor radius";
   parameter Velocity V_wind

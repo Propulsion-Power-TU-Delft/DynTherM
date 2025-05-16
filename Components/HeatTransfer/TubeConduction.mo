@@ -15,7 +15,7 @@ model TubeConduction "Dynamic model of conduction in a hollow cylinder"
   parameter Integer Nw_side=0 "Number of windows per fuselage side - aircraft fuselage application" annotation (Dialog(tab="Passive surface"));
 
   // Initialization
-  parameter Temperature Tstart=300
+  parameter Temperature Tstart=298.15
     "Temperature start value" annotation (Dialog(tab="Initialization"));
   parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
     "Initialization option" annotation (Dialog(tab="Initialization"));

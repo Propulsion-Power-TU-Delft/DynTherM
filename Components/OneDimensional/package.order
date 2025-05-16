@@ -6,10 +6,9 @@ CircularChannel1D
 CircularAsymmetricChannel1D
 RectangularChannel1D
 RectangularChannelFlux1D
-ExternalConvection1D
-InternalConvection1D
 WallRadiation1D
 HeatCapacity1D
 ConvectionRadiation1D
 WallConductionHorizontal1D
 WallConductionVertical1D
+ExternalConvection1D

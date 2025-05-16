@@ -9,10 +9,10 @@ model InternalConvection "Model of internal convection"
   replaceable model HTC =
     Components.HeatTransfer.HTCorrelations.InternalConvection.FixedValue
     constrainedby
-    Components.HeatTransfer.HTCorrelations.BaseClassInternal(ht_fixed=1)
+    HTCorrelations.BaseClasses.BaseClassInternal
     annotation (choicesAllMatching=true);
 
-  HTC ht_correlation;
+  HTC ht;
 
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a inlet
     annotation (Placement(transformation(extent={{-14,20},{14,48}})));
@@ -20,7 +20,7 @@ model InternalConvection "Model of internal convection"
     annotation (Placement(transformation(extent={{-14,-48},{14,-20}})));
 
 equation
-  inlet.Q_flow = ht_correlation.ht*A*(inlet.T - outlet.T);
+  inlet.Q_flow = ht.ht*A*(inlet.T - outlet.T);
   inlet.Q_flow + outlet.Q_flow = 0;
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={

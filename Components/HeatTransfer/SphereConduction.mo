@@ -10,7 +10,7 @@ model SphereConduction "Dynamic model of conduction in a hollow sphere"
     parameter Real AR=1 "Aspect ratio - set AR<1 to model a dome";
 
     // Initialization
-    parameter Temperature Tstart=288.15 "Temperature start value" annotation (Dialog(tab="Initialization"));
+    parameter Temperature Tstart=298.15 "Temperature start value" annotation (Dialog(tab="Initialization"));
     parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
       "Initialization option" annotation (Dialog(tab="Initialization"));
 

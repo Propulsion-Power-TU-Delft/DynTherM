@@ -1,7 +1,7 @@
 within DynTherM.Components.HeatTransfer.HTCorrelations.InternalConvection;
 model Cylinder
   "Internal convection for cylindrical shape"
-  extends BaseClassInternal;
+  extends BaseClasses.BaseClassInternal;
   parameter Velocity V_int=1 "Air speed inside plenum";
 
 equation

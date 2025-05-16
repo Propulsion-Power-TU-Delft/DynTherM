@@ -2,7 +2,7 @@ within DynTherM.Components.HeatTransfer.HTCorrelations.InternalConvection;
 model Gnielinski
   "Gnielinski's correlation for internal convection in pipes"
 
-  extends BaseClassInternal;
+  extends BaseClasses.BaseClassInternal;
   input Length Dh "Hydraulic diameter" annotation(Dialog(enable = true));
   input Temperature T_in "Inlet fluid temperature" annotation(Dialog(enable = true));
   input Temperature T_out "Outlet fluid temperature" annotation(Dialog(enable = true));
