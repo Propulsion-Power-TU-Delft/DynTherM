@@ -7,11 +7,11 @@ model ActuatorDisk "Simple actuator disk model"
 
   // Options
   parameter Boolean set_m_flow=false "If true, mass flow rate through the actuator disk is prescribed by the user";
-  parameter Boolean set_T=false "If true, thrust provided/absorbed by the actuator disk is prescribed by the user";
+  parameter Boolean set_T=true "If true, thrust provided/absorbed by the actuator disk is prescribed by the user";
   parameter Boolean set_W=false "If true, power provided/absorbed by the actuator disk is prescribed by the user";
-  parameter MassFlowRate m_flow_fixed=0 "Mass flow rate through the actuator disk - value prescribed by the user" annotation(Dialog(enable=set_m_flow));
-  parameter Force T_fixed=0 "Thrust provided/absorbed by the actuator disk - value prescribed by the user" annotation(Dialog(enable=set_T));
-  parameter Power W_fixed=0 "Power provided/absorbed by the actuator disk - value prescribed by the user" annotation(Dialog(enable=set_W));
+  input MassFlowRate m_flow_fixed=0 "Mass flow rate through the actuator disk - value prescribed by the user" annotation(Dialog(enable=set_m_flow));
+  input Force T_fixed=0 "Thrust provided/absorbed by the actuator disk - value prescribed by the user" annotation(Dialog(enable=set_T));
+  input Power W_fixed=0 "Power provided/absorbed by the actuator disk - value prescribed by the user" annotation(Dialog(enable=set_W));
 
   // Initialization
   parameter Medium.AbsolutePressure P_start=101325 "Pressure start value" annotation (Dialog(tab="Initialization"));
@@ -31,6 +31,7 @@ model ActuatorDisk "Simple actuator disk model"
   Pressure P_down "Pressure downstream of the actuator disk";
   Density rho_amb "Ambient density";
   SpecificEnthalpy h_amb "Ambient enthalpy";
+  Medium.ThermodynamicState state_out_tot "Total thermodynamic state at the outlet section";
 
   CustomInterfaces.ZeroDimensional.FluidPort_B outlet(
     redeclare package Medium = Medium,
@@ -41,6 +42,8 @@ model ActuatorDisk "Simple actuator disk model"
             110,10}})));
 
 equation
+  state_out_tot = Medium.setState_phX(outlet.P + rho_amb*V_out^2/2,
+    outlet.h_outflow + V_out^2/2, environment.X_amb);
   h_amb = Medium.specificEnthalpy(environment.state_amb);
   rho_amb = Medium.density(environment.state_amb);
 

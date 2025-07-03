@@ -10,7 +10,7 @@ model PlenumSimple "Plenum with heat and mass transfer"
   parameter Choices.InitOpt initOpt=Choices.InitOpt.fixedState
     "Initialization option" annotation (Dialog(tab="Initialization"));
 
-  parameter Volume V "Inner volume";
+  input Volume V "Inner volume" annotation (Dialog(enable=true));
 
   // Initialization
   parameter MassFlowRate m_flow_start=1

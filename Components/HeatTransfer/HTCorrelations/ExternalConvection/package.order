@@ -1,7 +1,7 @@
 FixedValue
 AircraftOnGroundFree
 AircraftFlying
-AircraftOnGroundForced
+CylinderCrossFlowForced
 HelicopterFlying
 HelicopterFlyingComplex
 HelicopterFlyingNASA

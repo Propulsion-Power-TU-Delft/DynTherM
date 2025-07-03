@@ -1087,6 +1087,135 @@ package TwoDimensional "Package collecting the components modeling coupled heat 
                                                  Diagram(coordinateSystem(
             preserveAspectRatio=false)));
   end ExternalConvection2D;
+
+  model InternalConvection2D
+    "Internal convection model implementing 2D spatial discretization"
+
+    replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
+      Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
+    model CV = DynTherM.Components.HeatTransfer.InternalConvection "Control volume";
+
+    replaceable model HTC =
+      DynTherM.Components.HeatTransfer.HTCorrelations.InternalConvection.FixedValue
+      constrainedby
+      DynTherM.Components.HeatTransfer.HTCorrelations.BaseClasses.BaseClassInternal
+      annotation (choicesAllMatching=true);
+
+    input Area A "Heat transfer area (total)" annotation (Dialog(enable=true));
+
+    // Discretization
+    parameter Integer Nx(min=1) "Number of control volumes in x-direction";
+    parameter Integer Ny(min=1) "Number of control volumes in y-direction";
+
+    CV cv[Nx,Ny](
+      redeclare model HTC = HTC,
+      redeclare package Medium = Medium,
+      each A = A_cv);
+
+    Area A_cv "Heat transfer area associated with one control volume";
+
+    CustomInterfaces.TwoDimensional.HeatPort2D_A inlet(
+      Nx=Nx,
+      Ny=Ny)
+      annotation (Placement(transformation(extent={{-60,-20},{60,80}}),
+          iconTransformation(extent={{-60,-20},{60,80}})));
+    CustomInterfaces.TwoDimensional.HeatPort2D_B outlet(
+      Nx=Nx,
+      Ny=Ny)
+      annotation (Placement(transformation(extent={{-60,-80},{60,20}}),
+          iconTransformation(extent={{-60,-80},{60,20}})));
+  equation
+    A_cv = A/(Nx*Ny);
+
+    for i in 1:Nx loop
+      for j in 1:Ny loop
+        connect(cv[i,j].inlet, inlet.ports[i,j]);
+        connect(cv[i,j].outlet, outlet.ports[i,j]);
+      end for;
+    end for;
+
+    annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
+          Line(points={{90,10},{-90,10}},   color={0,127,255}),
+          Line(points={{78,4},{90,10}},      color={0,127,255}),
+          Line(points={{90,-10},{-90,-10}}, color={0,127,255}),
+          Line(points={{78,16},{90,10}},     color={0,127,255}),
+          Line(points={{78,-16},{90,-10}},   color={0,127,255}),
+          Line(points={{78,-4},{90,-10}},    color={0,127,255})}),
+                                                 Diagram(coordinateSystem(
+            preserveAspectRatio=false)));
+  end InternalConvection2D;
+
+  model ParallelPlatesRadiation2D
+    "Radiation between parallel plates implementing 2D spatial discretization"
+
+    input Area A "Heat transfer area (total)" annotation (Dialog(enable=true));
+    input Real eps_in(min=0,max=1) "Emissivity of inlet surface: 1 is black body, 0 is pure reflection" annotation (Dialog(enable=true));
+    input Real eps_out(min=0,max=1) "Emissivity of outlet surface: 1 is black body, 0 is pure reflection" annotation (Dialog(enable=true));
+
+    // Discretization
+    parameter Integer Nx(min=1) "Number of control volumes in x-direction";
+    parameter Integer Ny(min=1) "Number of control volumes in y-direction";
+
+    Area A_cv "Heat transfer area associated with one control volume";
+    HeatFlowRate Q_flow[Nx,Ny] "Heat flow rate in each control volume";
+
+    CustomInterfaces.TwoDimensional.HeatPort2D_A inlet(
+      Nx=Nx,
+      Ny=Ny)
+      annotation (Placement(transformation(extent={{-60,28},{60,108}}),
+          iconTransformation(extent={{-60,28},{60,108}})));
+    CustomInterfaces.TwoDimensional.HeatPort2D_B outlet(
+      Nx=Nx,
+      Ny=Ny)
+      annotation (Placement(transformation(extent={{-60,-108},{60,-28}}),
+          iconTransformation(extent={{-60,-108},{60,-28}})));
+
+  equation
+    A_cv = A/(Nx*Ny);
+
+    for i in 1:Nx loop
+      for j in 1:Ny loop
+        Q_flow[i,j] = A_cv*sigma*(inlet.ports[i,j].T^4 - outlet.ports[i,j].T^4)*
+          eps_in*eps_out/((eps_in + eps_out) - eps_in*eps_out);
+        inlet.ports[i,j].Q_flow = Q_flow[i,j];
+        inlet.ports[i,j].Q_flow + outlet.ports[i,j].Q_flow = 0;
+      end for;
+    end for;
+
+    annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
+          Rectangle(
+            extent={{-100,60},{100,40}},
+            fillColor={192,192,192},
+            fillPattern=FillPattern.Backward),
+          Rectangle(
+            extent={{-100,-40},{100,-60}},
+            fillColor={192,192,192},
+            fillPattern=FillPattern.Backward),
+          Rectangle(
+            extent={{-100,-34},{100,-40}},
+            fillColor={191,0,0},
+            fillPattern=FillPattern.Solid,
+            pattern=LinePattern.None),
+          Rectangle(
+            extent={{-100,40},{100,34}},
+            fillColor={191,0,0},
+            fillPattern=FillPattern.Solid,
+            pattern=LinePattern.None),
+          Line(points={{-60,-28},{-60,30}}, color={238,46,47}),
+          Line(points={{-20,-28},{-20,30}}, color={238,46,47}),
+          Line(points={{-60,30},{-66,20}},  color={238,46,47}),
+          Line(points={{-60,30},{-54,20}},  color={238,46,47}),
+          Line(points={{-20,30},{-14,20}},  color={238,46,47}),
+          Line(points={{-20,30},{-26,20}},  color={238,46,47}),
+          Line(points={{20,30},{20,-28}},   color={238,46,47}),
+          Line(points={{60,30},{60,-28}},   color={238,46,47}),
+          Line(points={{20,-28},{14,-18}},  color={238,46,47}),
+          Line(points={{20,-28},{26,-18}},  color={238,46,47}),
+          Line(points={{60,-28},{66,-18}},  color={238,46,47}),
+          Line(points={{60,-28},{54,-18}},  color={238,46,47})}),
+                                                 Diagram(coordinateSystem(
+            preserveAspectRatio=false)));
+  end ParallelPlatesRadiation2D;
   annotation (Icon(graphics={
         Rectangle(
           lineColor={200,200,200},

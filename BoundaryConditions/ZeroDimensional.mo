@@ -305,10 +305,10 @@ package ZeroDimensional
     replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
       Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
 
-    parameter Medium.AbsolutePressure P_nom=101325 "Nominal pressure";
-    parameter Medium.Temperature T_nom=300 "Nominal temperature" annotation(Dialog(enable=not use_in_T and not use_di_T));
-    parameter Medium.MassFraction X_nom[Medium.nX]=Medium.reference_X "Nominal mass fractions" annotation(Dialog(enable=not use_in_Xw and not use_di_Xw));
-    parameter Medium.MassFlowRate massFlow_nom=1 "Nominal mass flowrate" annotation(Dialog(enable=not use_in_massFlow and not use_di_massFlow));
+    parameter AbsolutePressure P_nom=101325 "Nominal pressure";
+    parameter Temperature T_nom=300 "Nominal temperature" annotation(Dialog(enable=not use_in_T and not use_di_T));
+    parameter MassFraction X_nom[Medium.nX]=Medium.reference_X "Nominal mass fractions" annotation(Dialog(enable=not use_in_Xw and not use_di_Xw));
+    parameter MassFlowRate massFlow_nom=1 "Nominal mass flowrate" annotation(Dialog(enable=not use_in_massFlow and not use_di_massFlow));
     parameter DynTherM.CustomUnits.HydraulicConductance G=0
       "HydraulicConductance";
     parameter Boolean allowFlowReversal=environment.allowFlowReversal
@@ -322,9 +322,9 @@ package ZeroDimensional
     parameter Boolean use_di_massFlow=false "Use text-based defined mass flow rate" annotation(Dialog(tab="Inputs", group="Direct inputs"), choices(checkBox=true));
     parameter Boolean use_di_T=false "Use text-based defined temperature" annotation(Dialog(tab="Inputs", group="Direct inputs"), choices(checkBox=true));
     parameter Boolean use_di_X=false "Use text-based defined composition" annotation(Dialog(tab="Inputs", group="Direct inputs"), choices(checkBox=true));
-    input Medium.MassFlowRate massFlow_di=massFlow_nom "Mass flow" annotation(Dialog(tab="Inputs", group="Direct inputs", enable=use_di_massFlow));
-    input Medium.Temperature T_di=T_nom "Temperature" annotation(Dialog(tab="Inputs", group="Direct inputs", enable=use_di_T));
-    input Medium.MassFraction X_di[Medium.nX]=X_nom "Water mass fraction" annotation(Dialog(tab="Inputs", group="Direct inputs", enable=use_di_X));
+    input MassFlowRate massFlow_di=massFlow_nom "Mass flow" annotation(Dialog(tab="Inputs", group="Direct inputs", enable=use_di_massFlow));
+    input Temperature T_di=T_nom "Temperature" annotation(Dialog(tab="Inputs", group="Direct inputs", enable=use_di_T));
+    input MassFraction X_di[Medium.nX]=X_nom "Water mass fraction" annotation(Dialog(tab="Inputs", group="Direct inputs", enable=use_di_X));
 
     parameter Pressure P_start=101325 "Pressure start value" annotation (Dialog(tab="Initialization"));
     parameter Temperature T_start=300 "Temperature start value" annotation (Dialog(tab="Initialization"));
@@ -332,10 +332,10 @@ package ZeroDimensional
     parameter Medium.ThermodynamicState state_start = Medium.setState_pTX(P_start, T_start, X_start)
       "Starting thermodynamic state" annotation (Dialog(tab="Initialization"));
 
-    Medium.MassFlowRate massFlow(start=massFlow_nom) "Mass flow rate";
-    Medium.AbsolutePressure P(start=P_nom) "Pressure";
-    Medium.Temperature T(start=T_nom) "Temperature";
-    Medium.MassFraction X[Medium.nX](start=X_nom) "Mass fractions";
+    MassFlowRate massFlow(start=massFlow_nom) "Mass flow rate";
+    AbsolutePressure P(start=P_nom) "Pressure";
+    Temperature T(start=T_nom) "Temperature";
+    MassFraction X[Medium.nX](start=X_nom) "Mass fractions";
     Medium.ThermodynamicState state "Thermodynamic state";
 
     DynTherM.CustomInterfaces.ZeroDimensional.FluidPort_B outlet(
@@ -348,21 +348,20 @@ package ZeroDimensional
               {110,10}})));
     Modelica.Blocks.Interfaces.RealInput in_massFlow if use_in_massFlow annotation (Placement(
           transformation(
-          origin={-60,50},
+          origin={-60,70},
           extent={{-10,-10},{10,10}},
           rotation=270), iconTransformation(
           extent={{-10,-10},{10,10}},
           rotation=270,
-          origin={-80,70})));
+          origin={-58,70})));
     Modelica.Blocks.Interfaces.RealInput in_T if use_in_T annotation (Placement(
           transformation(
-          origin={-20,70},
+          origin={0,70},
           extent={{10,-10},{-10,10}},
           rotation=90), iconTransformation(
           extent={{10,-10},{-10,10}},
           rotation=90,
-          origin={-20,70})));
-
+          origin={0,70})));
   protected
     Modelica.Blocks.Interfaces.RealInput in_massFlow_internal;
     Modelica.Blocks.Interfaces.RealInput in_T_internal;
@@ -421,74 +420,6 @@ package ZeroDimensional
             fillColor={0,0,0},
             fillPattern=FillPattern.Solid)}));
   end flow_source;
-
-  model pressure_sink "Pressure sink"
-    replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
-      Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
-    outer DynTherM.Components.Environment environment "Environmental properties";
-
-    parameter DynTherM.CustomUnits.HydraulicResistance R=0 "Hydraulic Resistance";
-    parameter Boolean allowFlowReversal=environment.allowFlowReversal
-      "= true to allow flow reversal, false restricts to design direction";
-    parameter Boolean use_ambient=true "Use ambient conditions for the plenum";
-    input Modelica.Units.SI.Pressure P_di=101325 "Fixed value of pressure" annotation (Dialog(enable=not use_ambient));
-    input Modelica.Units.SI.Temperature T_di=288.15 "Fixed value of temperature" annotation (Dialog(enable=not use_ambient));
-    input Medium.MassFraction X_di[Medium.nX]=Medium.reference_X "Fixed value of mass fractions" annotation (Dialog(enable=not use_ambient));
-
-    parameter Pressure P_start=101325 "Pressure start value" annotation (Dialog(tab="Initialization"));
-    parameter Temperature T_start=300 "Temperature start value" annotation (Dialog(tab="Initialization"));
-    parameter MassFraction X_start[Medium.nX]=Medium.reference_X "Start gas composition" annotation (Dialog(tab="Initialization"));
-    parameter Medium.ThermodynamicState state_start = Medium.setState_pTX(P_start, T_start, X_start)
-      "Starting thermodynamic state" annotation (Dialog(tab="Initialization"));
-
-    Medium.ThermodynamicState state_sink "Thermodynamic state of the sink";
-
-    DynTherM.CustomInterfaces.ZeroDimensional.FluidPort_A inlet(
-      redeclare package Medium = Medium,
-      m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0),
-      P(start=P_start),
-      h_outflow(start=Medium.specificEnthalpy(state_start)),
-      Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{
-              -120,-20},{-80,20}}, rotation=0), iconTransformation(extent={{-110,
-              -10},{-90,10}})));
-
-  equation
-    if use_ambient then
-
-      if R > 0 then
-        inlet.P = environment.P_amb + inlet.m_flow*R;
-      else
-        inlet.P = environment.P_amb;
-      end if;
-
-      state_sink = Medium.setState_pTX(environment.P_amb, environment.T_amb, environment.X_amb);
-
-    else
-
-      inlet.P = P_di;
-      state_sink = Medium.setState_pTX(P_di, T_di, X_di);
-    end if;
-
-    inlet.Xi_outflow = X_di;
-    inlet.h_outflow = Medium.specificEnthalpy(state_sink);
-
-    annotation (Documentation(info="<html>
-<p>The actual gas used in the component is determined by the replaceable Medium package.</p>
-<p>The sink pressure, temperature and mass fraction can be either specified as parameter or input.</p>
-<p>Model adapted from ThermoPower library by Francesco Casella.</p>
-</html>", revisions="<html>
-</html>"), Icon(graphics={     Ellipse(
-            extent={{-90,-90},{90,90}},
-            lineColor={0,0,0},
-            fillColor={255,255,255},
-            fillPattern=FillPattern.Solid,
-            lineThickness=0.5),             Text(
-            extent={{-62,62},{66,-66}},
-            lineColor={0,0,0},
-            fillColor={159,159,223},
-            fillPattern=FillPattern.None,
-            textString="P SINK")}));
-  end pressure_sink;
 
   model flow_source_ext "Flow rate source using ExternalMedia fluid"
     outer DynTherM.Components.Environment environment "Environmental properties";
@@ -602,6 +533,185 @@ package ZeroDimensional
             fillColor={0,0,0},
             fillPattern=FillPattern.Solid)}));
   end flow_source_ext;
+
+  model pressure_source "Flow rate source"
+    outer DynTherM.Components.Environment environment "Environmental properties";
+    replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
+      Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
+
+    parameter AbsolutePressure P_nom=101325 "Nominal pressure";
+    parameter Temperature T_nom=300 "Nominal temperature" annotation(Dialog(enable=not use_in_T and not use_di_T));
+    parameter MassFraction X_nom[Medium.nX]=Medium.reference_X "Nominal mass fractions" annotation(Dialog(enable=not use_in_Xw and not use_di_Xw));
+    parameter Boolean allowFlowReversal=environment.allowFlowReversal
+      "= true to allow flow reversal, false restricts to design direction";
+
+    // External Inputs
+    parameter Boolean use_in_P = false "Use connector input for the pressure" annotation(Dialog(tab="Inputs", group="External inputs"), choices(checkBox=true));
+    parameter Boolean use_in_T = false "Use connector input for the temperature" annotation(Dialog(tab="Inputs", group="External inputs"), choices(checkBox=true));
+
+    // Direct Inputs
+    parameter Boolean use_di_P=false "Use text-based defined pressure" annotation(Dialog(tab="Inputs", group="Direct inputs"), choices(checkBox=true));
+    parameter Boolean use_di_T=false "Use text-based defined temperature" annotation(Dialog(tab="Inputs", group="Direct inputs"), choices(checkBox=true));
+    parameter Boolean use_di_X=false "Use text-based defined composition" annotation(Dialog(tab="Inputs", group="Direct inputs"), choices(checkBox=true));
+    input AbsolutePressure P_di=P_nom "Pressure" annotation(Dialog(tab="Inputs", group="Direct inputs", enable=use_di_P));
+    input Temperature T_di=T_nom "Temperature" annotation(Dialog(tab="Inputs", group="Direct inputs", enable=use_di_T));
+    input MassFraction X_di[Medium.nX]=X_nom "Water mass fraction" annotation(Dialog(tab="Inputs", group="Direct inputs", enable=use_di_X));
+
+    parameter Pressure P_start=101325 "Pressure start value" annotation (Dialog(tab="Initialization"));
+    parameter Temperature T_start=300 "Temperature start value" annotation (Dialog(tab="Initialization"));
+    parameter MassFraction X_start[Medium.nX]=Medium.reference_X "Start gas composition" annotation (Dialog(tab="Initialization"));
+    parameter Medium.ThermodynamicState state_start = Medium.setState_pTX(P_start, T_start, X_start)
+      "Starting thermodynamic state" annotation (Dialog(tab="Initialization"));
+
+    AbsolutePressure P(start=P_nom) "Pressure";
+    Temperature T(start=T_nom) "Temperature";
+    MassFraction X[Medium.nX](start=X_nom) "Mass fractions";
+    Medium.ThermodynamicState state "Thermodynamic state";
+
+    DynTherM.CustomInterfaces.ZeroDimensional.FluidPort_B outlet(
+      redeclare package Medium = Medium,
+      m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0),
+      P(start=P_start),
+      h_outflow(start=Medium.specificEnthalpy(state_start)),
+      Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{
+              80,-20},{120,20}}, rotation=0), iconTransformation(extent={{90,-10},
+              {110,10}})));
+    Modelica.Blocks.Interfaces.RealInput in_T if use_in_T annotation (Placement(
+          transformation(
+          origin={0,70},
+          extent={{10,-10},{-10,10}},
+          rotation=90), iconTransformation(
+          extent={{10,-10},{-10,10}},
+          rotation=90,
+          origin={0,70})));
+    Modelica.Blocks.Interfaces.RealInput in_P if use_in_P annotation (Placement(
+          transformation(
+          origin={60,70},
+          extent={{10,-10},{-10,10}},
+          rotation=90), iconTransformation(
+          extent={{10,-10},{-10,10}},
+          rotation=90,
+          origin={60,70})));
+  protected
+    Modelica.Blocks.Interfaces.RealInput in_P_internal;
+    Modelica.Blocks.Interfaces.RealInput in_T_internal;
+
+  equation
+    state = Medium.setState_pTX(P, T, X);
+
+    T = in_T_internal;
+    if not use_in_T and not use_di_T then
+      in_T_internal = T_nom "Temperature set by parameter";
+    elseif use_di_T and not use_in_T then
+      in_T_internal = T_di "Temperature set by direct inputs";
+    end if;
+
+    P = in_P_internal;
+    if not use_in_P and not use_di_P then
+      in_P_internal = P_nom "Pressure set by parameter";
+    elseif use_di_P and not use_in_P then
+      in_P_internal = P_di "Pressure set by direct inputs";
+    end if;
+
+    if use_di_X then
+      X = X_di "Composition set by direct inputs";
+    else
+      X = X_nom "Composition set by parameter";
+    end if;
+
+    outlet.P = P;
+    outlet.h_outflow = Medium.specificEnthalpy(state);
+    outlet.Xi_outflow = X;
+
+    // Connect protected connectors to public conditional connectors
+    connect(in_P, in_P_internal);
+    connect(in_T, in_T_internal);
+
+    annotation (Documentation(info="<html>
+<p>The actual gas used in the component is determined by the replaceable <span style=\"font-family: Courier New;\">Medium</span> package.</p>
+<p>The source mass flow rate, temperature and mass fraction can be either specified as parameter, input or wired from input blocks.</p>
+<p>Model adapted from <span style=\"font-family: Courier New;\">ThermoPower</span> library by Francesco Casella.</p>
+</html>", revisions="<html>
+</html>"), Icon(graphics={
+          Rectangle(
+            extent={{-100,60},{90,-60}},
+            lineColor={128,128,128},
+            fillColor={255,255,255},
+            fillPattern=FillPattern.Solid),
+          Polygon(
+            points={{-40,-40},{40,0},{-40,40},{0,0},{-40,-40}},
+            lineColor={0,0,0},
+            fillColor={0,0,0},
+            fillPattern=FillPattern.Solid)}));
+  end pressure_source;
+
+  model pressure_sink "Pressure sink"
+    replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
+      Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
+    outer DynTherM.Components.Environment environment "Environmental properties";
+
+    parameter DynTherM.CustomUnits.HydraulicResistance R=0 "Hydraulic Resistance";
+    parameter Boolean allowFlowReversal=environment.allowFlowReversal
+      "= true to allow flow reversal, false restricts to design direction";
+    parameter Boolean use_ambient=true "Use ambient conditions for the plenum";
+    input Modelica.Units.SI.Pressure P_di=101325 "Fixed value of pressure" annotation (Dialog(enable=not use_ambient));
+    input Modelica.Units.SI.Temperature T_di=288.15 "Fixed value of temperature" annotation (Dialog(enable=not use_ambient));
+    input Medium.MassFraction X_di[Medium.nX]=Medium.reference_X "Fixed value of mass fractions" annotation (Dialog(enable=not use_ambient));
+
+    parameter Pressure P_start=101325 "Pressure start value" annotation (Dialog(tab="Initialization"));
+    parameter Temperature T_start=300 "Temperature start value" annotation (Dialog(tab="Initialization"));
+    parameter MassFraction X_start[Medium.nX]=Medium.reference_X "Start gas composition" annotation (Dialog(tab="Initialization"));
+    parameter Medium.ThermodynamicState state_start = Medium.setState_pTX(P_start, T_start, X_start)
+      "Starting thermodynamic state" annotation (Dialog(tab="Initialization"));
+
+    Medium.ThermodynamicState state_sink "Thermodynamic state of the sink";
+
+    DynTherM.CustomInterfaces.ZeroDimensional.FluidPort_A inlet(
+      redeclare package Medium = Medium,
+      m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0),
+      P(start=P_start),
+      h_outflow(start=Medium.specificEnthalpy(state_start)),
+      Xi_outflow(start=X_start)) annotation (Placement(transformation(extent={{
+              -120,-20},{-80,20}}, rotation=0), iconTransformation(extent={{-110,
+              -10},{-90,10}})));
+
+  equation
+    if use_ambient then
+
+      if R > 0 then
+        inlet.P = environment.P_amb + inlet.m_flow*R;
+      else
+        inlet.P = environment.P_amb;
+      end if;
+
+      state_sink = Medium.setState_pTX(environment.P_amb, environment.T_amb, environment.X_amb);
+
+    else
+
+      inlet.P = P_di;
+      state_sink = Medium.setState_pTX(P_di, T_di, X_di);
+    end if;
+
+    inlet.Xi_outflow = X_di;
+    inlet.h_outflow = Medium.specificEnthalpy(state_sink);
+
+    annotation (Documentation(info="<html>
+<p>The actual gas used in the component is determined by the replaceable Medium package.</p>
+<p>The sink pressure, temperature and mass fraction can be either specified as parameter or input.</p>
+<p>Model adapted from ThermoPower library by Francesco Casella.</p>
+</html>", revisions="<html>
+</html>"), Icon(graphics={     Ellipse(
+            extent={{-90,-90},{90,90}},
+            lineColor={0,0,0},
+            fillColor={255,255,255},
+            fillPattern=FillPattern.Solid,
+            lineThickness=0.5),             Text(
+            extent={{-62,62},{66,-66}},
+            lineColor={0,0,0},
+            fillColor={159,159,223},
+            fillPattern=FillPattern.None,
+            textString="P SINK")}));
+  end pressure_sink;
   annotation (Icon(graphics={
         Rectangle(
           lineColor={200,200,200},

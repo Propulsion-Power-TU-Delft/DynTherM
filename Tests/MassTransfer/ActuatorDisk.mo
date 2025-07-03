@@ -1,6 +1,7 @@
 within DynTherM.Tests.MassTransfer;
 model ActuatorDisk "Test of actuator disk model"
   Components.MassTransfer.ActuatorDisk actuatorDisk(
+    set_T=false,
     set_W=true,
     W_fixed(displayUnit="kW") = 1000*(13004/8),
     R_disk=3.72)

@@ -11,3 +11,5 @@ WallConduction3D
 ExternalConvection
 WallHorizontal3D
 WallVertical3D
+InternalConvection2D
+ParallelPlatesRadiation2D
