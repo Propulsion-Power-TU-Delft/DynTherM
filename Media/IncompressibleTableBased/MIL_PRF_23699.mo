@@ -705,7 +705,7 @@ package MIL_PRF_23699
                                             422.15, 0.00208522];
 
   extends Modelica.Media.Incompressible.TableBased(
-    mediumName="Ethylene Glycol-Water",
+    mediumName="MIL-PRF-23699",
     TinK = true,
     T_min=250.15,
     T_max=422.15,
