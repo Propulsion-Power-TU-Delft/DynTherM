@@ -1,6 +1,6 @@
 within DynTherM.Tests.Distributed;
 model CircularCV
-  package Refrigerant = DynTherM.Media.IncompressibleTableBased.MEG(X=0.1)
+  package Refrigerant = DynTherM.Media.IncompressibleTableBased.EGW(X=0.1)
     "Refrigerant";
 
   BoundaryConditions.ZeroDimensional.flow_source ECSFlow(

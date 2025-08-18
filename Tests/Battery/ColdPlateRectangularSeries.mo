@@ -1,6 +1,6 @@
 within DynTherM.Tests.Battery;
 model ColdPlateRectangularSeries
-    package Coolant = DynTherM.Media.IncompressibleTableBased.MEG(X=0.1);
+    package Coolant = DynTherM.Media.IncompressibleTableBased.EGW(X=0.1);
 
     parameter Integer N_cv=2;
 

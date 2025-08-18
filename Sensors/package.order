@@ -1,4 +1,6 @@
 PressureSensor
 MassflowSensor
+PressureDifferentialSensor
+TemperatureDifferentialSensor
 PressureSensorExt
 MassflowSensorExt

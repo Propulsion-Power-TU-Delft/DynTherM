@@ -1,6 +1,6 @@
 within DynTherM.Tests.Distributed;
 model RectangularCV
-  package Refrigerant = DynTherM.Media.IncompressibleTableBased.MEG(X=0.1)
+  package Refrigerant = DynTherM.Media.IncompressibleTableBased.EGW(X=0.1)
     "Refrigerant";
 
   parameter Modelica.Units.SI.Length L "Length of the control volume";

@@ -19,11 +19,12 @@ model ActuatorDisk "Simple actuator disk model"
   parameter Medium.MassFraction X_start[Medium.nX]=Medium.reference_X "Start gas composition" annotation (Dialog(tab="Initialization"));
   parameter Medium.ThermodynamicState state_start = Medium.setState_pTX(P_start, T_start, X_start)
     "Starting thermodynamic state" annotation (Dialog(tab="Initialization"));
+  parameter Velocity V_disk_start=100 "Flow velocity at the actuator disk section - start value";
 
   parameter Length R_disk "Radius of the actuator disk";
 
   Area A_disk "Area of the actuator disk";
-  Velocity V_disk "Flow velocity at the actuator disk section";
+  Velocity V_disk(start=V_disk_start) "Flow velocity at the actuator disk section";
   Velocity V_out "Flow velocity at the outlet section";
   Force T "Thrust provided/absorbed by the actuator disk";
   Power W "Power provided/absorbed by the actuator disk";

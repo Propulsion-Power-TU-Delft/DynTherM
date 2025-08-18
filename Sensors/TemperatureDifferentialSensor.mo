@@ -1,5 +1,5 @@
 within DynTherM.Sensors;
-model MassflowSensor "Mass flow rate sensor"
+model TemperatureDifferentialSensor "Temperature differential sensor"
   extends Modelica.Icons.RoundSensor;
   replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
@@ -19,30 +19,33 @@ model MassflowSensor "Mass flow rate sensor"
         Medium, m_flow(max=if allowFlowReversal then +Modelica.Constants.inf
            else 0)) annotation (Placement(transformation(extent={{90,-10},{110,
             10}}), iconTransformation(extent={{90,-10},{110,10}})));
+
 equation
-  inlet.m_flow + outlet.m_flow = 0 "Mass balance";
-  inlet.P = outlet.P "Momentum balance";
+  // Zero flow equations for connectors
+  inlet.m_flow = 0;
+  outlet.m_flow = 0;
 
-  // Energy balance
-  inlet.h_outflow = inStream(outlet.h_outflow);
-  outlet.h_outflow = inStream(inlet.h_outflow);
+  // No contribution of specific quantities
+  inlet.h_outflow = Medium.h_default;
+  outlet.h_outflow = Medium.h_default;
+  inlet.Xi_outflow = Medium.X_default[1:Medium.nX];
+  outlet.Xi_outflow = Medium.X_default[1:Medium.nX];
 
-  // Independent composition mass balances
-  inlet.Xi_outflow = inStream(outlet.Xi_outflow);
-  outlet.Xi_outflow = inStream(inlet.Xi_outflow);
+  // Relative pressure
+  y = Medium.temperature(Medium.setState_phX(inlet.P, inStream(inlet.h_outflow), inStream(inlet.Xi_outflow))) -
+      Medium.temperature(Medium.setState_phX(outlet.P, inStream(outlet.h_outflow), inStream(outlet.Xi_outflow)));
 
-  y = inlet.m_flow "Sensor output";
   annotation (
     Documentation(info="<html>
 <p>The PressureSensor measures the absolute pressure.</p>
 <p>Thermodynamic equations are defined by Partials.AbsoluteSensor.</p>
 </html>"),
     Icon(coordinateSystem(preserveAspectRatio=true, extent={{-100,-100},{100,100}}),
-      graphics={Text(
-          extent={{-50,18},{50,-82}},
-          lineColor={0,0,0},
-          textString="m flow"),
-                           Line(points={{-100,0},{-70,0}}, color={0,0,0}),
+      graphics={           Line(points={{-100,0},{-70,0}}, color={0,0,0}),
                            Line(points={{0,70},{0,100}},   color={0,0,0}),
-                           Line(points={{70,0},{100,0}},   color={0,0,0})}));
-end MassflowSensor;
+                           Line(points={{70,0},{100,0}},   color={0,0,0}),
+                Text(
+          extent={{-30,-8},{28,-66}},
+          lineColor={0,0,0},
+          textString="dT")}));
+end TemperatureDifferentialSensor;

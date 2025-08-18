@@ -5,8 +5,8 @@ package OneDimensional
     "Model to impose 1D distribution of heat flow rate and temperature"
 
     parameter Integer Nx=1 "Number of ports in x-direction";
-    parameter Temperature T[Nx]=273.15*ones(Nx) "Temperature" annotation (Dialog(tab="Boundary conditions", enable=use_di_T));
-    parameter HeatFlowRate Q[Nx]=1e3*ones(Nx) "Heat flow rate" annotation (Dialog(tab="Boundary conditions", enable=use_di_Q));
+    input Temperature T[Nx]=273.15*ones(Nx) "Temperature" annotation (Dialog(tab="Boundary conditions", enable=use_di_T));
+    input HeatFlowRate Q[Nx]=1e3*ones(Nx) "Heat flow rate" annotation (Dialog(tab="Boundary conditions", enable=use_di_Q));
     parameter Boolean use_di_Q = true "True if heat flow rate is given as parameter" annotation (Dialog(tab="Boundary conditions"), choices(checkBox=true));
     parameter Boolean use_di_T = false "True if temperature is given as parameter" annotation (Dialog(tab="Boundary conditions"), choices(checkBox=true));
     parameter Boolean use_in_Q = false "True if heat flow rate is given as input" annotation (Dialog(tab="Boundary conditions"), choices(checkBox=true));

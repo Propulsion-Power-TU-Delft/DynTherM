@@ -43,7 +43,6 @@ model CircularPipeBend180
       R_bend=R_bend,
       Re=Re,
       theeta=theeta) annotation (choicesAllMatching=true);
-//
 
   DPC friction;
   GEO geometry;

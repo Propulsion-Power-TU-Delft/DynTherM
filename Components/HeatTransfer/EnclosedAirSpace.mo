@@ -8,18 +8,21 @@ model EnclosedAirSpace "Dynamic model for non-ventilated closed air cavities in 
   parameter Length h "Height of the air cavity";
   parameter Length l "Length of the air cavity";
   parameter Angle delta "Inclination angle of the air cavity";
-  parameter CoefficientOfHeatTransfer ht_start=1
-    "Heat transfer coefficient - starting value" annotation (Dialog(tab="Initialization"));
 
-  input Pressure P "Average pressure inside the air cavity";
-  input MassFraction X[2] "Mass fraction of the air cavity";
+  // Initialization
+  parameter CoefficientOfHeatTransfer ht_start=1
+    "Heat transfer coefficient - start value" annotation (Dialog(tab="Initialization"));
+  parameter RayleighNumber Ra_start=1e3 "Rayleigh number - start value" annotation (Dialog(tab="Initialization"));
+
+  input Pressure P "Average pressure inside the air cavity" annotation (Dialog(enable=true));
+  input MassFraction X[2] "Mass fraction of the air cavity" annotation (Dialog(enable=true));
 
   Area A "Surface of the air cavity";
   Temperature T "Average temperature inside the air cavity";
   NusseltNumber Nu "Nusselt number";
   NusseltNumber Nu_90 "Nusselt number for cavity inclined at 90 degrees";
   NusseltNumber Nu_60 "Nusselt number for cavity inclined at 60 degrees";
-  RayleighNumber Ra "Rayleigh number";
+  RayleighNumber Ra(start=Ra_start) "Rayleigh number";
   Medium.ThermodynamicState state "Average thermodynamic state";
   CoefficientOfHeatTransfer ht(start=ht_start) "Heat transfer coefficient";
 
@@ -81,7 +84,7 @@ equation
   // Boundary conditions
   T = (inlet.T + outlet.T)/2;
 
-  assert(Modelica.Units.Conversions.to_deg(delta) <= 90, "The inclination angle is outside the range 0-90 degrees");
+  assert(Modelica.Units.Conversions.to_deg(delta) < 90, "The inclination angle is outside the range 0-90 degrees");
 
   annotation (
     Icon(graphics={   Rectangle(

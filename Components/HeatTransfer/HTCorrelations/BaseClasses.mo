@@ -5,7 +5,7 @@ package BaseClasses
       Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
     outer DynTherM.Components.Environment environment "Environmental properties";
 
-    input Temperature T_surf "Surface temperature";
+    input Temperature T_surf "Surface temperature" annotation (Dialog(enable=true));
     parameter CoefficientOfHeatTransfer ht_start=10
       "Heat transfer coefficient - starting value";
 

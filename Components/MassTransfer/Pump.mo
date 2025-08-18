@@ -1,6 +1,6 @@
 within DynTherM.Components.MassTransfer;
 model Pump "Model of a pump"
-  replaceable package Medium = Media.IncompressibleTableBased.MEG(X=0.5) "Medium model" annotation(choicesAllMatching = true);
+  replaceable package Medium = Media.IncompressibleTableBased.EGW(X=0.5) "Medium model" annotation(choicesAllMatching = true);
 
   parameter Boolean allowFlowReversal=true
      "= true to allow flow reversal, false restricts to design direction";

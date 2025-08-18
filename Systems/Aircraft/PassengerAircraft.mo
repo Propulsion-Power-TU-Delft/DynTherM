@@ -549,9 +549,10 @@ equation
     annotation (Line(points={{-156,-42},{-156,-50}},
                                                  color={0,0,0}));
   connect(T_ECS,packFlow. in_T)
-    annotation (Line(points={{-182,-62},{-163,-62}},color={0,0,127}));
-  connect(m_ECS,packFlow. in_massFlow) annotation (Line(points={{-182,-78},{-168,
-          -78},{-168,-68},{-163,-68}},
+    annotation (Line(points={{-182,-62},{-172,-62},{-172,-60},{-163,-60}},
+                                                    color={0,0,127}));
+  connect(m_ECS,packFlow. in_massFlow) annotation (Line(points={{-182,-78},{
+          -168,-78},{-168,-65.8},{-163,-65.8}},
                                 color={0,0,127}));
   connect(cabinFloor.int, cargo.cargoToFloor) annotation (Line(points={{33,-0.7},
           {33,-14.4},{33.2,-14.4}}, color={191,0,0}));
@@ -578,19 +579,22 @@ equation
           {-99,-14},{-100,-14},{-100,-14.4},{-99.2,-14.4}},
                                                           color={191,0,0}));
   connect(m_trim_cabin,cabinTrimFlow. in_massFlow)
-    annotation (Line(points={{68,108},{68,87}}, color={0,0,127}));
+    annotation (Line(points={{68,108},{68,98},{68,87},{65.8,87}},
+                                                color={0,0,127}));
   connect(cockpitTemperature, cockpit.cockpitTemperature) annotation (Line(
         points={{-186,44},{-178,44},{-178,44.56},{-125,44.56}},color={0,0,127}));
   connect(cockpitTrimFlow.outlet, cockpit.cockpitInflow)
     annotation (Line(points={{-88,80},{-84,80},{-84,60.4}}, color={0,0,0}));
   connect(cockpitTrimFlow.in_massFlow, m_trim_cockpit)
-    annotation (Line(points={{-106,87},{-106,108}}, color={0,0,127}));
+    annotation (Line(points={{-103.8,87},{-103.8,98},{-106,98},{-106,108}},
+                                                    color={0,0,127}));
   connect(cockpit.cockpitToCabin, cabinWall.int) annotation (Line(points={{-74,46},
           {-74,48},{-72,48},{-72,46},{-38.4,46}}, color={191,0,0}));
-  connect(T_trim, cabinTrimFlow.in_T) annotation (Line(points={{0,108},{0,94},{62,
-          94},{62,87}}, color={0,0,127}));
+  connect(T_trim, cabinTrimFlow.in_T) annotation (Line(points={{0,108},{0,94},{
+          60,94},{60,87}},
+                        color={0,0,127}));
   connect(T_trim, cockpitTrimFlow.in_T) annotation (Line(points={{0,108},{0,94},
-          {-100,94},{-100,87}}, color={0,0,127}));
+          {-98,94},{-98,87}},   color={0,0,127}));
   connect(cockpit.cockpitToCargo, dadoPanelCockpit.inlet) annotation (Line(
         points={{-84,31.6},{-84,30},{-60,30},{-60,20}}, color={0,0,0}));
   connect(dadoPanelCockpit.outlet, EEbay.cargoToCabin) annotation (Line(points=

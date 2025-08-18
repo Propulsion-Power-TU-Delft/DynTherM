@@ -10,8 +10,8 @@ model PressureSensorExt
     annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
 equation
   port.m_flow = 0;
-  port.h_outflow = 0;
-  port.Xi_outflow = zeros(Medium.nX);
+  port.h_outflow = Medium.h_default;
+  port.Xi_outflow = Medium.X_default[1:Medium.nX];
   port.C_outflow = zeros(Medium.nC);
 
   // sensor output

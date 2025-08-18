@@ -1,6 +1,6 @@
 within DynTherM.Tests.Distributed;
 model Rectangular2D_manual
-  package Refrigerant = DynTherM.Media.IncompressibleTableBased.MEG(X=0.5)
+  package Refrigerant = DynTherM.Media.IncompressibleTableBased.EGW(X=0.5)
     "Refrigerant";
 
   parameter Integer N_cv=3 "Number of longitudinal sections in which the tube is discretized";
