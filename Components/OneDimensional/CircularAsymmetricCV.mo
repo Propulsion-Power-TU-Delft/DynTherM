@@ -14,14 +14,13 @@ model CircularAsymmetricCV
     "Initialization option" annotation (Dialog(tab="Initialization"));
 
   // Geometry
-  parameter Integer N=1 "Number of control volumes in parallel";
   parameter Length L "Length of the control volume" annotation (Dialog(tab="Geometry"));
   input Length R_ext_north "External radius of the control volume - north side" annotation (Dialog(tab="Geometry", enable=true));
   input Length R_ext_east "External radius of the control volume - east side" annotation (Dialog(tab="Geometry", enable=true));
   input Length R_ext_south "External radius of the control volume - south side" annotation (Dialog(tab="Geometry", enable=true));
   input Length R_ext_west "External radius of the control volume - west side" annotation (Dialog(tab="Geometry", enable=true));
   parameter Length R_int "Internal radius of the control volume" annotation (Dialog(tab="Geometry"));
-  parameter Length Roughness=0.015*10^(-3) "Pipe roughness" annotation (Dialog(tab="Geometry"));
+  parameter Length ks=0.0015e-3 "Surface roughness" annotation (Dialog(tab="Geometry"));
 
   // Initialization
   parameter Temperature T_start_solid=288.15
@@ -83,14 +82,12 @@ model CircularAsymmetricCV
     state_start=state_start,
     Re_start=Re_start,
     Pr_start=Pr_start,
-    N=N,
     L=L,
     D=R_int*2,
-    Roughness=Roughness)
+    ks=ks)
     annotation (Placement(transformation(extent={{-40,-40},{40,40}})));
   HeatTransfer.TubeConduction solid_north(
     redeclare model Mat = Mat,
-    N=N,
     coeff=1/4,
     L=L,
     R_ext=R_ext_north,
@@ -113,7 +110,6 @@ model CircularAsymmetricCV
         iconTransformation(extent={{50,60},{70,80}})));
   HeatTransfer.TubeConduction solid_east(
     redeclare model Mat = Mat,
-    N=N,
     coeff=1/4,
     L=L,
     R_ext=R_ext_east,
@@ -123,7 +119,6 @@ model CircularAsymmetricCV
     annotation (Placement(transformation(extent={{-50,66},{-10,34}})));
   HeatTransfer.TubeConduction solid_south(
     redeclare model Mat = Mat,
-    N=N,
     coeff=1/4,
     L=L,
     R_ext=R_ext_south,
@@ -133,7 +128,6 @@ model CircularAsymmetricCV
     annotation (Placement(transformation(extent={{10,66},{50,34}})));
   HeatTransfer.TubeConduction solid_west(
     redeclare model Mat = Mat,
-    N=N,
     coeff=1/4,
     L=L,
     R_ext=R_ext_west,
@@ -143,8 +137,8 @@ model CircularAsymmetricCV
     annotation (Placement(transformation(extent={{60,66},{100,34}})));
 
 equation
-  V_tot = N*L*pi*((R_ext_north + R_ext_east + R_ext_south + R_ext_west)/4)^2;
-  V_fluid = N*L*pi*R_int^2;
+  V_tot = L*pi*((R_ext_north + R_ext_east + R_ext_south + R_ext_west)/4)^2;
+  V_fluid = L*pi*R_int^2;
   V_tot = V_fluid + V_solid;
   m_tot = m_fluid + m_solid;
   m_fluid = fluid.rho*V_fluid;

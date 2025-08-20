@@ -3,7 +3,6 @@ model WallConduction "Dynamic model of conduction in a planar surface"
   replaceable model Mat=Materials.Aluminium constrainedby
     Materials.Properties "Material choice" annotation (choicesAllMatching=true);
 
-  input Real N=1 "Number of walls in parallel" annotation (Dialog(enable=true));
   input Length t "Wall thickness" annotation (Dialog(enable=true));
   input Area A "Wall surface" annotation (Dialog(enable=true));
 
@@ -26,10 +25,10 @@ equation
   m = Mat.rho*A*t;
   Cm = m*Mat.cm;
 
-  N*Cm*der(T_vol) = inlet.Q_flow + outlet.Q_flow "Energy balance";
-  inlet.Q_flow = (Mat.lambda*N*A*(inlet.T - T_vol))/(t/2)
+  Cm*der(T_vol) = inlet.Q_flow + outlet.Q_flow "Energy balance";
+  inlet.Q_flow = (Mat.lambda*A*(inlet.T - T_vol))/(t/2)
     "Heat conduction through the internal half-thickness";
-  outlet.Q_flow = (Mat.lambda*N*A*(outlet.T - T_vol))/(t/2)
+  outlet.Q_flow = (Mat.lambda*A*(outlet.T - T_vol))/(t/2)
     "Heat conduction through the external half-thickness";
 
 initial equation

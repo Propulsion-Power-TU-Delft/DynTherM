@@ -13,11 +13,10 @@ model CircularCV "Control volume modeling a portion of a circular channel"
     "Initialization option" annotation (Dialog(tab="Initialization"));
 
   // Geometry
-  parameter Integer N=1 "Number of control volumes in parallel";
   parameter Length L "Length of the control volume" annotation (Dialog(tab="Geometry"));
   parameter Length R_ext "External radius of the control volume" annotation (Dialog(tab="Geometry"));
   parameter Length R_int "Internal radius of the control volume" annotation (Dialog(tab="Geometry"));
-  parameter Length Roughness=0.015*10^(-3) "Pipe roughness" annotation (Dialog(tab="Geometry"));
+  parameter Length ks=0.0015e-3 "Surface roughness" annotation (Dialog(tab="Geometry"));
 
   // Initialization
   parameter Temperature T_start_solid=288.15
@@ -79,14 +78,12 @@ model CircularCV "Control volume modeling a portion of a circular channel"
     state_start=state_start,
     Re_start=Re_start,
     Pr_start=Pr_start,
-    N=N,
+    ks=ks,
     L=L,
-    D=R_int*2,
-    Roughness=Roughness)
+    D=R_int*2)
     annotation (Placement(transformation(extent={{-40,-40},{40,40}})));
   HeatTransfer.TubeConduction solid(
     redeclare model Mat = Mat,
-    N=N,
     coeff=1,
     L=L,
     R_ext=R_ext,
@@ -99,8 +96,8 @@ model CircularCV "Control volume modeling a portion of a circular channel"
         iconTransformation(extent={{-10,70},{10,90}})));
 
 equation
-  V_tot = N*L*pi*R_ext^2;
-  V_fluid = N*L*pi*R_int^2;
+  V_tot = L*pi*R_ext^2;
+  V_fluid = L*pi*R_int^2;
   V_tot = V_fluid + V_solid;
   m_tot = m_fluid + m_solid;
   m_fluid = fluid.rho*V_fluid;

@@ -49,12 +49,10 @@ model RectangularChannel1D
 
   // Discretization
   parameter Integer N_cv(min=1) "Number of longitudinal sections in which the tube is discretized";
-  input Real N_channels(min=1) "Number of channels in parallel" annotation (Dialog(enable=true));
 
   CV cv[N_cv](
     redeclare model Mat = Mat,
     redeclare package Medium = Medium,
-    each N=N_channels,
     each L=L/N_cv,
     each W=W,
     each H=H,

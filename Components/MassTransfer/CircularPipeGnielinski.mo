@@ -30,10 +30,9 @@ model CircularPipeGnielinski
   parameter PrandtlNumber Pr_start=1.5 "Prandtl number - start value" annotation (Dialog(tab="Initialization"));
 
   // Geometry
-  parameter Integer N=1 "Number of pipes in parallel";
   parameter Length L "Length" annotation (Dialog(tab="Geometry"));
   parameter Length D "Diameter" annotation (Dialog(tab="Geometry"));
-  parameter Length Roughness=0.015*10^(-3) "Roughness" annotation (Dialog(tab="Geometry"));
+  parameter Length ks=0.0015e-3 "Surface roughness" annotation (Dialog(tab="Geometry"));
 
   model GEO =
     Components.MassTransfer.PipeGeometry.Circular (L=L, D=D) annotation (choicesAllMatching=true);
@@ -56,7 +55,7 @@ model CircularPipeGnielinski
       redeclare package Medium=Medium,
       Dh=geometry.Dh,
       Re=Re,
-      Roughness=Roughness) annotation (choicesAllMatching=true);
+      ks=ks) annotation (choicesAllMatching=true);
 
   HTC convection;
   DPC friction;
@@ -109,7 +108,7 @@ equation
 
   // Mass balance
   inlet.m_flow + outlet.m_flow = 0;
-  G = abs(inlet.m_flow)/(N*geometry.A_cs);
+  G = abs(inlet.m_flow)/geometry.A_cs;
 
   // Independent composition mass balances
   inlet.Xi_outflow = inStream(outlet.Xi_outflow);
@@ -118,7 +117,7 @@ equation
   // Energy balance
   outlet.h_outflow = inStream(inlet.h_outflow) + thermalPort.Q_flow/inlet.m_flow;
   inlet.h_outflow = inStream(outlet.h_outflow) + thermalPort.Q_flow/inlet.m_flow;
-  thermalPort.Q_flow = convection.ht*N*geometry.A_ht*(thermalPort.T - Medium.temperature(state));
+  thermalPort.Q_flow = convection.ht*geometry.A_ht*(thermalPort.T - Medium.temperature(state));
 
   // Non-dimensional numbers
   rho = Medium.density(state);

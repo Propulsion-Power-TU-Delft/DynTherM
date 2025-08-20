@@ -20,7 +20,7 @@ model CircularChannel1D "Circular channel implementing 1D spatial discretization
   parameter Length L "Channel length" annotation (Dialog(tab="Geometry"));
   parameter Length R_ext "Channel external radius" annotation (Dialog(tab="Geometry"));
   parameter Length R_int "Channel internal radius" annotation (Dialog(tab="Geometry"));
-  parameter Length Roughness=0.015*10^(-3) "Channel roughness" annotation (Dialog(tab="Geometry"));
+  parameter Length ks=0.0015e-3 "Surface roughness" annotation (Dialog(tab="Geometry"));
   parameter Volume V_inertia=1e-10 "Volume of the plenum placed between two consecutive control volumes" annotation (Dialog(tab="Geometry"));
 
   // Initialization
@@ -41,16 +41,14 @@ model CircularChannel1D "Circular channel implementing 1D spatial discretization
 
   // Discretization
   parameter Integer N_cv(min=1) "Number of control volumes in which the cooling channels are discretized";
-  parameter Integer N_channels(min=1) "Number of channels in parallel";
 
   CV cv[N_cv](
     redeclare model Mat = Mat,
     redeclare package Medium = Medium,
-    each N=N_channels,
     each L=L/N_cv,
     each R_ext=R_ext,
     each R_int=R_int,
-    each Roughness=Roughness,
+    each ks=ks,
     each T_start_solid=T_start_solid,
     each T_start_fluid=T_start_fluid,
     each P_start=P_start,

@@ -9,7 +9,8 @@ Plenum
 Mixer
 CircularPipe
 RectangularPipe
-CircularPipeBend
 ActuatorDisk
 CircularPipeGnielinski
-CircularPipeBend180
+CurvedBend
+EdgedBend
+TJunction

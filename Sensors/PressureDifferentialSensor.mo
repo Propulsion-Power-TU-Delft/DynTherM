@@ -11,12 +11,12 @@ model PressureDifferentialSensor "Pressure differential sensor"
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={0,110})));
-  CustomInterfaces.ZeroDimensional.FluidPort_A inlet(redeclare package Medium
-      = Medium, m_flow(min=if allowFlowReversal then -Modelica.Constants.inf
+  CustomInterfaces.ZeroDimensional.FluidPort_A inlet(redeclare package Medium =
+        Medium, m_flow(min=if allowFlowReversal then -Modelica.Constants.inf
            else 0))
     annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
-  CustomInterfaces.ZeroDimensional.FluidPort_B outlet(redeclare package Medium
-      = Medium, m_flow(max=if allowFlowReversal then +Modelica.Constants.inf
+  CustomInterfaces.ZeroDimensional.FluidPort_B outlet(redeclare package Medium =
+        Medium, m_flow(max=if allowFlowReversal then +Modelica.Constants.inf
            else 0)) annotation (Placement(transformation(extent={{90,-10},{110,
             10}}), iconTransformation(extent={{90,-10},{110,10}})));
 

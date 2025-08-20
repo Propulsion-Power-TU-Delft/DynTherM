@@ -29,7 +29,6 @@ model RectangularPipe "Model of pipe with rectangular cross-section"
   parameter PrandtlNumber Pr_start=1.5 "Prandtl number - start value" annotation (Dialog(tab="Initialization"));
 
   // Geometry
-  input Real N=1 "Number of pipes in parallel" annotation (Dialog(enable=true));
   parameter Length L "Length" annotation (Dialog(tab="Geometry"));
   input Length W "Width of rectangular channel" annotation (Dialog(tab="Geometry", enable=true));
   input Length H "Height of rectangular channel" annotation (Dialog(tab="Geometry", enable=true));
@@ -106,7 +105,7 @@ equation
 
   // Mass balance
   inlet.m_flow + outlet.m_flow = 0;
-  G = abs(inlet.m_flow)/(N*geometry.A_cs);
+  G = abs(inlet.m_flow)/geometry.A_cs;
 
   // Independent composition mass balances
   inlet.Xi_outflow = inStream(outlet.Xi_outflow);
@@ -115,7 +114,7 @@ equation
   // Energy balance
   outlet.h_outflow = inStream(inlet.h_outflow) + thermalPort.Q_flow/inlet.m_flow;
   inlet.h_outflow = inStream(outlet.h_outflow) + thermalPort.Q_flow/inlet.m_flow;
-  thermalPort.Q_flow = convection.ht*N*geometry.A_ht*(thermalPort.T - Medium.temperature(state));
+  thermalPort.Q_flow = convection.ht*geometry.A_ht*(thermalPort.T - Medium.temperature(state));
 
   // Non-dimensional numbers
   rho = Medium.density(state);

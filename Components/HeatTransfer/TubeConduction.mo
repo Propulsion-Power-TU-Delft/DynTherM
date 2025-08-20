@@ -4,7 +4,6 @@ model TubeConduction "Dynamic model of conduction in a hollow cylinder"
   replaceable model Mat=Materials.Aluminium constrainedby
     Materials.Properties "Material choice" annotation (choicesAllMatching=true);
 
-  parameter Integer N=1 "Number of tubes in parallel";
   parameter Real coeff "Fraction of tube with active heat transfer";
   parameter Length L "Length";
   input Length R_ext "External radius" annotation (Dialog(enable=true));
@@ -40,11 +39,11 @@ equation
   A_window_int = H_window/R_int*L_window*Nw_side;
   A_window_ext = H_window/R_ext*L_window*Nw_side;
 
-  N*Cm*der(T_vol) = inlet.Q_flow + outlet.Q_flow "Energy balance";
-  inlet.Q_flow = (Mat.lambda*N*(coeff*2*pi*L - A_window_int)*(inlet.T - T_vol))/
+  Cm*der(T_vol) = inlet.Q_flow + outlet.Q_flow "Energy balance";
+  inlet.Q_flow = (Mat.lambda*(coeff*2*pi*L - A_window_int)*(inlet.T - T_vol))/
     Modelica.Math.log((R_int + R_ext)/(2*R_int))
     "Heat conduction through the internal half-thickness";
-  outlet.Q_flow = (Mat.lambda*N*(coeff*2*pi*L - A_window_ext)*(outlet.T - T_vol))/
+  outlet.Q_flow = (Mat.lambda*(coeff*2*pi*L - A_window_ext)*(outlet.T - T_vol))/
     Modelica.Math.log((2*R_ext)/(R_int + R_ext))
     "Heat conduction through the external half-thickness";
 

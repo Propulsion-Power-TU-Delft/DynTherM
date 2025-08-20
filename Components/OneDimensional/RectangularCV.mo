@@ -13,7 +13,6 @@ model RectangularCV "Control volume modeling a portion of a rectangular channel"
     "Initialization option" annotation (Dialog(tab="Initialization"));
 
   // Geometry
-  input Real N=1 "Number of control volumes in parallel" annotation (Dialog(enable=true));
   parameter Length L "Length of the control volume" annotation (Dialog(tab="Geometry"));
   input Length W "Width of the control volume" annotation (Dialog(tab="Geometry", enable=true));
   input Length H "Height of the control volume" annotation (Dialog(tab="Geometry", enable=true));
@@ -81,7 +80,6 @@ model RectangularCV "Control volume modeling a portion of a rectangular channel"
     state_start=state_start,
     Re_start=Re_start,
     Pr_start=Pr_start,
-    N=N,
     L=L,
     W=W,
     H=H)
@@ -100,7 +98,6 @@ model RectangularCV "Control volume modeling a portion of a rectangular channel"
         iconTransformation(extent={{-30,60},{-10,80}})));
   HeatTransfer.WallConduction solid_north(
     redeclare model Mat = Mat,
-    N=N,
     t=t_north,
     A=W*L,
     Tstart=T_start_solid,
@@ -108,7 +105,6 @@ model RectangularCV "Control volume modeling a portion of a rectangular channel"
     annotation (Placement(transformation(extent={{-100,66},{-60,36}})));
   HeatTransfer.WallConduction solid_east(
     redeclare model Mat = Mat,
-    N=1,
     t=t_east,
     A=(H + 2*t_east)*L,
     Tstart=T_start_solid,
@@ -116,7 +112,6 @@ model RectangularCV "Control volume modeling a portion of a rectangular channel"
     annotation (Placement(transformation(extent={{-50,66},{-10,36}})));
   HeatTransfer.WallConduction solid_south(
     redeclare model Mat = Mat,
-    N=N,
     t=t_south,
     A=W*L,
     Tstart=T_start_solid,
@@ -124,7 +119,6 @@ model RectangularCV "Control volume modeling a portion of a rectangular channel"
     annotation (Placement(transformation(extent={{10,66},{50,36}})));
   HeatTransfer.WallConduction solid_west(
     redeclare model Mat = Mat,
-    N=1,
     t=t_west,
     A=(H + 2*t_west)*L,
     Tstart=T_start_solid,
@@ -132,8 +126,8 @@ model RectangularCV "Control volume modeling a portion of a rectangular channel"
     annotation (Placement(transformation(extent={{60,66},{100,36}})));
 
 equation
-  V_tot = N*L*(H + t_north + t_south)*(W + t_east + t_west);
-  V_fluid = N*L*H*W;
+  V_tot = L*(H + t_north + t_south)*(W + t_east + t_west);
+  V_fluid = L*H*W;
   V_tot = V_fluid + V_solid;
   m_tot = m_fluid + m_solid;
   m_fluid = fluid.rho*V_fluid;

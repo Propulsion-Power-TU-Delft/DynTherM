@@ -24,7 +24,7 @@ model CircularAsymmetricChannel1D
   input Length R_ext_south "External radius of the control volume - south side" annotation (Dialog(tab="Geometry", enable=true));
   input Length R_ext_west "External radius of the control volume - west side" annotation (Dialog(tab="Geometry", enable=true));
   parameter Length R_int "Channel internal radius" annotation (Dialog(tab="Geometry"));
-  parameter Length Roughness=0.015*10^(-3) "Channel roughness" annotation (Dialog(tab="Geometry"));
+  parameter Length ks=0.0015e-3 "Surface roughness" annotation (Dialog(tab="Geometry"));
   parameter Volume V_inertia=1e-10 "Volume of the plenum placed between two consecutive control volumes" annotation (Dialog(tab="Geometry"));
 
   // Initialization
@@ -45,19 +45,17 @@ model CircularAsymmetricChannel1D
 
   // Discretization
   parameter Integer N_cv(min=1) "Number of control volumes in which the cooling channels are discretized";
-  parameter Integer N_channels(min=1) "Number of channels in parallel";
 
   CV cv[N_cv](
     redeclare model Mat = Mat,
     redeclare package Medium = Medium,
-    each N=N_channels,
     each L=L/N_cv,
     each R_ext_north=R_ext_north,
     each R_ext_east=R_ext_east,
     each R_ext_south=R_ext_south,
     each R_ext_west=R_ext_west,
     each R_int=R_int,
-    each Roughness=Roughness,
+    each ks=ks,
     each T_start_solid=T_start_solid,
     each T_start_fluid=T_start_fluid,
     each P_start=P_start,

@@ -29,10 +29,9 @@ model CircularPipe "Model of pipe with circular cross-section"
   parameter PrandtlNumber Pr_start=1.5 "Prandtl number - start value" annotation (Dialog(tab="Initialization"));
 
   // Geometry
-  parameter Integer N=1 "Number of pipes in parallel";
   parameter Length L "Length" annotation (Dialog(tab="Geometry"));
   parameter Length D "Diameter" annotation (Dialog(tab="Geometry"));
-  parameter Length Roughness=0.015*10^(-3) "Roughness" annotation (Dialog(tab="Geometry"));
+  parameter Length ks=0.0015e-3 "Surface roughness" annotation (Dialog(tab="Geometry"));
 
   model GEO =
     Components.MassTransfer.PipeGeometry.Circular (L=L, D=D) annotation (choicesAllMatching=true);
@@ -54,7 +53,7 @@ model CircularPipe "Model of pipe with circular cross-section"
       redeclare package Medium=Medium,
       Dh=geometry.Dh,
       Re=Re,
-      Roughness=Roughness) annotation (choicesAllMatching=true);
+      ks=ks) annotation (choicesAllMatching=true);
 
   HTC convection;
   DPC friction;
@@ -107,7 +106,7 @@ equation
 
   // Mass balance
   inlet.m_flow + outlet.m_flow = 0;
-  G = abs(inlet.m_flow)/(N*geometry.A_cs);
+  G = abs(inlet.m_flow)/geometry.A_cs;
 
   // Independent composition mass balances
   inlet.Xi_outflow = inStream(outlet.Xi_outflow);
@@ -116,7 +115,7 @@ equation
   // Energy balance
   outlet.h_outflow = inStream(inlet.h_outflow) + thermalPort.Q_flow/inlet.m_flow;
   inlet.h_outflow = inStream(outlet.h_outflow) + thermalPort.Q_flow/inlet.m_flow;
-  thermalPort.Q_flow = convection.ht*N*geometry.A_ht*(thermalPort.T - Medium.temperature(state));
+  thermalPort.Q_flow = convection.ht*geometry.A_ht*(thermalPort.T - Medium.temperature(state));
 
   // Non-dimensional numbers
   rho = Medium.density(state);
@@ -158,6 +157,14 @@ equation
     Documentation(info="<html>
 <p>The convective heat transfer coefficient and the friction factor can be fixed by the user or computed with semi-empirical correlations.</p>
 <p>The conductive heat transfer through the solid walls is not included in this model and must be treated separately.</p>
-<p>The model can be used to reproduce the flow through many tubes in parallel. In that case, the mass flow rate is split equally among the different tubes.</p>
+<p>Common values of surface roughness are:</p>
+<ul>
+<li>ks = 5e-3 for concrete&nbsp;</li>
+<li>ks = 0.5e-3 for wood&nbsp;</li>
+<li>ks = 0.25e-3 for cast iron </li>
+<li>ks = 0.15e-3 for galvanized iron</li>
+<li>ks = 0.059e-3 for steel&nbsp;</li>
+<li>ks = 0.0015e-3 for drawn pipe&nbsp;</li>
+</ul>
 </html>"));
 end CircularPipe;

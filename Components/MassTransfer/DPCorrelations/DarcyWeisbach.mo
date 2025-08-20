@@ -1,7 +1,7 @@
 within DynTherM.Components.MassTransfer.DPCorrelations;
 model DarcyWeisbach "Friction factor for circular pipes"
   extends BaseClass;
-  parameter Length Roughness "Pipe roughness";
+  parameter Length ks "Surface roughness";
   input Length Dh "Hydraulic diameter" annotation(Dialog(enable = true));
   input ReynoldsNumber Re "Reynolds number" annotation(Dialog(enable = true));
 
@@ -11,7 +11,7 @@ equation
   elseif Re > 4000 and Re < 10^4 then  // Transition
     f = 0.316/regPow(Re, 0.25, 1e-6);
   else                                 // Turbulent
-    1/regRoot(f, 1e-6) = -2*log10(Roughness/(3.7*Dh) + 2.51/(Re*regRoot(f, 1e-6)));
+    1/regRoot(f, 1e-6) = -2*log10(ks/(3.7*Dh) + 2.51/(Re*regRoot(f, 1e-6)));
   end if;
 
   annotation (Documentation(info="<html>
