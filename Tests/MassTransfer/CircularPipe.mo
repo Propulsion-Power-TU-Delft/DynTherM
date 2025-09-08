@@ -36,9 +36,10 @@ equation
   connect(pipe.outlet, pressureSink.inlet)
     annotation (Line(points={{40,-30},{76,-30}}, color={0,0,0}));
   connect(m_input.y, ECSFlow.in_massFlow) annotation (Line(points={{-79,0},{
-          -71.2,0},{-71.2,-20.2}}, color={0,0,127}));
-  connect(T_input.y, ECSFlow.in_T) annotation (Line(points={{-79,40},{-62.8,40},
-          {-62.8,-20.2}}, color={0,0,127}));
+          -68.12,0},{-68.12,-20.2}},
+                                   color={0,0,127}));
+  connect(T_input.y, ECSFlow.in_T) annotation (Line(points={{-79,40},{-60,40},{
+          -60,-20.2}},    color={0,0,127}));
   annotation (Documentation(info="<html>
 
 </html>"), experiment(StopTime=5000, Interval=0.1));

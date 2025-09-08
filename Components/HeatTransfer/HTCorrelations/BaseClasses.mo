@@ -95,6 +95,7 @@ package BaseClasses
 
     input Length x "Characteristic dimension" annotation (Dialog(enable=true));
     input Velocity V "Flow velocity" annotation (Dialog(enable=true));
+    parameter Velocity V_min=1 "Minimum velocity used for model convergence";
 
     ReynoldsNumber Re "Reynolds number";
     PrandtlNumber Pr "Prandtl number";
@@ -107,7 +108,7 @@ package BaseClasses
     T_film = (T_surf + environment.T_amb)/2;
     Pr = Medium.specificHeatCapacityCp(state_film)*Medium.dynamicViscosity(state_film)/
       Medium.thermalConductivity(state_film);
-    Re = Medium.density(state_film)*V*x/Medium.dynamicViscosity(state_film);
+    Re = Medium.density(state_film)*max(V_min,V)*x/Medium.dynamicViscosity(state_film);
     Nu = max(1, ht*x/Medium.thermalConductivity(state_film));
 
   end BaseClassForcedConvectionExternal;

@@ -74,12 +74,13 @@ equation
     annotation (Line(points={{-64,-30},{-54,-30}}, color={0,0,0}));
   connect(valve.outlet, pressureSink.inlet)
     annotation (Line(points={{54,-30},{66,-30}}, color={0,0,0}));
-  connect(T_input.y, ECSFlow.in_T) annotation (Line(points={{-99,60},{-83.2,60},
-          {-83.2,-18.8}}, color={0,0,127}));
+  connect(T_input.y, ECSFlow.in_T) annotation (Line(points={{-99,60},{-80,60},{
+          -80,-18.8}},    color={0,0,127}));
   connect(Q_input.y, cabinHeatFlowRate.Q_flow)
     annotation (Line(points={{-49,80},{-40,80},{-40,44}}, color={0,0,127}));
   connect(m_input.y, ECSFlow.in_massFlow) annotation (Line(points={{-99,20},{
-          -92.8,20},{-92.8,-18.8}}, color={0,0,127}));
+          -89.28,20},{-89.28,-18.8}},
+                                    color={0,0,127}));
   connect(mechanical.mechanical,simpleFan. shaft)
     annotation (Line(points={{0,18},{0,-14}},color={135,135,135}));
   connect(cabin.outlet, simpleFan.inlet)

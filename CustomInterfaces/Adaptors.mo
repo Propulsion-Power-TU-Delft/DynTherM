@@ -288,6 +288,30 @@ package Adaptors "Models used to couple two connectors of different type"
           coordinateSystem(preserveAspectRatio=false)));
   end heatFlowConverter;
 
+  model heatFlowScaler
+    "Model used to scale up or down the heat flow rate between two heat ports"
+
+    input Real scaler=1 "Inlet / outlet heat flow rate" annotation(Dialog(enable = true));
+
+    Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a inlet annotation (Placement(transformation(extent={{-10,-70},{10,-50}})));
+    Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b outlet annotation (Placement(transformation(extent={{-10,50},{10,70}})));
+
+  equation
+    inlet.Q_flow + scaler*outlet.Q_flow = 0;
+    inlet.T = outlet.T;
+
+    annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
+          Line(points={{0,-34},{0,34}},     color={238,46,47}),
+          Line(points={{0,34},{6,24}},      color={238,46,47}),
+          Line(points={{0,34},{-6,24}},     color={238,46,47}),
+          Line(points={{-10,-10},{-30,10}}, color={238,46,47}),
+          Line(points={{-10,10},{-30,-10}}, color={238,46,47})}),  Diagram(
+          coordinateSystem(preserveAspectRatio=false)),
+      Documentation(info="<html>
+<p><img src=\"modelica://ThermalManagement/ThermalManagement/Figures/ThermalRadiationASHRAE.PNG\"/></p>
+</html>"));
+  end heatFlowScaler;
+
   model flowScaler
     "Model used to scale up or down the mass flow rate between two fluid ports"
 

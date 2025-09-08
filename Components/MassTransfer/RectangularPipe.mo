@@ -113,7 +113,7 @@ equation
 
   // Energy balance
   outlet.h_outflow = inStream(inlet.h_outflow) + thermalPort.Q_flow/inlet.m_flow;
-  inlet.h_outflow = inStream(outlet.h_outflow) + thermalPort.Q_flow/inlet.m_flow;
+  inlet.h_outflow = inStream(outlet.h_outflow) + thermalPort.Q_flow/outlet.m_flow;
   thermalPort.Q_flow = convection.ht*geometry.A_ht*(thermalPort.T - Medium.temperature(state));
 
   // Non-dimensional numbers

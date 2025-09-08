@@ -25,8 +25,12 @@ model TJunction "Simple test of T-junction"
     offset=1.5e5,
     startTime=0.1) annotation (Placement(transformation(extent={{-88,30},{-68,
             50}})));
-  Components.MassTransfer.TJunction tJunction(
+  Components.MassTransfer.DivergingTJunction tJunction(
     redeclare package Medium = Modelica.Media.Air.DryAirNasa,
+    D_in(displayUnit="m") = 0.1,
+    D_out_main(displayUnit="m") = 0.1,
+    D_out_side(displayUnit="m") = 0.05,
+    R_bend=0.08,
     V=1e-4,
     T_start=293.15,
     noInitialPressure=true)
@@ -61,11 +65,11 @@ equation
           -51.6,40},{-51.6,9.8}}, color={0,0,127}));
   connect(source.outlet, tJunction.inlet)
     annotation (Line(points={{-46,0},{-20,0}}, color={0,0,0}));
-  connect(tJunction.outletOrthogonal, dP_orthogonal.inlet)
+  connect(tJunction.outlet_side, dP_orthogonal.inlet)
     annotation (Line(points={{0,20},{0,40}}, color={0,0,0}));
   connect(dP_orthogonal.outlet, sink_orthogonal.inlet)
     annotation (Line(points={{0,60},{0,76}}, color={0,0,0}));
-  connect(tJunction.outletParallel, dP_parallel.inlet)
+  connect(tJunction.outlet_main, dP_parallel.inlet)
     annotation (Line(points={{20,0},{40,0}}, color={0,0,0}));
   connect(dP_parallel.outlet, sink_parallel.inlet)
     annotation (Line(points={{60,0},{76,0}}, color={0,0,0}));

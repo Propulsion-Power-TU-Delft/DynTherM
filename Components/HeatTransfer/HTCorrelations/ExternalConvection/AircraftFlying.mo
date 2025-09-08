@@ -7,8 +7,8 @@ model AircraftFlying
   parameter Real coeff=1 "Fraction of cylinder with active heat transfer";
   parameter Length L "Fuselage element length";
   parameter Length R_ext "Fuselage radius";
-  parameter Length L_nose
-    "Average distance among current fuselage section and fuselage nose";
+  parameter Length L_nose "Average distance among current fuselage section and fuselage nose";
+  parameter Velocity V_min=1 "Minimum velocity used for model convergence";
 
   Velocity V_inf "Aircraft velocity";
   Pressure P_f "Pressure surrounding the fuselage";
@@ -30,7 +30,7 @@ equation
   state_aw = Medium.setState_pTX(P_f, T_aw, environment.X_amb);
   state_star = Medium.setState_pTX(P_f, T_star, environment.X_amb);
   gamma_amb = Medium.isentropicExponent(environment.state_amb);
-  V_inf = environment.Mach_inf*sqrt(gamma_amb*environment.R*environment.T_amb);
+  V_inf = max(V_min, environment.Mach_inf*sqrt(gamma_amb*environment.R*environment.T_amb));
   P_f = environment.P_amb + Cp*Medium.density(environment.state_amb)*V_inf^2/2;
   T_aw = environment.T_amb*(1 + r*(gamma_amb - 1)/2*environment.Mach_inf^2);
   T_star = (T_aw + environment.T_amb)/2 + 0.22*(T_aw - environment.T_amb);

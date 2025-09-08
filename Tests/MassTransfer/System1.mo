@@ -55,9 +55,9 @@ equation
   connect(valve.outlet, pressureSink.inlet)
     annotation (Line(points={{48,-30},{66,-30}}, color={0,0,0}));
   connect(m_input.y, ECSFlow.in_massFlow) annotation (Line(points={{-99,20},{
-          -76,20},{-76,-18.8},{-76.8,-18.8}}, color={0,0,127}));
-  connect(T_input.y, ECSFlow.in_T) annotation (Line(points={{-99,60},{-67.2,60},
-          {-67.2,-18.8}}, color={0,0,127}));
+          -76,20},{-76,-18.8},{-73.28,-18.8}},color={0,0,127}));
+  connect(T_input.y, ECSFlow.in_T) annotation (Line(points={{-99,60},{-64,60},{
+          -64,-18.8}},    color={0,0,127}));
   connect(dummy_valve.y, valve.opening)
     annotation (Line(points={{49,40},{34,40},{34,-22.44}}, color={0,0,127}));
   connect(Q_input.y, cabinHeatFlowRate.Q_flow)

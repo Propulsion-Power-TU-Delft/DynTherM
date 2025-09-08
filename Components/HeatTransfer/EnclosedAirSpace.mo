@@ -4,9 +4,9 @@ model EnclosedAirSpace "Dynamic model for non-ventilated closed air cavities in 
   replaceable package Medium = Modelica.Media.Air.MoistAir constrainedby
     Modelica.Media.Interfaces.PartialMedium "Medium model" annotation(choicesAllMatching = true);
 
-  parameter Length w "Width of the air cavity";
-  parameter Length h "Height of the air cavity";
-  parameter Length l "Length of the air cavity";
+  input Length w "Width of the air cavity" annotation (Dialog(enable=true));
+  input Length h "Height of the air cavity" annotation (Dialog(enable=true));
+  input Length l "Length of the air cavity" annotation (Dialog(enable=true));
   parameter Angle delta "Inclination angle of the air cavity";
 
   // Initialization
